@@ -45,74 +45,106 @@
     <!--/ Header -->
 
     <!-- User Profile Content -->
-    <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12">
-        <!-- About User -->
-        <div class="card mb-6">
-          <div class="card-body">
-            <p class="card-text text-uppercase text-body-secondary small mb-0">About</p>
-            <ul class="list-unstyled my-3 py-1">
-              <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-user icon-lg"></i><span
-                  class="fw-medium mx-2">Full Name:</span> <span>{{ $employee['name'] }}</span></li>
-              <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-check icon-lg"></i><span
-                  class="fw-medium mx-2">Status:</span> <span>Active</span></li>
-              <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-crown icon-lg"></i><span
-                  class="fw-medium mx-2">Role:</span>
-                <span>{{$employee['job_title']}}</span>
-              </li>
-              <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-flag icon-lg"></i><span
-                  class="fw-medium mx-2">Country:</span> <span>Pakistan</span></li>
-              {{-- <li class="d-flex align-items-center mb-2"><i class="icon-base ti tabler-language icon-lg"></i><span
-                  class="fw-medium mx-2">Languages:</span> <span>English</span></li> --}}
-            </ul>
-            <p class="card-text text-uppercase text-body-secondary small mb-0">Contacts</p>
-            <ul class="list-unstyled my-3 py-1">
-              <li class="d-flex align-items-center mb-4">
-                <i class="icon-base ti tabler-phone-call icon-lg"></i><span class="fw-medium mx-2">Contact:</span>
-                <span>{{ $employee['emergency_phone'] }}</span>
-              </li>
+<div class="row">
 
-              <li class="d-flex align-items-center mb-4">
-                <i class="icon-base ti tabler-mail icon-lg"></i><span class="fw-medium mx-2">Email:</span>
-                <span>{{ $employee['email'] }}</span>
-              </li>
-              <li class="d-flex align-items-center mb-4"><i class="icon-base ti tabler-map-pin icon-lg"></i><span
-                  class="fw-medium mx-2">location:</span> <span>{{ $employee['work_location'] }}</span></li>
-            </ul>
-            {{-- <p class="card-text text-uppercase text-body-secondary small mb-0">Teams</p>
-            <ul class="list-unstyled mb-0 mt-3 pt-1">
-              <li class="d-flex flex-wrap mb-4"><span class="fw-medium me-2">Backend Developer</span><span>(126
-                  Members)</span></li>
-              <li class="d-flex flex-wrap"><span class="fw-medium me-2">React Developer</span><span>(98 Members)</span>
-              </li>
-            </ul> --}}
-          </div>
+    {{-- Profile --}}
+    <div class="col-xl-6 col-lg-6 col-md-6">
+        <div class="card mb-6">
+            <div class="card-body">
+
+                <p class="card-text text-uppercase text-body-secondary small mb-0">
+                    About
+                </p>
+
+                <ul class="list-unstyled my-3 py-1">
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-user icon-lg"></i>
+                        <span class="fw-medium mx-2">Full Name:</span>
+                        <span>{{ $employee['name'] }}</span>
+                    </li>
+
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-check icon-lg"></i>
+                        <span class="fw-medium mx-2">Status:</span>
+                        <span>Active</span>
+                    </li>
+
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-crown icon-lg"></i>
+                        <span class="fw-medium mx-2">Role:</span>
+                        <span>{{ $employee['job_title'] }}</span>
+                    </li>
+
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-flag icon-lg"></i>
+                        <span class="fw-medium mx-2">Country:</span>
+                        <span>Pakistan</span>
+                    </li>
+                </ul>
+
+                <p class="card-text text-uppercase text-body-secondary small mb-0">
+                    Contacts
+                </p>
+
+                <ul class="list-unstyled my-3 py-1">
+
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-phone-call icon-lg"></i>
+                        <span class="fw-medium mx-2">Contact:</span>
+                        <span>{{ $employee['emergency_phone'] }}</span>
+                    </li>
+
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-mail icon-lg"></i>
+                        <span class="fw-medium mx-2">Email:</span>
+                        <span>{{ $employee['email'] }}</span>
+                    </li>
+
+                    <li class="d-flex align-items-center mb-4">
+                        <i class="icon-base ti tabler-map-pin icon-lg"></i>
+                        <span class="fw-medium mx-2">Location:</span>
+                        <span>{{ $employee['work_location'] }}</span>
+                    </li>
+
+                </ul>
+
+            </div>
         </div>
-        <!--/ About User -->
-      </div>
-
     </div>
-    <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12">
-        <!-- About User -->
+
+    {{-- Reset Password --}}
+    <div class="col-xl-6 col-lg-6 col-md-6">
         <div class="card mb-6">
-          <div class="card-body"> 
-            <p class="card-text text-uppercase text-body-secondary small mb-0">Reset Password</p>       
-            <form method="post" action="{{ route('password.user.update') }}" class="mt-6 space-y-6">
-        @csrf
-                        <input name="employee_id" type="hidden" value="{{ Auth::id() }}">
+            <div class="card-body">
+
+                <p class="card-text text-uppercase text-body-secondary small mb-0">
+                    Reset Password
+                </p>
+
+                <form method="post"
+                      action="{{ route('password.user.update') }}"
+                      class="mt-6">
+
+                    @csrf
+
+                    <input name="employee_id"
+                           type="hidden"
+                           value="{{ Auth::id() }}">
+
+                    <div class="row">
+
                         {{-- New Password --}}
-                        <div class="mb-6 col-lg-6 col-md-6">
+                        <div class="col-12 mb-6">
                             <label class="form-label" for="add-user-password">
                                 New Password
                             </label>
 
                             <input type="password"
-                                id="add-user-password"
-                                class="form-control"
-                                placeholder="Enter new password"
-                                name="password"
-                                autocomplete="new-password" />
+                                   id="add-user-password"
+                                   class="form-control"
+                                   placeholder="Enter new password"
+                                   name="password"
+                                   autocomplete="new-password">
 
                             <div class="form-text">
                                 Leave blank to keep the current password.
@@ -122,31 +154,36 @@
                         </div>
 
                         {{-- Confirm Password --}}
-                        <div class="mb-6 col-lg-6 col-md-6">
+                        <div class="col-12 mb-6">
                             <label class="form-label" for="add-user-password-confirmation">
                                 Confirm New Password
                             </label>
 
                             <input type="password"
-                                id="add-user-password-confirmation"
-                                class="form-control"
-                                placeholder="Confirm new password"
-                                name="password_confirmation"
-                                autocomplete="new-password" />
+                                   id="add-user-password-confirmation"
+                                   class="form-control"
+                                   placeholder="Confirm new password"
+                                   name="password_confirmation"
+                                   autocomplete="new-password">
 
-                            <div class="invalid-feedback" id="password_confirmationError"></div>
+                            <div class="invalid-feedback"
+                                 id="password_confirmationError"></div>
                         </div>
-                         
-                        <button type="submit" class="btn btn-primary me-3 data-submit">Submit</button>
-                        
-                    </form>
-            
-          </div>
-        </div>
-        <!--/ About User -->
-      </div>
 
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary me-3 data-submit">
+                        Submit
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
     </div>
+
+</div>
     <!--/ User Profile Content -->
   </div>
   <!-- / Content -->
