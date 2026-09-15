@@ -73,6 +73,14 @@
                                                                                                                             </select>
                                                                                                                         </div> -->
                                                     <div class="mb-3 col-md-4">
+                                                    <label for="year" class="form-label">Year</label>
+                                                    <select name="year_id" id="year_id"
+                                                        class="form-select" required>
+                                                        <option value=""> Select year</option>
+                                                            @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                        </select>
+                                                </div>
+                                                    <div class="mb-3 col-md-4">
                                                         <label for="faculty" class="form-label">Faculty</label>
                                                         <select name="faculty_id" id="faculty_id" class="select2 form-select"
                                                             required>

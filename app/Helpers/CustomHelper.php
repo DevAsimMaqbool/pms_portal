@@ -7454,13 +7454,14 @@ if (!function_exists('departmentPromotersPercentageOfHOD')) {
 
 if (!function_exists('departmentAlumniSatisfactionRateOfHOD')) {
 
-    function departmentAlumniSatisfactionRateOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
+    function departmentAlumniSatisfactionRateOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId,$currentYear = null)
     {
         $departmentId = auth()->user()->department_id;
 
         // 1️⃣ Get full records (IMPORTANT for grouping)
         $records = \App\Models\AlumniSatisfactionRate::with(['faculty', 'department', 'program'])
             ->where('department_id', $departmentId)
+            ->where('year_id', $currentYear)
             ->where('indicator_id', $indicatorId)
             ->whereNotNull('satisfaction_rate')
             ->get();
