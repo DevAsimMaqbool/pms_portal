@@ -134,7 +134,7 @@
                     url: "{{ route('faculty-target.index') }}",
                     method: "GET",
                     data: {
-                        status: "DEAN" // you can send more values
+                        status: "DEANALL" // you can send more values
                     },
                     dataType: "json",
                     success: function (data) {
