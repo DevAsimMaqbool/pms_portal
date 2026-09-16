@@ -49,6 +49,11 @@ class FacultyTargetController extends Controller
                         ->where('created_by', $employee_id)
                         ->where('form_status', 'HOD')
                         ->get();    }
+                if ($status == "DEANALL") {
+                         $forms = FacultyTarget::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'DEAN')
+                        ->get();    }        
                 if ($status == "HOD") {              
                         
                  $hod_ids = User::where('manager_id', $employee_id)->role('HOD')->pluck('employee_id');
