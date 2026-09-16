@@ -106,6 +106,7 @@ use App\Http\Controllers\GoalManagerReviewController;
 use App\Http\Controllers\GoalHrReviewController;
 use App\Http\Controllers\GoalHistoryController;
 use App\Http\Controllers\GoalInitiativeController;
+use App\Http\Controllers\PerformanceReportController;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Department;
@@ -710,6 +711,16 @@ Route::middleware('auth')->group(function () {
         '/manager/goal-initiatives/{goalInitiative}/reject',
         [GoalInitiativeController::class, 'reject']
     )->name('goal-initiatives.reject');
+
+/*
+|--------------------------------------------------------------------------
+| MY PERFORMANCE REPORT
+|--------------------------------------------------------------------------
+*/
+Route::get(
+    '/my-performance-report/download',
+    [PerformanceReportController::class, 'download']
+)->name('my-performance-report.download');
 
 });
 require __DIR__ . '/auth.php';

@@ -97,6 +97,7 @@
                 <div data-i18n="Downloads">Downloads</div>
             </a>
         </li>
+        <li class="menu-item"> <a href="{{ route('my-performance-report.download') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="My Performance Report"> My Performance Report </div> </a> </li>
 
         <li class="menu-item {{ request()->routeIs([
   'employee-tasks.index',
