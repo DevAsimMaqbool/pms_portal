@@ -221,7 +221,7 @@
 
                                                            <div class="mb-6">
                                                             <label class="form-label" for="employee_id">Employee ID</label>
-                                                            <input type="text" class="form-control"  placeholder="Employee ID" value="{{ auth()->user()->employee_id }}"  readonly>
+                                                            <input type="text" class="form-control"  placeholder="Employee ID" value="{{ auth()->user()->barcode }}"  readonly>
                                                           </div>
 
                                                           <div class="mb-6">
