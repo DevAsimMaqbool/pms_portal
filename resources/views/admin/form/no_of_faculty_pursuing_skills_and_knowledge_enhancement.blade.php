@@ -144,13 +144,13 @@
                     @endif
                     @if(in_array(getRoleName(activeRole()), ['Dean']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
-                                        <div class="d-flex">
+                                        {{-- <div class="d-flex d-none">
                                     <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
                                         <option value="2">Verified</option>
                                     </select>
                                     <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                                </div>
+                                </div> --}}
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>

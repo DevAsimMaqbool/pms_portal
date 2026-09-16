@@ -102,14 +102,14 @@
                     @if(auth()->user()->hasRole(['HOD']))
                       <div class="tab-pane fade" id="form3" role="tabpanel">
                             @if(auth()->user()->hasRole(['HOD']))
-                                        <div class="d-flex">
+                                        {{-- <div class="d-flex d-none">
                                     <select id="bulkAction" class="form-select w-auto me-2">
                                         <option value="">-- Select Action --</option>
                                         <option value="2">Verified</option>
                                         <option value="1">UnVerified</option>
                                     </select>
                                     <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                                </div>
+                                </div> --}}
                             @endif
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                     <thead>

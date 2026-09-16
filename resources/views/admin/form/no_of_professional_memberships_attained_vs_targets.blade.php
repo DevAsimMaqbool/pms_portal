@@ -270,13 +270,13 @@ class="country-dropdown select2 form-select" required>
         <div class="card-title mb-0">
                     <h5 class="mb-1">No of Professional Memberships attained vs targets</h5>
                 </div>
-            <div class="d-flex">
+            {{-- <div class="d-flex d-none">
                 <select id="bulkAction" class="form-select w-auto me-2">
                     <option value="">-- Select Action --</option>
                     <option value="2">Verified</option>
                 </select>
                 <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-            </div>
+            </div> --}}
         <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
             <thead>
                 <tr>

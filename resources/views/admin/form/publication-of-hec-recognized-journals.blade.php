@@ -74,14 +74,14 @@
                 @endif
                 @if(auth()->user()->hasRole(['Dean', 'ORIC']))
                     <div>
-                        <div class="d-flex">
+                        {{-- <div class="d-flex d-none">
                             <select id="bulkAction" class="form-select w-auto me-2">
                                 <option value="">-- Select Action --</option>
                                 <option value="3">Review</option>
                                 <option value="2">UnReview</option>
                             </select>
                             <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                        </div>
+                        </div> --}}
                         <table id="complaintTable2" class="table table-bordered table-striped" style="width:100%">
                             <thead>
                                 <tr>
