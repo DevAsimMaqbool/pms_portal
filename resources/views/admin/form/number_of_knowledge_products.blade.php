@@ -446,7 +446,7 @@
                     }
 
                     if (form.url) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Url</th><td>${form.url}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Url</th><td><div style="word-break: break-word;overflow-wrap: anywhere;">${form.url}</div></td></tr>`);
                     }
                     if (form.attach_evidence) {
                         let fileUrl = form.attach_evidence;
@@ -726,7 +726,7 @@
                     }
 
                     if (form.url) {
-                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Url</th><td>${form.url}</td></tr>`);
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Url</th><td><div style="word-break: break-word;overflow-wrap: anywhere;">${form.url}</div></td></tr>`);
                     }
                     if (form.attach_evidence) {
                         let fileUrl = form.attach_evidence;

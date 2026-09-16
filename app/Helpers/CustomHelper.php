@@ -798,7 +798,7 @@ if (!function_exists('ScopusPublications')) {
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
-                $query->where('form_status', 'RESEARCHER')
+                $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 3)
                     ->whereNotNull('journal_clasification');
@@ -925,7 +925,7 @@ if (!function_exists('ScopusPublicationsNew')) {
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId, $currentYear) {
-                $query->where('form_status', 'RESEARCHER')
+                $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 3)
                     ->where('year_id', $currentYear)
@@ -991,7 +991,7 @@ if (!function_exists('ScopusPublicationsBKKKK')) {
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
-                $query->where('form_status', 'RESEARCHER')
+                $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 3)
                     ->whereNotNull('journal_clasification');
@@ -1124,7 +1124,7 @@ if (!function_exists('calculateInternationalScore')) {
         // Get Approved Scopus Publications
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId, $currentYear) {
-                $query->where('form_status', 'RESEARCHER')
+                $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 3)
                     ->where('year_id', $currentYear)
@@ -1213,7 +1213,7 @@ if (!function_exists('calculateJournalQuartile')) {
         $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
             ->where('created_by', $facultyId)
             ->where('target_category', 'Scopus-Indexed')
-            ->where('form_status', 'RESEARCHER')
+            ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
             ->where('year_id', $currentYear)
             ->where('status', 3) // Fully approved
             ->get();
@@ -1368,7 +1368,7 @@ if (!function_exists('ScopusPublicationsbk')) {
     {
         $facultyTargets = FacultyTarget::with([
             'researchPublicationTargets' => function ($query) use ($indicatorId) {
-                $query->where('form_status', 'RESEARCHER')
+                $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                     ->where('indicator_id', $indicatorId)
                     ->where('status', 4)
                     ->whereNotNull('journal_clasification'); // Only targets with classification
@@ -3349,7 +3349,7 @@ function Research_publication_count($facultyId, $indicator_id,$currentYear = nul
 {
     $facultyTargets = FacultyTarget::with([
         'researchPublicationTargets' => function ($query) use ($indicator_id,$currentYear) {
-            $query->where('form_status', 'RESEARCHER')
+            $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                 ->where('status', 3)->whereNotNull('journal_clasification')
                 ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
