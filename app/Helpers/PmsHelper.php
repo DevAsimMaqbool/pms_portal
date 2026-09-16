@@ -550,7 +550,7 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId,$c
     }
     $facultyTargets = FacultyTarget::withCount([
         'researchPublicationTargets as researchPublication_count' => function ($query) use ($indicatorId,$currentYear) {
-            $query->where('form_status', 'RESEARCHER')
+            $query->whereIn('form_status', ['RESEARCHER', 'DEAN'])
                 ->where('status', 3)
                 ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicatorId);
