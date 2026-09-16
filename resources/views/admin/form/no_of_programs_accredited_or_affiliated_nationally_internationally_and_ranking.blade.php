@@ -248,6 +248,7 @@
                                     </select>
                                     <button id="bulkSubmit" class="btn btn-primary">Submit</button>
                                 </div> --}}
+                            <h5 class="mb-1">No of Programs accredited or affiliated nationally/ Internationally and ranking</h5>    
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>

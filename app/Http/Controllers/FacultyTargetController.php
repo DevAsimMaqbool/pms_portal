@@ -240,6 +240,7 @@ class FacultyTargetController extends Controller
                                 'year_id' => $request->year_id,
                                 'description' => $request->description,
                                 'form_status' => $request->form_status,
+                                'created_by' => $employeeId,
                                 'updated_by' => $employeeId,
                             ]);
                         } else {
