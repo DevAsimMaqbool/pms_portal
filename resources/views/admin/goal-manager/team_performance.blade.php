@@ -152,6 +152,20 @@
 
                     </div>
 
+                    {{-- TOTAL --}}
+                    <div class="rating-group-header">
+
+                        <div class="rating-group-title">
+                            Final Score
+                        </div>
+
+                        <div class="rating-sub-header">
+                            <span>Score</span>
+                            <span>Rating</span>
+                        </div>
+
+                    </div>
+
                     {{-- ACTION --}}
                     <div class="action-header">
                         Action
@@ -184,6 +198,60 @@
 
                         $feedbackScore =
                             $employee->manager_feedback_overall ?? null;
+
+                        /*
+                         |--------------------------------------------------------------------------
+                         | Convert Scores to 100
+                         |--------------------------------------------------------------------------
+                         */
+
+                        $selfScore100 =
+                            $selfScore !== null
+                                ? round((float) $selfScore * 20, 2)
+                                : null;
+
+                        $managerScore100 =
+                            $managerScore !== null
+                                ? round((float) $managerScore * 20, 2)
+                                : null;
+
+                        $hrScore100 =
+                            $hrScore !== null
+                                ? round((float) $hrScore * 20, 2)
+                                : null;
+
+                        /*
+                         |--------------------------------------------------------------------------
+                         | Feedback is already on 100 scale
+                         |--------------------------------------------------------------------------
+                         */
+
+                        $feedbackScore100 =
+                            $feedbackScore !== null
+                                ? round((float) $feedbackScore, 2)
+                                : null;
+
+                        /*
+                         |--------------------------------------------------------------------------
+                         | Final Score
+                         |
+                         | HR       = 70%
+                         | Feedback = 30%
+                         |--------------------------------------------------------------------------
+                         */
+
+                        $totalScore = null;
+
+                        if (
+                            $hrScore100 !== null &&
+                            $feedbackScore100 !== null
+                        ) {
+                            $totalScore = round(
+                                ($hrScore100 * 0.70) +
+                                ($feedbackScore100 * 0.30),
+                                2
+                            );
+                        }
 
                         /*
                          |--------------------------------------------------------------------------
@@ -226,18 +294,21 @@
                             'NI' => '#fd7e13',
                             'BE' => '#ff4c51',
                         ];
-                    
+
                         $selfRating =
-                            $getRating($selfScore*20);
+                            $getRating($selfScore100);
 
                         $managerRating =
-                            $getRating($managerScore*20);
+                            $getRating($managerScore100);
 
                         $hrRating =
-                            $getRating($hrScore*20);
+                            $getRating($hrScore100);
 
                         $feedbackRating =
-                            $getRating($feedbackScore);
+                            $getRating($feedbackScore100);
+
+                        $totalRating =
+                            $getRating($totalScore);
 
                         /*
                          |--------------------------------------------------------------------------
@@ -257,10 +328,22 @@
                         $complete =
                             $totalGoals > 0 &&
                             $pendingGoals == 0;
-$selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
-                        $managerColor = $ratingColors[$managerRating] ?? '#adb5bd';
-                        $hrColor = $ratingColors[$hrRating] ?? '#adb5bd';
-                        $feedbackColor = $ratingColors[$feedbackRating] ?? '#adb5bd';
+
+                        $selfColor =
+                            $ratingColors[$selfRating] ?? '#adb5bd';
+
+                        $managerColor =
+                            $ratingColors[$managerRating] ?? '#adb5bd';
+
+                        $hrColor =
+                            $ratingColors[$hrRating] ?? '#adb5bd';
+
+                        $feedbackColor =
+                            $ratingColors[$feedbackRating] ?? '#adb5bd';
+
+                        $totalColor =
+                            $ratingColors[$totalRating] ?? '#adb5bd';
+
                     @endphp
 
                     {{-- =================================================
@@ -300,11 +383,14 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                         <div class="rating-group">
 
                             {{-- SCORE --}}
-                            <div class="rating-score self-score" style="color: {{ $selfColor }}; font-weight: 700;">
+                            <div
+                                class="rating-score self-score"
+                                style="color: {{ $selfColor }}; font-weight: 700;"
+                            >
 
-                                @if($selfScore !== null)
+                                @if($selfScore100 !== null)
 
-                                    {{ number_format((float) $selfScore*20, 2) }}
+                                    {{ number_format($selfScore100, 2) }}
 
                                 @else
 
@@ -315,9 +401,12 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                             </div>
 
                             {{-- RATING --}}
-                            <div class="rating-value"  style="color: {{ $selfColor }}; font-weight: 700;">
+                            <div
+                                class="rating-value"
+                                style="color: {{ $selfColor }}; font-weight: 700;"
+                            >
 
-                                @if($selfScore !== null)
+                                @if($selfScore100 !== null)
 
                                     {{ $selfRating }}
 
@@ -340,11 +429,14 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                         <div class="rating-group">
 
                             {{-- SCORE --}}
-                            <div class="rating-score manager-score" style="color: {{ $managerColor }}; font-weight: 700;">
+                            <div
+                                class="rating-score manager-score"
+                                style="color: {{ $managerColor }}; font-weight: 700;"
+                            >
 
-                                @if($managerScore !== null)
+                                @if($managerScore100 !== null)
 
-                                    {{ number_format((float) $managerScore*20, 2) }}
+                                    {{ number_format($managerScore100, 2) }}
 
                                 @else
 
@@ -355,9 +447,12 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                             </div>
 
                             {{-- RATING --}}
-                            <div class="rating-value" style="color: {{ $managerColor }}; font-weight: 700;">
+                            <div
+                                class="rating-value"
+                                style="color: {{ $managerColor }}; font-weight: 700;"
+                            >
 
-                                @if($managerScore !== null)
+                                @if($managerScore100 !== null)
 
                                     {{ $managerRating }}
 
@@ -380,11 +475,14 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                         <div class="rating-group">
 
                             {{-- SCORE --}}
-                            <div class="rating-score feedback-score" style="color: {{ $feedbackColor }}; font-weight: 700;">
+                            <div
+                                class="rating-score feedback-score"
+                                style="color: {{ $feedbackColor }}; font-weight: 700;"
+                            >
 
-                                @if($feedbackScore !== null)
+                                @if($feedbackScore100 !== null)
 
-                                    {{ number_format((float) $feedbackScore, 2) }}
+                                    {{ number_format($feedbackScore100, 2) }}
 
                                 @else
 
@@ -395,9 +493,12 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                             </div>
 
                             {{-- RATING --}}
-                            <div class="rating-value" style="color: {{ $feedbackColor }}; font-weight: 700;">
+                            <div
+                                class="rating-value"
+                                style="color: {{ $feedbackColor }}; font-weight: 700;"
+                            >
 
-                                @if($feedbackScore !== null)
+                                @if($feedbackScore100 !== null)
 
                                     {{ $feedbackRating }}
 
@@ -420,11 +521,14 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                         <div class="rating-group">
 
                             {{-- SCORE --}}
-                            <div class="rating-score hr-score"  style="color: {{ $hrColor }}; font-weight: 700;">
+                            <div
+                                class="rating-score hr-score"
+                                style="color: {{ $hrColor }}; font-weight: 700;"
+                            >
 
-                                @if($hrScore !== null)
+                                @if($hrScore100 !== null)
 
-                                    {{ number_format((float) $hrScore*20, 2) }}
+                                    {{ number_format($hrScore100, 2) }}
 
                                 @else
 
@@ -435,11 +539,60 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
                             </div>
 
                             {{-- RATING --}}
-                            <div class="rating-value" style="color: {{ $hrColor }}; font-weight: 700;">
+                            <div
+                                class="rating-value"
+                                style="color: {{ $hrColor }}; font-weight: 700;"
+                            >
 
-                                @if($hrScore !== null)
+                                @if($hrScore100 !== null)
 
                                     {{ $hrRating }}
+
+                                @else
+
+                                    <span class="pending-text">
+                                        Pending
+                                    </span>
+
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                        {{-- =============================================
+                            FINAL SCORE
+                        ============================================== --}}
+
+                        <div class="rating-group final-score-group">
+
+                            {{-- SCORE --}}
+                            <div
+                                class="rating-score total-score"
+                                style="color: {{ $totalColor }}; font-weight: 800;"
+                            >
+
+                                @if($totalScore !== null)
+
+                                    {{ number_format($totalScore, 2) }}
+
+                                @else
+
+                                    —
+
+                                @endif
+
+                            </div>
+
+                            {{-- RATING --}}
+                            <div
+                                class="rating-value"
+                                style="color: {{ $totalColor }}; font-weight: 700;"
+                            >
+
+                                @if($totalScore !== null)
+
+                                    {{ $totalRating }}
 
                                 @else
 
@@ -459,8 +612,10 @@ $selfColor = $ratingColors[$selfRating] ?? '#adb5bd';
 
                         <div class="action-cell">
 
-                            <a href="{{ route('goal-manager.show', $employee) }}"
-                               class="btn btn-primary btn-sm view-goals-btn">
+                            <a
+                                href="{{ route('goal-manager.show', $employee) }}"
+                                class="btn btn-primary btn-sm view-goals-btn"
+                            >
 
                                 <i class="fas fa-eye me-1"></i>
 
@@ -738,6 +893,7 @@ body {
         180px
         180px
         180px
+        180px
         90px;
 
     gap: 10px;
@@ -852,6 +1008,18 @@ body {
 }
 
 /* =========================================================
+   FINAL SCORE GROUP
+========================================================= */
+
+.final-score-group {
+
+    background: #f8fbfe;
+
+    border-radius: 7px;
+
+}
+
+/* =========================================================
    SCORE
 ========================================================= */
 
@@ -885,6 +1053,14 @@ body {
 .feedback-score {
 
     color: #d97706;
+
+}
+
+.total-score {
+
+    font-size: 14px;
+
+    color: var(--pms-primary);
 
 }
 
