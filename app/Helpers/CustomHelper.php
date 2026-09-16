@@ -627,6 +627,70 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId, $activeTermId)
             $class->not_held_percentage = $class->total_rows
                 ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
                 : 0;
+
+            // ✅ ADD THESE 2 LINES HERE
+            $class->total_classes = $class->attendances->count();
+
+            // Calculate avg_present_percentage
+            $class->totalStudentsClass = $class->attendances->sum('total_students');
+
+            // Color & rating logic
+            if ($class->held_percentage == 100) {
+                $class->color = '#ffcb9a';
+                $class->rating = 'ME';
+            } elseif ($class->held_percentage >= 90 && $class->held_percentage <= 100) {
+                $class->color = '#fd7e13';
+                $class->rating = 'NI';
+            } else {
+                $class->color = '#ff4c51';
+                $class->rating = 'BE';
+            }
+
+            return $class;
+        })
+        // ✅ Exclude classes having 0 attendance records
+        ->filter(function ($class) {
+            return $class->total_classes > 0;
+        })
+        ->values();
+
+    //saveOverallAttendancePercentage(
+    //    $facultyId = getUserID($facultyId),
+    //    $classes,
+    //    $keyPerformanceAreaId = 1,
+    //    $indicatorCategoryId = 3,
+    //    $indicatorId = 117,
+    //    $activeRoleId
+    //);
+
+    return $classes;
+}
+
+function myClassesAttendanceRecordWithoutExclude0count($facultyId, $activeRoleId, $activeTermId)
+{
+    // $activeTermId = Term::where('status', '1')->value('id');
+    $classes = FacultyMemberClass::withCount([
+        'attendances as total_rows',
+        'attendances as class_held_count' => function ($query) {
+            $query->where('att_marked', 1);
+        },
+        'attendances as class_not_held_count' => function ($query) {
+            $query->where('att_marked', 0);
+        },
+    ])
+        ->where('faculty_id', $facultyId)
+        ->where('term_id', $activeTermId)
+        ->get()
+        ->map(function ($class) {
+            $class->program = $class->attendances()->latest('class_date')->value('program_name');
+
+            $class->held_percentage = $class->total_rows
+                ? round(($class->class_held_count / $class->total_rows) * 100, 2)
+                : 0;
+
+            $class->not_held_percentage = $class->total_rows
+                ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
+                : 0;
             // ✅ ADD THESE 2 LINES HERE
             $class->total_classes = $class->attendances->count();
 
@@ -5048,7 +5112,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         ->where('term', 'Fall')
         ->pluck('id');
 
-
     /*
     |--------------------------------------------------------------------------
     | HOD Department
@@ -5056,7 +5119,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
     */
 
     $departmentId = auth()->user()->department_id;
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5066,7 +5128,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 
     $facultyMembers = User::where('department_id', $departmentId)
     ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5090,7 +5151,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         ->latest()
         ->get();
 
-
     /*
     |--------------------------------------------------------------------------
     | Rating / Status
@@ -5102,7 +5162,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         $value = (float) (
             $row->completion_of_Course_folder ?? 0
         );
-
 
         if ($value == 100) {
 
@@ -5123,10 +5182,8 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
             $row->status_folder = 'Not Completed';
         }
 
-
         $row->score = $value;
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5138,7 +5195,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         ->whereIn('term_id', $springTermIds)
         ->values();
 
-
     /*
     |--------------------------------------------------------------------------
     | Fall Data
@@ -5148,7 +5204,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
     $fallData = $records
         ->whereIn('term_id', $fallTermIds)
         ->values();
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5168,9 +5223,7 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 
         : 0;
 
-
     $springScore = round($springScore, 2);
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5190,9 +5243,7 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 
         : 0;
 
-
     $fallScore = round($fallScore, 2);
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5220,7 +5271,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         $avgPercentage = 0;
     }
 
-
     /*
     |--------------------------------------------------------------------------
     | Weightage
@@ -5233,7 +5283,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         $indicator_id
     )['weightage'] ?? 0;
 
-
     /*
     |--------------------------------------------------------------------------
     | Weighted Score
@@ -5243,7 +5292,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
     $weightedScore = (
         $avgPercentage * $weightage
     ) / 100;
-
 
     /*
     |--------------------------------------------------------------------------
@@ -5262,7 +5310,6 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
         $weightedScore,
         $avgPercentage
     );
-
 
     /*
     |--------------------------------------------------------------------------
@@ -8293,7 +8340,6 @@ function EmployabilityOfPL($employeeId, $ProgramLevel)
             ? round(($relevant / $employertotalCount) * 100, 1)
             : 0;
             
-
         return [
             'program_name' => optional($items->first()->program)->program_name,
             'total_students' => $employertotalCount,
@@ -9233,7 +9279,6 @@ if (!function_exists('retentionRateofFaculty')) {
         //     ->where('faculty_id', $facultyId)
         //     ->selectRaw('AVG(no_retention_rate) as satisfaction')
         //     ->first();
-
 
         $retention = FacultyRetention::where(
                 'indicator_id',
