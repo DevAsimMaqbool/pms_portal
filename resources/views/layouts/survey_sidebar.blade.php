@@ -85,7 +85,7 @@
         </li>
         
         <li class="menu-item ">
-            <a href="#" class="menu-link">
+            <a href="{{ route('line-manager-feedback-chart') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-star"></i>
                 <div data-i18n="Virtue Mirror">Virtue Mirror</div>
             </a>
@@ -182,7 +182,7 @@
             <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-report"></i>
-                <div data-i18n="Daily Productivity">Daily Productivity</div>
+                <div data-i18n="Validate Daily Productivity">Validate Daily Productivity</div>
             </a>
 
             <ul class="menu-sub">

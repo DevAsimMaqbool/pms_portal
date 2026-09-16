@@ -721,6 +721,10 @@ Route::get(
     '/my-performance-report/download',
     [PerformanceReportController::class, 'download']
 )->name('my-performance-report.download');
+Route::get(
+    '/line-manager-feedback-chart',
+    [PerformanceReportController::class, 'lineManagerFeedbackChart']
+)->name('line-manager-feedback-chart');
 
 });
 require __DIR__ . '/auth.php';

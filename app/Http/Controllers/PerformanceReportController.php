@@ -475,6 +475,121 @@ class PerformanceReportController extends Controller
     }
 
     /**
+     * Show logged-in employee's Line Manager Feedback
+     * in a Spider / Radar chart.
+     */
+    public function lineManagerFeedbackChart()
+    {
+        $user = Auth::user();
+
+        /*
+        |--------------------------------------------------------------------------
+        | LINE MANAGER FEEDBACK
+        |--------------------------------------------------------------------------
+        |
+        | Get latest active/approved feedback for logged-in employee.
+        |
+        */
+        $lineManagerFeedback = LineManagerFeedback::where(
+            'employee_id',
+            $user->id
+        )
+            ->where('status', 1)
+            ->latest('id')
+            ->first();
+
+        /*
+        |--------------------------------------------------------------------------
+        | VIRTUE SCORES
+        |--------------------------------------------------------------------------
+        */
+        $virtueScores = [
+            'Honesty & Integrity' => $this->averageValues(
+                $lineManagerFeedback,
+                [
+                    'honesty_integrity_1',
+                    'honesty_integrity_2',
+                    'honesty_integrity_3',
+                ]
+            ),
+
+            'Responsibility & Accountability' => $this->averageValues(
+                $lineManagerFeedback,
+                [
+                    'responsibility_accountability_1',
+                    'responsibility_accountability_2',
+                    'responsibility_accountability_3',
+                ]
+            ),
+
+            'Humility & Service' => $this->averageValues(
+                $lineManagerFeedback,
+                [
+                    'humility_service_1',
+                    'humility_service_2',
+                    'humility_service_3',
+                ]
+            ),
+
+            'Empathy & Compassion' => $this->averageValues(
+                $lineManagerFeedback,
+                [
+                    'empathy_compassion_1',
+                    'empathy_compassion_2',
+                ]
+            ),
+
+            'Courage & Drive' => $this->averageValues(
+                $lineManagerFeedback,
+                [
+                    'inspirational_leadership_1',
+                    'inspirational_leadership_2',
+                    'inspirational_leadership_3',
+                ]
+            ),
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | OVERALL VIRTUE SCORE
+        |--------------------------------------------------------------------------
+        */
+        $validVirtueScores = collect($virtueScores)
+            ->filter(function ($score) {
+                return $score !== null;
+            });
+
+        $virtueOverall = $validVirtueScores->count()
+            ? round($validVirtueScores->avg(), 2)
+            : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | FEEDBACK SCORE ON 100 SCALE
+        |--------------------------------------------------------------------------
+        */
+        $feedbackScore100 = $virtueOverall !== null
+            ? round($virtueOverall, 2)
+            : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | VIEW
+        |--------------------------------------------------------------------------
+        */
+        return view(
+            'admin.new_goals.line-manager-feedback-chart',
+            compact(
+                'user',
+                'lineManagerFeedback',
+                'virtueScores',
+                'virtueOverall',
+                'feedbackScore100'
+            )
+        );
+    }
+
+    /**
      * Calculate average of available numeric values.
      */
     private function averageValues(
