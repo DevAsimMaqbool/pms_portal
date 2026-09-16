@@ -236,7 +236,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 'publication_title' => 'required',
                 'journal_name' => 'required',
                 'target_category' => 'required|string|max:255',
-                'link_of_publications' => 'required|max:500',
+                'link_of_publications' => 'required|url|max:500',
                 'journal_clasification' => 'required',
                 'journal_hec' => '',
                 'journal_wos' => '',

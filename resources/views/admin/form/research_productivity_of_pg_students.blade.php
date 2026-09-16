@@ -289,14 +289,14 @@
 
                     @if(auth()->user()->hasRole(['ORIC']))
                         <div>
-                            <div class="d-flex">
+                            {{-- <div class="d-flex d-none">
                                 <select id="bulkAction" class="form-select w-auto me-2">
                                     <option value="">-- Select Action --</option>
                                     <option value="3">Verified</option>
                                     <option value="2">UnVerified</option>
                                 </select>
                                 <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                            </div>
+                            </div> --}}
                             <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                                 <thead>
                                     <tr>

@@ -142,7 +142,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Link</label>
-                                                    <input type="url" name="link_of_publications" class="form-control">
+                                                    <input type="url" name="link_of_publications" required class="form-control">
                                                 </div>
                                                 
                                                 <div class="col-md-6">
@@ -373,6 +373,7 @@
                 {{-- ================= FORM 2 ================= --}}
                 @if(in_array(getRoleName(activeRole()), ['HOD']))
                     <div class="tab-pane fade" id="form2" role="tabpanel">
+                    <h4 class="mb-1">Research Publication</h4>
                         <form id="researchForm2" enctype="multipart/form-data" class="row">
                             @csrf
                             <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
@@ -507,14 +508,15 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="form3" role="tabpanel">
+                    <h4 class="mb-1">Research Publication</h4>
                         @if(in_array(getRoleName(activeRole()), ['HOD']))
-                            <div class="d-flex">
+                            {{-- <div class="d-flex d-none">
                                 <select id="bulkAction" class="form-select w-auto me-2">
                                     <option value="">-- Select Action --</option>
                                     <option value="2">Verified</option>
                                 </select>
                                 <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                            </div>
+                            </div> --}}
                         @endif
                         <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                             <thead>
@@ -700,13 +702,13 @@
                 @if(in_array(getRoleName(activeRole()), ['ORIC']))
                     <div>
                     <h4 class="mb-1">Research Publication</h4>
-                        <div class="d-flex">
+                        {{-- <div class="d-flex d-none">
                             <select id="bulkAction" class="form-select w-auto me-2">
                                 <option value="">-- Select Action --</option>
                                 <option value="3">Verified</option>
                             </select>
                             <button id="bulkSubmit" class="btn btn-primary">Submit</button>
-                        </div>
+                        </div> --}}
                         <table id="complaintTable3" class="table table-bordered table-striped" style="width:100%">
                             <thead>
                                 <tr>

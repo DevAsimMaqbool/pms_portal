@@ -138,7 +138,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Link</label>
-                                                    <input type="url" name="link_of_publications" class="form-control">
+                                                    <input type="url" name="link_of_publications" required class="form-control">
                                                 </div>
                                                 <div class="col-md-6">
                                                         <label for="year" class="form-label">Year</label>
