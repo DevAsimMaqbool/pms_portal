@@ -102,10 +102,20 @@
                                                     placeholder="Country">
                                             </div>
 
-                                            <div class="col-md-4">
+                                            {{-- <div class="col-md-4">
                                                 <label class="form-label">Semester / Year</label>
                                                 <input type="text" name="student_semester" class="form-control"
                                                     placeholder="e.g., Fall 2025">
+                                            </div> --}}
+                                             <div class="col-md-4">
+                                                <label for="batch" class="form-label">Semester / Year /Term</label>
+                                                <select name="term_id" class="form-select term_id" id="term_id" required>
+                                                    <option value="">-- Select Term --</option>
+                                                    @foreach(SelectCurrentTerm() as $term)
+                                                        <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                    </option> @endforeach
+
+                                                </select>
                                             </div>
 
                                             <div class="col-md-4">
@@ -406,6 +416,9 @@
                                
                             } 
                             else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>'; 
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                ); 
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -413,9 +426,11 @@
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
                                 form.student_name || 'N/A',
+                                form.faculty ? form.faculty.name : 'N/A',
+                                form.term? `${form.term.term} - ${form.term.start_year || 'N/A'}`: 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -430,6 +445,8 @@
                                     { title: "#" },
                                     { title: "Created By" },
                                     { title: "Student Name" },
+                                    { title: "Faculty" },
+                                    { title: "Semester /Term" },
                                     { title: "Status" },
                                     { title: "Created Date" },
                                     { title: "Actions" }
@@ -479,7 +496,11 @@
                 // Extra fields for Form 2
 
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                   // const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -563,6 +584,22 @@
                     }
                     if (form.student_comments) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Student Comments</th><td>${form.student_comments}</td></tr>`);
+                    }
+                    if (form.term.term) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Faculty</th><td>${form.term.term}-${form.term.start_year}</td></tr>`);
+                    }
+                     if (form.faculty.name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Faculty</th><td>${form.faculty.name}</td></tr>`);
+                    }
+
+                    if (form.department.name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Department</th><td>${form.department.name}</td></tr>`);
+                    }
+                    if (form.program.program_name) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Program</th><td>${form.program.program_name}</td></tr>`);
+                    }
+                     if (form.program_level) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Program Level</th><td>${form.program_level}</td></tr>`);
                     }
 
 

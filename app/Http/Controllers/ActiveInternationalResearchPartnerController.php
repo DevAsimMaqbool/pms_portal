@@ -24,6 +24,7 @@ class ActiveInternationalResearchPartnerController extends Controller
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ActiveInternationalResearchPartner::with([
+                           'year',
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
@@ -36,6 +37,7 @@ class ActiveInternationalResearchPartnerController extends Controller
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $forms = ActiveInternationalResearchPartner::with([
+                            'year',
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
@@ -77,6 +79,7 @@ class ActiveInternationalResearchPartnerController extends Controller
                $rules = [
                         'indicator_id' => 'required|integer',
                         'research_partners' => 'required|array|min:1',
+                        'research_partners.*.year_id' => 'required',
                         'research_partners.*.deliverables' => 'required|string',
                         'research_partners.*.target' => 'required|integer',
                         'research_partners.*.achieved_target' => 'required|integer',
@@ -84,6 +87,7 @@ class ActiveInternationalResearchPartnerController extends Controller
                     ];
 
                     $messages = [
+                        'research_partners.*.year_id.required' => 'Year is required',
                         'research_partners.*.deliverables.required' => 'Deliverables is required',
                         'research_partners.*.target.required' => 'Target is required',
                         'research_partners.*.achieved_target.required' => 'Achieved Target is required.',
@@ -147,13 +151,14 @@ class ActiveInternationalResearchPartnerController extends Controller
 
                 $request->validate([
                         'record_id' => 'required',
+                        'year_id' => 'required',
                         'deliverables' => 'required|string',
                         'target' => 'required|integer|min:0',
                         'achieved_target' => 'required|integer|min:0',
                 ]);
 
                 $data = $request->only([
-                    'deliverables', 'target', 'achieved_target'
+                    'deliverables','year_id', 'target', 'achieved_target'
                 ]);
                 $data['status'] = 1;
                 $data['reject_status'] = '0';

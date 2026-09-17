@@ -44,90 +44,299 @@ $totalFeedback = 0;
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
 
-    <div class="modal fade" id="SatisfactionofInternationalStudents" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content custom-modal">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Title -->
-                    <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> Satisfaction of International
-                        Students
-                    </h3>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-striped align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Faculty</th>
-                                            <th>Department</th>
-                                            <th>Program</th>
-                                            <th>Program Level</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $data = internationalStudentSatisfactionAverage(
-                                                Auth::user()->employee_id,
-                                                $activeRoleId,
-                                                176
-                                            );
-                                            $overallAvg = collect($data->rows)->avg('score');
-                                        @endphp
+   <div class="modal fade"
+     id="SatisfactionofInternationalStudents"
+     tabindex="-1"
+     aria-hidden="true">
 
-                                        @foreach($data->rows as $index => $row)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
+    <div class="modal-dialog modal-xl modal-dialog-centered">
 
-                                                <td>{{ $row['faculty'] }}</td>
-                                                <td>{{ $row['department'] }}</td>
-                                                <td>{{ $row['program'] }}</td>
-                                                <td>{{ $row['program_level'] }}</td>
+        <div class="modal-content custom-modal">
 
-                                                <td>
-                                                    <div class="badge" style="background-color: {{ $row['color'] }}">
-                                                        {{ number_format($row['score'], 1) }}%
-                                                    </div>
-                                                </td>
+            <div class="modal-header">
 
-                                                <td>
-                                                    <span class="badge" style="background-color: {{ $row['color'] }}">
-                                                        {{ $row['rating'] }}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th>Total</th>
-                                            <th colspan="4" class="text-end"></th>
-                                            <th style="font-size: 0.960rem;">
-                                                <b class="badge" style="background-color: {{ getRatingMeta($overallAvg)->color }}">
-                                                    {{ number_format($overallAvg, 1) }}%
-                                                </b>
-                                            </th>
-                                            <th style="font-size: 0.960rem;"><b class="badge"
-                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
-                                                    {{ getRatingMeta($overallAvg)->rating }}
-                                                </b></th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+
             </div>
+
+
+            <div class="modal-body p-4">
+
+                <!-- Title -->
+
+                <h3 class="text-center mb-4 fw-bold text-primary">
+
+                    <div class="badge bg-label-primary rounded p-2">
+
+                        <i class="icon-base ti tabler-clock-hour-2 icon-md"></i>
+
+                    </div>
+
+                    Satisfaction of International Students
+
+                </h3>
+
+
+                @php
+
+                    $data = internationalStudentSatisfactionAverage(
+                        Auth::user()->employee_id,
+                        $activeRoleId,
+                        176
+                    );
+
+                    $terms = collect($data->terms);
+
+                @endphp
+
+
+                <!-- Tabs -->
+
+                <div class="nav-align-top nav-tabs-shadow">
+
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+
+                        <ul class="nav custom-tabs" role="tablist">
+
+                            @foreach($terms as $index => $term)
+
+                                <li class="nav-item">
+
+                                    <button
+                                        type="button"
+                                        class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                                        role="tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#satisfaction-term-{{ $term['term_id'] }}"
+                                        aria-controls="satisfaction-term-{{ $term['term_id'] }}"
+                                        aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+
+                                        {{ $term['term'] ?? 'Term' }}
+
+                                        {{ $term['start_year'] ?? '' }}
+
+                                    </button>
+
+                                </li>
+
+                            @endforeach
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- Tab Content -->
+
+                    <div class="tab-content">
+
+                        @foreach($terms as $index => $term)
+
+                            @php
+
+                                $termRows = collect(
+                                    $term['rows']
+                                );
+
+                            @endphp
+
+
+                            <div
+                                class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}"
+                                id="satisfaction-term-{{ $term['term_id'] }}"
+                                role="tabpanel">
+
+
+                                <div class="card">
+
+                                    <div class="card-body">
+
+                                        <div class="table-responsive text-nowrap">
+
+                                            <table class="table table-hover align-middle custom-table">
+
+                                                <thead class="table-primary">
+
+                                                    <tr>
+
+                                                        <th>Sr#</th>
+
+                                                        <th>Faculty</th>
+
+                                                        <th>Department</th>
+
+                                                        <th>Program</th>
+
+                                                        <th>Program Level</th>
+
+                                                        <th>Score</th>
+
+                                                        <th>Rating</th>
+
+                                                    </tr>
+
+                                                </thead>
+
+
+                                                <tbody>
+
+                                                    @forelse(
+                                                        $termRows
+                                                        as $rowIndex => $row
+                                                    )
+
+                                                        <tr>
+
+                                                            <td>
+                                                                {{ $rowIndex + 1 }}
+                                                            </td>
+
+
+                                                            <td>
+                                                                {{ $row['faculty'] ?? 'N/A' }}
+                                                            </td>
+
+
+                                                            <td>
+                                                                {{ $row['department'] ?? 'N/A' }}
+                                                            </td>
+
+
+                                                            <td>
+                                                                {{ $row['program'] ?? 'N/A' }}
+                                                            </td>
+
+
+                                                            <td>
+                                                                {{ $row['program_level'] ?? 'N/A' }}
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <div
+                                                                    class="badge"
+                                                                    style="background-color: {{ $row['color'] }}">
+
+                                                                    {{ number_format(
+                                                                        $row['score'],
+                                                                        1
+                                                                    ) }}%
+
+                                                                </div>
+
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <span
+                                                                    class="badge"
+                                                                    style="background-color: {{ $row['color'] }}">
+
+                                                                    {{ $row['rating'] }}
+
+                                                                </span>
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @empty
+
+                                                        <tr>
+
+                                                            <td
+                                                                colspan="7"
+                                                                class="text-center">
+
+                                                                No data available.
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @endforelse
+
+                                                </tbody>
+
+
+                                                <!-- Term Total -->
+
+                                                <tfoot>
+
+                                                    <tr class="table-primary">
+
+                                                        <th>
+                                                            Total
+                                                        </th>
+
+                                                        <th colspan="4"
+                                                            class="text-end">
+
+                                                        </th>
+
+
+                                                        <th>
+
+                                                            <b
+                                                                class="badge"
+                                                                style="background-color: {{ $term['color'] }}">
+
+                                                                {{ number_format(
+                                                                    $term['average'],
+                                                                    1
+                                                                ) }}%
+
+                                                            </b>
+
+                                                        </th>
+
+
+                                                        <th>
+
+                                                            <b
+                                                                class="badge"
+                                                                style="background-color: {{ $term['color'] }}">
+
+                                                                {{ $term['rating'] }}
+
+                                                            </b>
+
+                                                        </th>
+
+                                                    </tr>
+
+                                                </tfoot>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
+
+</div>
 
     <!-- / Payment Methods modal -->
 @endif

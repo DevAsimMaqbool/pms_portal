@@ -12,6 +12,7 @@ class AdmissionTargetAchieved extends Model
         'department_id',
         'program_id',
         'program_level',
+        'term_id',
         'admissions_campaign',
         'admissions_target',
         'achieved_target',
@@ -37,5 +38,9 @@ class AdmissionTargetAchieved extends Model
     public function program()
     {
         return $this->belongsTo(Program::class, 'program_id');
+    }
+    public function term()
+    {
+        return $this->belongsTo(Term::class, 'term_id');
     }
 }

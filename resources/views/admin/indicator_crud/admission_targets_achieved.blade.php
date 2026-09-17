@@ -103,21 +103,12 @@
 
 
                                                     <div class="col-md-4">
-                                                        <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
-                                                        @php
-    $year = now()->year - 1;
-                                                        @endphp
-                                                        <select name="admissions_campaign" id="admissions_campaign"
-                                                            class="select2 form-select admissions-campaign" required>
-                                                            <option value="">-- Select Campaign --</option>
-                                                             @for($i = 0; $i < 3; $i++)
-                                                                <option value="Fall {{ $year + $i }}">
-                                                                    Fall {{ $year + $i }}
-                                                                </option>
-                                                                <option value="Spring {{ $year + $i + 1 }}">
-                                                                    Spring {{ $year + $i + 1 }}
-                                                                </option>
-                                                            @endfor
+                                                        <label for="batch" class="form-label">Semester / Campaign /Term</label>
+                                                        <select name="term_id" class="form-select term_id" id="term_id" required>
+                                                            <option value="">-- Select Term --</option>
+                                                            @foreach(SelectCurrentTerm() as $term)
+                                                                <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                            </option> @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md-4">
@@ -253,6 +244,7 @@
                 $('#researchForm1 #record_id').val(form.id);
                 populateFacultyDepartmentProgram(form);
                 $('#researchForm1 #admissions_campaign').val(form.admissions_campaign).trigger('change');
+                $('#researchForm1 #term_id').val(form.term_id).trigger('change');
                 $('#researchForm1 #admissions_target').val(form.admissions_target)
                 $('#researchForm1 #achieved_target').val(form.achieved_target);
                 $('#researchForm1 #achieved_target').val(form.achieved_target);

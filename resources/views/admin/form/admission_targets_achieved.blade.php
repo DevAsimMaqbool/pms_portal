@@ -15,7 +15,6 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
@@ -106,22 +105,12 @@
                                             </div>
 
                                             <div class="col-md-4">
-                                                <label for="admissions_campaign_id" class="form-label">Admissions
-                                                    Campaign</label>
-                                                @php
-                                                    $year = now()->year - 1;
-                                                @endphp
-                                                <select name="admission[0][admissions_campaign]"
-                                                    class="select2 form-select admissions-campaign" required>
-                                                    <option value="">-- Select Campaign --</option>
-                                                    @for($i = 0; $i < 3; $i++)
-                                                        <option value="Fall {{ $year + $i }}">
-                                                            Fall {{ $year + $i }}
-                                                        </option>
-                                                        <option value="Spring {{ $year + $i + 1 }}">
-                                                            Spring {{ $year + $i + 1 }}
-                                                        </option>
-                                                    @endfor
+                                                <label for="batch" class="form-label">Semester / Campaign /Term</label>
+                                                <select name="admission[0][term_id]" class="form-select term_id" id="term_id" required>
+                                                    <option value="">-- Select Term --</option>
+                                                    @foreach(SelectCurrentTerm() as $term)
+                                                        <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                    </option> @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
@@ -223,18 +212,8 @@
                         facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
                     });
                     let currentYear = new Date().getFullYear() - 1;
-                    let campaignOptions = `<option value="">-- Select Admission Campaign --</option>`;
 
-                    for (let i = 0; i < 3; i++) {
-                        campaignOptions += `
-                                                                                                                        <option value="Fall ${currentYear + i}">
-                                                                                                                            Fall ${currentYear + i}
-                                                                                                                        </option>
-                                                                                                                        <option value="Spring ${currentYear + i + 1}">
-                                                                                                                            Spring ${currentYear + i + 1}
-                                                                                                                        </option>
-                                                                                                                    `;
-                    }
+                    
                     let newGroup = `
                                                                                                     <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
@@ -270,10 +249,12 @@
                                                                                                     </div>
 
                                                                                                          <div class="col-md-4">
-                                                                                                            <label for="admissions_campaign_id" class="form-label">Admissions Campaign</label>
-                                                                                                            <select name="admission[${pastIndex}][admissions_campaign]"
-                                                                                                                class="select2 form-select admissions-campaign" required>
-                                                                                                                ${campaignOptions}
+                                                                                                            <label for="batch" class="form-label">Semester / Campaign /Term</label>
+                                                                                                            <select name="admission[${pastIndex}][term_id]" class="form-select term_id" id="term_id" required>
+                                                                                                                <option value="">-- Select Term --</option>
+                                                                                                                @foreach(SelectCurrentTerm() as $term)
+                                                                                                                    <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                                                                                </option> @endforeach
                                                                                                             </select>
                                                                                                         </div>
                                                                                                         <div class="col-md-4">

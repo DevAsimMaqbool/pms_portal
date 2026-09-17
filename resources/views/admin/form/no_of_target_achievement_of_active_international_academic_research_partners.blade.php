@@ -25,7 +25,7 @@
                             
                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4">
                                 <div class="d-flex flex-column justify-content-center">
-                                    <h4 class="mb-1">% of target achievement of Active International Academic / Research Partners</h4>
+                                    <h4 class="mb-1">% of target achievement of Active International Academic / Research Partners1</h4>
                                 </div>
                                 <div class="d-flex align-content-center flex-wrap gap-4">
                                     <div class="d-flex gap-4">
@@ -45,18 +45,25 @@
 
                                         
 
-                                
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Year</label>
+                                                 <select name="research_partners[0][year_id]" id="year_id"
+                                                    class="form-select year_id" required>
+                                                    <option value=""> Select year</option>
+                                                        @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <label for="deliverables" class="form-label">Deliverables</label>
                                                 <input type="text" name="research_partners[0][deliverables]" class="form-control" min="1"
                                                     step="1" required>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Target</label>
                                                 <input type="number" name="research_partners[0][target]" class="form-control" min="1"
                                                     step="1" required>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Achieved</label>
                                                 <input type="number" name="research_partners[0][achieved_target]" class="form-control" min="1"
                                                     step="1" required>
@@ -225,19 +232,31 @@
                 // Add new author group
                 $('#add-coauthor').click(function () {
                     let newGroup = `
-            <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
-
-                <div class="col-md-4">
+                    <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
+                        <div class="col-md-6">
+                        <label class="form-label">Year</label>
+                        <select
+                            name="research_partners[${pastIndex}][year_id]"
+                            class="form-select year_id"
+                            required
+                        >
+                            <option value="">Select Year</option>
+                            @foreach(SelectCurrentYear(1) as $year)
+                             <option value="{{ $year->id }}">{{ $year->year }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                <div class="col-md-6">
                     <label for="deliverables" class="form-label">Deliverables</label>
                     <input type="text" name="research_partners[${pastIndex}][deliverables]" class="form-control" min="1"
                         step="1" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label class="form-label">Target</label>
                     <input type="number" name="research_partners[${pastIndex}][target]" class="form-control" min="1"
                         step="1" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label class="form-label">Achieved</label>
                     <input type="number" name="research_partners[${pastIndex}][achieved_target]" class="form-control" min="1"
                         step="1" required>
@@ -360,16 +379,20 @@
                                
                             } 
                             else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';  
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );
 
                             // Pass entire form as JSON in button's data attribute
                             return [
                                 `<input type="checkbox" class="rowCheckbox" value="${form.id}">`,
                                 i + 1,
                                 form.creator ? form.creator.name : 'N/A',
+                                form.year ? form.year.year : 'N/A',
                                 form.deliverables || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -383,6 +406,7 @@
                                     { title: "<input type='checkbox' id='selectAll'>" },
                                     { title: "#" },
                                     { title: "Created By" },
+                                    { title: "Year" },
                                     { title: "Deliverables" },
                                     { title: "Status" },
                                     { title: "Created Date" },
@@ -433,7 +457,11 @@
                 // Extra fields for Form 2
                
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                   // const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 
@@ -496,6 +524,9 @@
 
                         // update the label text
                         $('label[for="approveCheckbox"]').text(statusLabel);
+                    }
+                    if (form.year.year) {
+                        $('#modalExtraFields').append(`<tr class="optional-field"><th>Year</th><td>${form.year.year}</td></tr>`);
                     }
                     if (form.deliverables) {
                         $('#modalExtraFields').append(`<tr class="optional-field"><th>Deliverables</th><td>${form.deliverables}</td></tr>`);

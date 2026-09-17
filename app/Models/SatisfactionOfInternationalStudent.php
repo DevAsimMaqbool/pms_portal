@@ -16,6 +16,7 @@ class SatisfactionOfInternationalStudent extends Model
         'program_level',
         'student_country',
         'student_semester',
+        'term_id',
         'student_rating',
         'student_comments',
         'form_status',
@@ -46,5 +47,9 @@ class SatisfactionOfInternationalStudent extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
+     public function term()
+    {
+        return $this->belongsTo(Term::class, 'term_id');
     }
 }

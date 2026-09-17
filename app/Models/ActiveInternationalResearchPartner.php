@@ -16,6 +16,8 @@ class ActiveInternationalResearchPartner extends Model
         'form_status',
         'deliverables',
         'target',
+        'year_id',
+        'term_id',
         'achieved_target',
         'update_history',
         'status',
@@ -27,5 +29,9 @@ class ActiveInternationalResearchPartner extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
+    public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
     }
 }

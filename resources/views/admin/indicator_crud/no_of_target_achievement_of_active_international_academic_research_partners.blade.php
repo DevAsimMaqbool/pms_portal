@@ -108,8 +108,15 @@
                     <input type="hidden" name="_method" value="PUT">
 
                     <div class="row g-3">
-                       
                         
+                          <div class="col-md-4">
+                            <label for="year" class="form-label">Year</label>
+                            <select name="year_id" id="year_id"
+                                class="form-select" required>
+                                <option value=""> Select year</option>
+                                    @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                </select>
+                        </div>
                          <div class="col-md-4">
                             <label for="deliverables" class="form-label">Deliverables</label>
                             <input type="text" name="deliverables"  id="deliverables"  class="form-control" min="1"
@@ -187,6 +194,9 @@
                             const createdAt = form.created_at
                                 ? new Date(form.created_at).toISOString().split('T')[0]
                                 : 'N/A';
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );     
 
                             let statusText = 'N/A';
                             if (form.status == 1) {
@@ -211,11 +221,12 @@
                             if (parseInt(form.status) === 1) {
                                 editButton = `
                                     <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                        data-form='${JSON.stringify(form)}'>
+                                        data-form="${formData}">
                                         <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
                                     </button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
-                            }      
+                            }   
+                               
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -348,9 +359,14 @@
             });
                
             $(document).on('click', '.edit-form-btn', function () {
-        const form = $(this).data('form');
+        //const form = $(this).data('form');
+        const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
         $('#researchForm1 #record_id').val(form.id);
         $('#researchForm1 #achieved_target').val(form.achieved_target);
+        $('#researchForm1 #year_id').val(form.year_id).trigger('change');;
         $('#researchForm1 #deliverables').val(form.deliverables)
         $('#researchForm1 #target').val(form.target);
         
