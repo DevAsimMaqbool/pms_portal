@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+
 class SatisfactionOfInternationalStudentController extends Controller
 {
 
@@ -23,6 +24,7 @@ class SatisfactionOfInternationalStudentController extends Controller
                         'faculty',
                         'department',
                         'program',
+                        'term',
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         }
@@ -35,6 +37,10 @@ class SatisfactionOfInternationalStudentController extends Controller
                 $status = $request->input('status');
                 if ($status == "HOD") {
                     $forms = SatisfactionOfInternationalStudent::with([
+                        'faculty',
+                        'department',
+                        'program',
+                        'term',
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');
                         }
@@ -70,7 +76,8 @@ class SatisfactionOfInternationalStudentController extends Controller
                     'program_id' => 'required',
                     'program_level' => 'required',
                     'student_country' => 'required|string|max:255',
-                    'student_semester' => 'required|string|max:255',
+                    // 'student_semester' => 'required|string|max:255',
+                    'term_id' => 'required|integer',
                     'score' => 'required|numeric|min:0|max:5',
                     'student_comments' => '',
                     'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -119,7 +126,8 @@ class SatisfactionOfInternationalStudentController extends Controller
                     'program_id' => 'required',
                     'program_level' => 'required',
                     'student_country' => 'required|string|max:255',
-                    'student_semester' => 'required|string|max:255',
+                    // 'student_semester' => 'required|string|max:255',
+                    'term_id' => 'required|integer',
                     'score' => 'required|numeric|min:0|max:5',
                     'student_comments' => '',
                 ]);
@@ -132,7 +140,8 @@ class SatisfactionOfInternationalStudentController extends Controller
                     'program_id' => $request->program_id,
                     'program_level' => $request->program_level,
                     'student_country' => $request->student_country,
-                    'student_semester' => $request->student_semester,
+                    // 'student_semester' => $request->student_semester,
+                    'term_id' => $request->term_id,
                     'student_rating' => $request->score,
                     'student_comments' => $request->student_comments,
                     'status' => 1,

@@ -53,7 +53,7 @@
                                             <th>Program</th>
                                             <th>Program Level</th>
                                             <th>Country</th>
-                                            <th>Semester / Year</th>
+                                            <th>Semester / Term</th>
                                             <th>Status</th>
                                             <th>History</th>
                                             <th>Actions</th>
@@ -185,10 +185,20 @@
                                                     placeholder="Country">
                                             </div>
 
-                                            <div class="col-md-4">
+                                            {{-- <div class="col-md-4">
                                                 <label class="form-label">Semester / Year</label>
                                                 <input type="text" name="student_semester" class="form-control"
                                                     placeholder="e.g., Fall 2025">
+                                            </div> --}}
+                                             <div class="col-md-4">
+                                                <label for="batch" class="form-label">Semester / Year /Term</label>
+                                                <select name="term_id" class="form-select term_id" id="term_id" required>
+                                                    <option value="">-- Select Term --</option>
+                                                    @foreach(SelectCurrentTerm() as $term)
+                                                        <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                    </option> @endforeach
+
+                                                </select>
                                             </div>
 
                                             <div class="col-md-4">
@@ -290,6 +300,9 @@
                         const forms = data.forms || [];
 
                         const rowData = forms.map((form, i) => {
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                ); 
 
                             let statusText = 'N/A';
                             if (form.status == 1) {
@@ -307,12 +320,13 @@
                             } 
                             else if (form.status == 2){
                                  statusText = '<span class="badge bg-label-success">Verified by QEC</span>';
-                            }   
+                            }  
+
 
                             let editButton = '';
                             let deleteBtn = '';
                             if (parseInt(form.status) === 1) {
-                                editButton = `<button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" data-form='${JSON.stringify(form)}'>Edit</button>`;
+                                editButton = `<button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" data-form="${formData}">Edit</button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
                             }
 
@@ -325,7 +339,7 @@
                                 form.program ? form.program.program_name : 'N/A',
                                 form.program_level,
                                 form.student_country,
-                                form.student_semester,
+                                form.term? `${form.term.term} - ${form.term.start_year || 'N/A'}`: 'N/A',
                                 statusText,
                                 `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
                                                                                                                                                                     data-history='${JSON.stringify(form.update_history)}'
@@ -352,7 +366,7 @@
                                     { title: "Program" },
                                     { title: "Program Level" },
                                     { title: "Country" },
-                                    { title: "Semester" },
+                                    { title: "Semester /Term" },
                                     { title: "Status" },
                                     { title: "History" },
                                     { title: "Actions" }
@@ -375,6 +389,7 @@
                     }
                 });
             }
+            
 
             $(document).ready(function () {
                 fetchAchievementForms();
@@ -455,7 +470,11 @@
                 });
 
                 $(document).on('click', '.edit-form-btn', function () {
-                    let form = $(this).data('form');
+                    //let form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     let $f = $('#researchForm1');
 
                     // Reset form
@@ -501,6 +520,7 @@
                         }
                     });
                     $f.find('[name="program_level"]').val(form.program_level).trigger('change');
+                    $f.find('[name="term_id"]').val(form.term_id).trigger('change');
                     $f.find('[name="student_country"]').val(form.student_country);
                     $f.find('[name="student_semester"]').val(form.student_semester);
                     employerRaty.setScore(form.student_rating);
@@ -533,11 +553,11 @@
                         success: function (response) {
                             Swal.close();
                             Swal.fire('Success', response.message, 'success');
-                            $('#employabilityFormModal').modal('hide');
+                            $('#updateFormModal').modal('hide');
                             $('#researchForm1')[0].reset();
                             form.find('.invalid-feedback').remove();
                             form.find('.is-invalid').removeClass('is-invalid');
-                            fetchCommercialForms(); // reload table
+                            fetchAchievementForms(); // reload table
                         },
                         error: function (xhr) {
                             Swal.close();

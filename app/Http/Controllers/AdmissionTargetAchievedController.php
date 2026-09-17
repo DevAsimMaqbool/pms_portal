@@ -136,7 +136,8 @@ class AdmissionTargetAchievedController extends Controller
         try {
 
             $employeeId = Auth::user()->employee_id;
-
+            
+            // 'admission.*.admissions_campaign' => 'required|string',
             $validator = Validator::make($request->all(), [
                 'indicator_id' => 'required|integer',
                 'admission' => 'required|array|min:1',
@@ -144,7 +145,7 @@ class AdmissionTargetAchievedController extends Controller
                 'admission.*.department_id' => 'required|integer',
                 'admission.*.program_id' => 'required|integer',
                 'admission.*.program_level' => 'required|string',
-                'admission.*.admissions_campaign' => 'required|string',
+                'admission.*.term_id' => 'required',
                 'admission.*.admissions_target' => 'required',
                 'admission.*.achieved_target' => 'required',
                 'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -165,7 +166,7 @@ class AdmissionTargetAchievedController extends Controller
                 $exists = AdmissionTargetAchieved::where('faculty_id', $admissions['faculty_id'])
                     ->where('department_id', $admissions['department_id'])
                     ->where('program_id', $admissions['program_id'])
-                    ->where('admissions_campaign', $admissions['admissions_campaign'])
+                    ->where('term_id', $admissions['term_id'])
                     ->exists();
 
                 if ($exists) {
@@ -231,6 +232,7 @@ class AdmissionTargetAchievedController extends Controller
     public function update(Request $request, $id)
     {
         $record = AdmissionTargetAchieved::findOrFail($id);
+        //'admissions_campaign' => 'required',
 
         $request->validate([
             'record_id' => 'required',
@@ -238,7 +240,7 @@ class AdmissionTargetAchievedController extends Controller
             'department_id' => 'required|integer',
             'program_id' => 'required|integer',
             'program_level' => 'required|string',
-            'admissions_campaign' => 'required',
+            'term_id' => 'required',
             'admissions_target' => 'required|integer|min:0',
             'achieved_target' => 'required|integer|min:0',
 
@@ -247,7 +249,7 @@ class AdmissionTargetAchievedController extends Controller
         $exists = AdmissionTargetAchieved::where('faculty_id', $request->faculty_id)
             ->where('department_id', $request->department_id)
             ->where('program_id', $request->program_id)
-            ->where('admissions_campaign', $request->admissions_campaign)
+            ->where('term_id', $request->term_id)
             ->where('id', '!=', $id)  // exclude current record
             ->exists();
 
@@ -263,7 +265,7 @@ class AdmissionTargetAchievedController extends Controller
             'department_id',
             'program_id',
             'program_level',
-            'admissions_campaign',
+            'term_id',
             'admissions_target',
             'achieved_target'
         ]);
