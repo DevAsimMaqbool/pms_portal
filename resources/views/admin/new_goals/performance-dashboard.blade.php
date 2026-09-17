@@ -89,7 +89,7 @@
                             </h5>
 
                             <small>
-                                Employee ID: {{ $user->employee_id ?? '—' }}
+                                Employee ID: {{ $user->barcode ?? '—' }}
                             </small>
 
                         </div>
@@ -105,7 +105,9 @@
                             </span>
 
                             <strong>
-                                {{ $user->department ?? '—' }}
+                            {{ isset($user->hr_department_name) && str_contains($user->hr_department_name, '/')
+                            ? trim(last(explode('/', $user->hr_department_name)))
+                            : ($user->hr_department_name ?? '—') }}
                             </strong>
 
                         </div>
