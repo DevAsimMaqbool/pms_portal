@@ -272,7 +272,7 @@ class PermissionController extends Controller
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
                 return view('admin.dean-v2', compact('employee', 'researchData', 'showPasswordPopup'));
                 case 'survey':
-                return redirect()->route('newgoals.index');
+                return redirect()->route('performance.dashboard');
             default:
             case 'finance':
             case 'international office':

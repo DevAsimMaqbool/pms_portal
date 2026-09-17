@@ -725,6 +725,10 @@ Route::get(
     '/line-manager-feedback-chart',
     [PerformanceReportController::class, 'lineManagerFeedbackChart']
 )->name('line-manager-feedback-chart');
+Route::get(
+    '/performance-dashboard',
+    [PerformanceReportController::class, 'dashboard']
+)->name('performance.dashboard');
 
 });
 require __DIR__ . '/auth.php';

@@ -58,7 +58,7 @@
         </li> -->
 
         <li class="menu-item">
-            <a href="" class="menu-link">
+            <a href="{{ route('performance.dashboard') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-home"></i>
                 <div data-i18n="Home">Home</div>
             </a>
