@@ -375,7 +375,7 @@
 <div class="report-header">
 
     <div class="report-title">
-        Performance Appraisal Report — FY2026
+        Performance Appraisal Report — FY 2025-2026
     </div>
 
     <div class="report-subtitle">
