@@ -966,11 +966,7 @@ public function dashboard()
         $feedbackScore100 !== null
     ) {
 
-        $finalScore = round(
-            ($hrScore100 * 0.70) +
-            ($feedbackScore100 * 0.30),
-            2
-        );
+        $finalScore = $hrScore100;
     }
 
     /*

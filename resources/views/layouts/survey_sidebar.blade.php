@@ -73,7 +73,7 @@
 
         <li class="menu-item {{ request()->routeIs('goal-self-reports.index') ? 'active' : '' }}">
             <a href="{{ route('goal-self-reports.index') }}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-target"></i>
+                <i class="menu-icon icon-base ti tabler-clipboard-check"></i>
                 <div data-i18n="Self Performance Reporting">Self Performance Reporting</div>
             </a>
         </li>

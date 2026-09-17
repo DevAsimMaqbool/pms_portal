@@ -2,188 +2,187 @@
 
 @section('content')
 
-<div class="container-fluid py-4">
+@php
+    /*
+    |--------------------------------------------------------------------------
+    | Rating + Color Mapping
+    |--------------------------------------------------------------------------
+    | Exact PMS rating thresholds and colors.
+    */
+
+    $getRatingMeta = function ($percentage) {
+
+        if ($percentage === null || !is_numeric($percentage)) {
+            return [
+                'rating' => 'Pending',
+                'color' => '#adb5bd',
+                'text' => '#495057',
+                'soft' => '#f1f3f5',
+            ];
+        }
+
+        $percentage = (float) $percentage;
+
+        if ($percentage >= 90) {
+
+            return [
+                'rating' => 'OS',
+                'color' => '#6EA8FE',
+                'text' => '#173a5c',
+                'soft' => '#6EA8FE22',
+            ];
+
+        } elseif ($percentage >= 80) {
+
+            return [
+                'rating' => 'EE',
+                'color' => '#96e2b4',
+                'text' => '#155724',
+                'soft' => '#96e2b422',
+            ];
+
+        } elseif ($percentage >= 70) {
+
+            return [
+                'rating' => 'ME',
+                'color' => '#ffcb9a',
+                'text' => '#7a4b00',
+                'soft' => '#ffcb9a22',
+            ];
+
+        } elseif ($percentage >= 60) {
+
+            return [
+                'rating' => 'NI',
+                'color' => '#fd7e13',
+                'text' => '#ffffff',
+                'soft' => '#fd7e1322',
+            ];
+
+        } else {
+
+            return [
+                'rating' => 'BE',
+                'color' => '#ff4c51',
+                'text' => '#ffffff',
+                'soft' => '#ff4c5122',
+            ];
+        }
+    };
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weighted Scores
+    |--------------------------------------------------------------------------
+    | Calculate once and reuse.
+    */
+
+    $weightedManagerScore = $managerScore100 !== null
+        ? round((float) $managerScore100 * 0.70, 2)
+        : null;
+
+    $weightedFeedbackScore = $feedbackScore100 !== null
+        ? round((float) $feedbackScore100 * 0.30, 2)
+        : null;
+
+    $weightedTotal = (
+        $weightedManagerScore !== null &&
+        $weightedFeedbackScore !== null
+    )
+        ? round(
+            $weightedManagerScore + $weightedFeedbackScore,
+            2
+        )
+        : null;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rating Metadata
+    |--------------------------------------------------------------------------
+    */
+
+    $selfRatingMeta = $getRatingMeta($selfScore100);
+
+    $managerRatingMeta = $getRatingMeta($managerScore100);
+
+    $feedbackRatingMeta = $getRatingMeta($feedbackScore100);
+
+    $totalRatingMeta = $getRatingMeta($weightedTotal);
+
+    $hrRatingMeta = $getRatingMeta($hrScore100);
+
+    $finalRatingMeta = $getRatingMeta($finalScore);
+
+@endphp
+
+<div class="container-fluid py-3">
 
     {{-- =========================================================
-        PAGE HEADER
+        EMPLOYEE INFO + FINAL SCORE
     ========================================================== --}}
 
-    <div class="dashboard-header mb-4">
+    <div class="performance-header mb-3">
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        {{-- =====================================================
+            EMPLOYEE INFORMATION
+        ====================================================== --}}
 
-            <div class="d-flex align-items-center gap-3">
+        <div class="employee-info-card">
 
-                <div class="header-icon">
-
-                    <i class="fas fa-chart-line"></i>
-
-                </div>
-
-                <div>
-
-                    <h3 class="fw-bold mb-1">
-                        Performance Dashboard
-                    </h3>
-
-                    <p class="mb-0 text-muted">
-                        Your complete performance overview, goals, feedback and review progress.
-                    </p>
-
-                </div>
-
+            <div class="employee-avatar">
+                <i class="fas fa-user"></i>
             </div>
 
-            <div class="employee-header-badge">
+            <div class="employee-details">
 
-                <div class="employee-header-icon">
+                <div class="employee-top-line">
 
-                    <i class="fas fa-user"></i>
-
-                </div>
-
-                <div>
-
-                    <small>
-                        Employee
-                    </small>
-
-                    <strong>
+                    <div class="employee-name">
                         {{ $user->name ?? '—' }}
-                    </strong>
+                    </div>
+
+                    <span class="employee-profile-label">
+                        Employee
+                    </span>
 
                 </div>
 
-            </div>
+                <div class="employee-meta">
 
-        </div>
+                    <span>
+                        <i class="fas fa-id-badge"></i>
+                        {{ $user->barcode ?? '—' }}
+                    </span>
 
-    </div>
-
-    {{-- =========================================================
-        TOP PROFILE / SUMMARY
-    ========================================================== --}}
-
-    <div class="row g-4 mb-4">
-
-        {{-- EMPLOYEE INFO --}}
-
-        <div class="col-xl-4 col-lg-6">
-
-            <div class="section-card employee-profile-card h-100">
-
-                <div class="section-body">
-
-                    <div class="profile-top">
-
-                        <div class="profile-avatar">
-
-                            <i class="fas fa-user"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h5 class="fw-bold mb-1">
-                                {{ $user->name ?? '—' }}
-                            </h5>
-
-                            <small>
-                                Employee ID: {{ $user->barcode ?? '—' }}
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <div class="profile-details">
-
-                        <div class="profile-detail">
-
-                            <span>
-                                Department
-                            </span>
-
-                            <strong>
-                            {{ isset($user->hr_department_name) && str_contains($user->hr_department_name, '/')
-                            ? trim(last(explode('/', $user->hr_department_name)))
-                            : ($user->hr_department_name ?? '—') }}
-                            </strong>
-
-                        </div>
-
-                        <div class="profile-detail">
-
-                            <span>
-                                Line Manager
-                            </span>
-
-                            <strong>
-                                {{ $user->manager_name ?? '—' }}
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- FINAL SCORE --}}
-
-        <div class="col-xl-4 col-lg-6">
-
-            <div class="section-card final-score-card h-100">
-
-                <div class="final-score-content">
-
-                    <div>
-
-                        <small class="final-score-label">
-                            OVERALL PERFORMANCE
-                        </small>
-
-                        <h5 class="fw-bold mb-1">
-                            Final Score
-                        </h5>
-
-                        <p class="mb-0">
-                            Based on HR and Line Manager Feedback.
-                        </p>
-
-                    </div>
-
-                    <div class="final-score-number">
-
-                        @if($finalScore !== null)
-
-                            {{ number_format($finalScore, 2) }}
-
-                            <span>/100</span>
-
-                        @else
-
-                            —
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-                <div class="final-score-footer">
-
-                    <span class="final-rating-badge">
-
-                        {{ $finalRating }}
-
+                    <span class="employee-divider">
+                        •
                     </span>
 
                     <span>
-                        HR 70% + Feedback 30%
+                        <i class="fas fa-building"></i>
+
+                        {{
+                            isset($user->hr_department_name) &&
+                            str_contains($user->hr_department_name, '/')
+                                ? trim(last(explode('/', $user->hr_department_name)))
+                                : ($user->hr_department_name ?? '—')
+                        }}
+                    </span>
+
+                </div>
+
+                <div class="employee-manager">
+
+                    <span class="manager-label">
+
+                        <i class="fas fa-user-tie"></i>
+
+                        Line Manager
+
+                    </span>
+
+                    <span class="manager-name">
+                        {{ $user->manager_name ?? '—' }}
                     </span>
 
                 </div>
@@ -192,114 +191,98 @@
 
         </div>
 
-        {{-- GOAL PROGRESS --}}
+        {{-- =====================================================
+            FINAL SCORE
+        ====================================================== --}}
 
-        <div class="col-xl-4 col-lg-12">
+        <div
+            class="header-final-score"
+            style="
+                --final-color: {{ $finalRatingMeta['color'] }};
+                --final-text: {{ $finalRatingMeta['text'] }};
+            "
+        >
 
-            <div class="section-card h-100">
+            <div class="final-score-glow"></div>
 
-                <div class="section-header">
+            <div class="header-final-score-content">
 
-                    <div class="section-title">
+                <div class="header-final-score-title">
 
-                        <div class="section-number">
+                    <div
+                        class="header-final-score-icon"
+                        style="
+                            background: {{ $finalRatingMeta['soft'] }};
+                            color: {{ $finalRatingMeta['color'] }};
+                            border-color: {{ $finalRatingMeta['color'] }};
+                        "
+                    >
+                        <i class="fas fa-award"></i>
+                    </div>
 
-                            <i class="fas fa-bullseye"></i>
+                    <div>
 
+                        <div
+                            class="header-final-score-label"
+                            style="color: {{ $finalRatingMeta['text'] }};"
+                        >
+                            FINAL SCORE
                         </div>
 
-                        <div>
-
-                            <h5 class="mb-1 fw-bold">
-                                Goal Progress
-                            </h5>
-
-                            <small>
-                                Current performance against goals.
-                            </small>
-
+                        <div
+                            class="header-final-score-caption"
+                            style="color: {{ $finalRatingMeta['text'] }};"
+                        >
+                            Overall performance
                         </div>
 
                     </div>
 
                 </div>
 
-                <div class="section-body">
+                <div
+                    class="header-final-score-number"
+                    style="color: {{ $finalRatingMeta['text'] }};"
+                >
 
-                    <div class="goal-progress-top">
+                    @if($finalScore !== null)
 
-                        <div>
+                        <strong style="color: {{ $finalRatingMeta['text'] }};">
+                            {{ number_format($finalScore, 2) }}
+                        </strong>
 
-                            <div class="goal-progress-label">
-                                Completion
-                            </div>
+                        <span style="color: {{ $finalRatingMeta['text'] }};">
+                            /100
+                        </span>
 
-                            <strong>
-                                {{ number_format($goalProgress, 0) }}%
-                            </strong>
+                    @else
 
-                        </div>
+                        <strong style="color: {{ $finalRatingMeta['text'] }};">
+                            —
+                        </strong>
 
-                        <div class="goal-count-text">
+                    @endif
 
-                            {{ $completedGoals }}
-                            /
-                            {{ $totalGoals }}
+                </div>
 
-                            completed
+                <div class="header-final-score-rating">
 
-                        </div>
+                    <span style="color: {{ $finalRatingMeta['text'] }};">
+                        Rating
+                    </span>
 
-                    </div>
-
-                    <div class="progress-custom">
-
-                        <div
-                            class="progress-custom-bar"
-                            style="width: {{ min($goalProgress, 100) }}%;"
-                        ></div>
-
-                    </div>
-
-                    <div class="goal-mini-stats">
-
-                        <div>
-
-                            <span class="goal-stat-dot completed"></span>
-
-                            <strong>
-                                {{ $completedGoals }}
-                            </strong>
-
-                            Completed
-
-                        </div>
-
-                        <div>
-
-                            <span class="goal-stat-dot progress"></span>
-
-                            <strong>
-                                {{ $inProgressGoals }}
-                            </strong>
-
-                            In Progress
-
-                        </div>
-
-                        <div>
-
-                            <span class="goal-stat-dot pending"></span>
-
-                            <strong>
-                                {{ $notStartedGoals }}
-                            </strong>
-
-                            Not Started
-
-                        </div>
-
-                    </div>
+                    <strong
+                        style="
+                            background-color: {{ $finalRatingMeta['color'] }};
+                            color: {{ $finalRatingMeta['text'] }};
+                            border-color: {{ $finalRatingMeta['color'] }};
+                        "
+                    >
+                        {{ $finalScore !== null
+                            ? $finalRatingMeta['rating']
+                            : 'Pending'
+                        }}
+                    </strong>
 
                 </div>
 
@@ -313,865 +296,428 @@
         SCORE CARDS
     ========================================================== --}}
 
-    <div class="row g-4 mb-4">
-
-        {{-- SELF --}}
-
-        <div class="col-xl col-md-6">
-
-            <div class="score-summary-card">
-
-                <div class="score-summary-top">
-
-                    <div class="score-summary-icon self">
-
-                        <i class="fas fa-user"></i>
-
-                    </div>
-
-                    <span class="score-summary-label">
-                        Self Score
-                    </span>
-
-                </div>
-
-                <div class="score-summary-value">
-
-                    @if($selfScore100 !== null)
-
-                        {{ number_format($selfScore100, 2) }}
-
-                        <span>/100</span>
-
-                    @else
-                        —
-                    @endif
-
-                </div>
-
-                <div class="score-summary-footer">
-
-                    <span>
-                        {{ $selfRating }}
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- MANAGER --}}
-
-        <div class="col-xl col-md-6">
-
-            <div class="score-summary-card">
-
-                <div class="score-summary-top">
-
-                    <div class="score-summary-icon manager">
-
-                        <i class="fas fa-user-tie"></i>
-
-                    </div>
-
-                    <span class="score-summary-label">
-                        Manager Score
-                    </span>
-
-                </div>
-
-                <div class="score-summary-value">
-
-                    @if($managerScore100 !== null)
-
-                        {{ number_format($managerScore100, 2) }}
-
-                        <span>/100</span>
-
-                    @else
-                        —
-                    @endif
-
-                </div>
-
-                <div class="score-summary-footer">
-
-                    <span>
-                        {{ $managerRating }}
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- FEEDBACK --}}
-
-        <div class="col-xl col-md-6">
-
-            <div class="score-summary-card">
-
-                <div class="score-summary-top">
-
-                    <div class="score-summary-icon feedback">
-
-                        <i class="fas fa-comments"></i>
-
-                    </div>
-
-                    <span class="score-summary-label">
-                        Feedback Score
-                    </span>
-
-                </div>
-
-                <div class="score-summary-value">
-
-                    @if($feedbackScore100 !== null)
-
-                        {{ number_format($feedbackScore100, 2) }}
-
-                        <span>/100</span>
-
-                    @else
-                        —
-                    @endif
-
-                </div>
-
-                <div class="score-summary-footer">
-
-                    <span>
-                        {{ $feedbackRating }}
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- HR --}}
-
-        <div class="col-xl col-md-6">
-
-            <div class="score-summary-card">
-
-                <div class="score-summary-top">
-
-                    <div class="score-summary-icon hr">
-
-                        <i class="fas fa-user-shield"></i>
-
-                    </div>
-
-                    <span class="score-summary-label">
-                        HR Score
-                    </span>
-
-                </div>
-
-                <div class="score-summary-value">
-
-                    @if($hrScore100 !== null)
-
-                        {{ number_format($hrScore100, 2) }}
-
-                        <span>/100</span>
-
-                    @else
-                        —
-                    @endif
-
-                </div>
-
-                <div class="score-summary-footer">
-
-                    <span>
-                        {{ $hrRating }}
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- FINAL --}}
-
-        <div class="col-xl col-md-6">
-
-            <div class="score-summary-card final">
-
-                <div class="score-summary-top">
-
-                    <div class="score-summary-icon final">
-
-                        <i class="fas fa-award"></i>
-
-                    </div>
-
-                    <span class="score-summary-label">
-                        Final Score
-                    </span>
-
-                </div>
-
-                <div class="score-summary-value">
-
-                    @if($finalScore !== null)
-
-                        {{ number_format($finalScore, 2) }}
-
-                        <span>/100</span>
-
-                    @else
-                        —
-                    @endif
-
-                </div>
-
-                <div class="score-summary-footer">
-
-                    <span>
-                        {{ $finalRating }}
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    {{-- =========================================================
-        MAIN ANALYTICS
-    ========================================================== --}}
-
-    <div class="row g-4 mb-4">
+    <div class="score-grid mb-3">
 
         {{-- =====================================================
-            PERFORMANCE BREAKDOWN
+            SELF ASSESSMENT
         ====================================================== --}}
 
-        <div class="col-lg-5">
+        <div
+            class="performance-score-card"
+            style="
+                --rating-color: {{ $selfRatingMeta['color'] }};
+                --rating-soft: {{ $selfRatingMeta['soft'] }};
+            "
+        >
 
-            <div class="section-card h-100">
+            <div
+                class="score-accent"
+                style="background: {{ $selfRatingMeta['color'] }};"
+            ></div>
 
-                <div class="section-header">
+            <div class="performance-score-top">
 
-                    <div class="section-title">
-
-                        <div class="section-number">
-
-                            <i class="fas fa-chart-bar"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h5 class="mb-1 fw-bold">
-                                Performance Breakdown
-                            </h5>
-
-                            <small>
-                                Score comparison across assessment sources.
-                            </small>
-
-                        </div>
-
-                    </div>
-
+                <div
+                    class="score-icon"
+                    style="
+                        background: {{ $selfRatingMeta['soft'] }};
+                        color: {{ $selfRatingMeta['color'] }};
+                    "
+                >
+                    <i class="fas fa-user"></i>
                 </div>
 
-                <div class="section-body">
+                <div class="score-heading">
 
-                    @php
-                        $performanceBars = [
-                            [
-                                'title' => 'Self',
-                                'score' => $selfScore100,
-                                'class' => 'bar-self'
-                            ],
-                            [
-                                'title' => 'Manager',
-                                'score' => $managerScore100,
-                                'class' => 'bar-manager'
-                            ],
-                            [
-                                'title' => 'Feedback',
-                                'score' => $feedbackScore100,
-                                'class' => 'bar-feedback'
-                            ],
-                            [
-                                'title' => 'HR',
-                                'score' => $hrScore100,
-                                'class' => 'bar-hr'
-                            ],
-                        ];
-                    @endphp
+                    <div class="score-card-label">
+                        Self Assessment
+                    </div>
 
-                    @foreach($performanceBars as $bar)
-
-                        <div class="performance-bar-row">
-
-                            <div class="performance-bar-heading">
-
-                                <span>
-                                    {{ $bar['title'] }}
-                                </span>
-
-                                <strong>
-
-                                    @if($bar['score'] !== null)
-
-                                        {{ number_format($bar['score'], 2) }}
-
-                                    @else
-
-                                        —
-
-                                    @endif
-
-                                </strong>
-
-                            </div>
-
-                            <div class="performance-bar">
-
-                                @if($bar['score'] !== null)
-
-                                    <div
-                                        class="performance-bar-fill {{ $bar['class'] }}"
-                                        style="width: {{ min($bar['score'], 100) }}%;"
-                                    ></div>
-
-                                @endif
-
-                            </div>
-
-                        </div>
-
-                    @endforeach
-
-                    <div class="breakdown-note">
-
-                        <i class="fas fa-info-circle"></i>
-
-                        <span>
-                            Final Score uses HR at 70% and Feedback at 30%.
-                        </span>
-
+                    <div class="score-card-caption">
+                        Employee rating
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
-
-        {{-- =====================================================
-            REVIEW STATUS
-        ====================================================== --}}
-
-        <div class="col-lg-3">
-
-            <div class="section-card h-100">
-
-                <div class="section-header">
-
-                    <div class="section-title">
-
-                        <div class="section-number">
-
-                            <i class="fas fa-route"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h5 class="mb-1 fw-bold">
-                                Review Journey
-                            </h5>
-
-                            <small>
-                                Current appraisal stage.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="section-body">
-
-                    <div class="timeline">
-
-                        {{-- SELF REPORT --}}
-
-                        <div class="timeline-item">
-
-                            <div class="timeline-icon
-                                {{ $selfReportSubmitted ? 'done' : '' }}">
-
-                                <i class="fas
-                                    {{ $selfReportSubmitted
-                                        ? 'fa-check'
-                                        : 'fa-file-alt'
-                                    }}"></i>
-
-                            </div>
-
-                            <div class="timeline-content">
-
-                                <strong>
-                                    Self Report
-                                </strong>
-
-                                <small>
-
-                                    {{ $selfReportSubmitted
-                                        ? 'Submitted'
-                                        : 'Pending'
-                                    }}
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                        {{-- MANAGER --}}
-
-                        <div class="timeline-line"></div>
-
-                        <div class="timeline-item">
-
-                            <div class="timeline-icon
-                                {{ $managerReviewCompleted ? 'done' : '' }}">
-
-                                <i class="fas
-                                    {{ $managerReviewCompleted
-                                        ? 'fa-check'
-                                        : 'fa-user-tie'
-                                    }}"></i>
-
-                            </div>
-
-                            <div class="timeline-content">
-
-                                <strong>
-                                    Manager Review
-                                </strong>
-
-                                <small>
-
-                                    {{ $managerReviewCompleted
-                                        ? 'Completed'
-                                        : 'Pending'
-                                    }}
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                        {{-- HR --}}
-
-                        <div class="timeline-line"></div>
-
-                        <div class="timeline-item">
-
-                            <div class="timeline-icon
-                                {{ $hrReviewCompleted ? 'done' : '' }}">
-
-                                <i class="fas
-                                    {{ $hrReviewCompleted
-                                        ? 'fa-check'
-                                        : 'fa-user-shield'
-                                    }}"></i>
-
-                            </div>
-
-                            <div class="timeline-content">
-
-                                <strong>
-                                    HR Review
-                                </strong>
-
-                                <small>
-
-                                    {{ $hrReviewCompleted
-                                        ? 'Completed'
-                                        : 'Pending'
-                                    }}
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                        {{-- FINAL --}}
-
-                        <div class="timeline-line"></div>
-
-                        <div class="timeline-item">
-
-                            <div class="timeline-icon
-                                {{ $finalized ? 'done' : '' }}">
-
-                                <i class="fas
-                                    {{ $finalized
-                                        ? 'fa-check'
-                                        : 'fa-award'
-                                    }}"></i>
-
-                            </div>
-
-                            <div class="timeline-content">
-
-                                <strong>
-                                    Finalized
-                                </strong>
-
-                                <small>
-
-                                    {{ $finalized
-                                        ? 'Finalized'
-                                        : 'In Progress'
-                                    }}
-
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- =====================================================
-            VIRTUE MIRROR
-        ====================================================== --}}
-
-        <div class="col-lg-4">
-
-            <div class="section-card h-100">
-
-                <div class="section-header">
-
-                    <div class="section-title">
-
-                        <div class="section-number">
-
-                            <i class="fas fa-star"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h5 class="mb-1 fw-bold">
-                                Virtue Mirror
-                            </h5>
-
-                            <small>
-                                Line Manager Feedback
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="section-body">
-
-                    @php
-                        $virtueItems = [
-                            'Honesty & Integrity' =>
-                                $virtueScores['Honesty & Integrity'] ?? null,
-
-                            'Responsibility & Accountability' =>
-                                $virtueScores['Responsibility & Accountability'] ?? null,
-
-                            'Humility & Service' =>
-                                $virtueScores['Humility & Service'] ?? null,
-
-                            'Empathy & Compassion' =>
-                                $virtueScores['Empathy & Compassion'] ?? null,
-
-                            'Courage & Drive' =>
-                                $virtueScores['Courage & Drive'] ?? null,
-                        ];
-                    @endphp
-
-                    <div class="virtue-dashboard-list">
-
-                        @foreach($virtueItems as $virtue => $score)
-
-                            <div class="virtue-dashboard-item">
-
-                                <div class="virtue-dashboard-heading">
-
-                                    <span>
-                                        {{ $virtue }}
-                                    </span>
-
-                                    <strong>
-
-                                        @if($score !== null)
-
-                                            {{ number_format($score, 2) }}
-
-                                        @else
-
-                                            —
-
-                                        @endif
-
-                                    </strong>
-
-                                </div>
-
-                                <div class="virtue-dashboard-progress">
-
-                                    @if($score !== null)
-
-                                        <div
-                                            class="virtue-dashboard-fill"
-                                            style="width: {{ min($score, 100) }}%;"
-                                        ></div>
-
-                                    @endif
-
-                                </div>
-
-                            </div>
-
-                        @endforeach
-
-                    </div>
-
-                    <div class="virtue-overall">
-
-                        <div>
-
-                            <small>
-                                Overall Feedback
-                            </small>
-
-                            <strong>
-                                Line Manager
-                            </strong>
-
-                        </div>
-
-                        <div class="virtue-overall-value">
-
-                            @if($feedbackScore100 !== null)
-
-                                {{ number_format($feedbackScore100, 2) }}
-
-                                <span>/100</span>
-
-                            @else
-
-                                —
-
-                            @endif
-
-                        </div>
-
-                    </div>
-
-                    <a
-                        href="{{ route('line-manager-feedback-chart') }}"
-                        class="btn btn-light border w-100 mt-3"
-                    >
-
-                        <i class="fas fa-chart-pie me-2"></i>
-
-                        View Virtue Mirror
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    {{-- =========================================================
-        GOAL SUMMARY
-    ========================================================== --}}
-
-    <div class="section-card mb-4">
-
-        <div class="section-header">
-
-            <div class="section-title">
-
-                <div class="section-number">
-
-                    <i class="fas fa-bullseye"></i>
-
-                </div>
-
-                <div>
-
-                    <h5 class="mb-1 fw-bold">
-                        Goal Performance
-                    </h5>
-
-                    <small>
-                        Summary of your latest goal submissions.
-                    </small>
-
-                </div>
-
-            </div>
-
-            <a
-                href="{{ route('newgoals.index') }}"
-                class="btn btn-light border shadow-sm"
+            <div
+                class="performance-score-value"
+                style="color: {{ $selfRatingMeta['color'] }};"
             >
 
-                <i class="fas fa-list me-2"></i>
+                @if($selfScore100 !== null)
 
-                View Goals
+                    {{ number_format($selfScore100, 2) }}
 
-            </a>
+                    <span>/100</span>
+
+                @else
+
+                    —
+
+                @endif
+
+            </div>
+
+            <div class="score-card-bottom">
+
+                <span
+                    class="score-rating"
+                    style="
+                        background: {{ $selfRatingMeta['color'] }};
+                        color: {{ $selfRatingMeta['text'] }};
+                    "
+                >
+                    {{ $selfScore100 !== null
+                        ? $selfRatingMeta['rating']
+                        : 'Pending'
+                    }}
+                </span>
+
+                <span class="score-scale">
+                    Self Score
+                </span>
+
+            </div>
 
         </div>
 
-        <div class="section-body">
+        {{-- =====================================================
+            MANAGER ASSESSMENT
+        ====================================================== --}}
 
-            <div class="row g-3">
+        <div
+            class="performance-score-card"
+            style="
+                --rating-color: {{ $managerRatingMeta['color'] }};
+                --rating-soft: {{ $managerRatingMeta['soft'] }};
+            "
+        >
 
-                {{-- TOTAL --}}
+            <div
+                class="score-accent"
+                style="background: {{ $managerRatingMeta['color'] }};"
+            ></div>
 
-                <div class="col-lg-3 col-md-6">
+            <div class="performance-score-top">
 
-                    <div class="goal-stat-card">
+                <div
+                    class="score-icon"
+                    style="
+                        background: {{ $managerRatingMeta['soft'] }};
+                        color: {{ $managerRatingMeta['color'] }};
+                    "
+                >
+                    <i class="fas fa-user-tie"></i>
+                </div>
 
-                        <div class="goal-stat-icon blue">
+                <div class="score-heading">
 
-                            <i class="fas fa-bullseye"></i>
+                    <div class="score-card-label">
+                        Manager Assessment
+                    </div>
 
-                        </div>
-
-                        <div>
-
-                            <span>
-                                Total Goals
-                            </span>
-
-                            <strong>
-                                {{ $totalGoals }}
-                            </strong>
-
-                        </div>
-
+                    <div class="score-card-caption">
+                        Weighted contribution
                     </div>
 
                 </div>
 
-                {{-- APPROVED --}}
+            </div>
 
-                <div class="col-lg-3 col-md-6">
+            <div
+                class="performance-score-value"
+                style="color: {{ $managerRatingMeta['color'] }};"
+            >
 
-                    <div class="goal-stat-card">
+                @if($weightedManagerScore !== null)
 
-                        <div class="goal-stat-icon green">
+                    {{ number_format($weightedManagerScore, 2) }}
 
-                            <i class="fas fa-user-check"></i>
+                    <span>/70</span>
 
-                        </div>
+                @else
 
-                        <div>
+                    —
 
-                            <span>
-                                Manager Approved
-                            </span>
+                @endif
 
-                            <strong>
-                                {{ $approvedGoals }}
-                            </strong>
+            </div>
 
-                        </div>
+            <div class="score-card-bottom">
 
+                <span
+                    class="score-rating"
+                    style="
+                        background: {{ $managerRatingMeta['color'] }};
+                        color: {{ $managerRatingMeta['text'] }};
+                    "
+                >
+                    {{ $managerScore100 !== null
+                        ? $managerRatingMeta['rating']
+                        : 'Pending'
+                    }}
+                </span>
+
+                <span class="score-scale">
+                    70%
+                </span>
+
+            </div>
+
+        </div>
+
+        {{-- =====================================================
+            LINE MANAGER FEEDBACK
+        ====================================================== --}}
+
+        <div
+            class="performance-score-card"
+            style="
+                --rating-color: {{ $feedbackRatingMeta['color'] }};
+                --rating-soft: {{ $feedbackRatingMeta['soft'] }};
+            "
+        >
+
+            <div
+                class="score-accent"
+                style="background: {{ $feedbackRatingMeta['color'] }};"
+            ></div>
+
+            <div class="performance-score-top">
+
+                <div
+                    class="score-icon"
+                    style="
+                        background: {{ $feedbackRatingMeta['soft'] }};
+                        color: {{ $feedbackRatingMeta['color'] }};
+                    "
+                >
+                    <i class="fas fa-comments"></i>
+                </div>
+
+                <div class="score-heading">
+
+                    <div class="score-card-label">
+                        Line Manager Feedback
+                    </div>
+
+                    <div class="score-card-caption">
+                        Weighted contribution
                     </div>
 
                 </div>
 
-                {{-- COMPLETED --}}
+            </div>
 
-                <div class="col-lg-3 col-md-6">
+            <div
+                class="performance-score-value"
+                style="color: {{ $feedbackRatingMeta['color'] }};"
+            >
 
-                    <div class="goal-stat-card">
+                @if($weightedFeedbackScore !== null)
 
-                        <div class="goal-stat-icon purple">
+                    {{ number_format($weightedFeedbackScore, 2) }}
 
-                            <i class="fas fa-check-circle"></i>
+                    <span>/30</span>
 
-                        </div>
+                @else
 
-                        <div>
+                    —
 
-                            <span>
-                                Completed
-                            </span>
+                @endif
 
-                            <strong>
-                                {{ $completedGoals }}
-                            </strong>
+            </div>
 
-                        </div>
+            <div class="score-card-bottom">
 
+                <span
+                    class="score-rating"
+                    style="
+                        background: {{ $feedbackRatingMeta['color'] }};
+                        color: {{ $feedbackRatingMeta['text'] }};
+                    "
+                >
+                    {{ $feedbackScore100 !== null
+                        ? $feedbackRatingMeta['rating']
+                        : 'Pending'
+                    }}
+                </span>
+
+                <span class="score-scale">
+                    30%
+                </span>
+
+            </div>
+
+        </div>
+
+        {{-- =====================================================
+            TOTAL SCORE
+        ====================================================== --}}
+
+        <div
+            class="performance-score-card total-card"
+            style="
+                --rating-color: {{ $totalRatingMeta['color'] }};
+                --rating-soft: {{ $totalRatingMeta['soft'] }};
+            "
+        >
+
+            <div
+                class="score-accent"
+                style="background: {{ $totalRatingMeta['color'] }};"
+            ></div>
+
+            <div class="performance-score-top">
+
+                <div
+                    class="score-icon"
+                    style="
+                        background: {{ $totalRatingMeta['soft'] }};
+                        color: {{ $totalRatingMeta['color'] }};
+                    "
+                >
+                    <i class="fas fa-calculator"></i>
+                </div>
+
+                <div class="score-heading">
+
+                    <div class="score-card-label">
+                        Total Score
+                    </div>
+
+                    <div class="score-card-caption">
+                        Manager + Feedback
                     </div>
 
                 </div>
 
-                {{-- IN PROGRESS --}}
+            </div>
 
-                <div class="col-lg-3 col-md-6">
+            <div
+                class="performance-score-value total-value"
+                style="color: {{ $totalRatingMeta['color'] }};"
+            >
 
-                    <div class="goal-stat-card">
+                @if($weightedTotal !== null)
 
-                        <div class="goal-stat-icon orange">
+                    {{ number_format($weightedTotal, 2) }}
 
-                            <i class="fas fa-spinner"></i>
+                    <span>/100</span>
 
-                        </div>
+                @else
 
-                        <div>
+                    —
 
-                            <span>
-                                In Progress
-                            </span>
+                @endif
 
-                            <strong>
-                                {{ $inProgressGoals }}
-                            </strong>
+            </div>
 
-                        </div>
+            <div class="score-card-bottom">
 
+                <span
+                    class="score-rating"
+                    style="
+                        background: {{ $totalRatingMeta['color'] }};
+                        color: {{ $totalRatingMeta['text'] }};
+                    "
+                >
+                    {{ $weightedTotal !== null
+                        ? $totalRatingMeta['rating']
+                        : 'Pending'
+                    }}
+                </span>
+
+                <span class="score-scale">
+                    70% + 30%
+                </span>
+
+            </div>
+
+        </div>
+
+        {{-- =====================================================
+            HR ASSESSMENT
+        ====================================================== --}}
+
+        <div
+            class="performance-score-card"
+            style="
+                --rating-color: {{ $hrRatingMeta['color'] }};
+                --rating-soft: {{ $hrRatingMeta['soft'] }};
+            "
+        >
+
+            <div
+                class="score-accent"
+                style="background: {{ $hrRatingMeta['color'] }};"
+            ></div>
+
+            <div class="performance-score-top">
+
+                <div
+                    class="score-icon"
+                    style="
+                        background: {{ $hrRatingMeta['soft'] }};
+                        color: {{ $hrRatingMeta['color'] }};
+                    "
+                >
+                    <i class="fas fa-user-shield"></i>
+                </div>
+
+                <div class="score-heading">
+
+                    <div class="score-card-label">
+                        HR Assessment
+                    </div>
+
+                    <div class="score-card-caption">
+                        HR moderation
                     </div>
 
                 </div>
+
+            </div>
+
+            <div
+                class="performance-score-value"
+                style="color: {{ $hrRatingMeta['color'] }};"
+            >
+
+                @if($hrScore100 !== null)
+
+                    {{ number_format($hrScore100, 2) }}
+
+                    <span>/100</span>
+
+                @else
+
+                    —
+
+                @endif
+
+            </div>
+
+            <div class="score-card-bottom">
+
+                <span
+                    class="score-rating"
+                    style="
+                        background: {{ $hrRatingMeta['color'] }};
+                        color: {{ $hrRatingMeta['text'] }};
+                    "
+                >
+                    {{ $hrScore100 !== null
+                        ? $hrRatingMeta['rating']
+                        : 'Pending'
+                    }}
+                </span>
+
+                <span class="score-scale">
+                    HR Score
+                </span>
 
             </div>
 
@@ -1180,367 +726,256 @@
     </div>
 
     {{-- =========================================================
-        APPROVED GOALS
+        REVIEW JOURNEY
     ========================================================== --}}
 
-    <div class="section-card mb-4">
+    <div class="review-card">
 
-        <div class="section-header">
+        <div class="review-card-header">
 
-            <div class="section-title">
+            <div class="review-header-left">
 
-                <div class="section-number">
-
-                    <i class="fas fa-tasks"></i>
-
+                <div class="review-icon">
+                    <i class="fas fa-route"></i>
                 </div>
 
                 <div>
 
-                    <h5 class="mb-1 fw-bold">
-                        Manager Approved Goals
-                    </h5>
+                    <div class="review-title">
+                        Review Journey
+                    </div>
 
-                    <small>
-                        Goals currently included in your performance assessment.
-                    </small>
+                    <div class="review-subtitle">
+                        Current appraisal workflow and completion status
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <div class="journey-status
+                {{ $finalized
+                    ? 'journey-completed'
+                    : 'journey-progress'
+                }}">
 
-        <div class="section-body p-0">
+                @if($finalized)
 
-            @if($approvedReports->count())
+                    <i class="fas fa-check-circle"></i>
+                    Completed
 
-                <div class="table-responsive">
+                @else
 
-                    <table class="table dashboard-table mb-0">
+                    <i class="fas fa-clock"></i>
+                    In Progress
 
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Goal
-                                </th>
-
-                                <th>
-                                    Achievement
-                                </th>
-
-                                <th>
-                                    Self
-                                </th>
-
-                                <th>
-                                    Manager
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @foreach($approvedReports->take(8) as $report)
-
-                                <tr>
-
-                                    <td>
-
-                                        <div class="goal-table-title">
-
-                                            {{ \Illuminate\Support\Str::limit(
-                                                optional($report->goal)->goal ?? 'Goal',
-                                                90
-                                            ) }}
-
-                                        </div>
-
-                                    </td>
-
-                                    <td>
-
-                                        @php
-                                            $achievementStatus =
-                                                $report->achievement_status ?? 'not_started';
-
-                                            $achievementLabel =
-                                                match ($achievementStatus) {
-                                                    'completed' => 'Completed',
-                                                    'in_progress' => 'In Progress',
-                                                    'partially_complete' => 'Partially Complete',
-                                                    default => 'Not Started',
-                                                };
-                                        @endphp
-
-                                        <span class="achievement-badge
-                                            {{ $achievementStatus }}">
-
-                                            {{ $achievementLabel }}
-
-                                        </span>
-
-                                    </td>
-
-                                    <td>
-
-                                        @if($report->rating !== null)
-
-                                            {{ number_format(
-                                                ((float) $report->rating) * 20,
-                                                2
-                                            ) }}
-
-                                            <small>
-                                                /100
-                                            </small>
-
-                                        @else
-
-                                            —
-
-                                        @endif
-
-                                    </td>
-
-                                    <td>
-
-                                        @if($report->manager_rating !== null)
-
-                                            {{ number_format(
-                                                ((float) $report->manager_rating) * 20,
-                                                2
-                                            ) }}
-
-                                            <small>
-                                                /100
-                                            </small>
-
-                                        @else
-
-                                            —
-
-                                        @endif
-
-                                    </td>
-
-                                    <td>
-
-                                        <span class="approved-badge">
-
-                                            <i class="fas fa-check me-1"></i>
-
-                                            Approved
-
-                                        </span>
-
-                                    </td>
-
-                                </tr>
-
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            @else
-
-                <div class="empty-inline">
-
-                    <i class="fas fa-clipboard-list"></i>
-
-                    <strong>
-                        No manager-approved goals yet.
-                    </strong>
-
-                    <span>
-                        Approved goals will appear here once reviewed by your manager.
-                    </span>
-
-                </div>
-
-            @endif
-
-        </div>
-
-    </div>
-
-    {{-- =========================================================
-        INITIATIVES
-    ========================================================== --}}
-
-    <div class="section-card mb-4">
-
-        <div class="section-header">
-
-            <div class="section-title">
-
-                <div class="section-number">
-
-                    <i class="fas fa-lightbulb"></i>
-
-                </div>
-
-                <div>
-
-                    <h5 class="mb-1 fw-bold">
-                        Approved Initiatives
-                    </h5>
-
-                    <small>
-                        Initiatives recognized by your Line Manager.
-                    </small>
-
-                </div>
+                @endif
 
             </div>
 
         </div>
 
-        <div class="section-body">
+        <div class="review-card-body">
 
-            @if($initiatives->count())
+            <div class="review-steps">
 
-                <div class="row g-3">
+                {{-- SELF REPORT --}}
+                <div class="review-step">
 
-                    @foreach($initiatives->take(6) as $initiative)
+                    <div class="review-step-icon
+                        {{ $selfReportSubmitted
+                            ? 'completed'
+                            : 'pending'
+                        }}">
 
-                        <div class="col-lg-6">
+                        @if($selfReportSubmitted)
+                            <i class="fas fa-check"></i>
+                        @else
+                            <i class="fas fa-file-alt"></i>
+                        @endif
 
-                            <div class="initiative-card">
+                    </div>
 
-                                <div class="initiative-top">
+                    <div class="review-step-content">
 
-                                    <div class="initiative-icon">
+                        <div class="review-step-number">
+                            01
+                        </div>
 
-                                        <i class="fas fa-lightbulb"></i>
+                        <div class="review-step-title">
+                            Self Report
+                        </div>
 
-                                    </div>
+                        <div class="review-step-status
+                            {{ $selfReportSubmitted
+                                ? 'status-completed'
+                                : 'status-pending'
+                            }}">
 
-                                    <span class="initiative-approved">
+                            <span class="status-dot"></span>
 
-                                        <i class="fas fa-check me-1"></i>
-
-                                        Approved
-
-                                    </span>
-
-                                </div>
-
-                                <h6 class="fw-bold mb-2">
-
-                                    {{ $initiative->title ?? 'Initiative' }}
-
-                                </h6>
-
-                                @if(!empty($initiative->description))
-
-                                    <p>
-
-                                        {{ \Illuminate\Support\Str::limit(
-                                            $initiative->description,
-                                            140
-                                        ) }}
-
-                                    </p>
-
-                                @endif
-
-                                <div class="initiative-meta">
-
-                                    <span>
-
-                                        <i class="fas fa-layer-group me-1"></i>
-
-                                        {{ ucfirst(
-                                            str_replace(
-                                                '_',
-                                                ' ',
-                                                $initiative->scope ?? '—'
-                                            )
-                                        ) }}
-
-                                    </span>
-
-                                    @if($initiative->nature_of_initiative)
-
-                                        <span>
-
-                                            <i class="fas fa-tag me-1"></i>
-
-                                            {{ $initiative->nature_of_initiative }}
-
-                                        </span>
-
-                                    @endif
-
-                                </div>
-
-                            </div>
+                            {{ $selfReportSubmitted
+                                ? 'Submitted'
+                                : 'Pending'
+                            }}
 
                         </div>
 
-                    @endforeach
+                    </div>
 
                 </div>
 
-            @else
+                <div class="review-connector
+                    {{ $selfReportSubmitted ? 'active' : '' }}">
+                </div>
 
-                <div class="empty-inline">
+                {{-- MANAGER REVIEW --}}
+                <div class="review-step">
 
-                    <i class="fas fa-lightbulb"></i>
+                    <div class="review-step-icon
+                        {{ $managerReviewCompleted
+                            ? 'completed'
+                            : 'pending'
+                        }}">
 
-                    <strong>
-                        No approved initiatives yet.
-                    </strong>
+                        @if($managerReviewCompleted)
+                            <i class="fas fa-check"></i>
+                        @else
+                            <i class="fas fa-user-tie"></i>
+                        @endif
 
-                    <span>
-                        Manager-approved initiatives will appear here.
-                    </span>
+                    </div>
+
+                    <div class="review-step-content">
+
+                        <div class="review-step-number">
+                            02
+                        </div>
+
+                        <div class="review-step-title">
+                            Manager Review
+                        </div>
+
+                        <div class="review-step-status
+                            {{ $managerReviewCompleted
+                                ? 'status-completed'
+                                : 'status-pending'
+                            }}">
+
+                            <span class="status-dot"></span>
+
+                            {{ $managerReviewCompleted
+                                ? 'Completed'
+                                : 'Pending'
+                            }}
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            @endif
+                <div class="review-connector
+                    {{ $managerReviewCompleted ? 'active' : '' }}">
+                </div>
 
-        </div>
+                {{-- HR REVIEW --}}
+                <div class="review-step">
 
-    </div>
+                    <div class="review-step-icon
+                        {{ $hrReviewCompleted
+                            ? 'completed'
+                            : 'pending'
+                        }}">
 
-    {{-- =========================================================
-        FOOTER NOTE
-    ========================================================== --}}
+                        @if($hrReviewCompleted)
+                            <i class="fas fa-check"></i>
+                        @else
+                            <i class="fas fa-user-shield"></i>
+                        @endif
 
-    <div class="dashboard-note">
+                    </div>
 
-        <div class="dashboard-note-icon">
+                    <div class="review-step-content">
 
-            <i class="fas fa-info-circle"></i>
+                        <div class="review-step-number">
+                            03
+                        </div>
 
-        </div>
+                        <div class="review-step-title">
+                            HR Review
+                        </div>
 
-        <div>
+                        <div class="review-step-status
+                            {{ $hrReviewCompleted
+                                ? 'status-completed'
+                                : 'status-pending'
+                            }}">
 
-            <strong>
-                Performance Summary
-            </strong>
+                            <span class="status-dot"></span>
 
-            <p class="mb-0">
+                            {{ $hrReviewCompleted
+                                ? 'Completed'
+                                : 'Pending'
+                            }}
 
-                This dashboard provides a consolidated view of your current
-                goals, assessments, Line Manager feedback and appraisal progress.
+                        </div>
 
-            </p>
+                    </div>
+
+                </div>
+
+                <div class="review-connector
+                    {{ $hrReviewCompleted ? 'active' : '' }}">
+                </div>
+
+                {{-- FINALIZED --}}
+                <div class="review-step">
+
+                    <div class="review-step-icon
+                        {{ $finalized
+                            ? 'completed'
+                            : 'pending'
+                        }}">
+
+                        @if($finalized)
+                            <i class="fas fa-check"></i>
+                        @else
+                            <i class="fas fa-award"></i>
+                        @endif
+
+                    </div>
+
+                    <div class="review-step-content">
+
+                        <div class="review-step-number">
+                            04
+                        </div>
+
+                        <div class="review-step-title">
+                            Finalized
+                        </div>
+
+                        <div class="review-step-status
+                            {{ $finalized
+                                ? 'status-completed'
+                                : 'status-pending'
+                            }}">
+
+                            <span class="status-dot"></span>
+
+                            {{ $finalized
+                                ? 'Finalized'
+                                : 'In Progress'
+                            }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -1557,591 +992,795 @@
 :root {
 
     --pms-primary: #1f4e79;
-
     --pms-primary-dark: #173a5c;
-
-    --pms-light: #f4f7fb;
 
     --pms-border: #e4e9f0;
 
     --pms-text: #253449;
-
     --pms-muted: #718096;
 
+    --pms-bg: #f7f9fc;
+
+}
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+    background: var(--pms-bg);
 }
 
 /* =========================================================
    HEADER
 ========================================================= */
 
-.dashboard-header {
+.performance-header {
 
-    background: linear-gradient(
-        135deg,
-        #ffffff 0%,
-        #f5f8fc 100%
-    );
-
-    border: 1px solid var(--pms-border);
-
-    border-radius: 16px;
-
-    padding: 22px 26px;
-
-    box-shadow:
-        0 4px 18px rgba(31, 78, 121, .06);
-}
-
-.header-icon {
-
-    width: 48px;
-
-    height: 48px;
-
-    border-radius: 12px;
-
-    background: var(--pms-primary);
-
-    color: #fff;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 20px;
-
-    box-shadow:
-        0 6px 14px rgba(31, 78, 121, .22);
-}
-
-.dashboard-header h3 {
-
-    color: var(--pms-text);
-
-}
-
-.dashboard-header p {
-
-    font-size: 12px;
-
-}
-
-.employee-header-badge {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    background: #eaf2f9;
-
-    border: 1px solid #d6e3ef;
-
-    border-radius: 12px;
-
-    padding: 8px 13px;
-}
-
-.employee-header-icon {
-
-    width: 34px;
-
-    height: 34px;
-
-    border-radius: 9px;
-
-    background: #fff;
-
-    color: var(--pms-primary);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-}
-
-.employee-header-badge small {
-
-    display: block;
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-}
-
-.employee-header-badge strong {
-
-    display: block;
-
-    color: var(--pms-text);
-
-    font-size: 11px;
-}
-
-/* =========================================================
-   COMMON CARD
-========================================================= */
-
-.section-card {
-
-    background: #fff;
-
-    border: 1px solid var(--pms-border);
-
-    border-radius: 16px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 4px 18px rgba(31, 78, 121, .06);
-}
-
-.section-header {
-
-    background: #f8fafc;
-
-    border-bottom: 1px solid var(--pms-border);
-
-    padding: 17px 20px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 15px;
-}
-
-.section-title {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-}
-
-.section-title small {
-
-    display: block;
-
-    color: var(--pms-muted);
-
-    font-size: 10px;
-}
-
-.section-number {
-
-    width: 36px;
-
-    height: 36px;
-
-    min-width: 36px;
-
-    border-radius: 10px;
-
-    background: var(--pms-primary);
-
-    color: #fff;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-}
-
-.section-body {
-
-    padding: 20px;
-}
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile-top {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    margin-bottom: 20px;
-}
-
-.profile-avatar {
-
-    width: 52px;
-
-    height: 52px;
-
-    border-radius: 13px;
-
-    background: #e8f1fa;
-
-    color: var(--pms-primary);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 18px;
-}
-
-.profile-top h5 {
-
-    color: var(--pms-text);
-
-}
-
-.profile-top small {
-
-    color: var(--pms-muted);
-
-    font-size: 10px;
-}
-
-.profile-details {
+    position: relative;
 
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        minmax(0, 1fr)
+        235px;
+
+    align-items: stretch;
 
     gap: 10px;
+
+    padding: 10px;
+
+    min-height: 88px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f5f8fc 100%
+        );
+
+    border: 1px solid var(--pms-border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 18px
+        rgba(31, 78, 121, .05);
+
+    overflow: hidden;
+
 }
 
-.profile-detail {
+.performance-header::before {
 
-    background: #fafcfe;
+    content: '';
 
-    border: 1px solid #edf1f5;
+    position: absolute;
 
-    border-radius: 9px;
+    left: 0;
 
-    padding: 10px 11px;
+    top: 11px;
+
+    bottom: 11px;
+
+    width: 3px;
+
+    border-radius:
+        0 4px 4px 0;
+
+    background:
+        var(--pms-primary);
+
 }
 
-.profile-detail span {
+/* =========================================================
+   EMPLOYEE INFO
+========================================================= */
 
-    display: block;
+.employee-info-card {
 
-    color: var(--pms-muted);
+    position: relative;
 
-    font-size: 8px;
+    min-width: 0;
 
-    margin-bottom: 4px;
+    display: flex;
 
-    text-transform: uppercase;
+    align-items: center;
 
-    font-weight: 700;
+    gap: 10px;
+
+    padding: 8px 11px;
+
+    background:
+        rgba(234, 242, 249, .78);
+
+    border: 1px solid #d6e3ef;
+
+    border-radius: 11px;
+
 }
 
-.profile-detail strong {
+.employee-avatar {
 
-    display: block;
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    color: var(--pms-primary);
+
+    font-size: 13px;
+
+    box-shadow:
+        0 3px 9px
+        rgba(31, 78, 121, .07);
+
+}
+
+.employee-details {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+.employee-top-line {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+
+}
+
+.employee-name {
+
+    min-width: 0;
 
     color: var(--pms-text);
 
-    font-size: 10px;
+    font-size: 12px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
 
     overflow: hidden;
 
     text-overflow: ellipsis;
 
+}
+
+.employee-profile-label {
+
+    flex: 0 0 auto;
+
+    padding: 3px 6px;
+
+    border-radius: 20px;
+
+    background: #e8f1fa;
+
+    color: var(--pms-primary);
+
+    font-size: 6px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+}
+
+.employee-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 4px;
+
+    color: var(--pms-muted);
+
+    font-size: 7px;
+
+}
+
+.employee-meta span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+}
+
+.employee-meta i {
+
+    color: var(--pms-primary);
+
+    font-size: 7px;
+
+}
+
+.employee-divider {
+
+    color: #b5c1cc;
+
+}
+
+.employee-manager {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 4px;
+
+    font-size: 7px;
+
+}
+
+.manager-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: var(--pms-muted);
+
+}
+
+.manager-label i {
+
+    color: var(--pms-primary);
+
+    font-size: 7px;
+
+}
+
+.manager-name {
+
+    min-width: 0;
+
+    max-width: 260px;
+
+    color: var(--pms-primary);
+
+    font-weight: 700;
+
     white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
 }
 
 /* =========================================================
    FINAL SCORE
 ========================================================= */
 
-.final-score-card {
+.header-final-score {
+
+    position: relative;
+
+    min-width: 0;
+
+    min-height: 66px;
+
+    padding: 8px 11px;
+
+    border-radius: 11px;
 
     background:
         linear-gradient(
             135deg,
-            var(--pms-primary),
-            var(--pms-primary-dark)
+            color-mix(in srgb, var(--final-color) 88%, white),
+            color-mix(in srgb, var(--final-color) 72%, white)
         );
 
-    border: 0;
+    color: var(--final-text);
 
-    color: #fff;
+    border: 1px solid
+        color-mix(in srgb, var(--final-color) 65%, white);
+
+    box-shadow:
+        0 5px 15px
+        color-mix(in srgb, var(--final-color) 15%, transparent);
+
+    overflow: hidden;
+
 }
 
-.final-score-content {
+.final-score-glow {
 
-    padding: 22px;
+    position: absolute;
 
-    min-height: 132px;
+    width: 105px;
+
+    height: 105px;
+
+    right: -45px;
+
+    top: -55px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.20);
+
+}
+
+.header-final-score-content {
+
+    position: relative;
+
+    z-index: 1;
+
+    height: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr auto;
+
+    grid-template-rows:
+        auto 1fr;
+
+    column-gap: 8px;
+
+}
+
+.header-final-score-title {
+
+    grid-column: 1;
 
     display: flex;
 
     align-items: center;
 
-    justify-content: space-between;
+    gap: 6px;
 
-    gap: 15px;
 }
 
-.final-score-label {
+.header-final-score-icon {
+
+    width: 23px;
+
+    height: 23px;
+
+    min-width: 23px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    border: 1px solid transparent;
 
     font-size: 8px;
 
-    letter-spacing: .8px;
-
-    opacity: .72;
-
-    font-weight: 700;
 }
 
-.final-score-content h5 {
+.header-final-score-label {
 
-    color: #fff;
+    font-size: 6px;
+
+    font-weight: 800;
+
+    letter-spacing: .7px;
+
 }
 
-.final-score-content p {
+.header-final-score-caption {
 
-    color: rgba(255,255,255,.72);
+    margin-top: 2px;
 
-    font-size: 10px;
+    font-size: 6px;
+
+    opacity: .70;
+
 }
 
-.final-score-number {
+.header-final-score-number {
 
-    font-size: 32px;
+    grid-column: 2;
+
+    grid-row: 1 / 3;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    white-space: nowrap;
+
+}
+
+.header-final-score-number strong {
+
+    font-size: 25px;
 
     line-height: 1;
 
     font-weight: 800;
 
-    white-space: nowrap;
+    letter-spacing: -.5px;
+
 }
 
-.final-score-number span {
+.header-final-score-number span {
 
-    font-size: 10px;
+    margin-left: 2px;
+
+    font-size: 7px;
 
     font-weight: 600;
 
-    opacity: .7;
+    opacity: .65;
+
 }
 
-.final-score-footer {
+.header-final-score-rating {
 
-    border-top: 1px solid rgba(255,255,255,.14);
+    grid-column: 1;
 
-    padding: 10px 22px;
+    align-self: end;
 
     display: flex;
 
     align-items: center;
 
-    justify-content: space-between;
+    gap: 5px;
 
-    gap: 10px;
+    margin-top: 3px;
 
-    font-size: 9px;
-
-    color: rgba(255,255,255,.72);
 }
 
-.final-rating-badge {
+.header-final-score-rating > span {
 
-    background: rgba(255,255,255,.14);
+    font-size: 6px;
 
-    border: 1px solid rgba(255,255,255,.2);
+    opacity: .65;
+
+}
+
+.header-final-score-rating strong {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 25px;
+
+    padding: 3px 7px;
 
     border-radius: 20px;
 
-    padding: 4px 9px;
+    border: 1px solid transparent;
 
-    color: #fff;
+    font-size: 6px;
 
-    font-weight: 700;
+    font-weight: 800;
+
 }
 
 /* =========================================================
-   GOAL PROGRESS
+   SCORE GRID
 ========================================================= */
 
-.goal-progress-top {
+.score-grid {
 
-    display: flex;
+    display: grid;
 
-    align-items: flex-end;
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
 
-    justify-content: space-between;
+    gap: 9px;
 
-    gap: 10px;
-
-    margin-bottom: 10px;
 }
 
-.goal-progress-label {
+/* =========================================================
+   SCORE TILE
+========================================================= */
 
-    color: var(--pms-muted);
+.performance-score-card {
 
-    font-size: 9px;
+    position: relative;
 
-    text-transform: uppercase;
+    min-width: 0;
 
-    font-weight: 700;
-}
+    min-height: 112px;
 
-.goal-progress-top strong {
-
-    color: var(--pms-primary);
-
-    font-size: 22px;
-}
-
-.goal-count-text {
-
-    color: var(--pms-muted);
-
-    font-size: 9px;
-}
-
-.progress-custom {
-
-    height: 9px;
-
-    background: #edf2f6;
-
-    border-radius: 20px;
+    padding: 12px;
 
     overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rating-soft),
+            #ffffff 78%
+        );
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--rating-color) 28%,
+            #e4e9f0
+        );
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px
+        color-mix(
+            in srgb,
+            var(--rating-color) 8%,
+            transparent
+        );
+
+    transition:
+        transform .16s ease,
+        box-shadow .16s ease;
+
 }
 
-.progress-custom-bar {
+.performance-score-card:hover {
 
-    height: 100%;
+    transform:
+        translateY(-2px);
 
-    background: linear-gradient(
-        90deg,
-        #1f4e79,
-        #4d7ea8
-    );
+    box-shadow:
+        0 8px 20px
+        color-mix(
+            in srgb,
+            var(--rating-color) 16%,
+            transparent
+        );
 
-    border-radius: inherit;
-
-    transition: width .3s ease;
 }
 
-.goal-mini-stats {
+.score-accent {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 3px;
+
+    border-radius:
+        12px 12px 0 0;
+
+}
+
+/* =========================================================
+   SCORE HEADER
+========================================================= */
+
+.performance-score-top {
 
     display: flex;
 
     align-items: center;
 
-    justify-content: space-between;
+    gap: 7px;
 
-    gap: 8px;
+}
+
+.score-icon {
+
+    width: 31px;
+
+    height: 31px;
+
+    min-width: 31px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    font-size: 10px;
+
+}
+
+.score-heading {
+
+    min-width: 0;
+
+}
+
+.score-card-label {
+
+    color: var(--pms-text);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+}
+
+.score-card-caption {
+
+    margin-top: 2px;
+
+    color: var(--pms-muted);
+
+    font-size: 7px;
+
+    line-height: 1.2;
+
+}
+
+/* =========================================================
+   SCORE VALUE
+========================================================= */
+
+.performance-score-value {
 
     margin-top: 13px;
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    font-weight: 800;
+
+    letter-spacing: -.3px;
+
+}
+
+.performance-score-value span {
 
     color: var(--pms-muted);
 
     font-size: 8px;
 
-    flex-wrap: wrap;
-}
+    font-weight: 600;
 
-.goal-mini-stats strong {
+    letter-spacing: 0;
 
-    color: var(--pms-text);
-}
-
-.goal-stat-dot {
-
-    width: 7px;
-
-    height: 7px;
-
-    border-radius: 50%;
-
-    display: inline-block;
-
-    margin-right: 3px;
-}
-
-.goal-stat-dot.completed {
-    background: #198754;
-}
-
-.goal-stat-dot.progress {
-    background: #d97706;
-}
-
-.goal-stat-dot.pending {
-    background: #adb5bd;
 }
 
 /* =========================================================
-   SCORE SUMMARY
+   SCORE FOOTER
 ========================================================= */
 
-.score-summary-card {
+.score-card-bottom {
 
-    background: #fff;
+    display: flex;
 
-    border: 1px solid var(--pms-border);
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 5px;
+
+    margin-top: 9px;
+
+}
+
+.score-rating {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 27px;
+
+    padding: 3px 7px;
+
+    border-radius: 20px;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+}
+
+.score-scale {
+
+    color: var(--pms-muted);
+
+    font-size: 7px;
+
+    white-space: nowrap;
+
+}
+
+/* =========================================================
+   REVIEW CARD
+========================================================= */
+
+.review-card {
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid
+        var(--pms-border);
 
     border-radius: 14px;
 
-    padding: 16px;
-
-    min-height: 136px;
-
     box-shadow:
-        0 3px 14px rgba(31,78,121,.035);
+        0 3px 14px
+        rgba(31, 78, 121, .04);
 
-    position: relative;
-
-    overflow: hidden;
 }
 
-.score-summary-card::after {
+.review-card-header {
 
-    content: '';
+    min-height: 53px;
 
-    position: absolute;
+    padding: 10px 14px;
 
-    right: -22px;
+    display: flex;
 
-    top: -22px;
+    align-items: center;
 
-    width: 60px;
+    justify-content: space-between;
 
-    height: 60px;
+    gap: 12px;
 
-    border-radius: 50%;
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #ffffff
+        );
 
-    background: #f5f8fc;
+    border-bottom: 1px solid
+        var(--pms-border);
+
 }
 
-.score-summary-card.final {
-
-    border-color: #cbddea;
-
-    background: linear-gradient(
-        135deg,
-        #f5f9fd,
-        #ffffff
-    );
-}
-
-.score-summary-top {
+.review-header-left {
 
     display: flex;
 
@@ -2149,18 +1788,15 @@
 
     gap: 9px;
 
-    position: relative;
-
-    z-index: 1;
 }
 
-.score-summary-icon {
+.review-icon {
 
-    width: 34px;
+    width: 31px;
 
-    height: 34px;
+    height: 31px;
 
-    border-radius: 9px;
+    min-width: 31px;
 
     display: flex;
 
@@ -2168,718 +1804,91 @@
 
     justify-content: center;
 
-    font-size: 11px;
-}
-
-.score-summary-icon.self {
+    border-radius: 9px;
 
     background: #e8f1fa;
 
     color: var(--pms-primary);
+
+    font-size: 10px;
+
 }
 
-.score-summary-icon.manager {
-
-    background: #e7f6ed;
-
-    color: #198754;
-}
-
-.score-summary-icon.feedback {
-
-    background: #fff4df;
-
-    color: #d97706;
-}
-
-.score-summary-icon.hr {
-
-    background: #f0eafa;
-
-    color: #6f42c1;
-}
-
-.score-summary-icon.final {
-
-    background: #e8f1fa;
-
-    color: var(--pms-primary);
-}
-
-.score-summary-label {
-
-    color: var(--pms-muted);
-
-    font-size: 9px;
-
-    font-weight: 700;
-
-    text-transform: uppercase;
-}
-
-.score-summary-value {
-
-    margin-top: 15px;
+.review-title {
 
     color: var(--pms-text);
 
-    font-size: 23px;
+    font-size: 10px;
 
     font-weight: 800;
 
-    line-height: 1;
 }
 
-.score-summary-value span {
+.review-subtitle {
+
+    margin-top: 2px;
 
     color: var(--pms-muted);
 
-    font-size: 9px;
+    font-size: 7px;
 
-    font-weight: 600;
 }
 
-.score-summary-footer {
-
-    margin-top: 11px;
-}
-
-.score-summary-footer span {
+.journey-status {
 
     display: inline-flex;
 
     align-items: center;
 
-    padding: 4px 8px;
-
-    background: #f4f7fb;
-
-    border-radius: 12px;
-
-    color: var(--pms-primary);
-
-    font-size: 8px;
-
-    font-weight: 800;
-}
-
-/* =========================================================
-   PERFORMANCE BREAKDOWN
-========================================================= */
-
-.performance-bar-row {
-
-    margin-bottom: 19px;
-}
-
-.performance-bar-row:last-of-type {
-
-    margin-bottom: 0;
-}
-
-.performance-bar-heading {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 6px;
-}
-
-.performance-bar-heading span {
-
-    color: var(--pms-text);
-
-    font-size: 10px;
-
-    font-weight: 700;
-}
-
-.performance-bar-heading strong {
-
-    color: var(--pms-primary);
-
-    font-size: 10px;
-}
-
-.performance-bar {
-
-    height: 8px;
-
-    background: #edf2f6;
-
-    border-radius: 20px;
-
-    overflow: hidden;
-}
-
-.performance-bar-fill {
-
-    height: 100%;
-
-    border-radius: inherit;
-}
-
-.bar-self {
-    background: #1f4e79;
-}
-
-.bar-manager {
-    background: #198754;
-}
-
-.bar-feedback {
-    background: #d97706;
-}
-
-.bar-hr {
-    background: #6f42c1;
-}
-
-.breakdown-note {
-
-    margin-top: 20px;
-
-    padding: 10px 11px;
-
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 8px;
-
-    background: #f4f7fb;
-
-    border: 1px solid #e1e8f0;
-
-    border-radius: 9px;
-
-    color: var(--pms-muted);
-
-    font-size: 9px;
-
-    line-height: 1.5;
-}
-
-.breakdown-note i {
-
-    color: var(--pms-primary);
-
-    margin-top: 2px;
-}
-
-/* =========================================================
-   TIMELINE
-========================================================= */
-
-.timeline {
-
-    padding-top: 2px;
-}
-
-.timeline-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-}
-
-.timeline-icon {
-
-    width: 32px;
-
-    height: 32px;
-
-    min-width: 32px;
-
-    border-radius: 50%;
-
-    background: #f1f4f8;
-
-    border: 1px solid #dde4eb;
-
-    color: #8996a4;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 10px;
-}
-
-.timeline-icon.done {
-
-    background: #e7f6ed;
-
-    border-color: #c9ead7;
-
-    color: #198754;
-}
-
-.timeline-content strong {
-
-    display: block;
-
-    color: var(--pms-text);
-
-    font-size: 10px;
-}
-
-.timeline-content small {
-
-    display: block;
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-
-    margin-top: 2px;
-}
-
-.timeline-line {
-
-    width: 1px;
-
-    height: 20px;
-
-    background: #dce3eb;
-
-    margin-left: 16px;
-}
-
-/* =========================================================
-   VIRTUE MIRROR
-========================================================= */
-
-.virtue-dashboard-item {
-
-    margin-bottom: 16px;
-}
-
-.virtue-dashboard-item:last-child {
-
-    margin-bottom: 0;
-}
-
-.virtue-dashboard-heading {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-bottom: 6px;
-}
-
-.virtue-dashboard-heading span {
-
-    color: var(--pms-text);
-
-    font-size: 9px;
-
-    font-weight: 700;
-}
-
-.virtue-dashboard-heading strong {
-
-    color: var(--pms-primary);
-
-    font-size: 9px;
-}
-
-.virtue-dashboard-progress {
-
-    height: 7px;
-
-    background: #edf2f6;
-
-    border-radius: 20px;
-
-    overflow: hidden;
-}
-
-.virtue-dashboard-fill {
-
-    height: 100%;
-
-    background: var(--pms-primary);
-
-    border-radius: inherit;
-}
-
-.virtue-overall {
-
-    margin-top: 20px;
-
-    padding: 12px;
-
-    border-radius: 10px;
-
-    background: linear-gradient(
-        135deg,
-        #f4f8fc,
-        #edf4fa
-    );
-
-    border: 1px solid #dce6f0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 10px;
-}
-
-.virtue-overall small {
-
-    display: block;
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-}
-
-.virtue-overall strong {
-
-    display: block;
-
-    color: var(--pms-text);
-
-    font-size: 10px;
-
-    margin-top: 2px;
-}
-
-.virtue-overall-value {
-
-    color: var(--pms-primary);
-
-    font-size: 18px;
-
-    font-weight: 800;
-}
-
-.virtue-overall-value span {
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-}
-
-/* =========================================================
-   GOAL STAT CARDS
-========================================================= */
-
-.goal-stat-card {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    background: #fafcfe;
-
-    border: 1px solid #e7edf2;
-
-    border-radius: 11px;
-
-    padding: 13px 14px;
-}
-
-.goal-stat-icon {
-
-    width: 38px;
-
-    height: 38px;
-
-    min-width: 38px;
-
-    border-radius: 10px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 12px;
-}
-
-.goal-stat-icon.blue {
-
-    background: #e8f1fa;
-
-    color: var(--pms-primary);
-}
-
-.goal-stat-icon.green {
-
-    background: #e7f6ed;
-
-    color: #198754;
-}
-
-.goal-stat-icon.purple {
-
-    background: #f0eafa;
-
-    color: #6f42c1;
-}
-
-.goal-stat-icon.orange {
-
-    background: #fff4df;
-
-    color: #d97706;
-}
-
-.goal-stat-card span {
-
-    display: block;
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-
-    margin-bottom: 2px;
-}
-
-.goal-stat-card strong {
-
-    display: block;
-
-    color: var(--pms-text);
-
-    font-size: 17px;
-
-    line-height: 1;
-}
-
-/* =========================================================
-   GOAL TABLE
-========================================================= */
-
-.dashboard-table {
-
-    margin: 0;
-}
-
-.dashboard-table thead th {
-
-    background: #f8fafc;
-
-    border-bottom: 1px solid var(--pms-border);
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-
-    text-transform: uppercase;
-
-    letter-spacing: .3px;
-
-    padding: 11px 14px;
-
-    white-space: nowrap;
-}
-
-.dashboard-table tbody td {
-
-    color: var(--pms-text);
-
-    font-size: 10px;
-
-    vertical-align: middle;
-
-    padding: 13px 14px;
-
-    border-color: #edf1f5;
-}
-
-.goal-table-title {
-
-    max-width: 430px;
-
-    font-weight: 600;
-
-    line-height: 1.45;
-}
-
-.dashboard-table td small {
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-}
-
-.achievement-badge,
-.approved-badge {
-
-    display: inline-flex;
-
-    align-items: center;
+    gap: 4px;
 
     padding: 5px 8px;
 
     border-radius: 20px;
 
-    font-size: 8px;
+    font-size: 7px;
 
     font-weight: 700;
 
-    white-space: nowrap;
 }
 
-.achievement-badge.completed {
+.journey-completed {
 
     background: #e7f6ed;
 
     color: #198754;
+
 }
 
-.achievement-badge.in_progress {
-
-    background: #fff4df;
-
-    color: #b77900;
-}
-
-.achievement-badge.partially_complete {
-
-    background: #e8f1fa;
-
-    color: var(--pms-primary);
-}
-
-.achievement-badge.not_started {
+.journey-progress {
 
     background: #f1f4f8;
 
-    color: #8996a4;
-}
+    color: var(--pms-muted);
 
-.approved-badge {
-
-    background: #e7f6ed;
-
-    color: #198754;
 }
 
 /* =========================================================
-   INITIATIVES
+   REVIEW BODY
 ========================================================= */
 
-.initiative-card {
+.review-card-body {
 
-    height: 100%;
+    padding: 17px 22px;
 
-    border: 1px solid #e6ebf0;
-
-    border-radius: 12px;
-
-    background: #fafcfe;
-
-    padding: 15px;
 }
 
-.initiative-top {
+.review-steps {
 
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
 
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-bottom: 10px;
-}
-
-.initiative-icon {
-
-    width: 36px;
-
-    height: 36px;
-
-    border-radius: 10px;
-
-    background: #fff4df;
-
-    color: #d97706;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 12px;
-}
-
-.initiative-approved {
-
-    color: #198754;
-
-    background: #e7f6ed;
-
-    border-radius: 20px;
-
-    padding: 4px 8px;
-
-    font-size: 8px;
-
-    font-weight: 700;
-}
-
-.initiative-card h6 {
-
-    color: var(--pms-text);
+    width: 100%;
 
 }
 
-.initiative-card p {
-
-    color: var(--pms-muted);
-
-    font-size: 9px;
-
-    line-height: 1.6;
-
-    margin-bottom: 10px;
-}
-
-.initiative-meta {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    color: var(--pms-muted);
-
-    font-size: 8px;
-}
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.empty-inline {
-
-    min-height: 150px;
+.review-step {
 
     display: flex;
 
@@ -2887,192 +1896,378 @@
 
     align-items: center;
 
-    justify-content: center;
+    width: 145px;
 
-    gap: 5px;
+    min-width: 100px;
 
     text-align: center;
 
-    color: var(--pms-muted);
 }
 
-.empty-inline i {
-
-    font-size: 23px;
-
-    margin-bottom: 4px;
-
-    color: #c5d0da;
-}
-
-.empty-inline strong {
-
-    color: var(--pms-text);
-
-    font-size: 11px;
-}
-
-.empty-inline span {
-
-    font-size: 9px;
-}
-
-/* =========================================================
-   DASHBOARD NOTE
-========================================================= */
-
-.dashboard-note {
-
-    background: linear-gradient(
-        135deg,
-        #f5f8fc,
-        #ffffff
-    );
-
-    border: 1px solid #dce6f0;
-
-    border-radius: 14px;
-
-    padding: 16px 18px;
-
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 12px;
-
-    box-shadow:
-        0 4px 15px rgba(31, 78, 121, .04);
-}
-
-.dashboard-note-icon {
+.review-step-icon {
 
     width: 38px;
 
     height: 38px;
-
-    min-width: 38px;
-
-    border-radius: 9px;
-
-    background: #e8f1fa;
-
-    color: var(--pms-primary);
 
     display: flex;
 
     align-items: center;
 
     justify-content: center;
-}
 
-.dashboard-note strong {
+    border-radius: 50%;
 
-    display: block;
+    background: #f4f6f8;
 
-    color: var(--pms-text);
+    border: 2px solid #dce3ea;
+
+    color: #8996a4;
 
     font-size: 11px;
 
-    margin-bottom: 2px;
 }
 
-.dashboard-note p {
+.review-step-icon.completed {
 
-    color: var(--pms-muted);
+    background: #e7f6ed;
 
-    font-size: 9px;
+    border-color: #b9dfc8;
 
-    line-height: 1.6;
+    color: #198754;
+
+    box-shadow:
+        0 0 0 4px #f2faf5;
+
+}
+
+.review-step-icon.pending {
+
+    background: #f5f7f9;
+
+    border-color: #dce3ea;
+
+    color: #8d99a6;
+
+}
+
+.review-step-content {
+
+    margin-top: 7px;
+
+}
+
+.review-step-number {
+
+    color: #a7b1bb;
+
+    font-size: 6px;
+
+    font-weight: 800;
+
+    letter-spacing: .4px;
+
+}
+
+.review-step-title {
+
+    margin-top: 2px;
+
+    color: var(--pms-text);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+}
+
+.review-step-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    margin-top: 4px;
+
+    padding: 3px 7px;
+
+    border-radius: 20px;
+
+    font-size: 6px;
+
+    font-weight: 700;
+
+}
+
+.status-dot {
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+
+}
+
+.status-completed {
+
+    background: #e7f6ed;
+
+    color: #198754;
+
+}
+
+.status-pending {
+
+    background: #f1f4f8;
+
+    color: #8996a4;
+
+}
+
+.review-connector {
+
+    position: relative;
+
+    flex: 1;
+
+    min-width: 25px;
+
+    max-width: 110px;
+
+    height: 2px;
+
+    margin-top: 18px;
+
+    background: #e0e6eb;
+
+}
+
+.review-connector::after {
+
+    content: '';
+
+    position: absolute;
+
+    right: 0;
+
+    top: 50%;
+
+    width: 5px;
+
+    height: 5px;
+
+    transform:
+        translateY(-50%)
+        rotate(45deg);
+
+    border-top: 1px solid #d6dde4;
+
+    border-right: 1px solid #d6dde4;
+
+}
+
+.review-connector.active {
+
+    background: #a9d7ba;
+
+}
+
+.review-connector.active::after {
+
+    border-color: #91caa5;
+
 }
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE - 1100
 ========================================================= */
 
-@media (max-width: 1199px) {
+@media (max-width: 1100px) {
 
-    .final-score-number {
+    .score-grid {
 
-        font-size: 28px;
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
     }
 
 }
+
+/* =========================================================
+   RESPONSIVE - 991
+========================================================= */
 
 @media (max-width: 991px) {
 
-    .profile-details {
+    .performance-header {
 
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .header-final-score {
+
+        min-height: 70px;
+
+    }
+
+    .score-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
     }
 
 }
 
-@media (max-width: 768px) {
+/* =========================================================
+   RESPONSIVE - 767
+========================================================= */
 
-    .dashboard-header {
+@media (max-width: 767px) {
 
-        padding: 18px;
+    .container-fluid {
+
+        padding-left: 10px;
+        padding-right: 10px;
+
     }
 
-    .employee-header-badge {
+    .performance-header {
 
-        width: 100%;
+        padding: 9px;
+
     }
 
-    .section-header {
+    .employee-avatar {
 
-        padding: 15px 16px;
+        width: 38px;
+
+        height: 38px;
+
+        min-width: 38px;
+
     }
 
-    .section-body {
+    .employee-name {
 
-        padding: 16px;
+        font-size: 10px;
+
     }
 
-    .final-score-content {
+    .employee-profile-label {
 
-        padding: 19px;
+        display: none;
+
     }
 
-    .profile-details {
+    .header-final-score-content {
 
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr auto;
+
     }
 
-    .dashboard-table {
+    .header-final-score-number {
 
-        min-width: 720px;
+        grid-column: 2;
+
+        grid-row: 1 / 3;
+
+    }
+
+    .header-final-score-rating {
+
+        grid-column: 1;
+
+    }
+
+    .score-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+    .review-card-body {
+
+        overflow-x: auto;
+
+    }
+
+    .review-steps {
+
+        min-width: 650px;
+
     }
 
 }
+
+/* =========================================================
+   RESPONSIVE - 480
+========================================================= */
 
 @media (max-width: 480px) {
 
-    .dashboard-header h3 {
+    .score-grid {
 
-        font-size: 18px;
+        grid-template-columns:
+            1fr;
+
     }
 
-    .header-icon {
+    .employee-meta {
 
-        width: 42px;
+        gap: 3px;
 
-        height: 42px;
-
-        font-size: 17px;
     }
 
-    .final-score-content {
+    .employee-divider {
+
+        display: none;
+
+    }
+
+    .employee-manager {
+
+        align-items: flex-start;
 
         flex-direction: column;
 
-        align-items: flex-start;
+        gap: 2px;
+
     }
 
-    .final-score-number {
+    .manager-name {
 
-        font-size: 27px;
+        max-width: 100%;
+
+    }
+
+    .header-final-score {
+
+        min-height: 68px;
+
+    }
+
+    .header-final-score-number strong {
+
+        font-size: 22px;
+
+    }
+
+    .performance-score-card {
+
+        min-height: 108px;
+
     }
 
 }
