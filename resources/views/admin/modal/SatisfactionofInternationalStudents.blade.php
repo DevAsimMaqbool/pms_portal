@@ -91,8 +91,14 @@ $totalFeedback = 0;
                     );
 
                     $terms = collect($data->terms);
+                    
 
                 @endphp
+                @if($terms->isEmpty())
+                    <div class="alert alert-info">
+                        No record exists.
+                    </div>
+                @else
 
 
                 <!-- Tabs -->
@@ -325,6 +331,7 @@ $totalFeedback = 0;
                             </div>
 
                         @endforeach
+                        @endif
 
                     </div>
 
