@@ -64,6 +64,20 @@
 
             @endif
 
+            <div class="col-md-auto">
+
+    <a href="{{ route('goal-hr.export', [
+        'department' => request('department')
+    ]) }}"
+       class="btn btn-success btn-sm">
+
+        <i class="fas fa-file-excel me-1"></i>
+        Download Report
+
+    </a>
+
+</div>
+
         </form>
 
     </div>

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\GoalSelfReport;
 use App\Models\GoalOverallReview;
+use App\Exports\GoalHrOverallPerformanceExport;
 use App\Models\GoalHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GoalHrReviewController extends Controller
 {
@@ -261,5 +263,28 @@ class GoalHrReviewController extends Controller
                 'success',
                 'Overall performance moderation has been saved successfully.'
             );
+    }
+
+    public function export(Request $request)
+    {
+        $department = $request->input('department');
+
+        $departmentName = !empty($department)
+    ? (str_contains($department, '/')
+        ? trim(last(explode('/', $department)))
+        : $department)
+    : 'All_Departments';
+
+        $filename =
+        'Overall_Performance_Report_' .
+        $departmentName .
+        '_' .
+        now()->format('Y-m-d') .
+        '.xlsx';
+
+        return Excel::download(
+        new GoalHrOverallPerformanceExport($department),
+        $filename
+        );
     }
 }

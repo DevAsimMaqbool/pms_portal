@@ -669,6 +669,11 @@ Route::middleware('auth')->group(function () {
             )->name('review');
         });
 
+        Route::get(
+    '/goal-hr/export',
+    [GoalHrReviewController::class, 'export']
+)->name('goal-hr.export');
+
     Route::get(
         '/newgoals/{newgoal}/history',
         [GoalHistoryController::class, 'index']
