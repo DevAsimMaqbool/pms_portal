@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -334,6 +335,56 @@ class GoalHrOverallPerformanceExport implements
                     'wrapText' => true,
                 ],
             ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Total Score Header
+        |--------------------------------------------------------------------------
+        | Main title remains bold/larger.
+        | Formula text is smaller for better presentation.
+        */
+        $richText = new RichText();
+
+        $mainText = $richText->createTextRun('Total Score');
+        $mainText->getFont()->setBold(true);
+        $mainText->getFont()->setSize(12);
+        $mainText
+            ->getFont()
+            ->getColor()
+            ->setARGB('FFFFFF');
+
+        $subText = $richText->createTextRun(
+            "\n70% Goal + 30% Feedback"
+        );
+        $subText->getFont()->setBold(false);
+        $subText->getFont()->setSize(8);
+        $subText
+            ->getFont()
+            ->getColor()
+            ->setARGB('FFFFFF');
+
+        $sheet
+            ->getCell('H1')
+            ->setValue($richText);
+
+        $sheet
+            ->getStyle('H1')
+            ->getAlignment()
+            ->setWrapText(true);
+
+        $sheet
+            ->getStyle('H1')
+            ->getAlignment()
+            ->setHorizontal(
+                Alignment::HORIZONTAL_CENTER
+            );
+
+        $sheet
+            ->getStyle('H1')
+            ->getAlignment()
+            ->setVertical(
+                Alignment::VERTICAL_CENTER
+            );
 
         if ($highestRow > 1) {
             $sheet
