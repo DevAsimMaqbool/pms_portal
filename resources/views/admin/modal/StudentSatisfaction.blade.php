@@ -295,6 +295,7 @@
         </div>
     </div>
 @endif
+
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!-- Student Satisfaction modal -->
     <div class="modal fade" id="StudentSatisfaction" tabindex="-1" aria-hidden="true">
@@ -302,7 +303,9 @@
             <div class="modal-content custom-modal">
 
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
 
@@ -327,16 +330,20 @@
                         $springTerm = $activeTerms->get('Spring');
                         $fallTerm = $activeTerms->get('Fall');
 
+                        // Get department feedback data
                         $feedbackData = getDepartmentFacultyFeedbackForHOD($activeRoleId);
 
-                        $classFeedback = $feedbackData['collection'] ?? collect();
-                        $totalFeedback = $feedbackData['totalFeedback'] ?? 0;
+                        // Separate Spring and Fall collections
+                        $springFeedback = $feedbackData['springCollection'] ?? collect();
+                        $fallFeedback = $feedbackData['fallCollection'] ?? collect();
 
-                        $avgScore = $classFeedback->isNotEmpty()
-                            ? round($classFeedback->avg(fn($f) => (float) $f->feedback), 2)
-                            : 0;
+                        // Separate Spring and Fall averages
+                        $springAvgScore = $feedbackData['springAvgScore'] ?? 0;
+                        $fallAvgScore = $feedbackData['fallAvgScore'] ?? 0;
 
-                        $ratingMeta = getRatingMetaAsBg($avgScore);
+                        // Rating metadata
+                        $springRatingMeta = getRatingMetaAsBg($springAvgScore);
+                        $fallRatingMeta = getRatingMetaAsBg($fallAvgScore);
                     @endphp
 
                     <!-- Tabs -->
@@ -345,6 +352,7 @@
                         <div class="d-flex justify-content-center mb-3 mt-3">
                             <ul class="nav custom-tabs" role="tablist">
 
+                                <!-- Spring Tab -->
                                 <li class="nav-item">
                                     <button type="button"
                                         class="nav-link active"
@@ -358,6 +366,7 @@
                                     </button>
                                 </li>
 
+                                <!-- Fall Tab -->
                                 <li class="nav-item">
                                     <button type="button"
                                         class="nav-link"
@@ -377,12 +386,15 @@
                         <!-- Tab Content -->
                         <div class="tab-content">
 
-                            <!-- Spring -->
+                            <!-- =====================================================
+                                 SPRING
+                            ====================================================== -->
                             <div class="tab-pane fade show active"
                                 id="student-satisfaction-spring"
                                 role="tabpanel">
 
                                 <div class="table-responsive text-nowrap">
+
                                     <table class="table table-hover align-middle custom-table">
 
                                         <thead class="table-primary">
@@ -399,7 +411,7 @@
 
                                         <tbody>
 
-                                            @forelse ($classFeedback as $index => $feedback)
+                                            @forelse ($springFeedback as $index => $feedback)
 
                                                 @php
                                                     $average = (float) $feedback->feedback;
@@ -407,7 +419,10 @@
                                                 @endphp
 
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
+
+                                                    <td>
+                                                        {{ $index + 1 }}
+                                                    </td>
 
                                                     {{-- Program --}}
                                                     <td>
@@ -442,13 +457,15 @@
                                                             {{ $feedbackRating->rating }}
                                                         </span>
                                                     </td>
+
                                                 </tr>
 
                                             @empty
 
                                                 <tr>
-                                                    <td colspan="7" class="text-center text-muted">
-                                                        No data found
+                                                    <td colspan="7"
+                                                        class="text-center text-muted">
+                                                        No Spring data found
                                                     </td>
                                                 </tr>
 
@@ -456,7 +473,8 @@
 
                                         </tbody>
 
-                                        @if($classFeedback->isNotEmpty())
+                                        @if($springFeedback->isNotEmpty())
+
                                             <tfoot>
                                                 <tr class="table-primary">
 
@@ -466,33 +484,42 @@
 
                                                     <th colspan="4"></th>
 
+                                                    {{-- Spring Average --}}
                                                     <th>
-                                                        <span class="badge bg-label-{{ $ratingMeta->color }}">
-                                                            {{ number_format($avgScore, 1) }}%
+                                                        <span
+                                                            class="badge bg-label-{{ $springRatingMeta->color }}">
+                                                            {{ number_format($springAvgScore, 1) }}%
                                                         </span>
                                                     </th>
 
+                                                    {{-- Spring Rating --}}
                                                     <th>
-                                                        <span class="badge bg-label-{{ $ratingMeta->color }}">
-                                                            {{ $ratingMeta->rating }}
+                                                        <span
+                                                            class="badge bg-label-{{ $springRatingMeta->color }}">
+                                                            {{ $springRatingMeta->rating }}
                                                         </span>
                                                     </th>
 
                                                 </tr>
                                             </tfoot>
+
                                         @endif
 
                                     </table>
+
                                 </div>
 
                             </div>
 
-                            <!-- Fall -->
+                            <!-- =====================================================
+                                 FALL
+                            ====================================================== -->
                             <div class="tab-pane fade"
                                 id="student-satisfaction-fall"
                                 role="tabpanel">
 
                                 <div class="table-responsive text-nowrap">
+
                                     <table class="table table-hover align-middle custom-table">
 
                                         <thead class="table-primary">
@@ -509,7 +536,7 @@
 
                                         <tbody>
 
-                                            @forelse ($classFeedback as $index => $feedback)
+                                            @forelse ($fallFeedback as $index => $feedback)
 
                                                 @php
                                                     $average = (float) $feedback->feedback;
@@ -517,7 +544,10 @@
                                                 @endphp
 
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
+
+                                                    <td>
+                                                        {{ $index + 1 }}
+                                                    </td>
 
                                                     {{-- Program --}}
                                                     <td>
@@ -552,13 +582,15 @@
                                                             {{ $feedbackRating->rating }}
                                                         </span>
                                                     </td>
+
                                                 </tr>
 
                                             @empty
 
                                                 <tr>
-                                                    <td colspan="7" class="text-center text-muted">
-                                                        No data found
+                                                    <td colspan="7"
+                                                        class="text-center text-muted">
+                                                        No Fall data found
                                                     </td>
                                                 </tr>
 
@@ -566,7 +598,8 @@
 
                                         </tbody>
 
-                                        @if($classFeedback->isNotEmpty())
+                                        @if($fallFeedback->isNotEmpty())
+
                                             <tfoot>
                                                 <tr class="table-primary">
 
@@ -576,23 +609,29 @@
 
                                                     <th colspan="4"></th>
 
+                                                    {{-- Fall Average --}}
                                                     <th>
-                                                        <span class="badge bg-label-{{ $ratingMeta->color }}">
-                                                            {{ number_format($avgScore, 1) }}%
+                                                        <span
+                                                            class="badge bg-label-{{ $fallRatingMeta->color }}">
+                                                            {{ number_format($fallAvgScore, 1) }}%
                                                         </span>
                                                     </th>
 
+                                                    {{-- Fall Rating --}}
                                                     <th>
-                                                        <span class="badge bg-label-{{ $ratingMeta->color }}">
-                                                            {{ $ratingMeta->rating }}
+                                                        <span
+                                                            class="badge bg-label-{{ $fallRatingMeta->color }}">
+                                                            {{ $fallRatingMeta->rating }}
                                                         </span>
                                                     </th>
 
                                                 </tr>
                                             </tfoot>
+
                                         @endif
 
                                     </table>
+
                                 </div>
 
                             </div>

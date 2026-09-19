@@ -5760,6 +5760,7 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
             ->where('users.department_id', $departmentId)
             ->whereIn('student_feedback_class_wises.term_id', $termIds)
             ->select(
+                'student_feedback_class_wises.term_id',
                 'student_feedback_class_wises.program',
                 'student_feedback_class_wises.feedback',
                 'student_feedback_class_wises.attempts',
@@ -5774,14 +5775,21 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
             return $item;
         });
 
-        // ✅ GROUP BY PROGRAM
-        $grouped = $records->groupBy('program');
+        /*
+         * ============================================================
+         * SPRING DATA
+         * ============================================================
+         */
 
-        $collection = collect();
+        $springRecords = $records->where('term_id', $springTerm?->id);
 
-        foreach ($grouped as $program => $items) {
+        $springGrouped = $springRecords->groupBy('program');
 
-            $collection->push((object) [
+        $springCollection = collect();
+
+        foreach ($springGrouped as $program => $items) {
+
+            $springCollection->push((object) [
                 'program' => $program,
                 'career_code' => $items->first()->career_code ?? 'UG',
                 'registered_students' => $items->sum('registered_students'),
@@ -5790,27 +5798,79 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
             ]);
         }
 
-        // ✅ DEPARTMENT AVG (AVG OF PROGRAMS)
-        $departmentAvgScore = $collection->count()
-            ? round($collection->avg('feedback'), 2)
+        $springAvgScore = $springCollection->count()
+            ? round($springCollection->avg('feedback'), 2)
+            : null;
+
+        /*
+         * ============================================================
+         * FALL DATA
+         * ============================================================
+         */
+
+        $fallRecords = $records->where('term_id', $fallTerm?->id);
+
+        $fallGrouped = $fallRecords->groupBy('program');
+
+        $fallCollection = collect();
+
+        foreach ($fallGrouped as $program => $items) {
+
+            $fallCollection->push((object) [
+                'program' => $program,
+                'career_code' => $items->first()->career_code ?? 'UG',
+                'registered_students' => $items->sum('registered_students'),
+                'attempts' => $items->sum('attempts'),
+                'feedback' => round($items->avg('feedback'), 2),
+            ]);
+        }
+
+        $fallAvgScore = $fallCollection->count()
+            ? round($fallCollection->avg('feedback'), 2)
+            : null;
+
+        /*
+         * ============================================================
+         * SPRING + FALL KPI AVERAGE
+         * ============================================================
+         */
+
+        $termScores = collect([
+            $springAvgScore,
+            $fallAvgScore
+        ])->filter(fn($score) => $score !== null);
+
+        $departmentAvgScore = $termScores->count()
+            ? round($termScores->avg(), 2)
             : 0;
 
         // ✅ KPI WEIGHT
-        $weight = getRoleWeightage($activeRoleId, 'indicator', 182)['weightage'] ?? 0;
+        $weight = getRoleWeightage(
+            $activeRoleId,
+            'indicator',
+            182
+        )['weightage'] ?? 0;
+
         $weightedScore = ($departmentAvgScore * $weight) / 100;
 
-        // ✅ SAVE KPI
-        // saveIndicatorPercentage90Plus(
-        //     auth()->user()->employee_id,
-        //     $activeRoleId,
-        //     1,
-        //     23,
-        //     182,
-        //     $weightedScore
-        // );
+        //✅ SAVE KPI ONCE
+        saveIndicatorPercentage90Plus(
+            auth()->user()->employee_id,
+            $activeRoleId,
+            1,
+            23,
+            182,
+            $weightedScore
+        );
 
         return [
-            'collection' => $collection,
+            'springCollection' => $springCollection,
+            'springAvgScore' => $springAvgScore ?? 0,
+
+            'fallCollection' => $fallCollection,
+            'fallAvgScore' => $fallAvgScore ?? 0,
+
+            'collection' => $springCollection,
             'totalFeedback' => $departmentAvgScore
         ];
     }
