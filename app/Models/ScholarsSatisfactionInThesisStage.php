@@ -12,6 +12,7 @@ class ScholarsSatisfactionInThesisStage extends Model
         'department_id',
         'program_id',
         'term',
+        'term_id',
         'career',
         'satisfaction_score',
         'form_status',
@@ -39,5 +40,9 @@ class ScholarsSatisfactionInThesisStage extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'employee_id');
+    }
+    public function terms()
+    {
+        return $this->belongsTo(Term::class, 'term_id', 'id');
     }
 }

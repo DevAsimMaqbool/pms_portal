@@ -17,6 +17,8 @@ class StudentEngagementRate extends Model
         'brief_description_of_activity',
         'faculty_id',
         'department_id',
+        'term_id',
+        'year_id',
         'program_id',
         'program_level',
         'participation_target',
@@ -48,5 +50,9 @@ class StudentEngagementRate extends Model
     public function program()
     {
         return $this->belongsTo(Program::class, 'program_id');
+    }
+    public function terms()
+    {
+        return $this->belongsTo(Term::class, 'term_id', 'id');
     }
 }

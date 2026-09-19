@@ -68,19 +68,14 @@
                                 <input type="hidden" name="_method" value="PUT">
 
                                 <div class="row g-3">
+                                     <div class="col-md-4">
+                                        <label for="batch" class="form-label">Term</label>
+                                        <select name="term_id" class="form-select term_id" id="term_id" required>
+                                            <option value="">-- Select Term --</option>
+                                            @foreach(SelectCurrentTerm() as $term)
+                                                <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                            </option> @endforeach
 
-                                    <div class="col-md-4">
-                                        <label for="term" class="form-label">Terms</label>
-                                        <select name="term" id="term" class="select2 form-select term" required>
-                                            <option value="">Select Term</option>
-
-                                            <?php
-            $currentYear = date('Y');
-            for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                echo "<option value='Spring $year'>Spring $year</option>";
-                echo "<option value='Fall $year'>Fall $year</option>";
-            }
-                                                                                                    ?>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
@@ -244,7 +239,7 @@
                     const form = $(this).data('form');
                     $('#researchForm1 #record_id').val(form.id);
                     populateFacultyDepartmentProgram(form);
-                    $('#researchForm1 #term').val(form.term).trigger('change');
+                    $('#researchForm1 #term_id').val(form.term_id).trigger('change');
                     $('#researchForm1 #career').val(form.career).trigger('change');
                     $('#researchForm1 #satisfaction_score').val(form.satisfaction_score);
 

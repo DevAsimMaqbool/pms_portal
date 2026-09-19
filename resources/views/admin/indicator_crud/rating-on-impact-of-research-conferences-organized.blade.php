@@ -122,6 +122,14 @@
                         <label class="form-label" for="conference_theme">Conference Theme</label>
                         <textarea class="form-control" id="conference_theme" name="conference_theme"></textarea>
                     </div>
+                    <div class="col-md-6 mb-3">
+                                        <label for="year" class="form-label">Year</label>
+                                        <select name="year_id" id="year_id"
+                                            class="form-select" required>
+                                            <option value=""> Select year</option>
+                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                            </select>
+                                </div>
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="conference_date">Conference Date</label>
@@ -511,6 +519,7 @@ $(document).on('click','.edit-form-btn',function(){
     $('#conference_theme').val(form.conference_theme);
     $('#conference_date').val(form.conference_date);
     $('#conference_scope').val(form.conference_scope).trigger('change');
+    $('#year_id').val(form.year_id).trigger('change');
     $('#scopus_indexing').val(form.scopus_indexing).trigger('change');
     $('#national_participants').val(form.national_participants);
     $('#international_participants').val(form.international_participants);

@@ -96,6 +96,14 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
+                                                 <div class="col-md-12 mb-3">
+                                                        <label for="year" class="form-label">Year</label>
+                                                        <select name="year_id" id="year_id"
+                                                            class="form-select" required>
+                                                            <option value=""> Select year</option>
+                                                                @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                            </select>
+                                                    </div>
                                                     <div class="col-md-12 mb-3">
                                                         <label class="form-label" for="">Nature of the Event</label>
                                                         <select name="nature_of_event" id="nature_of_event"
@@ -594,6 +602,9 @@
                     // ---------------------------
                     $f.find('[name="nature_of_event"]')
                         .val(form.nature_of_event)
+                        .trigger('change');
+                        $f.find('[name="year_id"]')
+                        .val(form.year_id)
                         .trigger('change');
 
                     // Show other field if needed

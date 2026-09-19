@@ -50,6 +50,7 @@ class StudentEngagementRateController extends Controller
             'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
 
             'nature_of_event' => 'required|string',
+            'year_id' => 'required',
             'other_event_detail' => 'nullable|string',
             'event_location' => 'nullable|array',
             'scope_of_the_event' => 'required|string',
@@ -172,6 +173,7 @@ class StudentEngagementRateController extends Controller
             'indicator_id' => $request->indicator_id,
             'form_status' => $request->form_status,
             'nature_of_event' => $request->nature_of_event,
+            'year_id'=>$request->year_id,
             'other_event_detail' => $request->other_event_detail,
             'event_location' => $request->event_location
                 ? json_encode($request->event_location)
@@ -200,6 +202,7 @@ class StudentEngagementRateController extends Controller
                     'indicator_id',
                     $request->indicator_id
                 )
+                ->where('year_id', $request->year_id)
                 ->where('faculty_id', $row['faculty_id'])
                 ->where('department_id', $row['department_id'])
                 ->where('program_id', $row['program_id'])
@@ -482,6 +485,7 @@ public function store1(Request $request)
 
                 $rules = [
                     // Engagement
+                    'year_id'=> 'required',
                     'nature_of_event' => 'required|string',
                     'other_event_detail' => 'nullable|string',
                     'event_location' => 'nullable|array',
@@ -517,6 +521,7 @@ public function store1(Request $request)
                 $data = $validator->validated();
                 // Check duplicate record except current record
                 $duplicate = StudentEngagementRate::where('id', '!=', $id)
+                ->where('year_id', $data['year_id'])
                     ->where('faculty_id', $data['faculty_id'])
                     ->where('department_id', $data['department_id'])
                     ->where('program_id', $data['program_id'])
