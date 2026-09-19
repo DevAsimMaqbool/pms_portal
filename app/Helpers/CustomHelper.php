@@ -5731,6 +5731,19 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
     {
         $departmentId = auth()->user()->department_id;
 
+        // Get active Spring and Fall terms
+        $activeTerms = \App\Models\Term::where('status', '1')
+            ->get()
+            ->keyBy('term');
+
+        $springTerm = $activeTerms->get('Spring');
+        $fallTerm = $activeTerms->get('Fall');
+
+        $termIds = collect([
+            $springTerm?->id,
+            $fallTerm?->id
+        ])->filter()->values()->toArray();
+
         $records = StudentFeedbackClassWise::query()
             ->join(
                 'faculty_member_classes',
@@ -5745,6 +5758,7 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
                 'faculty_member_classes.faculty_id'
             )
             ->where('users.department_id', $departmentId)
+            ->whereIn('student_feedback_class_wises.term_id', $termIds)
             ->select(
                 'student_feedback_class_wises.program',
                 'student_feedback_class_wises.feedback',
@@ -7213,7 +7227,6 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
             $avgFacultyPercentage
         );
 
-
         return [
             'records' => $records,
             'total_target' => $totalTarget,
@@ -7688,7 +7701,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
     $activeTermIds = Term::where('status', '1')
         ->pluck('id');
 
-
     /*
     |--------------------------------------------------------------------------
     | Get Records
@@ -7708,7 +7720,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         ->whereIn('term_id', $activeTermIds)
         ->get();
 
-
     /*
     |--------------------------------------------------------------------------
     | Group By Term
@@ -7716,7 +7727,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
     */
 
     $termGrouped = $records->groupBy('term_id');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -7739,7 +7749,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         ? round($programAverages->avg(), 2)
         : 0;
 
-
     /*
     |--------------------------------------------------------------------------
     | Overall Rating
@@ -7750,7 +7759,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
 
     $color = $meta->color;
     $rating = $meta->rating;
-
 
     /*
     |--------------------------------------------------------------------------
@@ -7764,9 +7772,7 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         $indicatorId
     )['weightage'] ?? 0;
 
-
     $weightedScore = ($avgRating * $weight) / 100;
-
 
     /*
     |--------------------------------------------------------------------------
@@ -7784,7 +7790,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         $avgRating
     );
 
-
     /*
     |--------------------------------------------------------------------------
     | Term-wise Rows
@@ -7792,7 +7797,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
     */
 
     $terms = [];
-
 
     foreach ($termGrouped as $termId => $termItems) {
 
@@ -7806,7 +7810,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
 
         $programRows = [];
 
-
         foreach ($programs as $programId => $items) {
 
             $programRatings = $items
@@ -7815,7 +7818,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
                     return (float) $rating;
                 });
 
-
             $programAvg = $programRatings->count()
                 ? round(
                     $programRatings->avg() * 20,
@@ -7823,14 +7825,11 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
                 )
                 : 0;
 
-
             $programMeta = getRatingMeta(
                 $programAvg
             );
 
-
             $first = $items->first();
-
 
             $programRows[] = [
 
@@ -7856,7 +7855,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             ];
         }
 
-
         /*
         |--------------------------------------------------------------------------
         | Term Average
@@ -7867,7 +7865,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             $programRows
         )->pluck('score');
 
-
         $termAverage = $termProgramAverages->count()
             ? round(
                 $termProgramAverages->avg(),
@@ -7875,11 +7872,9 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
             )
             : 0;
 
-
         $termMeta = getRatingMeta(
             $termAverage
         );
-
 
         /*
         |--------------------------------------------------------------------------
@@ -7888,7 +7883,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
         */
 
         $term = $termItems->first()->term;
-
 
         $terms[] = [
 
@@ -7908,7 +7902,6 @@ if (!function_exists('internationalStudentSatisfactionAverage')) {
 
         ];
     }
-
 
     /*
     |--------------------------------------------------------------------------
