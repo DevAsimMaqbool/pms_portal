@@ -53,7 +53,10 @@
                                 <h5 class="mb-1">Rating on Impact of Research Conferences Organized</h5>
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'rating-on-impact-of-research-conferences-organized', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
-                            </div>  
+                            </div> 
+                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+                            <p class="" id="indicatorDescription"></p>
+                             <div class="">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div> 
                             <form id="researchForm1" enctype="multipart/form-data" method="POST">
                 @csrf
                 <input type="hidden" id="indicator_id" name="indicator_id" value="{{ $indicatorId }}">
@@ -70,6 +73,14 @@
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="conference_theme">Conference Theme</label>
                         <textarea class="form-control" id="conference_theme" name="conference_theme"></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <select name="year_id" id="year_id"
+                            class="form-select" required>
+                            <option value=""> Select year</option>
+                                @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                            </select>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -409,6 +420,42 @@
     @if(in_array(getRoleName(activeRole()), ['HOD','Professor','Assistant Professor','Associate Professor']))
         <script>
             $(document).ready(function () {
+                function fetchTarget(indicatorId) {
+
+                    if (!indicatorId) {
+                        $('#indicatorTarget').text('Target: N/A');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('faculty-target.getTarget') }}",
+                        type: "GET",
+                        data: {
+                            indicator_id: indicatorId
+                        },
+                        success: function(res) {
+                            if (res.target) {
+                                $('#indicatorTarget').text('Target: ' + res.target);
+                                $('#indicatorDescription').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
+                                $('#indicatorTargetYear').text(res.year && res.year ? res.year : 'N/A');
+                            } else {
+                                $('#indicatorTarget').text('Target: N/A');
+                                $('#indicatorDescription').text('Description: N/A');
+                                $('#indicatorTargetYear').text('N/A');
+                            }
+                        },
+                        error: function() {
+                            $('#indicatorTarget').text('Target: N/A');
+                            $('#indicatorDescription').text('Description: N/A');
+                            $('#indicatorTargetYear').text('N/A');
+                        }
+                    });
+                }
+
+                // ✅ Pass PHP variable safely
+                fetchTarget({{ $indicatorId }});
              
 
              let pastIndex = 1;

@@ -120,6 +120,7 @@ class ResearchConferenceImpactController extends Controller
                $rules = [
                         'indicator_id' => 'required|integer',
                         'conference_name' => 'required|string',
+                        'year_id' => 'required',
                         'conference_theme' => 'required|string',
                         'conference_date' => 'required',
                         'conference_venue' => 'required|string',
@@ -166,6 +167,7 @@ class ResearchConferenceImpactController extends Controller
                         
                         'conference_name' => $request->conference_name,
                         'conference_theme' => $request->conference_theme,
+                        'year_id'=>$request->year_id,
                         'conference_date' => $request->conference_date,
                         'conference_venue' => $request->conference_venue,
                         'conference_scope' => $request->conference_scope,
@@ -220,6 +222,7 @@ class ResearchConferenceImpactController extends Controller
                 'conference_name' => 'required|string',
                 'conference_theme' => 'required|string',
                 'conference_date' => 'required',
+                'year_id'=>'required',
                 'conference_venue' => 'required|string',
                 'conference_scope' => 'required',
                 'scopus_indexing' => 'required',
@@ -251,6 +254,7 @@ class ResearchConferenceImpactController extends Controller
                 'conference_name' => $request->conference_name,
                 'conference_theme' => $request->conference_theme,
                 'conference_date' => $request->conference_date,
+                'year_id'=>$request->year_id,
                 'conference_venue' => $request->conference_venue,
                 'conference_scope' => $request->conference_scope,
                 'scopus_indexing' => $request->scopus_indexing,

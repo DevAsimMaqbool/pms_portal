@@ -43,147 +43,319 @@
  @endphp
 
 @if(in_array(getRoleName(activeRole()), ['HOD']))
-@php
-    $data=scholarsSatisfactionAverageOfHOD($activeRoleId); 
-    $avg_percentage = $data['avg_percentage'] ?? 0;
-    $meta = getRatingMeta($avg_percentage);
-@endphp
-<!-- / Payment Methods modal -->
-<div class="modal fade" id="ScholarsSatisfactionInThesisStage" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    Scholar's Satisfaction (In Thesis Stage)
-                </h3>
-                <!-- Tabs -->
-                <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ScholarsSatisfactionInThesisStage-spring"
-                                    aria-controls="ScholarsSatisfactionInThesisStage-spring" aria-selected="true">
-                                    🌸 Spring {{ date('Y') }}
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ScholarsSatisfactionInThesisStage-fall"
-                                    aria-controls="ScholarsSatisfactionInThesisStage-fall" aria-selected="false">
-                                    🍂 Fall {{ date('Y') - 1 }}
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
 
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active" id="ScholarsSatisfactionInThesisStage-spring"
-                            role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-striped align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Total Score</th>
-                                            <th>Total Count</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                             @php
-                                                $records_Spring_avg = $data['records']['Spring']['avg'] ?? 0;
-                                                $meta_Spring_avg = getRatingMeta($records_Spring_avg);
-                                                
-                                            @endphp
-                                                
-                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>{{ $data['records']['Spring']['sum'] }}</td>
-                                                    <td>{{ $data['records']['Spring']['count'] }}</td>
-                                                     <td><span class="badge" style="background-color: {{ $meta_Spring_avg->color }}">{{ $records_Spring_avg }}%</span></td>
-                                                    <td><span class="badge" style="background-color: {{ $meta_Spring_avg->color }}">{{ $meta_Spring_avg->rating }}</span></td>
-                                                </tr>
-                                    </tbody>
-                                    <tfoot>
-                                         <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">AVG (S+F)-></th>
-                                            {{-- <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                             <th class="">Total (S+F){{number_format($data['total_target_count'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">{{number_format($avg_percentage, 1) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">
-                                                        {{ $meta->rating }}
-                                                    </span></th>
-                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                        </tr>
-                                    </tfoot>
-                                    
-                                </table>
-                            </div>
-                        </div>
+    @php
+        $data = scholarsSatisfactionAverageOfHOD($activeRoleId);
 
-                        <!-- Fall -->
-                        <div class="tab-pane fade" id="ScholarsSatisfactionInThesisStage-fall" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                 <table class="table table-striped align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Total Score</th>
-                                            <th>Total Count</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                            @php
-                                                $records_fall_avg = $data['records']['Fall']['avg'] ?? 0;
-                                                $meta_fall_avg = getRatingMeta($records_fall_avg);
-                                                
-                                            @endphp
-                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>{{ $data['records']['Fall']['sum'] }}</td>
-                                                    <td>{{ $data['records']['Fall']['count'] }}</td>
-                                                    <td><span class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $records_fall_avg }}%</span></td>
-                                                    <td><span class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $meta_fall_avg->rating }}</span></td>
-                                                </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">AVG (S+F)-></th>
-                                            {{-- <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                             <th class="">Total (S+F){{number_format($data['total_target_count'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">{{number_format($avg_percentage, 1) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta->color }}">
-                                                        {{ $meta->rating }}
-                                                    </span></th>
-                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                        </tr>
-                                    </tfoot>
-                                    
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        $avg_percentage = $data['avg_percentage'] ?? 0;
+        $meta = getRatingMeta($avg_percentage);
+
+        $spring = $data['records']['Spring'] ?? [];
+        $fall = $data['records']['Fall'] ?? [];
+    @endphp
+
+    <div class="modal fade"
+         id="ScholarsSatisfactionInThesisStage"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+
+                {{-- Header --}}
+                <div class="modal-header">
+                   
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
                 </div>
+
+                {{-- Body --}}
+                <div class="modal-body">
+
+                    {{-- Overall Result --}}
+                    <div class="text-center mb-4">
+
+                        <h3 class="fw-bold text-primary">
+                            Scholar's Satisfaction (In Thesis Stage)
+                        </h3>
+
+                        <div class="mt-3">
+
+                            <span class="badge fs-5 px-4 py-2"
+                                  style="background-color: {{ $meta->color }}">
+                                {{ number_format($avg_percentage, 2) }}%
+                            </span>
+
+                            <span class="badge fs-5 px-4 py-2 ms-2"
+                                  style="background-color: {{ $meta->color }}">
+                                {{ $meta->rating }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                   <div class="d-flex justify-content-center mb-3 mt-3">
+                    {{-- Tabs --}}
+                    <ul class="nav custom-tabs" id="scholarSatisfactionTabs" role="tablist">
+
+                        {{-- Spring --}}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active"
+                                    id="spring-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#spring"
+                                    type="button"
+                                    role="tab">
+
+                                {{ $spring['term_name'] ?? 'Spring' }}
+                                {{ $spring['term_year'] ?? '' }}
+
+                            </button>
+                        </li>
+
+                        {{-- Fall --}}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="fall-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#fall"
+                                    type="button"
+                                    role="tab">
+
+                                {{ $fall['term_name'] ?? 'Fall' }}
+                                {{ $fall['term_year'] ?? '' }}
+
+                            </button>
+                        </li>
+
+                    </ul>
+                    </div>
+
+
+                    {{-- Tab Content --}}
+                    <div class="tab-content" id="scholarSatisfactionTabContent">
+
+                        {{-- ================= SPRING ================= --}}
+                        <div class="tab-pane fade show active"
+                             id="spring"
+                             role="tabpanel">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-hover align-middle">
+
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Level</th>
+                                            <th>Total Score</th>
+                                            <th>Total Count</th>
+                                            <th>Average Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @forelse($spring['details'] ?? [] as $index => $detail)
+
+                                            @php
+                                                $score = (float) ($detail['avg'] ?? 0);
+                                                $ratingMeta = getRatingMeta($score);
+                                            @endphp
+
+                                            <tr>
+
+                                                <td>
+                                                    {{ $index + 1 }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['faculty_name'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['department_name'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['program_name'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['program_level'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($detail['sum'] ?? 0, 2) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['count'] ?? 0 }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($score, 2) }}%
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="badge"
+                                                          style="background-color: {{ $ratingMeta->color }}">
+                                                        {{ $ratingMeta->rating }}
+                                                    </span>
+
+                                                </td>
+
+                                            </tr>
+
+                                        @empty
+
+                                            <tr>
+                                                <td colspan="9"
+                                                    class="text-center text-muted py-4">
+
+                                                    No record exists for Spring.
+
+                                                </td>
+                                            </tr>
+
+                                        @endforelse
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- ================= FALL ================= --}}
+                        <div class="tab-pane fade"
+                             id="fall"
+                             role="tabpanel">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-hover align-middle">
+
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Program</th>
+                                            <th>Level</th>
+                                            <th>Total Score</th>
+                                            <th>Total Count</th>
+                                            <th>Average Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @forelse($fall['details'] ?? [] as $index => $detail)
+
+                                            @php
+                                                $score = (float) ($detail['avg'] ?? 0);
+                                                $ratingMeta = getRatingMeta($score);
+                                            @endphp
+
+                                            <tr>
+
+                                                <td>
+                                                    {{ $index + 1 }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['faculty_name'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['department_name'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['program_name'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['program_level'] ?? 'N/A' }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($detail['sum'] ?? 0, 2) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $detail['count'] ?? 0 }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($score, 2) }}%
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="badge"
+                                                          style="background-color: {{ $ratingMeta->color }}">
+                                                        {{ $ratingMeta->rating }}
+                                                    </span>
+
+                                                </td>
+
+                                            </tr>
+
+                                        @empty
+
+                                            <tr>
+                                                <td colspan="9"
+                                                    class="text-center text-muted py-4">
+
+                                                    No record exists for Fall.
+
+                                                </td>
+                                            </tr>
+
+                                        @endforelse
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- Footer --}}
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                </div>
+
             </div>
         </div>
     </div>
-</div>
 
-<!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
 <!--  Payment Methods modal -->

@@ -9,6 +9,7 @@ class ResearchConferenceImpact extends Model
     protected $fillable = [
         'indicator_id',
         'conference_name',
+        'year_id',
         'conference_theme',
         'conference_date',
         'conference_venue',

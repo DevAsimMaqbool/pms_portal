@@ -46,20 +46,14 @@
                                             <div class="row g-3">
                                                 <div id="author-past-container">
                                                     <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
-
                                                         <div class="col-md-4">
-                                                            <label for="term" class="form-label">Terms</label>
-                                                            <select name="scholar_satisfaction[0][term]" class="select2 form-select term"
-                                                                required>
-                                                                <option value="">Select Term</option>
+                                                            <label for="batch" class="form-label">Term</label>
+                                                            <select name="scholar_satisfaction[0][term_id]" class="form-select term_id" id="term_id" required>
+                                                                <option value="">-- Select Term --</option>
+                                                                @foreach(SelectCurrentTerm() as $term)
+                                                                    <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                                </option> @endforeach
 
-                                                                <?php
-                        $currentYear = date('Y');
-                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                            echo "<option value='Spring $year'>Spring $year</option>";
-                            echo "<option value='Fall $year'>Fall $year</option>";
-                        }
-                                                                                                                ?>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-4">
@@ -172,22 +166,20 @@
                         facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
                     });
                     // Generate Spring/Fall options dynamically
-                    let currentYear = new Date().getFullYear();
-                    let termOptions = '<option value="">-- Select Term --</option>';
 
-                    for (let year = currentYear - 2; year <= currentYear + 3; year++) {
-                        termOptions += `<option value="Spring ${year}">Spring ${year}</option>`;
-                        termOptions += `<option value="Fall ${year}">Fall ${year}</option>`;
-                    }
+                    
                     let newGroup = `
                                     <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
 
-                                       <div class="col-md-4">
-                                            <label for="term" class="form-label">Terms</label>
-                                            <select name="scholar_satisfaction[${pastIndex}][term]"
-                                                class="select2 form-select term" required>
-                                                ${termOptions}
+                                        <div class="col-md-4">
+                                            <label for="batch" class="form-label">Term</label>
+                                            <select name="scholar_satisfaction[${pastIndex}][term_id]" class="form-select term_id" id="term_id" required>
+                                                <option value="">-- Select Term --</option>
+                                                @foreach(SelectCurrentTerm() as $term)
+                                                    <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
+                                                </option> @endforeach
+
                                             </select>
                                         </div>
                                         <div class="col-md-4">

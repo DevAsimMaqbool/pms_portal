@@ -63,13 +63,14 @@ class ScholarsSatisfactionInThesisStageController extends Controller
         try { 
             
                  $employeeId = Auth::user()->employee_id;
+                 //'scholar_satisfaction.*.term' => 'required',
                $rules = [
                         'indicator_id' => 'required|integer',
                         'scholar_satisfaction' => 'required|array|min:1',
                         'scholar_satisfaction.*.faculty_id' => 'required|integer',
                         'scholar_satisfaction.*.department_id' => 'required|integer',
                         'scholar_satisfaction.*.program_id' => 'required|integer',
-                        'scholar_satisfaction.*.term' => 'required',
+                        'scholar_satisfaction.*.term_id' => 'required',
                         'scholar_satisfaction.*.career' => 'required',
                         'scholar_satisfaction.*.satisfaction_score' => 'required',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
@@ -79,7 +80,7 @@ class ScholarsSatisfactionInThesisStageController extends Controller
                         'scholar_satisfaction.*.faculty_id.required' => 'Faculty is required',
                         'scholar_satisfaction.*.department_id.required' => 'Department is required',
                         'scholar_satisfaction.*.program_id.required' => 'Program is required',
-                        'scholar_satisfaction.*.term.required' => 'Term is required.',
+                        'scholar_satisfaction.*.term_id.required' => 'Term is required.',
                         'scholar_satisfaction.*.career.required' => 'Career is required.',
                         'scholar_satisfaction.*.satisfaction_score.required' => 'Satisfaction Score is required.',
                     ];
@@ -143,14 +144,14 @@ class ScholarsSatisfactionInThesisStageController extends Controller
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
                 'program_id' => 'required|integer',
-                'term' => 'required',
+                'term_id' => 'required',
                 'career' => 'required',
                 'satisfaction_score' => 'required',
     
         ]);
 
         $data = $request->only([
-                        'faculty_id', 'department_id', 'program_id', 'term', 'career','satisfaction_score'
+                        'faculty_id', 'department_id', 'program_id', 'term_id', 'career','satisfaction_score'
                     ]);
                     $data['updated_by'] = Auth::user()->employee_id;
 

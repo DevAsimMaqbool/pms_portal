@@ -4593,6 +4593,62 @@ function NumberOfKnowledgeProduct($facultyId, $activeRoleId, $currentYear = null
         'knowledgeProducts' => $knowledgeProducts,
     ];
 }
+function RatingonImpact($facultyId, $activeRoleId, $currentYear = null)
+{
+    // 1️⃣ Get all knowledge products created by the faculty
+    $knowledgeProducts = \App\Models\ResearchConferenceImpact::where('created_by', $facultyId)
+        ->where('status', 3) // optional: only approved/active products
+        ->where('year_id', $currentYear)
+        ->get();
+
+    $totalAchieved = $knowledgeProducts->count();
+
+    // 2️⃣ Get the target from faculty_targets table
+    $targetRecord = FacultyTarget::where('user_id', $facultyId)
+        ->where('indicator_id', 140) // indicator_id for NumberOfKnowledgeProduct
+        ->where('year_id', $currentYear)
+        ->first();
+
+    $target = $targetRecord ? $targetRecord->target : 0;
+
+    // 3️⃣ Calculate score (percentage)
+    $score = $target > 0 ? ($totalAchieved / $target) * 100 : 0;
+    $score = round($score, 2);
+    $score = min($score, 100);
+
+    // 4️⃣ Determine rating based on score
+    if ($score >= 90) {
+        $rating = 'OS';
+        $color = 'primary';
+    } elseif ($score >= 80) {
+        $rating = 'EE';
+        $color = 'success';
+    } elseif ($score >= 70) {
+        $rating = 'ME';
+        $color = 'warning';
+    } elseif ($score >= 60) {
+        $rating = 'NI';
+        $color = 'orange';
+    } else {
+        $rating = 'BE';
+        $color = 'danger';
+    }
+    $weights = [
+        'course_load' => getRoleWeightage($activeRoleId, 'indicator', 140)['weightage'],
+    ];
+    $weightedScore = ($score * $weights['course_load']) / 100;
+    saveIndicatorPercentage($facultyId, $activeRoleId, 2, 9, 140, $weightedScore, $score, $currentYear);
+
+    // 6️⃣ Return structured data for table
+    return [
+        'totalAchieved' => $totalAchieved,
+        'target' => $target,
+        'score' => $score,
+        'rating' => $rating,
+        'color' => $color,
+        'knowledgeProducts' => $knowledgeProducts,
+    ];
+}
 
 if (!function_exists('lineManagerReviewRatingOnTasks')) {
     function lineManagerReviewRatingOnTasks($facultyId, $activeRoleId)
@@ -5406,12 +5462,13 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 //     return $records;
 // }
 
-function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
+function StudentEngagementRateForHOD($activeRoleId, $indicatorId,$currentYear=null)
 {
     $departmentId = auth()->user()->department_id;
 
     $records = StudentEngagementRate::with(['faculty', 'department', 'program'])
         ->where('department_id', $departmentId)
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicatorId)
         ->get();
 
@@ -5456,6 +5513,7 @@ function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
     $overallPercentage = $programResults->count() > 0
         ? round($programResults->avg(), 2)
         : 0;
+    $overallPercentage = min($overallPercentage, 100);
 
     // Save KPI using overall average
     $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
@@ -5473,12 +5531,13 @@ function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
     return collect($result)->values();
 }
 
-function StudentSatisfactionRateForHOD($activeRoleId, $indicatorId)
+function StudentSatisfactionRateForHOD($activeRoleId, $indicatorId,$currentYear=null)
 {
     $departmentId = auth()->user()->department_id;
 
     $records = StudentEngagementRate::with(['faculty', 'department', 'program'])
         ->where('department_id', $departmentId)
+        ->where('year_id', $currentYear)
         ->where('indicator_id', $indicatorId)
         ->get();
 
@@ -6164,6 +6223,11 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
             155 => [
                 'model' => \App\Models\ProfessionalMembership::class
             ],
+            
+            140 => [
+                'model' => \App\Models\ResearchConferenceImpact::class,
+                'status' => 3
+            ],
 
         ];
 
@@ -6514,7 +6578,7 @@ if (!function_exists('departmentResearchTasksAssignedbyDeanHOD')) {
 }
 
 if (!function_exists('scholarsSatisfactionAverageOfHOD')) {
-    function scholarsSatisfactionAverageOfHOD($activeRoleId)
+    function scholarsSatisfactionAverageOfHODbk($activeRoleId)
     {
         $departmentId = auth()->user()->department_id;
         $currentYear = Carbon::now()->year;
@@ -6587,6 +6651,236 @@ if (!function_exists('scholarsSatisfactionAverageOfHOD')) {
             'weighted_score' => round($weightedScore, 2),        // weighted score
         ];
     }
+    function scholarsSatisfactionAverageOfHOD($activeRoleId)
+{
+    $departmentId = auth()->user()->department_id;
+
+    // Get active terms
+    $activeTerms = Term::where('status', '1')
+        ->orderBy('id', 'desc')
+        ->get(['id', 'term', 'start_year']);
+
+    $activeTermIds = $activeTerms->pluck('id');
+
+    // Get records
+    $recordsRaws = ScholarsSatisfactionInThesisStage::where('department_id', $departmentId)
+        ->where('indicator_id', 132)
+        ->whereIn('term_id', $activeTermIds)
+        ->with([
+            'faculty',
+            'department',
+            'program',
+            'terms'
+        ])
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Group records by term_id
+    |--------------------------------------------------------------------------
+    */
+    $recordsRaw = $recordsRaws->groupBy('term_id');
+
+    $records = [
+        'Spring' => [
+            'sum' => 0,
+            'count' => 0,
+            'avg' => 0,
+            'term_name' => null,
+            'term_id' => null,
+            'term_year' => null,
+            'details' => [],
+        ],
+
+        'Fall' => [
+            'sum' => 0,
+            'count' => 0,
+            'avg' => 0,
+            'term_name' => null,
+            'term_id' => null,
+            'term_year' => null,
+            'details' => [],
+        ],
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Loop through term_id groups
+    |--------------------------------------------------------------------------
+    */
+    foreach ($recordsRaw as $termId => $termRecords) {
+
+        $firstRecord = $termRecords->first();
+
+        if (!$firstRecord || !$firstRecord->terms) {
+            continue;
+        }
+
+        $termName = $firstRecord->terms->term ?? '';
+        $termNameLower = strtolower($termName);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Determine Spring / Fall
+        |--------------------------------------------------------------------------
+        */
+        if (str_contains($termNameLower, 'spring')) {
+            $season = 'Spring';
+        } elseif (str_contains($termNameLower, 'fall')) {
+            $season = 'Fall';
+        } else {
+            continue;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Term information
+        |--------------------------------------------------------------------------
+        */
+        $records[$season]['term_id'] = $termId;
+        $records[$season]['term_name'] = $termName;
+        $records[$season]['term_year'] = $firstRecord->terms->start_year;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Group this term's records by program_id
+        |--------------------------------------------------------------------------
+        */
+        $programGroups = $termRecords->groupBy('program_id');
+
+        foreach ($programGroups as $programId => $programRecords) {
+
+            $firstProgramRecord = $programRecords->first();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Program total
+            |--------------------------------------------------------------------------
+            */
+            $programSum = $programRecords->sum(function ($record) {
+                return (float) ($record->satisfaction_score ?? 0);
+            });
+
+            $programCount = $programRecords->count();
+
+            $programAvg = $programCount > 0
+                ? round($programSum / $programCount, 2)
+                : 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Add to term total
+            |--------------------------------------------------------------------------
+            */
+            $records[$season]['sum'] += $programSum;
+            $records[$season]['count'] += $programCount;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Program details
+            |--------------------------------------------------------------------------
+            */
+            $records[$season]['details'][] = [
+                'program_id' => $programId,
+
+                'faculty_id' => $firstProgramRecord->faculty_id,
+                'faculty_name' => $firstProgramRecord->faculty->name ?? 'N/A',
+
+                'department_id' => $firstProgramRecord->department_id,
+                'department_name' => $firstProgramRecord->department->name ?? 'N/A',
+
+                'program_name' => $firstProgramRecord->program->program_name ?? 'N/A',
+
+                'program_level' => $firstProgramRecord->career ?? 'N/A',
+
+                'sum' => $programSum,
+                'count' => $programCount,
+                'avg' => $programAvg,
+
+                'satisfaction_score' => $programAvg,
+
+                'term_id' => $termId,
+                'term_name' => $termName,
+                'term_year' => $firstRecord->terms->start_year,
+            ];
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate Spring / Fall averages
+    |--------------------------------------------------------------------------
+    */
+    foreach (['Spring', 'Fall'] as $season) {
+
+        if ($records[$season]['count'] > 0) {
+
+            $records[$season]['avg'] = round(
+                $records[$season]['sum'] /
+                $records[$season]['count'],
+                2
+            );
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Department Average
+    |--------------------------------------------------------------------------
+    */
+    //$totalTargetSum = $recordsRaw->sum('satisfaction_score');
+    $totalTargetSum = $recordsRaw->flatten(1)->sum('satisfaction_score');
+
+    $totalTargetCount = $recordsRaw->count();
+    //dd($totalTargetSum);
+
+    $totalTargetAvg = $totalTargetCount > 0
+        ? round($totalTargetSum / $totalTargetCount, 2)
+        : 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Indicator Weight
+    |--------------------------------------------------------------------------
+    */
+    $indicatorWeight = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        132
+    );
+
+    $weight = $indicatorWeight['weightage'] ?? 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weighted Score
+    |--------------------------------------------------------------------------
+    */
+    $weightedScore = ($totalTargetAvg * $weight) / 100;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save KPI
+    |--------------------------------------------------------------------------
+    */
+    saveIndicatorPercentage(
+        auth()->user()->employee_id,
+        $activeRoleId,
+        2,
+        6,
+        132,
+        $weightedScore,
+        $totalTargetAvg
+    );
+
+    return [
+        'records' => $records,
+        'total_target' => $totalTargetSum,
+        'total_target_count' => $totalTargetCount,
+        'avg_percentage' => $totalTargetAvg,
+        'weighted_score' => round($weightedScore, 2),
+    ];
+}
 }
 
 if (!function_exists('researchProductivityPGStudentsOfHOD')) {
@@ -7658,11 +7952,11 @@ if (!function_exists('departmentEmployerSatisfactionOfHOD')) {
     {
         $departmentId = auth()->user()->department_id;
 
-        $activeTermIds = Term::where('status', '1')->pluck('id');
+        $activeTermIds = Term::where('status', '1')->pluck('start_year');
         // 1️⃣ Get ALL records
         $records = Employability::with(['faculty', 'department', 'program'])
             ->where('department_id', $departmentId)
-            ->whereIn('batch', $activeTermIds)
+            ->whereIn('passing_year', $activeTermIds)
             ->whereNotNull('employer_satisfaction')
             ->get();
 
