@@ -2502,6 +2502,7 @@ if (!function_exists('lineManagerRatingOnTasks')) {
     function lineManagerRatingOnTasks($facultyId, $activeRoleId, $currentYear = null)
     {
         $feedbacks = LineManagerFeedback::where('employee_id', $facultyId)
+        ->where('assessment_type', 'manager')
             ->where('year_id', $currentYear)->get();
 
         $overallSum = 0;
