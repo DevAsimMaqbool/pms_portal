@@ -5462,7 +5462,7 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 //     return $records;
 // }
 
-function StudentEngagementRateForHOD($activeRoleId, $indicatorId,$currentYear=null)
+function StudentEngagementRateForHOD($activeRoleId, $indicatorId, $currentYear = null)
 {
     $departmentId = auth()->user()->department_id;
 
@@ -5475,6 +5475,7 @@ function StudentEngagementRateForHOD($activeRoleId, $indicatorId,$currentYear=nu
     $grouped = $records->groupBy('program_id');
 
     $programResults = collect();
+    $result = []; // Initialize result to avoid undefined variable
 
     foreach ($grouped as $programRecords) {
 
@@ -5509,14 +5510,20 @@ function StudentEngagementRateForHOD($activeRoleId, $indicatorId,$currentYear=nu
         ];
     }
 
-    // 🔥 FINAL FIX: AVERAGE OF PROGRAMS
+    // FINAL FIX: AVERAGE OF PROGRAMS
     $overallPercentage = $programResults->count() > 0
         ? round($programResults->avg(), 2)
         : 0;
+
     $overallPercentage = min($overallPercentage, 100);
 
     // Save KPI using overall average
-    $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+    $weight = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        $indicatorId
+    )['weightage'] ?? 0;
+
     $weightedScore = ($overallPercentage * $weight) / 100;
 
     saveIndicatorPercentage(
