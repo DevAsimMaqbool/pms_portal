@@ -90,7 +90,8 @@ class LineManagerFeedbackController extends Controller
 
         $employeeId = $request->employee_id;
         $year = $request->year_id;
-
+        $employee = \App\Models\User::where('employee_id', $employeeId)->first();
+        
         // Check if the employee has already submitted feedback for this year
         $existing = LineManagerFeedback::where('created_by', Auth::id())
             ->where('employee_id', $employeeId)
@@ -110,6 +111,12 @@ class LineManagerFeedbackController extends Controller
             if ($request->has('area_of_improvement')) {
                 $data['area_of_improvement'] = $request->area_of_improvement ? json_encode(explode(',', $request->area_of_improvement)) : null;
             }
+        }
+        
+        if ($employee && $employee->manager_id == Auth::user()->employee_id) {
+            $data['assessment_type'] = 'manager';
+        } elseif ($employee && Auth::user()->manager_id == $employee->employee_id) {
+            $data['assessment_type'] = 'sub_ordinate';
         }
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
