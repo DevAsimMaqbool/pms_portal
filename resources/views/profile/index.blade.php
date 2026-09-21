@@ -91,7 +91,7 @@
                     <li class="d-flex align-items-center mb-4">
                         <i class="icon-base ti tabler-phone-call icon-lg"></i>
                         <span class="fw-medium mx-2">Contact:</span>
-                        <span>{{ $employee['emergency_phone'] }}</span>
+                        <span>{{ $employee['mobile_phone'] }}</span>
                     </li>
 
                     <li class="d-flex align-items-center mb-4">
