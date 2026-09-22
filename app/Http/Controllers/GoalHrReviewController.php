@@ -344,7 +344,7 @@ class GoalHrReviewController extends Controller
             '.pdf';
 
         $pdf = Pdf::loadView(
-            'admin.goal_hr.overall_performance_pdf',
+            'admin.goal-hr.overall_performance_pdf',
             [
                 'rows' => $rows,
                 'department' => $department,
