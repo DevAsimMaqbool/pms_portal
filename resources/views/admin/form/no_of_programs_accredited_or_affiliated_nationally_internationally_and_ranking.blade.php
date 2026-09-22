@@ -71,7 +71,7 @@
                                             <div class="col-md-6">
                                                 <label for="program" class="form-label">Program</label>
                                                 <select name="program_id" id="program_id" class="select2 form-select program_id"
-                                                    required>
+                                                    >
                                                     <option value="">-- Select Program --</option>
                                                 </select>
                                             </div>
