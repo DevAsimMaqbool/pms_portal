@@ -16,73 +16,119 @@
 
         </div>
 
+        @php
+            $selectedDepartments = request('department', []);
+
+            if (!is_array($selectedDepartments)) {
+                $selectedDepartments = [$selectedDepartments];
+            }
+
+            $selectedDepartments = array_values(
+                array_filter($selectedDepartments)
+            );
+        @endphp
+
         {{-- DEPARTMENT FILTER --}}
-<div class="card border-0 shadow-sm mb-3">
+        <div class="card border-0 shadow-sm mb-3">
 
-    <div class="card-body py-2">
+            <div class="card-body py-2">
 
-        <form method="GET"
-              action="{{ route('goal-hr.index') }}"
-              class="row align-items-end g-2">
+                <form method="GET"
+                      action="{{ route('goal-hr.index') }}"
+                      class="row align-items-end g-2">
 
-            <div class="col-md-4">
+                    <div class="col-md-5">
 
-                <label class="form-label mb-1">
-                    Search by Department
-                </label>
+                        <label class="form-label mb-1">
+                            Search by Department
+                        </label>
 
-                <select name="department"
-        id="department"
-        class="form-select form-select-sm">
+                        <select name="department[]"
+                                id="department"
+                                class="form-select form-select-sm"
+                                multiple>
 
-    <option value="">All Departments</option>
+                            @foreach($departments as $department)
 
-    @foreach($departments as $department)
-        <option value="{{ $department }}"
-            {{ request('department') == $department ? 'selected' : '' }}>
-            {{ $department }}
-        </option>
-    @endforeach
+                                <option value="{{ $department }}"
+                                    {{ in_array($department, $selectedDepartments, true) ? 'selected' : '' }}>
+                                    {{ $department }}
+                                </option>
 
-</select>
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-auto">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-sm">
+
+                            <i class="fas fa-filter me-1"></i>
+                            Apply Filter
+
+                        </button>
+
+                    </div>
+
+                    @if(count($selectedDepartments))
+
+                        <div class="col-md-auto">
+
+                            <a href="{{ route('goal-hr.index') }}"
+                               class="btn btn-light border btn-sm">
+
+                                <i class="fas fa-times me-1"></i>
+                                Clear
+
+                            </a>
+
+                        </div>
+
+                    @endif
+
+                    {{-- EXCEL --}}
+                    <div class="col-md-auto">
+
+                        <a href="{{ route('goal-hr.export', [
+                            'department' => $selectedDepartments
+                        ]) }}"
+                           class="btn btn-success btn-sm">
+
+                            <i class="fas fa-file-excel me-1"></i>
+                            Download Excel
+
+                        </a>
+
+                    </div>
+
+                    {{-- PDF --}}
+                    <div class="col-md-auto">
+
+                        <a href="{{ route('goal-hr.export-pdf', [
+                            'department' => $selectedDepartments
+                        ]) }}"
+                           class="btn btn-danger btn-sm">
+
+                            <i class="fas fa-file-pdf me-1"></i>
+
+                            @if(count($selectedDepartments) > 1)
+                                Download PDFs
+                            @else
+                                Download PDF
+                            @endif
+
+                        </a>
+
+                    </div>
+
+                </form>
 
             </div>
 
-            @if(request('department'))
-
-                <div class="col-md-auto">
-
-                    <a href="{{ route('goal-hr.index') }}"
-                       class="btn btn-light border btn-sm">
-
-                        <i class="fas fa-times me-1"></i>
-                        Clear
-
-                    </a>
-
-                </div>
-
-            @endif
-
-            <div class="col-md-auto">
-
-    <a href="{{ route('goal-hr.export', [
-        'department' => request('department')
-    ]) }}"
-       class="btn btn-success btn-sm">
-
-        <i class="fas fa-file-excel me-1"></i>
-        Download Report
-
-    </a>
-
-</div>
-
-        </form>
-
-    </div>
-
-</div>
+        </div>
 
         <div class="card border-0 shadow-sm">
 
@@ -92,99 +138,101 @@
 
                     @php
 
-    $reports = $employee->goalSelfReports;
+                        $reports = $employee->goalSelfReports;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Self Overall Rating
-    |--------------------------------------------------------------------------
-    */
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Self Overall Rating
+                        |--------------------------------------------------------------------------
+                        */
 
-    $selfRatings = $reports
-        ->pluck('rating')
-        ->filter(fn($rating) => $rating !== null);
+                        $selfRatings = $reports
+                            ->pluck('rating')
+                            ->filter(fn($rating) => $rating !== null);
 
-    $selfOverall = $selfRatings->count()
-        ? round($selfRatings->avg(), 2)
-        : null;
+                        $selfOverall = $selfRatings->count()
+                            ? round($selfRatings->avg(), 2)
+                            : null;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Manager Overall Rating
-    |--------------------------------------------------------------------------
-    */
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Manager Overall Rating
+                        |--------------------------------------------------------------------------
+                        */
 
-    $managerRatings = $reports
-        ->pluck('manager_rating')
-        ->filter(fn($rating) => $rating !== null);
+                        $managerRatings = $reports
+                            ->pluck('manager_rating')
+                            ->filter(fn($rating) => $rating !== null);
 
-    $managerOverall = $managerRatings->count()
-        ? round($managerRatings->avg(), 2)
-        : null;
+                        $managerOverall = $managerRatings->count()
+                            ? round($managerRatings->avg(), 2)
+                            : null;
 
-    /*
-    |--------------------------------------------------------------------------
-    | HR Overall Rating
-    |--------------------------------------------------------------------------
-    */
+                        /*
+                        |--------------------------------------------------------------------------
+                        | HR Overall Rating
+                        |--------------------------------------------------------------------------
+                        */
 
-    $overallReview = $employee->goalOverallReviews->first();
+                        $overallReview = $employee->goalOverallReviews->first();
 
-@endphp
+                    @endphp
 
                     <div class="employee-row">
 
                         <div class="employee-info">
 
-    <div class="employee-avatar">
-        <i class="fas fa-user"></i>
-    </div>
+                            <div class="employee-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
 
-    <div>
+                            <div>
 
-        <div class="employee-name">
-            {{ $employee->name }}
-        </div>
+                                <div class="employee-name">
+                                    {{ $employee->name }}
+                                </div>
 
-        <div class="employee-meta">
+                                <div class="employee-meta">
 
-            <span>
-                <i class="fas fa-building me-1"></i>
-                {{ $employee->hr_department_name ?? 'No Department' }}
-            </span>
+                                    <span>
+                                        <i class="fas fa-building me-1"></i>
+                                        {{ $employee->hr_department_name ?? 'No Department' }}
+                                    </span>
 
-            <span>
-                <i class="fas fa-user-tie me-1"></i>
-                Manager:
-                {{ $employee->manager_name ?? 'No Manager' }}
-            </span>
+                                    <span>
+                                        <i class="fas fa-user-tie me-1"></i>
+                                        Manager:
+                                        {{ $employee->manager_name ?? 'No Manager' }}
+                                    </span>
 
-        </div>
+                                </div>
 
-        <small class="text-muted">
-            {{ $reports->count() }} manager-reviewed goal(s)
-        </small>
+                                <small class="text-muted">
+                                    {{ $reports->count() }} manager-reviewed goal(s)
+                                </small>
 
-    </div>
+                            </div>
 
-</div>
-{{-- SELF OVERALL --}}
-<div class="rating-box self">
+                        </div>
 
-    <small>
-        Self Overall
-    </small>
+                        {{-- SELF OVERALL --}}
+                        <div class="rating-box self">
 
-    <strong>
-        {{ $selfOverall ?? '-' }}
+                            <small>
+                                Self Overall
+                            </small>
 
-        @if($selfOverall !== null)
-            / 5
-        @endif
-    </strong>
+                            <strong>
+                                {{ $selfOverall ?? '-' }}
 
-</div>
+                                @if($selfOverall !== null)
+                                    / 5
+                                @endif
+                            </strong>
 
+                        </div>
+
+                        {{-- MANAGER OVERALL --}}
                         <div class="rating-box">
 
                             <small>
@@ -201,6 +249,7 @@
 
                         </div>
 
+                        {{-- HR OVERALL --}}
                         <div class="rating-box hr">
 
                             <small>
@@ -252,119 +301,125 @@
 
     <style>
 
-    .employee-row {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 14px 16px;
-        border-bottom: 1px solid #edf1f5;
-    }
-
-    .employee-row:last-child {
-        border-bottom: 0;
-    }
-
-    .employee-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex: 1;
-    }
-
-    .employee-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        background: #e8f1fa;
-        color: #1f4e79;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .employee-name {
-        color: #253449;
-        font-size: 13px;
-        font-weight: 700;
-    }
-
-    .rating-box {
-        min-width: 110px;
-    }
-
-    .rating-box small {
-        display: block;
-        color: #718096;
-        font-size: 9px;
-    }
-
-    .rating-box strong {
-        color: #b77900;
-        font-size: 16px;
-    }
-
-    .rating-box.hr strong {
-        color: #198754;
-    }
-
-    @media(max-width:768px) {
-
         .employee-row {
-            align-items: flex-start;
-            flex-direction: column;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf1f5;
+        }
+
+        .employee-row:last-child {
+            border-bottom: 0;
+        }
+
+        .employee-info {
+            display: flex;
+            align-items: center;
             gap: 10px;
+            flex: 1;
+        }
+
+        .employee-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #e8f1fa;
+            color: #1f4e79;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .employee-name {
+            color: #253449;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .rating-box {
-            min-width: auto;
+            min-width: 110px;
         }
 
-        .employee-row .btn {
-            width: 100%;
+        .rating-box small {
+            display: block;
+            color: #718096;
+            font-size: 9px;
         }
 
-    }
-.employee-meta {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    flex-wrap: wrap;
-}
+        .rating-box strong {
+            color: #b77900;
+            font-size: 16px;
+        }
 
-.employee-meta span {
-    color: #718096;
-    font-size: 10px;
-    font-weight: 500;
-}
+        .rating-box.hr strong {
+            color: #198754;
+        }
 
-.employee-meta i {
-    color: #1f4e79;
-    font-size: 9px;
-}
-.rating-box.self strong {
-    color: #1f4e79;
-}
+        .employee-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            flex-wrap: wrap;
+        }
+
+        .employee-meta span {
+            color: #718096;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .employee-meta i {
+            color: #1f4e79;
+            font-size: 9px;
+        }
+
+        .rating-box.self strong {
+            color: #1f4e79;
+        }
+
+        @media(max-width:768px) {
+
+            .employee-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .rating-box {
+                min-width: auto;
+            }
+
+            .employee-row .btn {
+                width: 100%;
+            }
+
+        }
+
     </style>
 
 @endsection
+
 @push('script')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function () {
 
-        $('#department').select2({
-            placeholder: 'Search Department',
-            allowClear: true,
-            width: '100%'
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+          rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#department').select2({
+                placeholder: 'Search Department',
+                allowClear: true,
+                width: '100%',
+                closeOnSelect: false
+            });
+
         });
+    </script>
 
-        $('#department').on('change', function () {
-            $(this).closest('form').submit();
-        });
-
-    });
-</script>
 @endpush

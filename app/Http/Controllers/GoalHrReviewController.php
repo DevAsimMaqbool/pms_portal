@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use ZipArchive;
 
 class GoalHrReviewController extends Controller
 {
@@ -20,7 +22,7 @@ class GoalHrReviewController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index(Request $request)
+   public function index(Request $request)
 {
     // Get available departments
     $departments = User::whereNotNull('hr_department_name')
@@ -29,14 +31,25 @@ class GoalHrReviewController extends Controller
         ->orderBy('hr_department_name')
         ->pluck('hr_department_name');
 
+    // Get selected departments
+    $selectedDepartments = $request->input('department', []);
+
+    if (!is_array($selectedDepartments)) {
+        $selectedDepartments = [$selectedDepartments];
+    }
+
+    $selectedDepartments = array_values(
+        array_filter($selectedDepartments)
+    );
+
     $employees = User::whereHas('goalSelfReports', function ($query) {
             $query->where('status', 'manager_approved');
         })
-        ->when($request->filled('department'), function ($query) use ($request) {
+        ->when(!empty($selectedDepartments), function ($query) use ($selectedDepartments) {
 
-            $query->where(
+            $query->whereIn(
                 'hr_department_name',
-                $request->department
+                $selectedDepartments
             );
 
         })
@@ -287,4 +300,141 @@ class GoalHrReviewController extends Controller
         $filename
         );
     }
+
+    public function exportPdf(Request $request)
+{
+    $departments = $request->input('department', []);
+
+    if (!is_array($departments)) {
+        $departments = [$departments];
+    }
+
+    $departments = collect($departments)
+        ->filter()
+        ->unique()
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | No department OR one department
+    |--------------------------------------------------------------------------
+    | Return a normal PDF.
+    */
+    if ($departments->count() <= 1) {
+
+        $department = $departments->first();
+
+        $rows = (new GoalHrOverallPerformanceExport(
+            $department
+        ))->collection();
+
+        $departmentName = $department
+            ? preg_replace(
+                '/[^A-Za-z0-9_-]+/',
+                '_',
+                $department
+            )
+            : 'All_Departments';
+
+        $filename =
+            'Overall_Performance_Report_' .
+            $departmentName .
+            '_' .
+            now()->format('Y-m-d') .
+            '.pdf';
+
+        $pdf = Pdf::loadView(
+            'admin.goal_hr.overall_performance_pdf',
+            [
+                'rows' => $rows,
+                'department' => $department,
+            ]
+        )->setPaper('a4', 'landscape');
+
+        return $pdf->download($filename);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Multiple departments
+    |--------------------------------------------------------------------------
+    | Generate a separate PDF for every selected department
+    | and place all PDFs inside one ZIP file.
+    */
+    $zipName =
+        'Overall_Performance_Reports_' .
+        now()->format('Y-m-d') .
+        '.zip';
+
+    $zipPath = storage_path(
+        'app/' . $zipName
+    );
+
+    $zip = new ZipArchive();
+
+    if (
+        $zip->open(
+            $zipPath,
+            ZipArchive::CREATE |
+            ZipArchive::OVERWRITE
+        ) !== true
+    ) {
+        abort(
+            500,
+            'Unable to create ZIP file.'
+        );
+    }
+
+    foreach ($departments as $index => $department) {
+
+        $rows = (new GoalHrOverallPerformanceExport(
+            $department
+        ))->collection();
+
+        $pdf = Pdf::loadView(
+            'admin.goal-hr.overall_performance_pdf',
+            [
+                'rows' => $rows,
+                'department' => $department,
+            ]
+        )->setPaper('a4', 'landscape');
+
+        $departmentName = preg_replace(
+            '/[^A-Za-z0-9_-]+/',
+            '_',
+            $department
+        );
+
+        $departmentName = trim(
+            $departmentName,
+            '_'
+        );
+
+        if (!$departmentName) {
+            $departmentName =
+                'Department_' . ($index + 1);
+        }
+
+        $pdfFileName =
+            'Overall_Performance_Report_' .
+            $departmentName .
+            '_' .
+            now()->format('Y-m-d') .
+            '.pdf';
+
+        $zip->addFromString(
+            $pdfFileName,
+            $pdf->output()
+        );
+    }
+
+    $zip->close();
+
+    return response()
+        ->download(
+            $zipPath,
+            $zipName
+        )
+        ->deleteFileAfterSend(true);
+}
 }

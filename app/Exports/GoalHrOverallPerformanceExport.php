@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GoalHrOverallPerformanceExport implements
     FromCollection,
@@ -500,4 +501,43 @@ class GoalHrOverallPerformanceExport implements
 
         return 'BE';
     }
+
+    public function exportPdf(Request $request)
+{
+    $department = $request->input('department');
+
+    $departmentName = $department
+        ? preg_replace(
+            '/[^A-Za-z0-9_-]+/',
+            '_',
+            $department
+        )
+        : 'All_Departments';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Use the exact same data/calculations as Excel report
+    |--------------------------------------------------------------------------
+    */
+    $rows = (new GoalHrOverallPerformanceExport($department))
+        ->collection();
+
+    $pdf = Pdf::loadView(
+        'admin.goal_hr.overall_performance_pdf',
+        [
+            'rows' => $rows,
+            'department' => $department,
+        ]
+    )
+        ->setPaper('a4', 'landscape');
+
+    $filename =
+        'Overall_Performance_Report_' .
+        $departmentName .
+        '_' .
+        now()->format('Y-m-d') .
+        '.pdf';
+
+    return $pdf->download($filename);
+}
 }
