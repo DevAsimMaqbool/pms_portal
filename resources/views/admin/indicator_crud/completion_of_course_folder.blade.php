@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor', 'Demonstrator']))
+        @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor', 'Demonstrator', 'Program Leader UG','Program Leader PG']))
         <div class="card">
             <!-- Header with Add Feedback Button -->
             <div class="d-flex justify-content-between align-items-center p-3">
@@ -154,7 +154,7 @@
     <script src="{{ asset('admin/assets/vendor/libs/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/datatables-responsive/dataTables.responsive.js') }}"></script>
-    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor', 'Demonstrator']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher','Assistant Professor','Professor','Associate Professor', 'Demonstrator', 'Program Leader UG','Program Leader PG']))
     <script>
       const CURRENT_FACULTY_ID = @json(auth()->user()->faculty_id);
              window.currentUserRole = "{{ Auth::user()->getRoleNames()->first() }}";
