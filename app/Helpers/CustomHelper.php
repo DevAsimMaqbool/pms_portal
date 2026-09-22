@@ -1841,7 +1841,7 @@ function IndustrialVisits($facultyId, $activeRoleId, $indicator_id, $currentYear
     $commercial = FacultyTarget::with([
         'industrialVisitsTarget' => function ($query) use ($indicator_id, $currentYear) {
             $query->where('form_status', 'RESEARCHER')
-                ->where('status', 2)
+                ->where('status', 3)
                 ->where('year_id', $currentYear)
                 ->where('indicator_id', $indicator_id);
         }
