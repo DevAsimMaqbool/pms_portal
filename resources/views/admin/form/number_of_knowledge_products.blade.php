@@ -88,7 +88,7 @@
                                     <div class="col-md-6">
                                         <label for="project_name" class="form-label">Attach Evidence</label>
                                         <input type="file" name="attach_evidence" id="attach_evidence" class="form-control"
-                                            required>
+                                            required accept=".pdf,.jpg,.jpeg,.png">
                                     </div>
                                 </div>
                                 <div class="col-12 demo-vertical-spacing">
