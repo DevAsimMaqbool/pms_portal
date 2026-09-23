@@ -378,155 +378,269 @@
     <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Program Leader UG','Program Leader PG']))
- @php
-    $roleName = getRoleName(activeRole());
-    $value = match($roleName) {
-        'Program Leader UG' => 'UG',
-        'Program Leader PG' => 'PG',
-        default => ''
-    };
-    $data=admissionTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 10, 143, $value);  
-    $leader_avg_percentage = $data['avg_percentage'] ?? 0;
-    $meta_leader_avg_percentage = getRatingMeta($leader_avg_percentage);
-    
-@endphp
-<!-- / Payment Methods modal -->
-<div class="modal fade" id="ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content custom-modal">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <!-- Title -->
-                <h3 class="text-center mb-4 fw-bold text-primary">
-                    % of Admission Targets Achieved
-                </h3>
-                <!-- Tabs -->
-                <div class="nav-align-top nav-tabs-shadow">
-                    <div class="d-flex justify-content-center mb-3 mt-3">
-                        <ul class="nav custom-tabs" role="tablist">
-                            <li class="nav-item">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ofAdmissionTargetsAchieved-spring"
-                                    aria-controls="ofAdmissionTargetsAchieved-spring" aria-selected="true">
-                                    🌸 Spring {{ date('Y') }}
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#ofAdmissionTargetsAchieved-fall"
-                                    aria-controls="ofAdmissionTargetsAchieved-fall" aria-selected="false">
-                                    🍂 Fall {{ date('Y') - 1 }}
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+  @php
+        $roleName = getRoleName(activeRole());
+        $value = match($roleName) {
+            'Program Leader UG' => 'UG',
+            'Program Leader PG' => 'PG',
+            default => ''
+        };
+        $data=admissionTargetAverageForPL(Auth::user()->employee_id, $activeRoleId, 3, 10, 143, $value);  
 
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <!-- Spring -->
-                        <div class="tab-pane fade show active" id="ofAdmissionTargetsAchieved-spring"
-                            role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-striped align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Program</th>
-                                            <th>Total Target</th>
-                                            <th>Total Achieved</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                                @foreach($data['records']['Spring'] ?? [] as $index => $Spring)
-                                                    @php
-                                                        $spring_avg_percentage = $Spring['percentage'] ?? 0;
-                                                        $meta_spring_avg = getRatingMeta($spring_avg_percentage);
-                                                    @endphp
-                                                    <tr>
-                                                        <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $Spring['program'] }}</td>
-                                                        <td>{{ $Spring['target'] }}</td>
-                                                        <td>{{ $Spring['achieved'] }}</td>
-                                                        <td><span class="badge" style="background-color: {{ $meta_spring_avg->color }}">{{ $spring_avg_percentage }}%</span></td>
-                                                        <td><span class="badge" style="background-color: {{ $meta_spring_avg->color }}">{{ $meta_spring_avg->rating }}</span></td>
-                                                    </tr>
-                                                @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">{{number_format($leader_avg_percentage, 1) }}</span></th>
-                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">  {{ $meta_leader_avg_percentage->rating }} </span></th>
-                                       
-                                        </tr>
-                                    </tfoot>
-                                    
-                                </table>
-                            </div>
+        // Overall S + F
+        $leader_avg_percentage = $data['avg_percentage'] ?? 0;
+        $meta_leader_avg_percentage = getRatingMeta($leader_avg_percentage);
+
+        // Spring
+        $spring = $data['records']['Spring'] ?? [
+            'year' => 0,
+            'total_target' => 0,
+            'total_achieved' => 0,
+            'percentage' => 0,
+        ];
+
+        $spring_percentage = $spring['percentage'] ?? 0;
+        $meta_spring = getRatingMeta($spring_percentage);
+
+        // Fall
+        $fall = $data['records']['Fall'] ?? [
+            'year' => 0,
+            'total_target' => 0,
+            'total_achieved' => 0,
+            'percentage' => 0,
+        ];
+
+        $fall_percentage = $fall['percentage'] ?? 0;
+        $meta_fall = getRatingMeta($fall_percentage);
+    @endphp
+
+    <div class="modal fade" id="ofAdmissionTargetsAchieved" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+
+                <div class="modal-header">
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
+
+                <div class="modal-body p-4">
+
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        % of Admission Targets Achieved
+                    </h3>
+
+                    <!-- Tabs -->
+                    <div class="nav-align-top nav-tabs-shadow">
+
+                        <div class="d-flex justify-content-center mb-3 mt-3">
+                            <ul class="nav custom-tabs" role="tablist">
+
+                                <!-- Spring -->
+                                <li class="nav-item">
+                                    <button type="button"
+                                            class="nav-link active"
+                                            role="tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#ofAdmissionTargetsAchieved-spring"
+                                            aria-controls="ofAdmissionTargetsAchieved-spring"
+                                            aria-selected="true">
+                                        🌸 Spring  {{ $spring['year'] }}
+                                    </button>
+                                </li>
+
+                                <!-- Fall -->
+                                <li class="nav-item">
+                                    <button type="button"
+                                            class="nav-link"
+                                            role="tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#ofAdmissionTargetsAchieved-fall"
+                                            aria-controls="ofAdmissionTargetsAchieved-fall"
+                                            aria-selected="false">
+                                        🍂 Fall {{ $fall['year'] }}
+                                    </button>
+                                </li>
+
+                            </ul>
                         </div>
 
-                        <!-- Fall -->
-                        <div class="tab-pane fade" id="ofAdmissionTargetsAchieved-fall" role="tabpanel">
-                            <div class="table-responsive text-nowrap">
-                                 <table class="table table-striped align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Program</th>
-                                            <th>Total Target</th>
-                                            <th>Total Achieved</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                                @foreach($data['records']['Fall'] ?? [] as $index => $fall)
-                                                @php
-                                                    $fall_avg_percentage = $fall['percentage'] ?? 0;
-                                                    $meta_fall_avg = getRatingMeta($fall_avg_percentage);
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $fall['program'] }}</td>
-                                                    <td>{{ $fall['target'] }}</td>
-                                                    <td>{{ $fall['achieved'] }}</td>
-                                                    <td><span class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $fall_avg_percentage }}%</span></td>
-                                                    <td><span class="badge" style="background-color: {{ $meta_fall_avg->color }}">{{ $meta_fall_avg->rating }}</div></span>
-                                                </tr>
-                                            @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            <th class="">Total (S+F){{number_format($data['total_target'], 1) }}</th>
-                                            <th class="">Total (S+F){{number_format($data['total_achieved'], 1) }}</th>
-                                            {{-- <th class="">AVG (S+F){{number_format($data['avg_percentage'], 1) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">{{number_format($leader_avg_percentage, 1) }}</span></th>
-                                           {{-- <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_leader_avg_percentage->color }}">  {{ $meta_leader_avg_percentage->rating }} </span></th>
-                                       
-                                        </tr>
-                                    </tfoot>
-                                    
-                                </table>
+                        <div class="tab-content">
+
+                            <!-- ================= SPRING ================= -->
+                            <div class="tab-pane fade show active"
+                                 id="ofAdmissionTargetsAchieved-spring"
+                                 role="tabpanel">
+
+                                <div class="table-responsive text-nowrap">
+
+                                    <table class="table table-striped align-middle custom-table">
+
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Total Target</th>
+                                                <th>Total Achieved</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+
+                                                <td>
+                                                    {{ number_format($spring['total_target'], 1) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($spring['total_achieved'], 1) }}
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_spring->color }}">
+                                                        {{ number_format($spring_percentage, 1) }}%
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_spring->color }}">
+                                                        {{ $meta_spring->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr class="table-primary">
+
+                                                <th>Total (S + F)</th>
+
+                                                <th>
+                                                    {{ number_format($data['total_target'] ?? 0, 1) }}
+                                                </th>
+
+                                                <th>
+                                                    {{ number_format($data['total_achieved'] ?? 0, 1) }}
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_leader_avg_percentage->color }}">
+                                                        {{ number_format($leader_avg_percentage, 1) }}%
+                                                    </span>
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_leader_avg_percentage->color }}">
+                                                        {{ $meta_leader_avg_percentage->rating }}
+                                                    </span>
+                                                </th>
+
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+
+                                </div>
                             </div>
+
+
+                            <!-- ================= FALL ================= -->
+                            <div class="tab-pane fade"
+                                 id="ofAdmissionTargetsAchieved-fall"
+                                 role="tabpanel">
+
+                                <div class="table-responsive text-nowrap">
+
+                                    <table class="table table-striped align-middle custom-table">
+
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Total Target</th>
+                                                <th>Total Achieved</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+
+                                                <td>
+                                                    {{ number_format($fall['total_target'], 1) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($fall['total_achieved'], 1) }}
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_fall->color }}">
+                                                        {{ number_format($fall_percentage, 1) }}%
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_fall->color }}">
+                                                        {{ $meta_fall->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr class="table-primary">
+
+                                                <th>Total (S + F)</th>
+
+                                                <th>
+                                                    {{ number_format($data['total_target'] ?? 0, 1) }}
+                                                </th>
+
+                                                <th>
+                                                    {{ number_format($data['total_achieved'] ?? 0, 1) }}
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_leader_avg_percentage->color }}">
+                                                        {{ number_format($leader_avg_percentage, 1) }}%
+                                                    </span>
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta_leader_avg_percentage->color }}">
+                                                        {{ $meta_leader_avg_percentage->rating }}
+                                                    </span>
+                                                </th>
+
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <!-- / Payment Methods modal -->
 @endif

@@ -87,7 +87,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 'indicator_id' => 'required',
                 'faculty_id' => 'required|integer',
                 'department_id' => 'required|integer',
-                'program_id' => 'required|integer',
+                'program_id' => '',
                 'program_level' => 'required|string',
                 'recognition_type' => 'required|in:accreditation,affiliation,ranking',
                 'year_id' => 'required',
@@ -204,7 +204,7 @@ class NoOfProgramsAccreditedOrAffiliatedNationallyInternationallyAndRankingContr
                 $rules =[
                         'faculty_id' => 'required|integer',
                         'department_id' => 'required|integer',
-                        'program_id' => 'required|integer',
+                        'program_id' => '',
                         'program_level' => 'required|string',
 
                         'recognition_type' => 'required|in:accreditation,affiliation,ranking',

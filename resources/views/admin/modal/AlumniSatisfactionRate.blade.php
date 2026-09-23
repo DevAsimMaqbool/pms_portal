@@ -138,13 +138,14 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Alumni Satisfaction Rate
 
                     </h3>
+                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -160,24 +161,29 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 6, 15, 163);
+                                            //$data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 6, 15, 163);
+                                            $data=ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 6, 15, 163,$currentYear->id);
                                             $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
                                             $meta_avg = getRatingMeta($faculty_avg_percentage);
 
                                         @endphp
                                         @foreach($data['records'] as $record)
+                                        @php
+                                                $meta_avg_single = getRatingMeta($record->with_out_weight_score);
+                                                $sumScore = min($record->with_out_weight_score, 100);
+                                                @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td> {{ $record->user?->department?->name ?? '' }}</td>
                                                 <td>
-                                                    <div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
+                                                    <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
+                                                        {{ $sumScore}}%
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge bg-label-{{ $record->color }}">
+                                                    <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
 
-                                                        {{ $record->rating }}
+                                                        {{ $meta_avg_single->rating }}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -212,12 +218,12 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         Alumni Satisfaction Rate
                     </h3>
-                    <!-- Tabs -->
+                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
                         <div class="d-flex justify-content-center mb-3 mt-3">
                             <ul class="nav custom-tabs" role="tablist">
@@ -225,7 +231,7 @@
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#AlumniSatisfactionRate-spring"
                                         aria-controls="AlumniSatisfactionRate-spring" aria-selected="true">
-                                        🌸 Yearly
+                                        {{ $currentYear->year }}
                                     </button>
                                 </li>
 
@@ -254,7 +260,7 @@
                                                     'Program Leader PG' => 'PG',
                                                     default => ''
                                                 };
-                                                $data = alumniSatisfactionRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 15, 163, $value);
+                                                $data = alumniSatisfactionRateAverageForPL(Auth::user()->employee_id, $activeRoleId, 6, 15, 163, $value,$currentYear->id);
                                                 $avg_percentage = $data['avg_percentage'] ?? 0;
                                                 $meta_avg_percentage = getRatingMeta($avg_percentage);
                                                 if (!function_exists('ratingFunctions')) {

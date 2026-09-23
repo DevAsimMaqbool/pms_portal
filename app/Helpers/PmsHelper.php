@@ -718,9 +718,8 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
             ->where('role_id', 22)->where('key_performance_area_id', $KpaId)
             ->where('indicator_category_id', $categoryId)->where('indicator_id', $indicatorId)
             ->orderBy('id')
-            ->get();
-        // dd($record);    
-        $sumScore = $record->sum('score');
+            ->get();    
+        $sumScore = $record->sum('with_out_weight_score');
         $avgScore = ($count_hod_ids > 0) ? round(($sumScore / $count_hod_ids), 2) : 0;
         $avgScore = min($avgScore, 100);
 

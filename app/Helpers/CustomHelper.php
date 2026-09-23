@@ -5397,6 +5397,262 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
 
     ];
 }
+function CompletionOfCourseFolderForPL($activeRoleId, $indicator_id)
+{
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Active Terms
+    |--------------------------------------------------------------------------
+    */
+
+    $activeTerms = Term::where('status', '1')->get();
+
+    $activeTermIds = $activeTerms->pluck('id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring / Fall Term IDs
+    |--------------------------------------------------------------------------
+    */
+
+    $springTermIds = $activeTerms
+        ->where('term', 'Spring')
+        ->pluck('id');
+
+    $fallTermIds = $activeTerms
+        ->where('term', 'Fall')
+        ->pluck('id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | HOD Department
+    |--------------------------------------------------------------------------
+    */
+
+    $departmentId = auth()->user()->department_id;
+    $employee_id = auth()->user()->employee_id;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty Members Of Department
+    |--------------------------------------------------------------------------
+    */
+
+    $facultyMembers = User::where('manager_id', $employee_id)
+                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');           
+                 
+    /*
+    |--------------------------------------------------------------------------
+    | Get Course Folder Records
+    |--------------------------------------------------------------------------
+    */
+
+    $records = CompletionOfCourseFolder::with([
+        'facultyMember',
+        'facultyClass',
+        'term'
+    ])
+        ->whereIn('faculty_member_id', $facultyMembers)
+        ->where('status', 2)
+        ->where('form_status', 'HOD')
+        ->whereIn('term_id', $activeTermIds)
+        ->where(
+            'completion_of_Course_folder_indicator_id',
+            $indicator_id
+        )
+        ->latest()
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rating / Status
+    |--------------------------------------------------------------------------
+    */
+
+    foreach ($records as $row) {
+
+        $value = (float) (
+            $row->completion_of_Course_folder ?? 0
+        );
+
+        if ($value == 100) {
+
+            $row->rating = 'OS';
+            $row->color = '#6EA8FE';
+            $row->status_folder = 'Completed';
+
+        } elseif ($value >= 70) {
+
+            $row->rating = 'ME';
+            $row->color = '#ffcb9a';
+            $row->status_folder = 'Partially Completed';
+
+        } else {
+
+            $row->rating = 'BE';
+            $row->color = '#ff4c51';
+            $row->status_folder = 'Not Completed';
+        }
+
+        $row->score = $value;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Data
+    |--------------------------------------------------------------------------
+    */
+
+    $springData = $records
+        ->whereIn('term_id', $springTermIds)
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Data
+    |--------------------------------------------------------------------------
+    */
+
+    $fallData = $records
+        ->whereIn('term_id', $fallTermIds)
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Spring Score
+    |--------------------------------------------------------------------------
+    */
+
+    $springScore = $springData->isNotEmpty()
+
+        ? $springData->avg(function ($record) {
+
+            return (float) (
+                $record->completion_of_Course_folder ?? 0
+            );
+
+        })
+
+        : 0;
+
+    $springScore = round($springScore, 2);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fall Score
+    |--------------------------------------------------------------------------
+    */
+
+    $fallScore = $fallData->isNotEmpty()
+
+        ? $fallData->avg(function ($record) {
+
+            return (float) (
+                $record->completion_of_Course_folder ?? 0
+            );
+
+        })
+
+        : 0;
+
+    $fallScore = round($fallScore, 2);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Spring + Fall
+    |--------------------------------------------------------------------------
+    */
+
+    if ($springScore > 0 && $fallScore > 0) {
+
+        $avgPercentage = round(
+            ($springScore + $fallScore) / 2,
+            2
+        );
+
+    } elseif ($springScore > 0) {
+
+        $avgPercentage = $springScore;
+
+    } elseif ($fallScore > 0) {
+
+        $avgPercentage = $fallScore;
+
+    } else {
+
+        $avgPercentage = 0;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weightage
+    |--------------------------------------------------------------------------
+    */
+
+    $weightage = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        $indicator_id
+    )['weightage'] ?? 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Weighted Score
+    |--------------------------------------------------------------------------
+    */
+
+    $weightedScore = (
+        $avgPercentage * $weightage
+    ) / 100;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save Percentage
+    |--------------------------------------------------------------------------
+    */
+
+    $facultyId = auth()->user()->employee_id;
+
+    saveIndicatorPercentage100Plus(
+        $facultyId,
+        $activeRoleId,
+        1,
+        3,
+        $indicator_id,
+        $weightedScore,
+        $avgPercentage
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Return
+    |--------------------------------------------------------------------------
+    */
+
+    return [
+
+        'allData' => $records,
+
+        'springData' => $springData,
+
+        'fallData' => $fallData,
+
+        'springScore' => $springScore,
+
+        'fallScore' => $fallScore,
+
+        'avgPercentage' => $avgPercentage,
+
+        'weightedScore' => round(
+            $weightedScore,
+            2
+        ),
+
+        'weightage' => $weightage,
+
+    ];
+}
 
 // function StudentEngagementRateForHOD($activeRoleId, $indicatorId)
 // {
@@ -5738,6 +5994,157 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
     function getDepartmentFacultyFeedbackForHOD($activeRoleId)
     {
         $departmentId = auth()->user()->department_id;
+
+        // Get active Spring and Fall terms
+        $activeTerms = \App\Models\Term::where('status', '1')
+            ->get()
+            ->keyBy('term');
+
+        $springTerm = $activeTerms->get('Spring');
+        $fallTerm = $activeTerms->get('Fall');
+
+        $termIds = collect([
+            $springTerm?->id,
+            $fallTerm?->id
+        ])->filter()->values()->toArray();
+
+        $records = StudentFeedbackClassWise::query()
+            ->join(
+                'faculty_member_classes',
+                'faculty_member_classes.code',
+                '=',
+                'student_feedback_class_wises.component_class'
+            )
+            ->join(
+                'users',
+                'users.faculty_id',
+                '=',
+                'faculty_member_classes.faculty_id'
+            )
+            ->where('users.department_id', $departmentId)
+            ->whereIn('student_feedback_class_wises.term_id', $termIds)
+            ->select(
+                'student_feedback_class_wises.term_id',
+                'student_feedback_class_wises.program',
+                'student_feedback_class_wises.feedback',
+                'student_feedback_class_wises.attempts',
+                'student_feedback_class_wises.registered_students',
+                'faculty_member_classes.career_code'
+            )
+            ->get();
+
+        // ✅ CLEAN FEEDBACK VALUES
+        $records = $records->map(function ($item) {
+            $item->feedback = (float) str_replace('%', '', $item->feedback ?? 0);
+            return $item;
+        });
+
+        /*
+         * ============================================================
+         * SPRING DATA
+         * ============================================================
+         */
+
+        $springRecords = $records->where('term_id', $springTerm?->id);
+
+        $springGrouped = $springRecords->groupBy('program');
+
+        $springCollection = collect();
+
+        foreach ($springGrouped as $program => $items) {
+
+            $springCollection->push((object) [
+                'program' => $program,
+                'career_code' => $items->first()->career_code ?? 'UG',
+                'registered_students' => $items->sum('registered_students'),
+                'attempts' => $items->sum('attempts'),
+                'feedback' => round($items->avg('feedback'), 2),
+            ]);
+        }
+
+        $springAvgScore = $springCollection->count()
+            ? round($springCollection->avg('feedback'), 2)
+            : null;
+
+        /*
+         * ============================================================
+         * FALL DATA
+         * ============================================================
+         */
+
+        $fallRecords = $records->where('term_id', $fallTerm?->id);
+
+        $fallGrouped = $fallRecords->groupBy('program');
+
+        $fallCollection = collect();
+
+        foreach ($fallGrouped as $program => $items) {
+
+            $fallCollection->push((object) [
+                'program' => $program,
+                'career_code' => $items->first()->career_code ?? 'UG',
+                'registered_students' => $items->sum('registered_students'),
+                'attempts' => $items->sum('attempts'),
+                'feedback' => round($items->avg('feedback'), 2),
+            ]);
+        }
+
+        $fallAvgScore = $fallCollection->count()
+            ? round($fallCollection->avg('feedback'), 2)
+            : null;
+
+        /*
+         * ============================================================
+         * SPRING + FALL KPI AVERAGE
+         * ============================================================
+         */
+
+        $termScores = collect([
+            $springAvgScore,
+            $fallAvgScore
+        ])->filter(fn($score) => $score !== null);
+
+        $departmentAvgScore = $termScores->count()
+            ? round($termScores->avg(), 2)
+            : 0;
+
+        // ✅ KPI WEIGHT
+        $weight = getRoleWeightage(
+            $activeRoleId,
+            'indicator',
+            182
+        )['weightage'] ?? 0;
+
+        $weightedScore = ($departmentAvgScore * $weight) / 100;
+
+        //✅ SAVE KPI ONCE
+        saveIndicatorPercentage90Plus(
+            auth()->user()->employee_id,
+            $activeRoleId,
+            1,
+            23,
+            182,
+            $weightedScore
+        );
+
+        return [
+            'springCollection' => $springCollection,
+            'springAvgScore' => $springAvgScore ?? 0,
+
+            'fallCollection' => $fallCollection,
+            'fallAvgScore' => $fallAvgScore ?? 0,
+
+            'collection' => $springCollection,
+            'totalFeedback' => $departmentAvgScore
+        ];
+    }
+}
+if (!function_exists('getDepartmentFacultyFeedbackForPL')) {
+    function getDepartmentFacultyFeedbackForPL($activeRoleId)
+    {
+        $departmentId = auth()->user()->department_id;
+        $employee_id = auth()->user()->employee_id;
+        $programIds = Program::where('leader_id', $employee_id)->pluck('id');
 
         // Get active Spring and Fall terms
         $activeTerms = \App\Models\Term::where('status', '1')
@@ -6404,8 +6811,8 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
         $meta = getRatingMeta($avgRating);
 
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
-
-        $weightedScore = ($avgRating * $weight) / 100;
+        $avgRating_weitage = min($avgRating, 100);
+        $weightedScore = ($avgRating_weitage * $weight) / 100;
 
         saveIndicatorPercentage90Plus(
             $employeeId,
@@ -6414,7 +6821,7 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
             $categoryId,
             $indicatorId,
             $weightedScore,
-            $avgRating,
+            $avgRating_weitage,
             $currentYear
         );
 
@@ -8257,6 +8664,7 @@ if (!function_exists('departmentAlumniSatisfactionRateOfHOD')) {
 
         // 4️⃣ Weight
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 20;
+        $departmentAvg = min($departmentAvg, 100);
         $weightedScore = ($departmentAvg * $weight) / 100;
 
         // 5️⃣ Save KPI (ONLY departmentAvg indirectly via weightedScore)
@@ -8266,7 +8674,8 @@ if (!function_exists('departmentAlumniSatisfactionRateOfHOD')) {
             $KpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore
+            $weightedScore,
+            $departmentAvg,
         );
 
         // 6️⃣ GROUP BY PROGRAM (FOR MODAL)
@@ -8845,9 +9254,8 @@ if (!function_exists('calculateDeanPercentagesFastDiffFromHOD')) {
 //------------------------------------------- Program Leader -------------------------------------------------
 if (!function_exists('calculateStudentEngagementRateFromPL')) {
 
-    function calculateStudentEngagementRateFromPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $programLevel)
+    function calculateStudentEngagementRateFromPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $programLevel,$currentYear = null)
     {
-        $currentYear = Carbon::now()->year;
 
         $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
@@ -8855,8 +9263,7 @@ if (!function_exists('calculateStudentEngagementRateFromPL')) {
         $stats = StudentEngagementRate::with(['faculty', 'department', 'program'])
             ->whereIn('program_id', $programIds)
             ->where('program_level', $programLevel)
-            ->whereYear('event_start_date', $currentYear)
-            ->whereYear('event_end_date', $currentYear)
+            ->where('year_id', $currentYear)
             ->where('participation_target', '>', 0)
             ->where('number_of_students_participated', '>=', 0)
             ->selectRaw('
@@ -9450,66 +9857,109 @@ if (!function_exists('admissionTargetAverageForPL')) {
 
     function admissionTargetAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
     {
-        $currentYear = Carbon::now()->year;
-        $previousYear = Carbon::now()->year - 1;
-        // ✅ Campaigns for current year
-        $campaigns = [
-            "Spring $currentYear",
-            "Fall $previousYear"
-        ];
+        
         $programIds = Program::where('leader_id', $employeeId)->pluck('id');
-
-        $recordsRaw = AdmissionTargetAchieved::with(['program'])
-            ->whereIn('program_id', $programIds)
-            ->whereIn('admissions_campaign', $campaigns)
-            ->where('program_level', $ProgramLevel)
+        // Get ONLY active terms
+        $activeTerms = Term::where('status', '1')
             ->get();
+
+        $activeTermIds = $activeTerms->pluck('id');
+
+        // Get admission data based ONLY on term_id
+        $recordsRaw = AdmissionTargetAchieved::select(
+                'term_id',
+                \DB::raw('SUM(admissions_target) as total_target'),
+                \DB::raw('SUM(achieved_target) as total_achieved')
+            )
+            ->whereIn('program_id', $programIds)
+            ->whereIn('term_id', $activeTermIds)
+            ->where('program_level', $ProgramLevel)
+            ->groupBy('term_id')
+            ->get();
+
         $records = [
-            'Spring' => [],
-            'Fall' => []
+            'Spring' => [
+                'year' => 2026,
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+            ],
+            'Fall' => [
+                'year' => 2025,
+                'total_target' => 0,
+                'total_achieved' => 0,
+                'percentage' => 0,
+            ],
         ];
+
         foreach ($recordsRaw as $record) {
-            $totalTarget1 = $record->admissions_target ?? 0;
-            $totalAchieved1 = $record->achieved_target ?? 0;
-            $percentage = $totalTarget1 > 0 ? ($totalAchieved1 / $totalTarget1) * 100 : 0;
 
-            $data = [
-                'program' => $record->program->program_name,
-                'target' => $totalTarget1,
-                'achieved' => $totalAchieved1,
-                'percentage' => round($percentage, 1),
-            ];
+            $totalTarget = (float) ($record->total_target ?? 0);
+            $totalAchieved = (float) ($record->total_achieved ?? 0);
 
-            if (str_contains($record->admissions_campaign, 'Spring')) {
-                $records['Spring'][] = $data; // push multiple
-            } elseif (str_contains($record->admissions_campaign, 'Fall')) {
-                $records['Fall'][] = $data; // push multiple
+            $percentage = $totalTarget > 0
+                ? ($totalAchieved / $totalTarget) * 100
+                : 0;
+
+            // Find the active term
+            $term = $activeTerms->firstWhere('id', $record->term_id);
+
+            if (!$term) {
+                continue;
+            }
+
+            // Use your Term column here
+            if (str_contains(strtolower($term->term), 'spring')) {
+
+                $records['Spring']['year'] = $term->start_year;
+                $records['Spring']['total_target'] = $totalTarget;
+                $records['Spring']['total_achieved'] = $totalAchieved;
+                $records['Spring']['percentage'] = round($percentage, 1);
+
+            } elseif (str_contains(strtolower($term->term), 'fall')) {
+                $records['Fall']['year'] = $term->start_year;
+                $records['Fall']['total_target'] = $totalTarget;
+                $records['Fall']['total_achieved'] = $totalAchieved;
+                $records['Fall']['percentage'] = round($percentage, 1);
             }
         }
 
-        $totalTarget = $recordsRaw->sum('admissions_target');
-        $totalAchieved = $recordsRaw->sum('achieved_target');
-        $avgadmissionTarget = $totalTarget > 0 ? ($totalAchieved / $totalTarget) * 100 : 0;
+        // Overall total
+        $totalTarget = $recordsRaw->sum('total_target');
+        $totalAchieved = $recordsRaw->sum('total_achieved');
 
-        $weight123 = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
-        // 5️⃣ Calculate weighted score
-        $weightedScore123 = round(($avgadmissionTarget * $weight123) / 100, 2);
-        // Save result
+        $avgFacultyPercentage = $totalTarget > 0
+            ? ($totalAchieved / $totalTarget) * 100
+            : 0;
+        $avgFacultyPercentage = min($avgFacultyPercentage, 100);
+
+        // Indicator weight
+        $indicatorWeight = getRoleWeightage(
+            $activeRoleId,
+            'indicator',
+            $indicatorId
+        );
+
+        $weight = $indicatorWeight['weightage'] ?? 0;
+
+        $weightedScore = ($avgFacultyPercentage * $weight) / 100;
+
         saveIndicatorPercentage100Plus(
             $employeeId,
             $activeRoleId,
             $kpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore123,
-            $avgadmissionTarget
+            $weightedScore,
+            $avgFacultyPercentage
         );
+
         return [
-            'records' => $records,                  // per program records
-            'total_target' => $totalTarget,         // sum of all targets
+            'records' => $records,
+            'total_target' => $totalTarget,
             'total_achieved' => $totalAchieved,
-            'avg_percentage' => round($avgadmissionTarget, 2), // overall %
-            'weighted_score' => round($weightedScore123, 2),        // weighted score
+            'avg_percentage' => round($avgFacultyPercentage, 2),
+            'weighted_score' => round($weightedScore, 2),
         ];
     }
 }
@@ -9850,14 +10300,13 @@ if (!function_exists('dropOutRateAverageForPL')) {
 }
 if (!function_exists('alumniSatisfactionRateAverageForPL')) {
 
-    function alumniSatisfactionRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel)
+    function alumniSatisfactionRateAverageForPL($employeeId, $activeRoleId, $kpaId, $categoryId, $indicatorId, $ProgramLevel,$currentYear = null)
     {
-        $currentYear = Carbon::now()->year;
         $programIds = Program::where('leader_id', $employeeId)->pluck('id');
 
         $recordsRaw = AlumniSatisfactionRate::with(['program'])
             ->whereIn('program_id', $programIds)
-            ->whereYear('graduation_year', $currentYear)
+            ->where('year_id', $currentYear)
             ->where('program_level', $ProgramLevel)
             ->get();
 
@@ -10033,7 +10482,7 @@ if (!function_exists('retentionRateofFaculty')) {
         $avg = $retention
             ? ($retention->remarks->avg('no_retention_rate') ?? 0)
             : 0;
-
+        $avg = min($avg, 100);
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
 
         $weightedScore = round(($avg * $weight) / 100, 2);
@@ -10044,7 +10493,9 @@ if (!function_exists('retentionRateofFaculty')) {
             $kpaId,
             $categoryId,
             $indicatorId,
-            $weightedScore
+            $weightedScore,
+            $avg
+
         );
 
         $meta = getRatingMeta($avg);
