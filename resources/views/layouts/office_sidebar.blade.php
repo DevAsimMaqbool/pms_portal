@@ -26,7 +26,7 @@
     </li>
     @php
       // $result = getRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1); 
-      $result = getSidbarRoleAssignments(Auth::user()->getRoleNames()->first(), null, 1);
+      $result = getSidbarRoleAssignments(activeRole(), null, 1);
       $icons = icons();
     @endphp
 
