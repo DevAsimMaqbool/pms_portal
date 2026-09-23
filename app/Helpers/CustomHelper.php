@@ -2758,6 +2758,122 @@ if (!function_exists('saveIndicatorPercentage90Plus')) {
 function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = null)
 {
     $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)
+        ->where('year_id', $currentYear)
+        ->get();
+
+    if ($feedbacks->isEmpty()) {
+        return [];
+    }
+
+    $total = 0;
+    $count = $feedbacks->count();
+
+    foreach ($feedbacks as $item) {
+        $total += $item->rating;
+
+        // Label logic (keep this if needed for UI)
+        $percentage = round($item->rating, 1);
+
+        if ($percentage >= 90) {
+            $label = 'OS';
+            $color = 'bg-label-primary';
+        } elseif ($percentage >= 80) {
+            $label = 'EE';
+            $color = 'bg-label-success';
+        } elseif ($percentage >= 70) {
+            $label = 'ME';
+            $color = 'bg-label-warning';
+        } elseif ($percentage >= 60) {
+            $label = 'NI';
+            $color = 'bg-label-orange';
+        } else {
+            $label = 'BE';
+            $color = 'bg-label-danger';
+        }
+
+        $item->rating_data = [
+            'percentage' => $percentage,
+            'label' => $label,
+            'color' => $color
+        ];
+    }
+
+    // Average rating
+    $averageRating = $total / $count;
+    $averageRating = min($averageRating, 100);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Participation Score - 30%
+    |--------------------------------------------------------------------------
+    | Find the highest number of events participated in by any employee
+    | in the same department for the selected year.
+    */
+
+    $employee = User::find($facultyId);
+
+    $highestDepartmentCount = 1;
+
+    if ($employee && $employee->department_id) {
+        $departmentEmployeeIds = User::where(
+            'department_id',
+            $employee->department_id
+        )->pluck('id');
+
+        $highestDepartmentCount = LineManagerEventFeedback::whereIn(
+                'employee_id',
+                $departmentEmployeeIds
+            )
+            ->where('year_id', $currentYear)
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('employee_id')
+            ->orderByDesc('total')
+            ->value('total') ?? 1;
+    }
+
+    // Convert employee's event count into a 100-point participation score
+    $participationScore = ($count / $highestDepartmentCount) * 100;
+    $participationScore = min($participationScore, 100);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Final Score
+    |--------------------------------------------------------------------------
+    | 70% = Average Feedback Rating
+    | 30% = Event Participation
+    */
+
+    $weightedRating = ($averageRating * 70) / 100;
+    $weightedParticipation = ($participationScore * 30) / 100;
+    $finalPercentage = $weightedRating + $weightedParticipation;
+    $finalPercentage = min($finalPercentage, 100);
+    // Apply role weight
+    $weight = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        189
+    )['weightage'];
+
+    $weightedScore = ($finalPercentage * $weight) / 100;
+
+    // Save ONCE
+    saveIndicatorPercentage(
+        $facultyId,
+        $activeRoleId,
+        13,
+        28,
+        189,
+        $weightedScore,
+        $finalPercentage,
+        $currentYear
+    );
+
+    return $feedbacks;
+}
+
+function lineManagerRatingOnEventsBK($facultyId, $activeRoleId, $currentYear = null)
+{
+    $feedbacks = LineManagerEventFeedback::where('employee_id', $facultyId)
         ->where('year_id', $currentYear)->get();
 
     if ($feedbacks->isEmpty()) {
