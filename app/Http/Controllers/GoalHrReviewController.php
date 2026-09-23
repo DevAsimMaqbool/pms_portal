@@ -279,27 +279,72 @@ class GoalHrReviewController extends Controller
     }
 
     public function export(Request $request)
-    {
-        $department = $request->input('department');
+{
+    $departments = $request->input('department', []);
 
-        $departmentName = !empty($department)
-    ? (str_contains($department, '/')
-        ? trim(last(explode('/', $department)))
-        : $department)
-    : 'All_Departments';
+    if (!is_array($departments)) {
+        $departments = [$departments];
+    }
 
-        $filename =
+    $departments = array_values(
+        array_filter($departments)
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Department Name for File
+    |--------------------------------------------------------------------------
+    */
+
+    if (count($departments) === 0) {
+
+        $departmentName = 'All_Departments';
+
+    } elseif (count($departments) === 1) {
+
+        $departmentName = $departments[0];
+
+        if (str_contains($departmentName, '/')) {
+            $departmentName = trim(
+                last(explode('/', $departmentName))
+            );
+        }
+
+    } else {
+
+        $departmentName = 'Multiple_Departments';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Safe File Name
+    |--------------------------------------------------------------------------
+    */
+
+    $departmentName = preg_replace(
+        '/[^A-Za-z0-9_-]+/',
+        '_',
+        $departmentName
+    );
+
+    $filename =
         'Overall_Performance_Report_' .
         $departmentName .
         '_' .
         now()->format('Y-m-d') .
         '.xlsx';
 
-        return Excel::download(
-        new GoalHrOverallPerformanceExport($department),
+    /*
+    |--------------------------------------------------------------------------
+    | Download Excel
+    |--------------------------------------------------------------------------
+    */
+
+    return Excel::download(
+        new GoalHrOverallPerformanceExport($departments),
         $filename
-        );
-    }
+    );
+}
 
     public function exportPdf(Request $request)
 {
