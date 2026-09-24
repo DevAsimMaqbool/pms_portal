@@ -166,23 +166,28 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 4, 123);
+                                            //$data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 4, 123);
+                                            $data = ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 1, 4, 123);
                                             $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
                                             $meta_avg = getRatingMeta($faculty_avg_percentage);
                                         @endphp
                                         @foreach($data['records'] as $record)
+                                        @php
+                                        $meta_avg_single = getRatingMeta($record->with_out_weight_score);
+                                        $sumScore = min($record->with_out_weight_score, 100);
+                                        @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td> {{ $record->user?->department?->name ?? '' }}</td>
                                                 <td>
-                                                    <div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
+                                                    <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
+                                                        {{ $sumScore}}%
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge bg-label-{{ $record->color }}">
+                                                    <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
 
-                                                        {{ $record->rating }}
+                                                        {{ $meta_avg_single->rating }}
                                                     </div>
                                                 </td>
                                             </tr>
