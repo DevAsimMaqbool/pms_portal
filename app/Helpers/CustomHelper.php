@@ -9030,13 +9030,14 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
                 7,
                 16,
                 $indicatorId,
-                $weightedScore
+                $weightedScore,
+                $departmentAvg
             );
         } else {
-            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 178, $weightedScore178);
-            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 165, $weightedScore165);
-            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 166, $weightedScore166);
-            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 180, $weightedScore180);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 178, $weightedScore178,$departmentAvg);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 165, $weightedScore165,$departmentAvg);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 166, $weightedScore166,$departmentAvg);
+            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 180, $weightedScore180,$departmentAvg);
         }
 
         return [
@@ -9158,7 +9159,8 @@ if (!function_exists('lineManagerReviewRatingOnTasks169')) {
                 7,                   // KPA ID
                 17,                  // Category ID
                 169,                 // Indicator ID
-                $weightedScore169
+                $weightedScore169,
+                $averageScore
             );
         }
 

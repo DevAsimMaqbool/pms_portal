@@ -141,7 +141,7 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
@@ -229,7 +229,7 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center p-4">
+                <div class="modal-body text-center text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
@@ -256,16 +256,20 @@
                                                 $meta_avg = getRatingMeta($faculty_avg_percentage);
                                             @endphp
                                                 @foreach($data['records'] as $record)
+                                                @php
+                                                $meta_avg_single = getRatingMeta($record->with_out_weight_score);
+                                                $sumScore = min($record->with_out_weight_score, 100);
+                                                @endphp
                                                 <tr>
                                                    <td>{{ $loop->iteration }}</td>
                                                    <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge bg-{{ $record->color }}">
-                                                        {{ $record->score}}%
+                                                    <td><div class="badge" style="background-color: {{ $meta_avg_single->color }}">
+                                                        {{ $sumScore}}%
                                                         </div></td>
                                                     <td>
-                                                            <div class="badge bg-label-{{ $record->color }}">
+                                                            <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
 
-                                                                {{ $record->rating }}
+                                                                {{ $meta_avg_single->rating }}
                                                             </div>
                                                     </td>    
                                                 </tr>

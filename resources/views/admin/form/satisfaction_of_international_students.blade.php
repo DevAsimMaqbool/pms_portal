@@ -288,6 +288,22 @@
                             Swal.close();
                             Swal.fire({ icon: 'success', title: 'Success', text: response.message });
                             form[0].reset();
+                            // Reset Select2 fields
+                            $('#faculty_id').val('').trigger('change');
+                            $('#department_id').html('<option value="">-- Select Department --</option>')
+                                            .val('')
+                                            .trigger('change');
+                            $('#program_id').html('<option value="">-- Select Program --</option>')
+                                            .val('')
+                                            .trigger('change');
+                            $('#term_id').val('').trigger('change');
+                            $('#program_level').val('').trigger('change');
+
+                            // Reset Rating
+                            $('#rating').val('');
+
+                            // Reset visual star rating
+                            $('#ratingBox').raty('score', null);
                         },
                         error: function (xhr) {
                             Swal.close();

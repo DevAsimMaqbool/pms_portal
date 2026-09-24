@@ -177,11 +177,13 @@ class IndustrialVisitController extends Controller
                         'visit_end_date' => 'required|date',
                         'location' => 'required',
                         'visit_report_submitted' => 'required',
-                        'evidence_upload' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                        'evidence_upload' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
                         'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
                     ];
                     $messages = [
-                        'evidence_upload.mimes' => 'Upload JPG / PNG / PDF only.',
+                        'evidence_upload.max' => 'File size is too big. Maximum allowed size is 10 MB.',
+                        'evidence_upload.mimes' => 'Only PDF, JPG, JPEG, and PNG files are allowed.',
+                        'evidence_upload.required' => 'Please upload an evidence file.',
                     ];
 
                     $validator = Validator::make($request->all(), $rules, $messages);

@@ -133,7 +133,11 @@ class NumberOfKnowledgeProductController extends Controller
             'product_type' => 'required|string',
             'year_id' => 'required',
             'url' => 'required|url',
-            'attach_evidence' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'attach_evidence' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+        ],[
+            'attach_evidence.max' => 'File size is too big. Maximum allowed size is 10 MB.',
+            'attach_evidence.mimes' => 'Only PDF, JPG, JPEG, and PNG files are allowed.',
+            'attach_evidence.required' => 'Please upload an evidence file.',
         ]);
 
         $filePath = $request->file('attach_evidence')
@@ -180,7 +184,7 @@ class NumberOfKnowledgeProductController extends Controller
                     'product_type' => 'required|string',
                     'year_id' => 'required',
                     'url' => 'required|url',
-                    'attach_evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                    'attach_evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
                 ]);
 
                 $data = [
