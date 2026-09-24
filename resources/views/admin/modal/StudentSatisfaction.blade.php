@@ -676,22 +676,28 @@
                                     <tbody>
                                         @php
                                             $activeRoleId = getRoleIdByName(activeRole());
-                                            $data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
-                                            $avgScore = $data['records']->isNotEmpty() ? $data['records']->avg(fn($r) => (float) $r->score) : 0;
+                                            //$data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
+                                            $data = ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 1, 23, 182);
+                                            $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
+                                            $meta_avg = getRatingMeta($faculty_avg_percentage);
                                         @endphp
                                         @forelse($data['records'] as $record)
+                                        @php
+                                        $meta_avg_single = getRatingMeta($record->with_out_weight_score);
+                                        $sumScore = min($record->with_out_weight_score, 100);
+                                        @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td> {{ $record->user?->department?->name ?? '' }}</td>
                                                 <td>
-                                                    <div class="badge bg-{{ getRatingMetaAsBg($record->score)->color }}">
-                                                        {{ $record->score}}%
+                                                    <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
+                                                        {{ $sumScore}}%
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge bg-label-{{ getRatingMetaAsBg($record->score)->color }}">
+                                                    <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
 
-                                                        {{ $record->rating }}
+                                                        {{ $meta_avg_single->rating }}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -704,21 +710,18 @@
                                         @endforelse
                                     </tbody>
                                     @if($data['records']->isNotEmpty())
-                                        <tfoot>
+                                         <tfoot>
                                             <tr class="table-primary">
-                                                <th class="text-end">Total</th>
-                                                <th class="text-end"></th>
-                                                <th style="font-size: 0.960rem;">
-                                                    <span class="text-end badge bg-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                        {{ number_format($avgScore, 1) }}%
-                                                    </span>
+                                                <th class="">Total</th>
+                                                <th class=""></th>
+                                                {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
+                                                <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
+                                                <th class="fs-6"><span class="badge"
+                                                        style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span>
                                                 </th>
-                                                <th style="font-size: 0.960rem;">
-                                                    <span
-                                                        class="text-end badge bg-label-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                        {{ getRatingMetaAsBg($avgScore)->rating }}
-                                                    </span>
-                                                </th>
+                                                <th class="fs-6"><span class="badge"
+                                                        style="background-color: {{ $meta_avg->color }}">
+                                                        {{ $meta_avg->rating }} </span></th>
                                             </tr>
                                         </tfoot>
                                     @endif

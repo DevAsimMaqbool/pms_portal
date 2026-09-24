@@ -4596,7 +4596,8 @@ function EmployabilityOfHOD()
                 1,
                 1,
                 $indicator,
-                $weightedScore
+                $weightedScore,
+                $avg
             );
         } else {
             saveIndicatorPercentage(
@@ -4605,7 +4606,8 @@ function EmployabilityOfHOD()
                 1,
                 1,
                 $indicator,
-                $weightedScore
+                $weightedScore,
+                $avg
             );
         }
 
@@ -5905,7 +5907,8 @@ function StudentEngagementRateForHOD($activeRoleId, $indicatorId, $currentYear =
         1,
         4,
         $indicatorId,
-        $weightedScore
+        $weightedScore,
+        $overallPercentage
     );
 
     return collect($result)->values();
@@ -5997,7 +6000,8 @@ function StudentSatisfactionRateForHOD($activeRoleId, $indicatorId,$currentYear=
         1,
         4,
         124,
-        $weightedScore
+        $weightedScore,
+        $overallSatisfaction
     );
 
     return collect($result)->values();
@@ -6240,7 +6244,8 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
             1,
             23,
             182,
-            $weightedScore
+            $weightedScore,
+            $departmentAvgScore
         );
 
         return [
