@@ -16,7 +16,12 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Permission Table -->
         <div class="card mb-6">
-            <h5 class="card-header">Target Assign</h5>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Target Assign</h5>
+                 <a href="{{ route('show-dean-target') }}" class="btn btn-primary">
+                    Show Dean Target
+                </a>
+            </div>
             <form class="card-body" id="researchForm2">
                 @csrf
                 <input type="hidden" id="form_status" name="form_status" value="OTHER" required>
@@ -36,7 +41,7 @@
                             <option value="197">Industrial Visits (I&C)</option>
                             <option value="155">No of Professional Memberships attained vs targets</option>
                             <option value="154">No of Programs accredited or affiliated nationally/ Internationally and ranking</option>
-                            {{-- <option value="140">Rating on Impact of Research Conferences Organized</option> --}}
+                            <option value="140">Rating on Impact of Research Conferences Organized</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>
                     </div>

@@ -1915,7 +1915,7 @@
         <script>
             function fetchHodTarget() {
                 $.ajax({
-                    url: "{{ route('faculty-target.index') }}",
+                    url: "{{ route('faculty-target-dean.index') }}",
                     method: "GET",
                     data: {
                         status: "DEAN",
@@ -2241,7 +2241,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('faculty-target.store') }}",
+                        url: "{{ route('faculty-target-dean.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,
