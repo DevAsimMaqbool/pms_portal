@@ -37,7 +37,7 @@
                             <option value="136">Multidisciplinary Projects (I&C)</option>
                             <option value="137">Commercial Consultancy/Research Income (I&C)</option>
                             <option value="138">Patents/Intellectual Property (IPR) (I&C)</option>
-                            <option value="139">Spin Offs (I&C)</option>
+                            {{-- <option value="139">Spin Offs (I&C)</option> --}}
                             <option value="198">Industrial Projects (I&C)</option>
                             <option value="199">Products Delivered to Industry (I&C)</option>
                             <option value="194">Number of Knowledge Products (I&C)</option>
