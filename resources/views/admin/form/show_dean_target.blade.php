@@ -34,7 +34,7 @@
                 </thead>
 
                 <tbody>
-                @forelse($recordtarget as $records)
+                @foreach($recordtarget as $records)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $records->assign->name ?? '-' }}</td>
@@ -53,11 +53,7 @@
                         <td>{{ $records->year->year ?? '-' }}</td>
                         <td>{{ $records->description ?? '-' }}</td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="text-center">No record found.</td>
-                    </tr>
-                @endforelse
+                 @endforeach
             </tbody>
 
             </table>
