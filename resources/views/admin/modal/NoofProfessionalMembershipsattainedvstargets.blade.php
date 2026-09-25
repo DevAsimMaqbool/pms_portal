@@ -42,7 +42,7 @@
     $totalFeedback = 0;
     $currentYear = SelectCurrentYear(1)->first();
 @endphp
-@if(in_array(getRoleName(activeRole()), ['HOD','Program Leader UG', 'Program Leader PG']))
+@if(in_array(getRoleName(activeRole()), ['HOD']))
 <!--  Payment Methods modal -->
 
 <div class="modal fade" id="NoofProfessionalMembershipsattainedvstargets" tabindex="-1" aria-hidden="true">
@@ -76,6 +76,95 @@
                                 <tbody>
                                     @php
                                         $data = noOfProfessionalMembershipsOfHOD(Auth::user()->employee_id, $activeRoleId, 6, 14, 155,$currentYear->id);
+                                    @endphp
+                                    <tr>
+                                        <td>1</td>
+
+                                        {{-- TARGET --}}
+                                        <td>{{ $data['total_target'] }}</td>
+
+                                        {{-- ACHIEVED --}}
+                                        <td>{{ $data['total_submitted'] }}</td>
+
+                                        {{-- SCORE --}}
+                                        <td>
+                                            <div class="badge" style="background-color: {{ $data['color'] }}">
+                                                {{ number_format($data['average_rating'], 1) }}%
+                                            </div>
+                                        </td>
+
+                                        {{-- RATING --}}
+                                        <td>
+                                            <span class="badge" style="background-color: {{ $data['color'] }}">
+                                                {{ $data['rating'] }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                 <tfoot>
+                                        <tr class="table-primary">
+                                            <th class="">Total</th>
+                                            <th class=""></th>
+                                            <th class="">AVG-></th>
+                                            <th class="fs-6">
+                                                <div class="badge" style="background-color: {{ $data['color'] }}">
+                                                    {{ number_format($data['average_rating'], 1) }}
+                                                </div>
+                                            </th>
+
+                                            {{-- RATING --}}
+                                            <th class="fs-6">
+                                                <span class="badge" style="background-color: {{ $data['color'] }}">
+                                                    {{ $data['rating'] }}
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- / Payment Methods modal -->
+@endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG', 'Program Leader PG']))
+<!--  Payment Methods modal -->
+
+<div class="modal fade" id="NoofProfessionalMembershipsattainedvstargets" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <!-- Title -->
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    <div class="badge bg-label-primary rounded p-2"><i
+                            class="icon-base ti tabler-clock-hour-2 icon-md"></i></div> No of Professional Memberships
+                    attained vs targets
+                </h3>
+                <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped align-middle custom-table">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Sr#</th>
+                                        <th>Target</th>
+                                        <th>Achieved</th>
+                                        <th>Score</th>
+                                        <th>Rating</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @php
+                                        $data = noOfProfessionalMembershipsOfHODPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 155,$currentYear->id);
                                     @endphp
                                     <tr>
                                         <td>1</td>

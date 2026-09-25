@@ -21,8 +21,8 @@
                     <h4 class="mb-1">Target Assign</h4>
                 </div>
                 <div class="d-flex align-content-center flex-wrap gap-4">
-                    <div class="d-flex gap-4">
-                    <a class="btn btn-label-primary waves-effect" href="{{ route('dean.target.verify') }}">Approve</a></div>
+                    {{-- <div class="d-flex gap-4">
+                    <a class="btn btn-label-primary waves-effect" href="{{ route('dean.target.verify') }}">Approve</a></div> --}}
                 </div>
             </div>
             <form class="card-body" id="researchForm2">
@@ -132,7 +132,7 @@
         <script>
             function fetchTarget() {
                 $.ajax({
-                    url: "{{ route('faculty-target.index') }}",
+                    url: "{{ route('faculty-target-dean.index') }}",
                     method: "GET",
                     data: {
                         status: "DEANALL" // you can send more values
@@ -199,7 +199,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('faculty-target.store') }}",
+                        url: "{{ route('faculty-target-dean.store') }}",
                         type: "POST",
                         data: formData,
                         contentType: false,

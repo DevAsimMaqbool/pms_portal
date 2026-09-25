@@ -1,0 +1,397 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\FacultyTargetsDean;
+use App\Models\User;
+use App\Models\RoleKpaAssignment;
+use App\Models\Years;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
+class FacultyTargetsDeanController extends Controller
+{
+  /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $userId = Auth::id();
+            $employee_id = $user->employee_id;
+
+            if (in_array(getRoleName(activeRole()), ['HOD'])) {    
+                $status = $request->input('status');
+                $indicator_id = $request->input('indicator');
+                if ($status == "HOD") {
+                    $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'HOD')
+                        ->where('indicator_id', $indicator_id)
+                        ->get();
+                }
+                if ($status == "OTHER") {
+                    $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'OTHER')
+                        ->get();
+                }
+
+
+            }
+            if (in_array(getRoleName(activeRole()), ['Dean'])) {       
+                $status = $request->input('status');
+                if ($status == "DEAN") {
+                         $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'HOD')
+                        ->get();    }
+                if ($status == "DEANALL") {
+                         $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator','year'])
+                        ->where('created_by', $employee_id)
+                        ->where('form_status', 'DEAN')
+                        ->get();    }        
+                if ($status == "HOD") {              
+                        
+                 $hod_ids = User::where('manager_id', $employee_id)->role('HOD')->pluck('employee_id');
+                 $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                     ->whereIn('created_by', $hod_ids)
+                     ->whereIn('status', [1, 2])
+                     ->whereIn('form_status', ['OTHER', 'HOD'])
+                     ->get();
+                }
+            }
+            if (in_array(getRoleName(activeRole()), ['ORIC'])) {  
+
+                $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                    ->whereIn('status', [2, 3])
+                    ->whereIn('form_status', ['OTHER', 'HOD'])
+                    ->get();
+
+            }
+            if (in_array(getRoleName(activeRole()), ['Human Resources'])) {     
+
+                $forms = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id',])
+                    ->whereIn('status', [3, 4])
+                    ->whereIn('form_status', ['OTHER', 'HOD'])
+                    ->get();
+
+            }
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'forms' => $forms
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Oops! Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        try {
+            $employeeId = Auth::user()->employee_id;
+            if ($request->form_status == 'HOD') {
+                $rules = [
+                    'indicator_id' => 'required',
+                    'description' => 'required',
+                    'year_id' => 'required',
+                    'faculty_member_id' => 'required|array',
+                    // 'national' => 'required|integer',
+                    // 'international' => 'required|integer',
+                    'faculty_member_id.*' => 'integer|exists:users,id',
+                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                ];
+
+
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = [
+                    'indicator_id' => $request->indicator_id,
+                    'target' => $request->target,
+                    'year_id' => $request->year_id,
+                    'description' => $request->description,
+                    'form_status' => $request->form_status,
+                    'scopus_q1' => $request->scopus_q1,
+                    'scopus_q2' => null,
+                    'scopus_q3' => null,
+                    'scopus_q4' => null,
+                    'hec_w' => $request->hec_w,
+                    'hec_x' => null,
+                    'hec_y' => null,
+                    'medical_recognized' => $request->medical_recognized,
+                    'national' => null,
+                    'international' => null,
+                    'created_by' => $employeeId,
+                    'updated_by' => $employeeId,
+                ];
+                DB::beginTransaction();
+                
+
+                foreach ($request->faculty_member_id as $userId) {
+                    FacultyTargetsDean::updateOrCreate(
+                        [
+                            'user_id' => $userId,
+                            'indicator_id' => $request->indicator_id,
+                            'year_id' => $request->year_id
+                            
+                            
+                        ],
+                        $data
+                    );
+                }
+
+
+                DB::commit();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Form saved successfully!',
+                ]);
+
+            }
+            if (in_array($request->form_status, ['OTHER', 'DEAN'])) {
+                $rules = [
+                    'indicator_id' => 'required|array',
+                    'indicator_id.*' => 'integer',
+                    'faculty_member_id' => 'required|array',
+                    'target' => 'required|integer',
+                    'description' => 'required',
+                    'year_id' => 'required',
+                    'faculty_member_id.*' => 'integer|exists:users,id',
+                    'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
+                ];
+
+
+                $validator = Validator::make($request->all(), $rules);
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                $data = [
+                    'target' => $request->target,
+                    'year_id' => $request->year_id,
+                    'form_status' => $request->form_status,
+                    'created_by' => $employeeId,
+                    'updated_by' => $employeeId,
+                ];
+                DB::beginTransaction();
+                $userIds = $request->faculty_member_id;
+                $indicatorIds = $request->indicator_id;
+                $indicatorsInfo = DB::table('indicators')
+                    ->join('indicator_categories', 'indicators.indicator_category_id', '=', 'indicator_categories.id')
+                    ->select(
+                        'indicators.id as indicator_id',
+                        'indicators.indicator_category_id',
+                        'indicator_categories.key_performance_area_id as kpa_id'
+                    )
+                    ->whereIn('indicators.id', $indicatorIds)
+                    ->get()
+                    ->keyBy('indicator_id');
+                $userRoles = DB::table('model_has_roles')
+                    ->where('model_type', User::class)
+                    ->whereIn('model_id', $userIds)
+                    ->pluck('role_id', 'model_id');
+
+                foreach ($userIds as $userId) {
+                    $roleId = $userRoles[$userId] ?? null;
+                    foreach ($indicatorIds as $indicatorId) {
+                        $info = $indicatorsInfo[$indicatorId] ?? null;
+                        if (!$info)
+                            continue; // skip if indicator not found
+
+                        $indicatorCategoryId = $info->indicator_category_id;
+                        $kpaId = $info->kpa_id;
+                        // ✅ CHECK IF ALREADY ASSIGNED
+                        $existing = FacultyTargetsDean::where('user_id', $userId)
+                            ->where('indicator_id', $indicatorId)
+                            ->where('year_id', $request->year_id)
+                            ->first();
+
+                        if ($existing) {
+                            // 🔄 UPDATE EXISTING RECORD
+                            $existing->update([
+                                'target' => $request->target,
+                                'year_id' => $request->year_id,
+                                'description' => $request->description,
+                                'form_status' => $request->form_status,
+                                'created_by' => $employeeId,
+                                'updated_by' => $employeeId,
+                            ]);
+                        } else {
+                            // ➕ CREATE NEW RECORD
+                            FacultyTargetsDean::create([
+                                'user_id' => $userId,
+                                'indicator_id' => $indicatorId,
+                                'target' => $request->target,
+                                'year_id' => $request->year_id,
+                                'description' => $request->description,
+                                'form_status' => $request->form_status,
+                                'created_by' => $employeeId,
+                                'updated_by' => $employeeId,
+                            ]);
+                            if ($kpaId == 2 && $indicatorCategoryId == 8) {
+                                // ✅ Insert record in role_kpa_assignments
+                                DB::table('role_kpa_assignments')->updateOrInsert(
+                                    [
+                                        'role_id' => $roleId,
+                                        'key_performance_area_id' => $kpaId,
+                                        'indicator_category_id' => $indicatorCategoryId,
+                                        'indicator_id' => $indicatorId,
+                                    ],
+                                    [
+                                        'status' => 1,
+                                        'updated_at' => now(),
+                                    ]
+                                );
+                                DB::table('sidebar_kpa_assignments')->updateOrInsert(
+                                    [
+                                        'role_id' => $roleId,
+                                        'key_performance_area_id' => $kpaId,
+                                        'indicator_category_id' => $indicatorCategoryId,
+                                        'indicator_id' => $indicatorId,
+                                    ],
+                                    [
+                                        'form_status' => 1
+                                    ]
+                                );
+                                $count = RoleKpaAssignment::where('role_id', $roleId)
+                                    ->where('key_performance_area_id', $kpaId)
+                                    ->where('indicator_category_id', $indicatorCategoryId)
+                                    ->count();
+                                $weightage = round(10 / $count, 2);
+                                DB::table('role_kpa_assignments')
+                                    ->where('role_id', $roleId)
+                                    ->where('key_performance_area_id', $kpaId)
+                                    ->where('indicator_category_id', $indicatorCategoryId)
+                                    ->update([
+                                        'indicator_weightage' => $weightage,
+                                    ]);
+                            }
+                        }
+                    }
+                }
+
+
+                DB::commit();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Target saved successfully!',
+                ]);
+            }
+
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // return response()->json([
+            //     'message' => 'Oops! Something went wrong',
+            //     'error' => $e->getMessage()
+            // ], 500);
+            return response()->json([
+                'message' => 'Oops! Something went wrong'
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(FacultyTargetsDean $facultyTarget)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(FacultyTargetsDean $facultyTarget)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:1,2,3,4,5,6'
+        ]);
+
+        $target = FacultyTargetsDean::findOrFail($id);
+        $target->status = $request->status;
+        $target->updated_by = Auth::id();
+        $target->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(FacultyTargetsDean $facultyTarget)
+    {
+        //
+    }
+    // app/Http/Controllers/FacultyTargetController.php
+    public function getTarget11(Request $request)
+    {
+        $record = FacultyTargetsDean::where('indicator_id', $request->indicator_id)
+            ->where('user_id', 45433)
+            ->first(); // ✅ No error if not found
+
+        return response()->json([
+            'target' => $record ? $record->target : null
+        ]);
+    }
+
+    public function getTarget(Request $request)
+    {
+        $employeeId = Auth::user()->employee_id;
+        $activeYear = Years::where('active', 1)->first();
+        $record = FacultyTargetsDean::where('indicator_id', $request->indicator_id)
+            ->where('user_id', $employeeId)
+            ->where('year_id', $activeYear->id)
+            ->first();
+
+        return response()->json([
+            'target' => $record ? $record->target : null,
+            'data' => $record,
+            'year' => $activeYear->year,
+        ]);
+    }
+    public function showDeanTarget(){
+        $activeYear = Years::where('active', 1)->first();
+        $recordtarget = FacultyTargetsDean::with(['user:id,name,employee_id', 'indicator:id,indicator', 'assign:id,name,employee_id','year'])
+        ->where('user_id', Auth::id()) // or Auth::user()->id
+        ->where('year_id', $activeYear->id)
+        ->get();
+        return view('admin.form.show_dean_target', compact('recordtarget'));
+    }
+}

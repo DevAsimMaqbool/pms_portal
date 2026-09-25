@@ -30,9 +30,15 @@
                                 </div>
                                 <a href="{{ route('indicators_crud.index', ['slug' => 'no_of_programs_accredited_or_affiliated_nationally_internationally_and_ranking', 'id' => $indicatorId]) }}" class="btn rounded-pill btn-outline-primary waves-effect"> View</a>
                             </div> 
+                            @if(in_array(getRoleName(activeRole()), ['Dean','HOD']))
+                            <h5 class="text-primary" id="indicatorTargetDean">Dean Target 0</h5>
+                            <p class="" id="indicatorDescriptionDean"></p>
+                            <div class="mb-3">Dean Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYearDean"></div></div>
+                            @else
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <p class="" id="indicatorDescription"></p>
-                             <div class="">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
+                            <div class="mb-3">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
+                            @endif
                             <form id="researchForm" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" id="form_status" name="form_status" value="HOD" required>
@@ -404,9 +410,43 @@
                         }
                     });
                 }
+                function fetchTargetDean(indicatorId) {
+
+                    if (!indicatorId) {
+                        $('#indicatorTargetDean').text('Dean Target: N/A');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('faculty-target-dean.getTarget') }}",
+                        type: "GET",
+                        data: {
+                            indicator_id: indicatorId
+                        },
+                        success: function(res) {
+                            if (res.target) {
+                                $('#indicatorTargetDean').text('Dean Target: ' + res.target);
+                                $('#indicatorDescriptionDean').text(
+                                    'Description: ' + (res.data && res.data.description ? res.data.description : 'N/A')
+                                );
+                                $('#indicatorTargetYearDean').text(res.year && res.year ? res.year : 'N/A');
+                            } else {
+                                $('#indicatorTargetDean').text('Target: N/A');
+                                 $('#indicatorDescriptionDean').text('Description: N/A');
+                                 $('#indicatorTargetYearDean').text('N/A');
+                            }
+                        },
+                        error: function() {
+                            $('#indicatorTargetDean').text('Target: N/A');
+                             $('#indicatorDescriptionDean').text('Description: N/A');
+                             $('#indicatorTargetYearDean').text('N/A');
+                        }
+                    });
+                }
 
                 // ✅ Pass PHP variable safely
                 fetchTarget({{ $indicatorId }});
+                fetchTargetDean({{ $indicatorId }});
             
             function toggleRecognitionFields() {
 

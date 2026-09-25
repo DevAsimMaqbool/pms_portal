@@ -6,6 +6,7 @@ use App\Http\Controllers\ActiveInternationalResearchPartnerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AssignUserKpaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\FacultyTargetsDeanController;
 use App\Http\Controllers\IndicatorCategoryController;
 use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\KeyPerformanceAreaController;
@@ -317,6 +318,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('industrial-projects', IndustrialProjectsController::class);
         Route::resource('employability', EmployabilityController::class);
         Route::resource('faculty-target', FacultyTargetController::class);
+        Route::resource('faculty-target-dean', FacultyTargetsDeanController::class);
         Route::resource('admission-targets', AdmissionTargetAchievedController::class);
         Route::resource('recovery', RecoveryController::class);
         Route::resource('internationalization-section', InternationalizationSectionController::class);
@@ -421,6 +423,8 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/faculty-target-gets', [FacultyTargetController::class, 'getTarget'])
         ->name('faculty-target.getTarget');
+    Route::get('/faculty-target-dean-gets', [FacultyTargetsDeanController::class, 'getTarget'])->name('faculty-target-dean.getTarget');
+    Route::get('/show_deanfaculty_target', [FacultyTargetsDeanController::class, 'showDeanTarget'])->name('show-dean-target');
 
     Route::resource('/survey', SurveyController::class);
     Route::get('/survey-report', [SurveyController::class, 'report'])->name('survey.report');

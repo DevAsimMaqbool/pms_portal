@@ -45,7 +45,7 @@
  @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor']))
     <!--  Payment Methods modal -->
 
-    <div class="modal fade" id="NumberofKnowledgeProducts" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="RatingonImpactofResearchConferencesOrganized" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
                 <div class="modal-header">
@@ -55,7 +55,7 @@
                     <!-- Title -->
                     <h3 class="text-center mb-3 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Number of Knowledge Products
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Rating on Impact of Research Conferences Organized
                     </h3>
                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
