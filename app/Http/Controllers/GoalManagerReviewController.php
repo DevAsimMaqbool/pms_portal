@@ -630,23 +630,38 @@ public function lineManagerForm()
                 : null;
 
         /*
-        |--------------------------------------------------------------------------
-        | MANAGER / HR OVERALL
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| MANAGER OVERALL SCORE
+|--------------------------------------------------------------------------
+*/
 
-        $overallReview = GoalOverallReview::where(
-            'user_id',
-            $employee->id
-        )
-        ->latest('id')
-        ->first();
+$managerRatings = GoalSelfReport::where(
+    'user_id',
+    $employee->id
+)
+->whereNotNull('manager_rating')
+->pluck('manager_rating');
 
-        $employee->manager_overall_rating =
-            $overallReview?->manager_overall_rating;
+$employee->manager_overall_rating =
+    $managerRatings->count()
+        ? round($managerRatings->avg(), 2)
+        : null;
 
-        $employee->hr_overall_rating =
-            $overallReview?->hr_overall_rating;
+/*
+|--------------------------------------------------------------------------
+| HR OVERALL
+|--------------------------------------------------------------------------
+*/
+
+$overallReview = GoalOverallReview::where(
+    'user_id',
+    $employee->id
+)
+->latest('id')
+->first();
+
+$employee->hr_overall_rating =
+    $overallReview?->hr_overall_rating;
 
         /*
         |--------------------------------------------------------------------------
