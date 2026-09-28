@@ -21,12 +21,20 @@ class GoalHrOverallPerformanceExport implements
     ShouldAutoSize,
     WithStyles
 {
-    protected ?string $department;
+    protected array $departments = [];
 
-    public function __construct(?string $department = null)
-    {
-        $this->department = $department;
+    public function __construct($departments = null)
+{
+    if (!is_array($departments)) {
+        $departments = [$departments];
     }
+
+    $this->departments = collect($departments)
+        ->filter()
+        ->unique()
+        ->values()
+        ->toArray();
+}
 
     public function collection(): Collection
     {
@@ -43,12 +51,38 @@ class GoalHrOverallPerformanceExport implements
             ])
             ->orderBy('name');
 
-        if (filled($this->department)) {
-            $query->where(
-                'hr_department_name',
-                $this->department
-            );
+        if (!empty($this->departments)) {
+
+    $query->where(function ($q) {
+
+        foreach ($this->departments as $department) {
+
+            if (
+                $department ===
+                'Superior University, Lahore / Rector Secretariat'
+            ) {
+
+                $q->orWhere(
+                    'hr_department_name',
+                    $department
+                )
+                ->orWhere('manager_id', 20055)
+                ->orWhereIn('employee_id', [
+                    '40110',
+                    '40298',
+                    '130211',
+                ]);
+
+            } else {
+
+                $q->orWhere(
+                    'hr_department_name',
+                    $department
+                );
+            }
         }
+    });
+}
 
         $employees = $query->get();
 
