@@ -362,7 +362,7 @@ Route::middleware('auth')->group(function () {
         )->name('compliance.usagelms.verification');
 
         // routes/import excel file
-        Route::post('/employability/import', [EmployabilityController::class, 'importGraduateSatisfaction'])->name('employability.import');
+        Route::post('/employability/import', [EmployabilityController::class, 'import'])->name('employability.import');
         Route::post('/student-engagement-rate/import', [StudentEngagementRateController::class, 'import'])->name('student-engagement-rate.import');
         Route::post('/program-profitability/import', [ProgramProfitabilityController::class, 'import'])->name('program-profitability.import');
         Route::post('/admission-targets/import', [AdmissionTargetAchievedController::class, 'import'])->name('admission-targets.import');
