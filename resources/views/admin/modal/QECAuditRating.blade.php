@@ -39,7 +39,8 @@
 @php
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
-    $totalFeedback = 0;                                    
+    $totalFeedback = 0;   
+    $currentYear = SelectCurrentYear(1)->first();                                   
 @endphp
 @if(in_array(getRoleName(activeRole()), ['HOD']))
     <!--  Payment Methods modal -->
@@ -50,11 +51,12 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         QEC Audit Rating
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
@@ -79,7 +81,7 @@
                                     <tbody class="table-border-bottom-0">
                                         @if(in_array(getRoleName(activeRole()), ['HOD']))
                                             @php
-                                                $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId);
+                                                $feedbacks = QECAuditRatingOfHOD(Auth::user()->employee_id, $activeRoleId,$currentYear->id);
                                                 $sr = 1;
                                                 $count = count($feedbacks);
 
@@ -160,12 +162,13 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>QEC Audit Rating
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
 
                         <div class="card-body">
@@ -240,12 +243,13 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body text-center p-4">
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
                                 class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>QEC Audit Rating
                     </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
@@ -271,7 +275,7 @@
                                                 'Program Leader PG' => 'PG',
                                                 default => ''
                                             };
-                                            $data = QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId, $programLevel);
+                                            $data = QECAuditRatingOfPL(Auth::user()->employee_id, $activeRoleId, $programLevel,$currentYear->id);
                                             $avgTotalScore = collect($data)->avg(function ($item) {
                                                 return (float) ($item->total_score ?? 0);
                                             }) ?? 0;
@@ -283,6 +287,10 @@
                                             $avgScore = collect($data)->avg(function ($item) {
                                                 return (float) ($item->percentage ?? 0);
                                             }) ?? 0;
+
+                                            $finalPercentage = $avgTotalScore > 0
+                                                ? ($avgObtainedScore / $avgTotalScore) * 100
+                                                : 0;
                                         @endphp
                                         @foreach($data as $index => $record)
                                             <tr>
@@ -306,7 +314,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="badge bg-label-{{ $meta->color }}">
+                                                    <div class="badge" style="background-color: {{ $meta->color }}">
 
                                                         {{ $meta->rating }}
                                                     </div>
@@ -331,7 +339,7 @@
                                             <!-- Avg Percentage -->
                                             <th style="font-size: 0.960rem;">
                                                 <span class="badge bg-{{ getRatingMetaAsBg($avgScore)->color }}">
-                                                    {{ number_format(($avgObtainedScore / $avgTotalScore) * 100, 1) }}%
+                                                    {{ number_format($finalPercentage, 1) }}%
                                                 </span>
                                             </th>
 

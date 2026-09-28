@@ -4894,7 +4894,7 @@ if (!function_exists('ResearchTasksAssignedbyDeanHOD')) {
     }
 }
 
-function QECAuditRatingOfHOD($employeeId, $activeRoleId)
+function QECAuditRatingOfHOD($employeeId, $activeRoleId,$currentYear = null)
 {
     $departmentId = auth()->user()->department_id;
 
@@ -4903,8 +4903,9 @@ function QECAuditRatingOfHOD($employeeId, $activeRoleId)
         'details.department',
         'details.program'
     ])
-        ->whereHas('details', function ($q) use ($departmentId) {
-            $q->where('department_id', $departmentId);
+        ->whereHas('details', function ($q) use ($departmentId,$currentYear) {
+            $q->where('department_id', $departmentId)->where('year_id', $currentYear);
+            
         })
         ->get();
 
@@ -4963,7 +4964,7 @@ function QECAuditRatingOfHOD($employeeId, $activeRoleId)
     return $data;
 }
 
-function StudentAttendanceOfHOD($employeeId, $activeRoleId)
+function StudentAttendanceOfHODbk($employeeId, $activeRoleId)
 {
     $user = auth()->user();
 
@@ -5073,6 +5074,237 @@ function StudentAttendanceOfHOD($employeeId, $activeRoleId)
     }
 
     return $data;
+}
+
+function StudentAttendanceOfHOD($employeeId, $activeRoleId, $activeTermId)
+{
+    $user = auth()->user();
+
+    if (!$activeTermId) {
+        return collect();
+    }
+
+    // Get managed departments
+    $departmentIds = User::where('manager_id', $user->id)
+        ->whereNotNull('department_id')
+        ->distinct()
+        ->pluck('department_id');
+
+    if ($departmentIds->count() <= 1) {
+        $departmentIds = collect([$user->department_id]);
+    }
+
+    // Faculty list
+    $faculties = User::whereIn('department_id', $departmentIds)
+        ->whereNotNull('faculty_id')
+        ->get(['faculty_id', 'name', 'department_id'])
+        ->keyBy('faculty_id');
+
+    if ($faculties->isEmpty()) {
+        return collect();
+    }
+
+    // Classes with latest attendance
+    $classes = FacultyMemberClass::with([
+        'attendances' => function ($q) {
+            $q->latest('class_date')->limit(1);
+        }
+    ])
+        ->whereIn('faculty_id', $faculties->keys())
+        ->where('term_id', $activeTermId)
+        ->get();
+
+    return $classes->map(function ($class) use ($faculties) {
+
+        $attendance = $class->attendances->first();
+
+        if (!$attendance) {
+            return null;
+        }
+
+        $faculty = $faculties[$class->faculty_id];
+
+        $percentage = $attendance->total_students > 0
+            ? ($attendance->present_count / $attendance->total_students) * 100
+            : 0;
+
+        if ($percentage >= 90) {
+            $rating = 'OS';
+            $color = 'bg-primary';
+        } elseif ($percentage >= 80) {
+            $rating = 'EE';
+            $color = 'bg-success';
+        } elseif ($percentage >= 70) {
+            $rating = 'ME';
+            $color = 'bg-warning';
+        } elseif ($percentage >= 60) {
+            $rating = 'NI';
+            $color = 'bg-info';
+        } else {
+            $rating = 'BE';
+            $color = 'bg-danger';
+        }
+
+        return (object)[
+            'faculty_name'   => $faculty->name,
+            'department_id'  => $faculty->department_id,
+            'class_name'     => $class->class_name,
+            'code'           => $class->code,
+            'program'        => $attendance->program_name,
+            'total_students' => $attendance->total_students,
+            'present_count'  => $attendance->present_count,
+            'absent_count'   => $attendance->absent_count,
+            'percentage'     => round($percentage, 2),
+            'rating'         => $rating,
+            'color'          => $color,
+        ];
+    })->filter()->values();
+}
+
+function StudentAttendanceOfPL($employeeId, $activeRoleId, $activeTermId)
+{
+    if (!$activeTermId) {
+        return collect();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Programs managed by Program Leader
+    |--------------------------------------------------------------------------
+    */
+    $programs = Program::where('leader_id', $employeeId)
+        ->get([
+            'id',
+            'program_name',
+            'faculty_id',
+            'department_id',
+        ]);
+
+    if ($programs->isEmpty()) {
+        return collect();
+    }
+
+    $programNames = $programs
+        ->pluck('program_name')
+        ->filter()
+        ->unique()
+        ->values();
+
+    $facultyIds = $programs
+        ->pluck('faculty_id')
+        ->filter()
+        ->unique()
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get Classes
+    |--------------------------------------------------------------------------
+    */
+    $classes = FacultyMemberClass::with([
+        'attendances' => function ($query) use (
+            $activeTermId,
+            $facultyIds,
+            $programNames
+        ) {
+            $query
+                ->where('term_id', $activeTermId)
+                ->whereIn('faculty_id', $facultyIds)
+                ->whereIn('program_name', $programNames)
+                ->latest('class_date');
+        }
+    ])
+        ->whereIn('faculty_id', $facultyIds)
+        ->where('term_id', $activeTermId)
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Prepare Result
+    |--------------------------------------------------------------------------
+    */
+    return $classes->flatMap(function ($class) use ($programs) {
+
+        return $class->attendances
+            ->filter(function ($attendance) use ($class, $programs) {
+
+                // Faculty must match
+                if ($attendance->faculty_id != $class->faculty_id) {
+                    return false;
+                }
+
+                // Attendance program must belong to PL's programs
+                return $programs->contains(function ($program) use ($attendance) {
+                    return $program->program_name === $attendance->program_name
+                        && $program->faculty_id == $attendance->faculty_id;
+                });
+            })
+            ->map(function ($attendance) use ($class, $programs) {
+
+                $program = $programs->first(function ($program) use ($attendance) {
+                    return $program->program_name === $attendance->program_name
+                        && $program->faculty_id == $attendance->faculty_id;
+                });
+
+                if (!$program) {
+                    return null;
+                }
+
+                $percentage = $attendance->total_students > 0
+                    ? ($attendance->present_count / $attendance->total_students) * 100
+                    : 0;
+
+                if ($percentage >= 90) {
+                    $rating = 'OS';
+                    $color = 'bg-primary';
+                } elseif ($percentage >= 80) {
+                    $rating = 'EE';
+                    $color = 'bg-success';
+                } elseif ($percentage >= 70) {
+                    $rating = 'ME';
+                    $color = 'bg-warning';
+                } elseif ($percentage >= 60) {
+                    $rating = 'NI';
+                    $color = 'bg-info';
+                } else {
+                    $rating = 'BE';
+                    $color = 'bg-danger';
+                }
+
+                return (object) [
+                    'faculty_id' => $attendance->faculty_id,
+
+                    'department_id' => $program->department_id,
+
+                    'program_id' => $program->id,
+
+                    'program' => $attendance->program_name,
+
+                    'class_id' => $class->c_class_id,
+
+                    'class_name' => $class->class_name,
+
+                    'code' => $class->code,
+
+                    'term_id' => $attendance->term_id,
+
+                    'term' => $attendance->term,
+
+                    'total_students' => (int) $attendance->total_students,
+
+                    'present_count' => (int) $attendance->present_count,
+
+                    'absent_count' => (int) $attendance->absent_count,
+
+                    'percentage' => round($percentage, 2),
+
+                    'rating' => $rating,
+
+                    'color' => $color,
+                ];
+            })
+            ->filter();
+    })->values();
 }
 
 function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
@@ -10007,27 +10239,23 @@ function EmployabilityOfPLBKK($employeeId, $ProgramLevel)
     return $results;
 }
 
-function QECAuditRatingOfPL($employeeId, $activeRoleId, $programLevel)
+function QECAuditRatingOfPL($employeeId, $activeRoleId, $programLevel,$currentYear = null)
 {
-    $currentYear = Carbon::now()->year;
-    $previousYear = Carbon::now()->year - 1;
-    $year = $previousYear . '-' . $currentYear;
 
     $programIds = Program::where('leader_id', $employeeId)->pluck('id');
-
     $records = QecAuditRating::with([
-        'details' => function ($q) use ($programIds, $programLevel, $year) {
+        'details' => function ($q) use ($programIds, $programLevel, $currentYear) {
             $q->whereIn('program_id', $programIds)
                 ->where('program_level', $programLevel)   // ✅ add this
-                ->where('audit_term', $year)              // ✅ add this
+                ->where('year_id', $currentYear)              // ✅ add this
                 ->where('total_score', '>', 0)
                 ->with(['faculty', 'department', 'program']);
         }
     ])
-        ->whereHas('details', function ($q) use ($programIds, $programLevel, $year) {
+        ->whereHas('details', function ($q) use ($programIds, $programLevel, $currentYear) {
             $q->whereIn('program_id', $programIds)
                 ->where('program_level', $programLevel)
-                ->where('audit_term', $year)
+                ->where('year_id', $currentYear)
                 ->where('total_score', '>', 0);
         })
         ->get();

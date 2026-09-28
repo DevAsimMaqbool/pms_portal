@@ -66,21 +66,13 @@
                                                 <div id="author-past-container">
                                                     <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
-                                                        <div class="col-md-4">
-                                                            <label class="form-label">Audit Term</label>
-                                                            <select name="audits[0][audit_term]" class="form-select">
-                                                                <option value="">Select Audit Term</option>
-                                                                <?php
-                        $currentYear = date('Y');
-
-                        // Show range from past 2 to next 3 academic years
-                        for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++) {
-                            $nextYear = $year + 1;
-                            $range = $year . '-' . $nextYear;
-                            echo "<option value='{$range}'>{$range}</option>";
-                        }
-                                                                                                                        ?>
-                                                            </select>
+                                                         <div class="col-md-4">
+                                                            <label for="year" class="form-label">Year</label>
+                                                            <select name="audits[0][year_id]" id="year_id"
+                                                                class="form-select" required class="year_id">
+                                                                <option value=""> Select year</option>
+                                                                    @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                                </select>
                                                         </div>
 
                                                         <div class="col-md-4">
@@ -560,25 +552,20 @@
                 faculties.forEach(function (fac) {
                     facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
                 });
-                // 🔹 Dynamic Academic Year Logic (Same as PHP)
-                let currentYear = new Date().getFullYear();
-                let auditTermOptions = '<option value="">Select Audit Term</option>';
 
-                for (let year = currentYear - 2; year <= currentYear + 3; year++) {
-                    let nextYear = year + 1;
-                    let range = `${year}-${nextYear}`;
-                    auditTermOptions += `<option value="${range}">${range}</option>`;
-                }
+               
 
                 let group = `
                                                 <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
                                                 <div class="col-md-4">
-                                                <label class="form-label">Audit Term</label>
-                                                <select name="audits[${pastIndex}][audit_term]" class="form-select">
-                                                ${auditTermOptions}
-                                                </select>
-                                                </div>
+                                                            <label for="year" class="form-label">Year</label>
+                                                            <select name="audits[${pastIndex}][year_id]" id="year_id"
+                                                                class="form-select" required class="year_id">
+                                                                <option value=""> Select year</option>
+                                                                    @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+                                                                </select>
+                                                        </div>
 
                                                                 <div class="col-md-4">
                                                                 <label class="form-label">Faculty</label>

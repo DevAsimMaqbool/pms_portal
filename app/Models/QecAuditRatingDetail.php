@@ -9,6 +9,7 @@ class QecAuditRatingDetail extends Model
     protected $fillable = [
         'qec_audit_rating_id',
         'audit_term',
+        'year_id',
         'faculty_id',
         'department_id',
         'program_id',
@@ -37,5 +38,9 @@ class QecAuditRatingDetail extends Model
     public function program()
     {
         return $this->belongsTo(Program::class, 'program_id');
+    }
+    public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
     }
 }
