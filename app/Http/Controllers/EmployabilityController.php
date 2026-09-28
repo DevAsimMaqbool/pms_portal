@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Imports\EmployabilityImport;
+use App\Imports\GraduateSatisfactionImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -347,5 +348,51 @@ class EmployabilityController extends Controller
             ], 500);
         }
     }
+
+    public function importGraduateSatisfaction(Request $request)
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,xls,csv',
+        'indicator_id' => 'required',
+        'form_status' => 'required',
+    ]);
+
+    try {
+
+        DB::beginTransaction();
+
+        Excel::import(
+            new GraduateSatisfactionImport(
+                $request->indicator_id,
+                $request->form_status
+            ),
+            $request->file('file')
+        );
+
+        DB::commit();
+
+        return response()->json([
+            'message' => 'Graduate satisfaction updated successfully'
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'message' => 'Import failed. No data was updated.',
+            'errors' => $e->errors(),
+        ], 422);
+
+    } catch (\Throwable $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'message' => 'Import failed. No data was updated.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 }
 
