@@ -34,25 +34,12 @@
                             <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Audit Term</label>
-                                    <select name="audits[{{ $index }}][audit_term]" class="form-select">
-                                        <option value="">Select Audit Term</option>
-                                        @php
-                                            $currentYear = date('Y');
-                                            $selectedTerm = $detail->audit_term ?? '';
-                                        @endphp
-
-                                        @for ($year = $currentYear - 2; $year <= $currentYear + 3; $year++)
-                                            @php
-                                                $nextYear = $year + 1;
-                                                $range = $year . '-' . $nextYear;
-                                            @endphp
-
-                                            <option value="{{ $range }}" {{ $selectedTerm == $range ? 'selected' : '' }}>
-                                                {{ $range }}
-                                            </option>
-                                        @endfor
-                                    </select>
+                                    <label for="year" class="form-label">Year</label>
+                                    <select name="audits[{{ $index }}][year_id]" id="year_id"
+                                        class="form-select" required class="year_id">
+                                        <option value=""> Select year</option>
+                                            @foreach(SelectCurrentYear() as $year) <option value="{{ $year->id }}" {{ $detail->year_id == $year->id ? 'selected' : '' }}>{{ $year->year }}</option> @endforeach
+                                        </select>
                                 </div>
 
                                 <div class="col-md-4">
@@ -278,23 +265,19 @@
         faculties.forEach(function(fac) {
             facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
         });
-        let currentYear = new Date().getFullYear();
-        let auditTermOptions = '<option value="">Select Audit Term</option>';
 
-        for (let year = currentYear - 2; year <= currentYear + 3; year++) {
-            let nextYear = year + 1;
-            let range = `${year}-${nextYear}`;
-            auditTermOptions += `<option value="${range}">${range}</option>`;
-        }
+       
 
         let group = `
 <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
 <div class="col-md-4">
-<label class="form-label">Audit Term</label>
-<select name="audits[${index}][audit_term]" class="form-select">
-${auditTermOptions}
-</select>
+    <label for="year" class="form-label">Year</label>
+    <select name="audits[${index}][year_id]" id="year_id"
+        class="form-select" required class="year_id">
+        <option value=""> Select year</option>
+            @foreach(SelectCurrentYear(1) as $year) <option value="{{ $year->id }}">{{ $year->year }}</option> @endforeach
+        </select>
 </div>
 
 <div class="col-md-4">

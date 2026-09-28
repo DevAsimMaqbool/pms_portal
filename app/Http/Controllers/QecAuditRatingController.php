@@ -19,7 +19,8 @@ class QecAuditRatingController extends Controller
         $audits = QecAuditRating::with([
             'details.faculty',
             'details.department',
-            'details.program'
+            'details.program',
+            'details.year'
         ])->latest()->get();
 
         return view(
@@ -33,7 +34,7 @@ class QecAuditRatingController extends Controller
         $request->validate([
             'indicator_id' => 'required',
             'remarks' => 'required',
-            'audits.*.audit_term' => 'required',
+            'audits.*.year_id' => 'required',
             'audits.*.faculty_id' => 'required',
             'audits.*.department_id' => 'required',
             'audits.*.program_id' => 'required',
@@ -90,7 +91,7 @@ class QecAuditRatingController extends Controller
         $request->validate([
             'indicator_id' => 'required',
             'remarks' => 'required',
-            'audits.*.audit_term' => 'required',
+            'audits.*.year_id' => 'required',
             'audits.*.faculty_id' => 'required',
             'audits.*.department_id' => 'required',
             'audits.*.program_id' => 'required',

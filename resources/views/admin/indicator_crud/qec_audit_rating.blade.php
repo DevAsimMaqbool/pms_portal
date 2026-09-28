@@ -44,7 +44,7 @@
 
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $firstDetail->audit_term ?? 'N/A' }}</td>
+                                <td>{{ $firstDetail->year->year ?? 'N/A' }}</td>
                                 <td>{{ $firstDetail->faculty->name ?? 'N/A' }}</td>
                                 <td>{{ $firstDetail->department->name ?? 'N/A' }}</td>
                                 <td>{{ $firstDetail->program->program_name ?? 'N/A' }}</td>
@@ -101,16 +101,11 @@
             }
 
             table.DataTable({
-                responsive: true,
                 ordering: true,
                 paging: true,
                 searching: true,
                 info: true,
-                autoWidth: false,
                 pageLength: 10,
-                columnDefs: [
-                    { orderable: false, targets: -1 } // Disable sorting on Actions column
-                ]
             });
         }
 

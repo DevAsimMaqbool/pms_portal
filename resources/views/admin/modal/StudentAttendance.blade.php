@@ -45,6 +45,10 @@
 
     $springTerm = $activeTerms->get('Spring');
     $fallTerm = $activeTerms->get('Fall');
+    
+@endphp
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+@php
 
     // Spring data
     $springAtt = $springTerm
@@ -155,7 +159,6 @@
         $weightedScore
     );
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="StudentAttendance" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -217,7 +220,8 @@
                                         <tbody class="table-border-bottom-0">
 
                                             @php
-                                                $att = myClassesAttendanceData(Auth::user()->faculty_id, $springTerm->id);
+                                                //$att = myClassesAttendanceData(Auth::user()->faculty_id, $springTerm->id);
+                                                $att = $springAtt;
                                                 $sr = 1;
                                                 $totalAvgPresent = $att->isNotEmpty()
                                                     ? $att->avg('avg_present_percentage')
@@ -302,7 +306,8 @@
                                         <tbody class="table-border-bottom-0">
 
                                             @php
-                                                $att = myClassesAttendanceData(Auth::user()->faculty_id, $fallTerm->id);
+                                               // $att = myClassesAttendanceData(Auth::user()->faculty_id, $fallTerm->id);
+                                                $att = $fallAtt;
                                                 $sr = 1;
                                                 $totalAvgPresent = $att->isNotEmpty()
                                                     ? $att->avg('avg_present_percentage')
@@ -370,6 +375,27 @@
 @endif
 
 @if(in_array(getRoleName(activeRole()), ['HOD']))
+@php
+
+$springData = collect();
+$fallData   = collect();
+
+if($springTerm){
+    $springData = StudentAttendanceOfHOD(
+        Auth::user()->employee_id,
+        $activeRoleId,
+        $springTerm->id
+    );
+}
+
+if($fallTerm){
+    $fallData = StudentAttendanceOfHOD(
+        Auth::user()->employee_id,
+        $activeRoleId,
+        $fallTerm->id
+    );
+}
+@endphp
     <!--  Payment Methods modal -->
     <div class="modal fade" id="StudentAttendance" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -385,24 +411,24 @@
                     </h3>
                     <!-- Tabs -->
                     <div class="nav-align-top nav-tabs-shadow">
-                        <!-- <div class="d-flex justify-content-center mb-3 mt-3">
+                        <div class="d-flex justify-content-center mb-3 mt-3">
             <ul class="nav custom-tabs" role="tablist">
             <li class="nav-item">
             <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
             data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
             aria-selected="true">
-            🌸 Spring 2026
+            🌸 Spring {{ $springTerm?->start_year ?? date('Y') }}
             </button>
             </li>
             <li class="nav-item">
             <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
             data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
             aria-selected="false">
-            🍂 Fall 2025
+            🍂 Fall {{ $fallTerm?->start_year ?? date('Y') - 1 }}
             </button>
             </li>
             </ul>
-            </div> -->
+            </div>
 
                         <!-- Tab Content -->
                         <div class="tab-content">
@@ -410,7 +436,7 @@
                             <div class="tab-pane fade show active" id="student-attendance-spring" role="tabpanel">
                                 <div class="table-responsive text-nowrap">
                                     <table class="table table-striped align-middle custom-table"">
-            <thead class=" table-primary">
+                                    <thead class=" table-primary">
                                         <tr>
                                             <th>Sr#</th>
                                             <th>Name</th>
@@ -424,8 +450,9 @@
 
                                         <tbody class="table-border-bottom-0">
                                             @php
-                                                $data = StudentAttendanceOfHOD(Auth::user()->employee_id, $activeRoleId);
-                                                $grouped = collect($data)->groupBy('faculty_name');
+                                                //$data = StudentAttendanceOfHOD(Auth::user()->employee_id, $activeRoleId,$springTerm->id);
+                                                //$grouped = collect($data)->groupBy('faculty_name');
+                                                $grouped = $springData->groupBy('faculty_name');
                                                 $sr = 1;
                                             @endphp
 
@@ -505,29 +532,25 @@
                                                 <th colspan="2" class="text-end">Grand Total</th>
 
                                                 <th>
-                                                    {{ collect($data)->sum('total_students') }}
+                                                    {{ collect($springData)->sum('total_students') }}
                                                 </th>
 
                                                 <th>
-                                                    {{ collect($data)->sum('present_count') }}
+                                                    {{ collect($springData)->sum('present_count') }}
                                                 </th>
 
                                                 <th>
-                                                    {{ collect($data)->sum('absent_count') }}
+                                                    {{ collect($springData)->sum('absent_count') }}
                                                 </th>
                                                 <th style="font-size: 0.960rem;">
                                                     @php
-                                                        $totalStudents = collect($data)->sum('total_students');
-                                                        $present = collect($data)->sum('present_count');
+                                                        $totalStudents = collect($springData)->sum('total_students');
+                                                        $present = collect($springData)->sum('present_count');
 
                                                         $grandScore = $totalStudents > 0
                                                             ? ($present / $totalStudents) * 100
                                                             : 0;
-                                                        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 113);
-                                                        $weight = $indicatorWeight['weightage'] ?? 0;
-                                                        $weightedScore = ($grandScore * $weight) / 100;
-
-                                                        saveIndicatorPercentage90Plus(Auth::user()->employee_id, $activeRoleId, 1, 3, 113, $weightedScore, $grandScore);
+                                                        $grandScorespring=$grandScore;      
                                                     @endphp
 
                                                     <span class="badge"
@@ -544,8 +567,516 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+
                                 </div>
                             </div>
+
+                            <!-- Fall -->
+                            <div class="tab-pane fade" id="student-attendance-fall" role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-striped align-middle custom-table"">
+                                    <thead class=" table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Name</th>
+                                            <th>Avg Class Size</th>
+                                            <th>Avg Present</th>
+                                            <th>Avg Absent</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody class="table-border-bottom-0">
+                                            @php
+                                                //$data = StudentAttendanceOfHOD(Auth::user()->employee_id, $activeRoleId,$fallTerm->id);
+                                                //$grouped = collect($data)->groupBy('faculty_name');
+                                                $grouped = $fallData->groupBy('faculty_name');
+                                                $sr = 1;
+                                            @endphp
+
+                                            @foreach($grouped as $facultyName => $rows)
+
+                                                @php
+                                                    $totalStudents = $rows->sum('total_students');
+                                                    $present = $rows->sum('present_count');
+                                                    $absent = $rows->sum('absent_count');
+
+                                                    // ✅ SCORE CALCULATION
+                                                    $score = $totalStudents > 0
+                                                        ? ($present / $totalStudents) * 100
+                                                        : 0;
+
+                                                    // ✅ RATING + COLOR LOGIC
+                                                    if ($score >= 90) {
+                                                        $rating = 'OS';
+                                                        $color = 'bg-primary';
+                                                    } elseif ($score >= 80) {
+                                                        $rating = 'EE';
+                                                        $color = 'bg-success';
+                                                    } elseif ($score >= 70) {
+                                                        $rating = 'ME';
+                                                        $color = 'bg-warning';
+                                                    } elseif ($score >= 60) {
+                                                        $rating = 'NI';
+                                                        $color = 'bg-info';
+                                                    } else {
+                                                        $rating = 'BE';
+                                                        $color = 'bg-danger';
+                                                    }
+                                                @endphp
+
+                                                <tr>
+                                                    <td>{{ $sr++ }}</td>
+
+                                                    <td class="fw-bold">
+                                                        {{ $facultyName }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ $totalStudents }}
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-success">
+                                                            {{ $present }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-danger">
+                                                            {{ $absent }}
+                                                        </span>
+                                                    </td>
+
+                                                    <!-- ✅ SCORE -->
+                                                    <td>
+                                                        <span class="badge {{ $color }}">
+                                                            {{ number_format($score, 1) }}%
+                                                        </span>
+                                                    </td>
+
+                                                    <!-- ✅ RATING -->
+                                                    <td>
+                                                        <span class="badge {{ $color }}">
+                                                            {{ $rating }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th colspan="2" class="text-end">Grand Total</th>
+
+                                                <th>
+                                                    {{ collect($fallData)->sum('total_students') }}
+                                                </th>
+
+                                                <th>
+                                                    {{ collect($fallData)->sum('present_count') }}
+                                                </th>
+
+                                                <th>
+                                                    {{ collect($fallData)->sum('absent_count') }}
+                                                </th>
+                                                <th style="font-size: 0.960rem;">
+                                                    @php
+                                                        $totalStudents = collect($fallData)->sum('total_students');
+                                                        $present = collect($fallData)->sum('present_count');
+
+                                                        $grandScore = $totalStudents > 0
+                                                            ? ($present / $totalStudents) * 100
+                                                            : 0;
+                                                        $grandScorefall=$grandScore;    
+                                                    @endphp
+
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($grandScore)->color }}">
+                                                        {{ number_format($grandScore, 1) }}%
+                                                    </span>
+                                                </th>
+                                                <th style="font-size: 0.960rem;">
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($grandScore)->color }}">
+                                                        {{ getRatingMeta($grandScore)->rating }}
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                            </div>
+                        @php
+                        $avg_combine=($grandScorespring+$grandScorefall)/2;
+                        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 113);
+                        $weight = $indicatorWeight['weightage'] ?? 0;
+                        $weightedScore = ($avg_combine * $weight) / 100;
+
+                        saveIndicatorPercentage90Plus(Auth::user()->employee_id, $activeRoleId, 1, 3, 113, $weightedScore, $avg_combine);
+                        @endphp
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+@if(in_array(getRoleName(activeRole()), ['Program Leader UG', 'Program Leader PG']))
+@php
+
+    $springData = collect();
+    $fallData   = collect();
+
+    if ($springTerm) {
+        $springData = StudentAttendanceOfPL(
+            Auth::user()->employee_id,
+            $activeRoleId,
+            $springTerm->id
+        );
+    }
+
+    if ($fallTerm) {
+        $fallData = StudentAttendanceOfPL(
+            Auth::user()->employee_id,
+            $activeRoleId,
+            $fallTerm->id
+        );
+    }
+
+    // Overall Spring + Fall
+    $springTotalStudents = $springData->sum('total_students');
+    $springPresent       = $springData->sum('present_count');
+
+    $grandScorespring = $springTotalStudents > 0
+        ? ($springPresent / $springTotalStudents) * 100
+        : 0;
+
+    $fallTotalStudents = $fallData->sum('total_students');
+    $fallPresent       = $fallData->sum('present_count');
+
+    $grandScorefall = $fallTotalStudents > 0
+        ? ($fallPresent / $fallTotalStudents) * 100
+        : 0;
+
+    // Average of available terms
+    $availableScores = collect();
+
+    if ($springTerm) {
+        $availableScores->push($grandScorespring);
+    }
+
+    if ($fallTerm) {
+        $availableScores->push($grandScorefall);
+    }
+
+    //$avg_combine = $availableScores->avg() ?? 0;
+    $avg_combine = ($grandScorefall + $grandScorespring)/2;
+
+    // Indicator calculation
+    $indicatorWeight = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        113
+    );
+
+    $weight = $indicatorWeight['weightage'] ?? 0;
+
+    $weightedScore = ($avg_combine * $weight) / 100;
+
+    saveIndicatorPercentage90Plus(
+        Auth::user()->employee_id,
+        $activeRoleId,
+        1,
+        3,
+        113,
+        $weightedScore,
+        $avg_combine
+    );
+@endphp
+    <!--  Payment Methods modal -->
+    <div class="modal fade" id="StudentAttendance" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2"><i
+                                class="icon-base ti tabler-rewind-backward-50 icon-md"></i></div>Student Attendance
+                    </h3>
+                    <!-- Tabs -->
+                    <div class="nav-align-top nav-tabs-shadow">
+                        <div class="d-flex justify-content-center mb-3 mt-3">
+            <ul class="nav custom-tabs" role="tablist">
+            <li class="nav-item">
+            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+            data-bs-target="#student-attendance-spring" aria-controls="student-attendance-spring"
+            aria-selected="true">
+            🌸 Spring {{ $springTerm?->start_year ?? date('Y') }}
+            </button>
+            </li>
+            <li class="nav-item">
+            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+            data-bs-target="#student-attendance-fall" aria-controls="student-attendance-fall"
+            aria-selected="false">
+            🍂 Fall {{ $fallTerm?->start_year ?? date('Y') - 1 }}
+            </button>
+            </li>
+            </ul>
+            </div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Spring -->
+                            <div class="tab-pane fade show active" id="student-attendance-spring" role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-striped align-middle custom-table"">
+                                    <thead class=" table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Name</th>
+                                            <th>Avg Class Size</th>
+                                            <th>Avg Present</th>
+                                            <th>Avg Absent</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody class="table-border-bottom-0">
+                                           @php
+                                                $grouped = $springData->groupBy('program');
+                                                $sr = 1;
+                                            @endphp
+
+                                            @forelse($grouped as $programName => $rows)
+
+                                                @php
+                                                    $totalStudents = $rows->sum('total_students');
+                                                    $present = $rows->sum('present_count');
+                                                    $absent = $rows->sum('absent_count');
+
+                                                    $score = $totalStudents > 0
+                                                        ? ($present / $totalStudents) * 100
+                                                        : 0;
+                                                @endphp
+
+                                                <tr>
+                                                    <td>{{ $sr++ }}</td>
+
+                                                    <td class="fw-bold">
+                                                        {{ $programName }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ $totalStudents }}
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-success">
+                                                            {{ $present }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-danger">
+                                                            {{ $absent }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge"
+                                                            style="background-color: {{ getRatingMeta($score)->color }}">
+                                                            {{ number_format($score, 1) }}%
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge"
+                                                            style="background-color: {{ getRatingMeta($score)->color }}">
+                                                            {{ getRatingMeta($score)->rating }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                            @empty
+
+                                                <tr>
+                                                    <td colspan="7" class="text-center text-muted">
+                                                        No Spring attendance record found.
+                                                    </td>
+                                                </tr>
+
+                                            @endforelse
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="table-primary">
+
+                                                <th colspan="2" class="text-end">
+                                                    Grand Total
+                                                </th>
+
+                                                <th>
+                                                    {{ $springTotalStudents }}
+                                                </th>
+
+                                                <th>
+                                                    {{ $springPresent }}
+                                                </th>
+
+                                                <th>
+                                                    {{ $springData->sum('absent_count') }}
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($grandScorespring)->color }}">
+                                                        {{ number_format($grandScorespring, 1) }}%
+                                                    </span>
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($grandScorespring)->color }}">
+                                                        {{ getRatingMeta($grandScorespring)->rating }}
+                                                    </span>
+                                                </th>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <!-- Fall -->
+                            <div class="tab-pane fade" id="student-attendance-fall" role="tabpanel">
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-striped align-middle custom-table"">
+                                    <thead class=" table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Name</th>
+                                            <th>Avg Class Size</th>
+                                            <th>Avg Present</th>
+                                            <th>Avg Absent</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody class="table-border-bottom-0">
+                                            @php
+                                                $grouped = $fallData->groupBy('program');
+                                                $sr = 1;
+                                            @endphp
+
+                                            @forelse($grouped as $programName => $rows)
+
+                                                @php
+                                                    $totalStudents = $rows->sum('total_students');
+                                                    $present = $rows->sum('present_count');
+                                                    $absent = $rows->sum('absent_count');
+
+                                                    $score = $totalStudents > 0
+                                                        ? ($present / $totalStudents) * 100
+                                                        : 0;
+                                                @endphp
+
+                                                <tr>
+                                                    <td>{{ $sr++ }}</td>
+
+                                                    <td class="fw-bold">
+                                                        {{ $programName }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ $totalStudents }}
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-success">
+                                                            {{ $present }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-danger">
+                                                            {{ $absent }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge"
+                                                            style="background-color: {{ getRatingMeta($score)->color }}">
+                                                            {{ number_format($score, 1) }}%
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge"
+                                                            style="background-color: {{ getRatingMeta($score)->color }}">
+                                                            {{ getRatingMeta($score)->rating }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                            @empty
+
+                                                <tr>
+                                                    <td colspan="7" class="text-center text-muted">
+                                                        No Fall attendance record found.
+                                                    </td>
+                                                </tr>
+
+                                            @endforelse
+                                        </tbody>
+                                       <tfoot>
+                                            <tr class="table-primary">
+
+                                                <th colspan="2" class="text-end">
+                                                    Grand Total
+                                                </th>
+
+                                                <th>
+                                                    {{ $fallTotalStudents }}
+                                                </th>
+
+                                                <th>
+                                                    {{ $fallPresent }}
+                                                </th>
+
+                                                <th>
+                                                    {{ $fallData->sum('absent_count') }}
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($grandScorefall)->color }}">
+                                                        {{ number_format($grandScorefall, 1) }}%
+                                                    </span>
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                        style="background-color: {{ getRatingMeta($grandScorefall)->color }}">
+                                                        {{ getRatingMeta($grandScorefall)->rating }}
+                                                    </span>
+                                                </th>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
