@@ -45,6 +45,9 @@
 
     $springTerm = $activeTerms->get('Spring');
     $fallTerm = $activeTerms->get('Fall');
+@endphp
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+@php
 
     // Spring
     $springClasses = $springTerm
@@ -118,7 +121,6 @@
         $activeRoleId
     );
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
     <div class="modal fade" id="ClassesHeld" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -180,7 +182,7 @@
                                         @endphp
                                         <tbody class="table-border-bottom-0">
                                             @php $sr = 1;
-                                                $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId, $springTerm->id);
+                                                $classes = $springClasses;
                                                 // 👇 SUM of held_percentage
                                                 $totalHeldPercentage = $classes->avg('held_percentage');
                                             @endphp
@@ -252,7 +254,8 @@
                                         @endphp
                                         <tbody class="table-border-bottom-0">
                                             @php $sr = 1;
-                                                $classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId, $fallTerm->id);
+                                                //$classes = myClassesAttendanceRecord(Auth::user()->faculty_id, $activeRoleId, $fallTerm->id);
+                                                $classes =$fallClasses;
                                                 // 👇 SUM of held_percentage
                                                 $totalHeldPercentage = $classes->avg('held_percentage');
                                             @endphp
@@ -307,6 +310,31 @@
 @endif
 
 @if(in_array(getRoleName(activeRole()), ['HOD']))
+@php
+
+    // Spring
+    $springClasses = $springTerm
+        ? myDepartmentClassesAttendanceRecordHOD(
+            Auth::user()->employee_id,
+            $activeRoleId,
+            $springTerm->id
+        )
+        : collect();
+
+    // Fall
+    $fallClasses = $fallTerm
+        ? myDepartmentClassesAttendanceRecordHOD(
+            Auth::user()->employee_id,
+            $activeRoleId,
+            $fallTerm->id
+        )
+        : collect();
+
+   
+
+
+    
+@endphp
     <!--  Payment Methods modal -->
     <div class="modal fade" id="ClassesHeld" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -328,14 +356,14 @@
                                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#classes-held-spring" aria-controls="classes-held-spring"
                                         aria-selected="true">
-                                        🌸 Spring 2026
+                                        🌸 Spring {{ $springTerm?->start_year ?? date('Y') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                                         data-bs-target="#classes-held-fall" aria-controls="classes-held-fall"
                                         aria-selected="false">
-                                        🍂 Fall 2025
+                                        🍂 Fall {{ $fallTerm?->start_year ?? date('Y') - 1 }}
                                     </button>
                                 </li>
                             </ul>
@@ -360,10 +388,7 @@
                                         <tbody class="table-border-bottom-0">
                                             @php
                                                 $sr = 1;
-                                                $classes = myDepartmentClassesAttendanceRecordHOD(
-                                                    Auth::user()->employee_id,
-                                                    $activeRoleId
-                                                );
+                                                $classes = $springClasses;
                                                 $totalClasses = $classes->sum('total_rows');
                                                 $totalHeld = $classes->sum('class_held_count');
                                                 $totalNotHeld = $classes->sum('class_not_held_count');
@@ -437,10 +462,7 @@
                                         <tbody class="table-border-bottom-0">
                                             @php
                                                 $sr = 1;
-                                                $classes = myDepartmentClassesAttendanceRecordHOD(
-                                                    Auth::user()->employee_id,
-                                                    $activeRoleId
-                                                );
+                                                $classes = $fallClasses;
                                                 $totalClasses = $classes->sum('total_rows');
                                                 $totalHeld = $classes->sum('class_held_count');
                                                 $totalNotHeld = $classes->sum('class_not_held_count');

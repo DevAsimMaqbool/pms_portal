@@ -12,6 +12,7 @@ class LineManagerReviewRating extends Model
         'indicator_id',
         'employee_id',
         'year',
+        'year_id',
         'kpa_category',
         'remarks',
         'form_status',
@@ -24,5 +25,9 @@ class LineManagerReviewRating extends Model
     public function tasks()
     {
         return $this->hasMany(LineManagerReviewRatingTask::class, 'line_manager_review_rating_id');
+    }
+    public function year()
+    {
+        return $this->belongsTo(Years::class, 'year_id', 'id');
     }
 }

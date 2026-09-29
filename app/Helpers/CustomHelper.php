@@ -5307,7 +5307,7 @@ function StudentAttendanceOfPL($employeeId, $activeRoleId, $activeTermId)
     })->values();
 }
 
-function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
+function myDepartmentClassesAttendanceRecordHODbk($employeeId, $activeRoleId)
 {
     $departmentId = auth()->user()->department_id;
 
@@ -5366,6 +5366,61 @@ function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId)
         117,
         $activeRoleId
     );
+
+    return $allClasses;
+}
+function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId,$activeTermId)
+{
+    $departmentId = auth()->user()->department_id;
+
+    // 1️⃣ Get all faculty in this department
+    $facultyMembers = User::where('department_id', $departmentId)
+        ->get(['id', 'faculty_id', 'name']);
+
+    $allClasses = collect();
+
+    foreach ($facultyMembers as $faculty) {
+
+        // ✅ FIX: use users.id instead of faculty_id
+        $classes = FacultyMemberClass::withCount([
+            'attendances as total_rows',
+            'attendances as class_held_count' => function ($query) {
+                $query->where('att_marked', 1);
+            },
+            'attendances as class_not_held_count' => function ($query) {
+                $query->where('att_marked', 0);
+            },
+        ])
+            ->where('faculty_id', $faculty->faculty_id) // ✅ FIXED HERE
+            ->where('term_id', $activeTermId)
+            ->get()
+            ->map(function ($class) use ($faculty) {
+
+                // Latest program name
+                $class->program = $class->attendances()
+                    ->latest('class_date')
+                    ->value('program_name');
+
+                // Held %
+                $class->held_percentage = $class->total_rows
+                    ? round(($class->class_held_count / $class->total_rows) * 100, 2)
+                    : 0;
+
+                // Not Held %
+                $class->not_held_percentage = $class->total_rows
+                    ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
+                    : 0;
+
+                // Faculty name
+                $class->faculty_name = $faculty->name;
+
+                return $class;
+            });
+
+        $allClasses = $allClasses->merge($classes);
+    }
+
+   
 
     return $allClasses;
 }
@@ -9303,13 +9358,21 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
      */
     function calculateLineManagerFeedbackAverage($authUser, $activeRoleId, $indicatorId,$currentYear = null)
     {
+        $employeeIdManager = [];
         // Determine which employees to include
         if ($indicatorId == 177) {
 
             // Dean's Feedback Score: upward (manager)
-            $employeeIds = $authUser->manager ? [$authUser->manager->employee_id] : [];
+            $employeeIdManager = $authUser->manager ? [$authUser->manager->employee_id] : [];
+            $employeeIds = [$authUser->employee_id];
 
         } elseif ($indicatorId == 178) {
+            // PLs / Faculty Satisfaction Score: downward (subordinates)
+            $employeeIds = $authUser->subordinates
+                ? collect($authUser->subordinates)->pluck('employee_id')->filter()->toArray()
+                : [];
+        }
+        elseif ($indicatorId == 166) {
             // PLs / Faculty Satisfaction Score: downward (subordinates)
             $employeeIds = $authUser->subordinates
                 ? collect($authUser->subordinates)->pluck('employee_id')->filter()->toArray()
@@ -9329,6 +9392,9 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
 
         // Fetch all relevant feedback records
         $feedbacks = LineManagerFeedback::whereIn('employee_id', $employeeIds)
+                ->when($indicatorId == 177, function ($query) use ($employeeIdManager) {
+                $query->whereIn('created_by', $employeeIdManager);
+            })
         ->where('year_id', $currentYear)
             ->get([
                 'responsibility_accountability_1',
@@ -9409,10 +9475,11 @@ if (!function_exists('calculateLineManagerFeedbackAverage')) {
                 $weightedScore,
                 $departmentAvg
             );
+        }else if ($indicatorId == 166) { 
+           saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 166, $weightedScore166,$departmentAvg);
         } else {
             saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 178, $weightedScore178,$departmentAvg);
             saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 165, $weightedScore165,$departmentAvg);
-            saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 166, $weightedScore166,$departmentAvg);
             saveIndicatorPercentage($authUser->employee_id, $activeRoleId, 7, 16, 180, $weightedScore180,$departmentAvg);
         }
 
