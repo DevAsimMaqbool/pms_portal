@@ -108,8 +108,6 @@
 
                                                 <div class="row">
 
-                                                    
-                                                     
                                                     <div class="col-md-6">
                                                             <label for="batch" class="form-label">Select Year</label>
                                                             <select name="year_id" id="year_id"
@@ -212,37 +210,59 @@
                             success: function (data) {
                                 const forms = data.forms || [];
 
-                                const rowData = forms.map((form, i) => {
-                                     const createdAt = form.created_at
-                                        ? new Date(form.created_at).toISOString().split('T')[0]
-                                        : 'N/A';
-                                         const facultyName = form.remarks?.[0]?.faculty?.name || 'N/A';
-                                    const retentionRate = form.remarks?.[0]?.no_retention_rate || 'N/A';
-                                    const formData = encodeURIComponent(
-                                    JSON.stringify(form)
-                                );
+const rowData = forms.map((form, i) => {
 
-                                    let editButton = '';
-                                    let deleteBtn = '';
-                                    if (parseInt(form.status) === 1) {
-                                        editButton = `
-                                            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                                                data-form="${formData}">
-                                                <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
-                                            </button>`;
-                                        deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
-                                    }    
+    const createdAt = form.created_at
+        ? new Date(form.created_at).toISOString().split('T')[0]
+        : 'N/A';
 
-                                    // Pass entire form as JSON in button's data attribute
-                                    return [
-                                        i + 1,
-                                        form.year ? form.year.year : 'N/A',
-                                        facultyName,
-                                        retentionRate+'%',
-                                        createdAt,
-                                        editButton+ ' ' + deleteBtn
-                                    ];
-                                });
+    const facultyName =
+        form.remarks?.[0]?.faculty?.name || 'N/A';
+
+    // Calculate Faculty Retention Rate
+    // Average of all department retention rates
+    const retentionRates = form.remarks
+        ?.map(remark => parseFloat(remark.no_retention_rate))
+        .filter(rate => !isNaN(rate)) || [];
+
+    const retentionRate = retentionRates.length
+        ? (
+            retentionRates.reduce((sum, rate) => sum + rate, 0) /
+            retentionRates.length
+          ).toFixed(1)
+        : 'N/A';
+
+    const formData = encodeURIComponent(
+        JSON.stringify(form)
+    );
+
+    let editButton = '';
+    let deleteBtn = '';
+
+    if (parseInt(form.status) === 1) {
+
+        editButton = `
+            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
+                data-form="${formData}">
+                <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
+            </button>`;
+
+        deleteBtn = `
+            <button class="btn rounded-pill btn-outline-danger delete-btn" 
+                data-id="${form.id}">
+                Delete
+            </button>`;
+    }
+
+    return [
+        i + 1,
+        form.year ? form.year.year : 'N/A',
+        facultyName,
+        retentionRate !== 'N/A' ? retentionRate + '%' : 'N/A',
+        createdAt,
+        editButton + ' ' + deleteBtn
+    ];
+});
 
                                 if (!$.fn.DataTable.isDataTable('#intellectualTable')) {
                                     $('#intellectualTable').DataTable({
@@ -270,7 +290,6 @@
                         });
                     }
 
-
                     $(document).ready(function () {
 
                         fetchCommercialForms();
@@ -286,7 +305,6 @@
                     allowOutsideClick: false,
                     didOpen: () => Swal.showLoading()
                 });
-
 
                 $.ajax({
                     url: "{{ route('faculty-retention.update', '') }}/" + recordId,
@@ -351,7 +369,6 @@
                 });
                 return options;
             }
-
 
         let index = $('#author-past-container .past-group').length;
 
@@ -449,8 +466,6 @@
 
             $('#multidisciplinaryProjectFormModal').modal('show');
         });
-
-
 
         });
 
