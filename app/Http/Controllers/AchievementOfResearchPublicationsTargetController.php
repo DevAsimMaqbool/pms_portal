@@ -124,6 +124,59 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
                 return DataTables::eloquent($forms)
                     ->addIndexColumn()
+                    ->filter(function ($query) {
+
+                    $keyword = strtolower(request('search')['value'] ?? '');
+
+                    if (!$keyword) {
+                        return;
+                    }
+
+                    if (str_contains($keyword, 'waiting for oric approvel')) {
+
+                        $query->where(function ($q) {
+                            $q->where(function ($s) {
+                                $s->where('status', '1')
+                                ->where('form_status', 'DEAN')
+                                ->where(function ($r) {
+                                    $r->whereNull('reject_status')
+                                        ->orWhere('reject_status', '0');
+                                });
+                            })->orWhere(function ($s) {
+                                $s->where('status', '2')
+                                ->where(function ($r) {
+                                    $r->whereNull('reject_status')
+                                        ->orWhere('reject_status', '0');
+                                });
+                            });
+                        });
+
+                    } elseif (str_contains($keyword, 'waiting for hod approvel')) {
+
+                        $query->where('status', '1')
+                            ->where('form_status', 'RESEARCHER')
+                            ->where(function ($r) {
+                                $r->whereNull('reject_status')
+                                    ->orWhere('reject_status', '0');
+                            });
+
+                    } elseif (str_contains($keyword, 'verified')) {
+
+                        $query->where('status', '3');
+
+                    } elseif (str_contains($keyword, 'oric reject this application')) {
+                        $query->where('status', '1')->where('reject_status', '2');
+
+                    } elseif (str_contains($keyword, 'hod reject this application')) {
+
+                        $query->where('status', '1')->where('reject_status', '1');
+
+                    } elseif (str_contains($keyword, 'on hold')) {
+
+                        $query->where('status', '2')
+                            ->where('reject_status', '3');
+                    }
+                })
                     ->make(true);
             }
 
