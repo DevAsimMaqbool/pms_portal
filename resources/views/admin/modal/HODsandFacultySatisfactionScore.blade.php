@@ -73,7 +73,7 @@ $currentYear = SelectCurrentYear(1)->first();
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                            $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178,$currentYear->id);
+                                            $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 166,$currentYear->id);
                                             // Use RAW values (NO rounding here)
                                             $categories = collect($data['categories']);
                                             // SINGLE SOURCE → SAME RESULT ALWAYS
@@ -242,7 +242,7 @@ $currentYear = SelectCurrentYear(1)->first();
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @php
-                                       $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 178,$currentYear->id);
+                                       $data = calculateLineManagerFeedbackAverage(Auth::user(), $activeRoleId, 166,$currentYear->id);
                                        // Use RAW values (NO rounding here)
                                         $categories = collect($data['categories']);
                                         // SINGLE SOURCE → SAME RESULT ALWAYS

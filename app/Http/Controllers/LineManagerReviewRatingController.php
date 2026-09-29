@@ -22,7 +22,7 @@ class LineManagerReviewRatingController extends Controller
 
                 $status = $request->input('status');
                 if($status=="HOD"){
-                        $forms = LineManagerReviewRating::with('tasks')->where('created_by', $employee_id)
+                        $forms = LineManagerReviewRating::with(['tasks','year'])->where('created_by', $employee_id)
                         ->orderBy('id', 'desc')
                         ->get();
                 }
@@ -47,7 +47,7 @@ class LineManagerReviewRatingController extends Controller
                $rules = [
                         'indicator_id' => 'required|integer',
                         'employee_id' => 'required|integer',
-                        'year' => 'required|string',
+                        'year_id' => 'required',
                         'kpa_category' => 'required',
                         'linemanager' => 'required|array|min:1',
                         'linemanager.*.task' => 'required|string',
@@ -73,7 +73,8 @@ class LineManagerReviewRatingController extends Controller
                     $lineManagerReview = LineManagerReviewRating::create([
                         'indicator_id' => $request->indicator_id,
                         'employee_id' => $request->employee_id,
-                        'year' => $request->year,
+                        'year_id' => $request->year_id,
+                        'year' => $request->year_id,
                         'kpa_category' => $request->kpa_category,
                         'remarks' => $request->remarks,
                         'form_status' => $request->form_status,
@@ -110,7 +111,7 @@ class LineManagerReviewRatingController extends Controller
 
         $rules = [
             'employee_id' => 'required|integer',
-            'year' => 'required|string',
+            'year_id' => 'required',
             'kpa_category' => 'required',
             'linemanager' => 'required|array|min:1',
             'linemanager.*.task' => 'required|string',
@@ -125,7 +126,8 @@ class LineManagerReviewRatingController extends Controller
         // ✅ Update parent
         $review->update([
             'employee_id' => $request->employee_id,
-            'year' => $request->year,
+            'year_id' => $request->year_id,
+            'year' => $request->year_id,
             'kpa_category' => $request->kpa_category,
             'remarks' => $request->remarks,
             'updated_by' => Auth::user()->employee_id

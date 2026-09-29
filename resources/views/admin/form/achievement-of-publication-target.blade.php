@@ -2546,11 +2546,12 @@
                 name: 'status',
                 title: 'Status',
                 orderable: false,
-                searchable: false,
+                searchable: true,
 
                 render: function (data, type, row) {
 
                     let statusText = 'N/A';
+                    let statusLabel = 'N/A';
 
                     /*
                     |--------------------------------------------------------------------------
@@ -2580,9 +2581,10 @@
                                     data-bs-custom-class="tooltip-danger"
                                     data-bs-original-title="${remarks}"
                                 >
-                                    ORIC Reject this application.
+                                    ORIC Reject this application
                                 </span>
                             `;
+                             statusLabel = 'ORIC Reject this application';
 
                         }
 
@@ -2595,9 +2597,10 @@
 
                             statusText = `
                                 <span class="badge bg-label-dark text-danger">
-                                    HOD Reject this application.
+                                    HOD Reject this application
                                 </span>
                             `;
+                            statusLabel = 'HOD Reject this application';
 
                         }
 
@@ -2610,16 +2613,18 @@
                              if (row.form_status === 'DEAN') {
                                          statusText = `
                                             <span class="badge bg-label-dark text-warning">
-                                                 Waiting for ORIC Approvel.
+                                                 Waiting for ORIC Approvel
                                             </span>
                                         `;
+                                        statusLabel = 'Waiting for ORIC Approvel';
                                 }else {
                                 
                                    statusText = `
                                         <span class="badge bg-label-dark text-warning">
-                                            Waiting for HOD Approvel.
+                                            Waiting for HOD Approvel
                                         </span>
                                     `;
+                                    statusLabel = 'Waiting for HOD Approvel';
                                 }
                         }
                     }
@@ -2643,6 +2648,7 @@
                                     Reject
                                 </span>
                             `;
+                            statusLabel = 'Reject';
 
                         }
 
@@ -2658,6 +2664,7 @@
                                     On Hold
                                 </span>
                             `;
+                            statusLabel = 'On Hold';
 
                         }
 
@@ -2673,6 +2680,7 @@
                                     Waiting for ORIC Approvel
                                 </span>
                             `;
+                            statusLabel = 'Waiting for ORIC Approvel';
                         }
                     }
 
@@ -2688,6 +2696,11 @@
                                 Verified
                             </span>
                         `;
+                        statusLabel = 'Verified';
+                    }
+                    // Search uses plain text
+                    if (type === 'filter' || type === 'search') {
+                        return statusLabel;
                     }
 
                     return statusText;
