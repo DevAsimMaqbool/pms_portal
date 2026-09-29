@@ -52,9 +52,9 @@
                                     <div id="author-past-container">
                                         <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="form-label">Faculty</label>
-                                                <select name="retention_rate[0][faculty_id]" class="select2 form-select faculty-select">
+                                                <select name="retention_rate[0][faculty_id]" id="faculty_id" class="select2 form-select faculty-select">
                                                     <option value="">Select Faculty</option>
                                                     @foreach(get_faculties() as $faculty)
                                                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
@@ -62,19 +62,43 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <label for="department_id" class="form-label">Department</label>
+                                                <select name="retention_rate[0][department_id]" id="department_id" class="select2 form-select department-select"
+                                                    required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="program" class="form-label">Program</label>
+                                                <select name="retention_rate[0][program_id]" id="program_id" class="select2 form-select program-select"
+                                                    >
+                                                    <option value="">-- Select Program --</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="retention_rate[0][program_level]" id="program_level"
+                                                    class="select2 form-select faculty-member">
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
                                                 <label class="form-label">Retention Rate</label>
                                                 <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon11">%</span>
                                                 <input type="number" name="retention_rate[0][no_retention_rate]" class="form-control" min="1"
-                                                    step="1" required>
+                                                    step="0.1" required>
                                                 </div>    
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label" for="remarks">Remarks</label>
                                                 <textarea class="form-control" id="remarks" name="retention_rate[0][remarks]" rows="3"></textarea>
                                             </div>
-
 
                                         </div>
                                     </div>
@@ -104,7 +128,6 @@
             </div>
         </div>
 
-
     </div>
     <!-- / Content -->
 @endsection
@@ -132,7 +155,6 @@
                 // Add new author group
                 $('#add-coauthor').click(function () {
                     
-
                      let facultyOptions = '<option value="">Select Faculty</option>';
                         faculties.forEach(function(fac) {
                             facultyOptions += `<option value="${fac.id}">${fac.name}</option>`;
@@ -140,19 +162,42 @@
                     let newGroup = `
             <div class="past-group row g-3 m-0 border p-3 mt-3 rounded">
 
-
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="form-label">Faculty</label>
-                    <select name="retention_rate[${pastIndex}][faculty_id]" class="select2 form-select faculty-select">
+                    <select name="retention_rate[${pastIndex}][faculty_id]" id="faculty_id" class="select2 form-select faculty-select">
                         ${facultyOptions}
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
+                                                <label for="department_id" class="form-label">Department</label>
+                                                <select name="retention_rate[${pastIndex}][department_id]" id="department_id" class="select2 form-select department-select"
+                                                    required>
+                                                    <option value="">-- Select Department --</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="program" class="form-label">Program</label>
+                                                <select name="retention_rate[${pastIndex}][program_id]" id="program_id" class="select2 form-select program-select"
+                                                    >
+                                                    <option value="">-- Select Program --</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="program_level" class="form-label">Program Level</label>
+                                                <select name="retention_rate[${pastIndex}][program_level]" id="program_level"
+                                                    class="select2 form-select faculty-member">
+                                                    <option value="">-- Select Level --</option>
+                                                    <option value="UG">UG</option>
+                                                    <option value="PG">PG</option>
+                                                </select>
+                                            </div>
+                <div class="col-md-4">
                     <label class="form-label">Retention Rate</label>
                     <div class="input-group">
                     <span class="input-group-text" id="basic-addon11">%</span>
                     <input type="number" name="retention_rate[${pastIndex}][no_retention_rate]" class="form-control" min="1"
-                        step="1" required>
+                        step="0.1" required>
                     </div>    
                 </div>
                 <div class="col-md-12">
@@ -243,8 +288,78 @@
                     });
                 });
 
-                
+                $(document).on('change', '.faculty-select', function () {
 
+    let facultyId = $(this).val();
+
+    let currentGroup = $(this).closest('.past-group');
+    let departmentSelect = currentGroup.find('.department-select');
+    let programSelect = currentGroup.find('.program-select');
+
+    departmentSelect.html('<option value="">Loading...</option>');
+    programSelect.html('<option value="">-- Select Program --</option>');
+
+    if (facultyId) {
+        $.ajax({
+            url: "/get-departments/" + facultyId,
+            type: "GET",
+            success: function (response) {
+
+                departmentSelect.empty();
+                departmentSelect.append('<option value="">-- Select Department --</option>');
+
+                $.each(response, function (key, department) {
+                    departmentSelect.append(
+                        `<option value="${department.id}">
+                            ${department.name}
+                        </option>`
+                    );
+                });
+
+                departmentSelect.trigger('change');
+            }
+        });
+    } else {
+        departmentSelect.html('<option value="">-- Select Department --</option>');
+    }
+});
+
+$(document).on('change', '.department-select', function () {
+
+    let departmentId = $(this).val();
+
+    let currentGroup = $(this).closest('.past-group');
+    let programSelect = currentGroup.find('.program-select');
+
+    programSelect.html('<option value="">Loading...</option>');
+
+    if (departmentId) {
+        $.ajax({
+            url: "/get-programs/" + departmentId,
+            type: "GET",
+            success: function (response) {
+
+                programSelect.empty();
+                programSelect.append('<option value="">-- Select Program --</option>');
+
+                $.each(response, function (key, program) {
+                    programSelect.append(
+                        `<option value="${program.id}">
+                            ${program.program_name}
+                        </option>`
+                    );
+                });
+
+                programSelect.trigger('change');
+            },
+            error: function () {
+                programSelect.html('<option value="">Error loading programs</option>');
+            }
+        });
+    } else {
+        programSelect.html('<option value="">-- Select Program --</option>');
+    }
+});
 
             });
         </script>

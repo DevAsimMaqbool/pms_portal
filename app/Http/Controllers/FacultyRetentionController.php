@@ -21,7 +21,6 @@ class FacultyRetentionController extends Controller
             $userId = Auth::id();
             $employee_id = $user->employee_id;
 
-
             $status = $request->input('status');
             if ($status == "HOD") {
                 $forms = FacultyRetention::with([
@@ -66,16 +65,19 @@ class FacultyRetentionController extends Controller
                 'year_id' => 'required',
                 'retention_rate' => 'required|array|min:1',
                 'retention_rate.*.faculty_id' => 'required|integer',
-                'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
+                'retention_rate.*.department_id' => 'required|integer',
+                'retention_rate.*.program_id' => '',
+                'retention_rate.*.program_level' => '',
+                'retention_rate.*.no_retention_rate' => 'required|numeric|min:1|max:100',
                 'retention_rate.*.remarks' => 'nullable|string',
                 'form_status' => 'required|in:HOD,RESEARCHER,DEAN,OTHER',
             ];
 
             $messages = [
                 'retention_rate.*.faculty_id.required' => 'Faculty is required',
+                'retention_rate.*.department_id.required' => 'Department is required',
                 'retention_rate.*.no_retention_rate.required' => 'Rate is required',
             ];
-
 
             $validator = Validator::make($request->all(), $rules, $messages);
             if ($validator->fails()) {
@@ -97,6 +99,9 @@ class FacultyRetentionController extends Controller
                 FacultyRetentionRemark::create([
                     'faculty_retention_id' => $FacultyRetention->id,
                     'faculty_id' => $retention_rates['faculty_id'],
+                    'department_id' => $retention_rates['department_id'],
+                    'program_id' => $retention_rates['program_id'],
+                    'program_level' => $retention_rates['program_level'],
                     'no_retention_rate' => $retention_rates['no_retention_rate'],
                     'remarks' => $retention_rates['remarks'],
                 ]);
@@ -124,7 +129,10 @@ class FacultyRetentionController extends Controller
             'year_id' => 'required',
             'retention_rate' => 'required|array|min:1',
             'retention_rate.*.faculty_id' => 'required|integer',
-            'retention_rate.*.no_retention_rate' => 'required|numeric|min:0|max:100',
+            'retention_rate.*.department_id' => 'required|integer',
+            'retention_rate.*.program_id' => '',
+            'retention_rate.*.program_level' => '',
+            'retention_rate.*.no_retention_rate' => 'required|numeric|min:1|max:100',
             'retention_rate.*.remarks' => 'nullable|string',
 
         ];
@@ -141,6 +149,9 @@ class FacultyRetentionController extends Controller
 
             $record->remarks()->create([
                 'faculty_id' => $row['faculty_id'],
+                'department_id' => $row['department_id'],
+                'program_id' => $row['program_id'],
+                'program_level' => $row['program_level'],
                 'no_retention_rate' => $row['no_retention_rate'],
                 'remarks' => $row['remarks'],
             ]);

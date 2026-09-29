@@ -10,6 +10,9 @@ class FacultyRetentionRemark extends Model
     protected $fillable = [
         'faculty_retention_id',
         'faculty_id',
+        'department_id',
+        'program_id',
+        'program_level',
         'no_retention_rate',
         'remarks',
         'status',
