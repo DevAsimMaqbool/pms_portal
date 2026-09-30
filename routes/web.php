@@ -474,6 +474,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:Dean')->group(function () {
         Route::get('/dean-target', [FormBuilderController::class, 'DeanTargetForms'])->name('dean.target');
         Route::get('/dean-target-verify', [FormBuilderController::class, 'DeanTargetVerifyForms'])->name('dean.target.verify');
+        Route::get('/dean_report/{id}', [UserController::class, 'deanReport']);
     });
     Route::middleware('role:ORIC')->group(function () {
         Route::get('/oric-target', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');

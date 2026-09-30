@@ -273,6 +273,66 @@ class UserController extends Controller
         return view('admin.report', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional', 'noteable', 'areaOfDevelopment'));
 
     }
+    public function deanReport($id)
+    {
+        $user = User::findOrFail($id);
+
+        $kpaIds = [1, 2, 3, 4, 6, 7];
+        $catIds = [23,3,1,4];
+        $researchIds = [5, 9, 8];
+        $institutionalIds = [10];
+        $InternationalizationIds = [12];
+        $BrandIdentityIds = [14,15];
+        $LeadershipGovernanceIds = [16,17];
+
+        $dataset1 = [];
+        $datasetTeaching = [];
+        $datasetResearch = [];
+        $datasetInstitutional = [];
+        $datasetinternationalization=[];
+        $datasetBrandIdentity=[];
+        $datasetLeadershipGovernance=[];
+
+        foreach ($kpaIds as $kpaId) {
+            $result = kpaAvgScoreForReport($kpaId, $id);
+            $dataset1[] = $result['avg'];    // only avg
+        }
+        foreach ($catIds as $catId) {
+            $teaching = indicatorCategoryAvgScore($catId, 1, $id);
+            $datasetTeaching[] = $teaching['avg'];    // only avg
+        }
+
+        foreach ($researchIds as $researchId) {
+            $research = indicatorCategoryAvgScore($researchId, 2, $id);
+            $datasetResearch[] = $research['avg'];    // only avg
+        }
+
+        foreach ($institutionalIds as $institutionalId) {
+            $institutional = indicatorCategoryAvgScore($institutionalId, 3, $id);
+            $datasetInstitutional[] = $institutional['avg'];    // only avg
+        }
+
+        foreach ($InternationalizationIds as $InternationalizationId) {
+            $internationalization = indicatorCategoryAvgScore($InternationalizationId, 4, $id);
+            $datasetinternationalization[] = $internationalization['avg'];    // only avg
+        }
+
+        foreach ($BrandIdentityIds as $BrandIdentityId) {
+            $brandIdentity = indicatorCategoryAvgScore($BrandIdentityId, 6, $id);
+            $datasetBrandIdentity[] = $brandIdentity['avg'];    // only avg
+        }
+
+        foreach ($LeadershipGovernanceIds as $LeadershipGovernanceId) {
+            $leadershipGovernance = indicatorCategoryAvgScore($LeadershipGovernanceId, 7, $id);
+            $datasetLeadershipGovernance[] = $leadershipGovernance['avg'];    // only avg
+        }
+
+        $noteable = getIndicatorsByScore('>=', 80, $id);
+        $areaOfDevelopment = getIndicatorsByScore('<', 70, $id);
+
+        return view('admin.report_dean', compact('user', 'dataset1', 'datasetTeaching', 'datasetResearch', 'datasetInstitutional','datasetinternationalization','datasetBrandIdentity','datasetLeadershipGovernance', 'noteable', 'areaOfDevelopment'));
+
+    }
 
     public function demoUserReport($id)
     {

@@ -767,6 +767,13 @@
 </head>
 
 <body>
+@if(getRoleName(activeRole()) === 'Dean')
+    {{-- Dean content --}}
+@else
+    @php
+        abort(404);
+    @endphp
+@endif
     <!-- <button class="download-btn" onclick="window.print()" title="Download PDF">Download PDF</button> -->
     <div class="page A4">
         <header class="page-header">
@@ -860,14 +867,59 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = kpaAvgScoreForReport(13, Auth::user()->employee_id);
+                            $kpaResult = kpaAvgScoreForReport(3, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
                             $color = $kpaResult['color'];
                              $weightage = $kpaResult['weightage'];
                         @endphp
-                        <td>Institutional Engagement</td>
+                        <td>Financial Sustainability</td>
+                        <td class="report-center">{{ $target }}%</td>
+                        <td class="report-center">{{ number_format($weightage, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                    <tr>
+                        @php
+                            $kpaResult = kpaAvgScoreForReport(4, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $target = $kpaResult['target'];
+                            $rating = $kpaResult['rating'];
+                            $color = $kpaResult['color'];
+                            $weightage = $kpaResult['weightage'];
+                        @endphp
+                        <td>Internationalization</td>
+                        <td class="report-center">{{ $target }}%</td>
+                        <td class="report-center">{{ number_format($weightage, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                     <tr>
+                        @php
+                            $kpaResult = kpaAvgScoreForReport(6, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $target = $kpaResult['target'];
+                            $rating = $kpaResult['rating'];
+                            $color = $kpaResult['color'];
+                            $weightage = $kpaResult['weightage'];
+                        @endphp
+                        <td>Brand Identity</td>
+                        <td class="report-center">{{ $target }}%</td>
+                        <td class="report-center">{{ number_format($weightage, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                    <tr>
+                        @php
+                            $kpaResult = kpaAvgScoreForReport(7, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $target = $kpaResult['target'];
+                            $rating = $kpaResult['rating'];
+                            $color = $kpaResult['color'];
+                            $weightage = $kpaResult['weightage'];
+                        @endphp
+                        <td>Leadership and Governance</td>
                         <td class="report-center">{{ $target }}%</td>
                         <td class="report-center">{{ number_format($weightage, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
@@ -990,14 +1042,29 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(25, 1, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(1, 1, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
-                        <td>Teaching Output</td>
+                        <td>Teaching and Learning Outcome</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                     <tr>
+                        @php
+                            $kpaResult = indicatorCategoryAvgScore(4, 1, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                        @endphp
+                        <td>Student Engagement</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
@@ -1112,29 +1179,14 @@
                     </tr>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(32, 2, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(9, 2, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
-                        <td>Other Knowledge Products</td>
-                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
-                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
-                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
-                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
-                    </tr>
-                    <tr>
-                        @php
-                            $kpaResult = indicatorCategoryAvgScore(34, 2, Auth::user()->employee_id);
-                            $avg = $kpaResult['avg'];
-                            $rating = $kpaResult['rating'];
-                            $weighted_kp = $kpaResult['weighted_kp'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
-                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
-                        @endphp
-                        <td>Research Operations</td>
+                        <td>Knowledge Transfer/Exchange Activities</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
@@ -1216,17 +1268,11 @@
             <div class="tp-grid">
                 <aside class="tp-left">
                     <h2 class="tp-heading">
-                        <span class="t-green">Institutional</span>
-                        <span class="t-blue">Engagement</span>
+                        <span class="t-green">Financial</span>
+                        <span class="t-blue">Sustainability</span>
                     </h2>
                     <p>
-                        This KPA emphasizes proactive participation in departmental tasks, institutional initiatives,
-                        and events that enhance
-                        collaboration, visibility, and collective achievement. Institutional engagement fosters
-                        teamwork, ownership, and a
-                        shared sense of purpose, strengthening the institution’s culture and external partnerships.
-                        Performance is measured
-                        against the following sub-KPAs.
+                        This KPA focuses on ensuring the institution’s long-term financial health and operational viability through diversified revenue streams, effective resource utilization, and profitable growth. It emphasizes achieving enrollment and revenue targets, maintaining profitability across programs and centers, and strengthening financial resilience through prudent recovery and cost management. A sustainable financial model supports institutional excellence, strategic expansion, and the ability to reinvest in quality improvement.
                     </p>
                 </aside>
                 <div class="triangle-wrap">
@@ -1252,29 +1298,14 @@
                 <tbody>
                     <tr>
                         @php
-                            $kpaResult = indicatorCategoryAvgScore(27, 13, Auth::user()->employee_id);
+                            $kpaResult = indicatorCategoryAvgScore(10, 3, Auth::user()->employee_id);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
                             $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
-                        <td>Performance in Departmental Tasks</td>
-                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
-                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
-                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
-                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
-                    </tr>
-                    <tr>
-                        @php
-                            $kpaResult = indicatorCategoryAvgScore(28, 13, Auth::user()->employee_id);
-                            $avg = $kpaResult['avg'];
-                            $rating = $kpaResult['rating'];
-                            $weighted_kp = $kpaResult['weighted_kp'];
-                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
-                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
-                        @endphp
-                        <td>Performance in Events</td>
+                        <td> Enrollment and Revenue Sources</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
                         <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
@@ -1293,8 +1324,8 @@
         </section>
 
         @php
-            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 13);
-            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 13);
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 3);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 3);
         @endphp
 
         <section class="achievements">
@@ -1319,6 +1350,321 @@
             </div>
         </section>
 
+
+        <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
+    </div>
+
+     <!-- Page 5: Internationalization  -->
+    <div class="page A4">
+        <header class="page-header">
+            <div class="identity">
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', $user->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
+                <div class="role">{{ $user->job_title }}</div>
+                <div class="dept">{{ $user->department }}</div>
+            </div>
+            <div class="report-title">
+                <div class="title">Performance Insight Report</div>
+                <div class="title">2025-2026</div>
+                <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
+            </div>
+        </header>
+
+        <section class="research-intro">
+            <div class="research-grid">
+                <aside class="tp-left">
+                    <h2 class="tp-heading">
+                        <span class="t-red">Internationalization</span>
+                    </h2>
+                    <p>
+                        Evaluates the institution’s performance in meeting internationalization goals through the Superior Go Global and 1M Global Experience initiatives. It reflects progress in building global partnerships, promoting student mobility, and offering international work or learning experiences that enhance global competencies and institutional reputation.
+                    </p>
+                </aside>
+                <div class="radar-wrap">
+                    <div class="card-body pt-2">
+                        <canvas class="chartjs" id="internationalizationRadarChart" data-height="355"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="kpi">
+            <table class="kpi-table">
+                <thead>
+                    <tr>
+                        <th>Sub KPA</th>
+                        <th>Target</th>
+                        <th>Achieved</th>
+                        <th>Avg</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @php
+                            $kpaResult = indicatorCategoryAvgScore(12, 4, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                        @endphp
+                        <td>Internationalization</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        @php
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 4);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 4);
+        @endphp
+
+        <section class="achievements">
+            <h3>Notable Performance Achievements</h3>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devArea)
+                    <span class="tag-pill">
+                        {{ $devArea->indicator->indicator }} ({{ $devArea->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
+    </div>
+
+    <!-- Page 6: Brand Identity  -->
+    <div class="page A4">
+        <header class="page-header">
+            <div class="identity">
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', $user->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
+                <div class="role">{{ $user->job_title }}</div>
+                <div class="dept">{{ $user->department }}</div>
+            </div>
+            <div class="report-title">
+                <div class="title">Performance Insight Report</div>
+                <div class="title">2025-2026</div>
+                <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
+            </div>
+        </header>
+
+        <section class="research-intro">
+            <div class="research-grid">
+                <aside class="tp-left">
+                    <h2 class="tp-heading">
+                        <span class="t-red">Brand Identity</span>
+                    </h2>
+                    <p>
+                       This KPA represents the institution’s collective reputation, credibility, and distinctiveness in the academic and professional landscape. It emphasizes building a strong, trusted, and recognizable brand through excellence in accreditation, affiliations, stakeholder satisfaction, and global partnerships. A strong brand identity reflects consistent quality, meaningful industry linkages, and positive perceptions among students, faculty, alumni, and employers — ultimately reinforcing the institution’s prestige and competitive advantage.
+                    </p>
+                </aside>
+                <div class="radar-wrap">
+                    <div class="card-body pt-2">
+                        <canvas class="chartjs" id="brandidentityRadarChart" data-height="355"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="kpi">
+            <table class="kpi-table">
+                <thead>
+                    <tr>
+                        <th>Sub KPA</th>
+                        <th>Target</th>
+                        <th>Achieved</th>
+                        <th>Avg</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @php
+                            $kpaResult = indicatorCategoryAvgScore(14, 6, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                        @endphp
+                        <td>Accreditations, Affiliations and memberships</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                    <tr>
+                        @php
+                            $kpaResult = indicatorCategoryAvgScore(15, 6, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                        @endphp
+                        <td>Stakeholders Satisfaction, Retention and Association</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        @php
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 6);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 6);
+        @endphp
+
+        <section class="achievements">
+            <h3>Notable Performance Achievements</h3>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devArea)
+                    <span class="tag-pill">
+                        {{ $devArea->indicator->indicator }} ({{ $devArea->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
+    </div>
+
+    <!-- Page 7: Leadership and Governance  -->
+    <div class="page A4">
+        <header class="page-header">
+            <div class="identity">
+                <h5 class="name">{{ trim(preg_replace('/[-\s]*\d+$/', '', $user->name)) }}</h5>
+                <div class="role">{{ $user->barcode }}</div>
+                <div class="role">{{ $user->job_title }}</div>
+                <div class="dept">{{ $user->department }}</div>
+            </div>
+            <div class="report-title">
+                <div class="title">Performance Insight Report</div>
+                <div class="title">2025-2026</div>
+                <div class="issued">Issued on {{ now()->format('F d, Y') }}</div>
+            </div>
+        </header>
+
+        <section class="research-intro">
+            <div class="research-grid">
+                <aside class="tp-left">
+                    <h2 class="tp-heading">
+                        <span class="t-red">Leadership and Governance</span>
+                    </h2>
+                    <p>
+                       This KPA reflects the effectiveness, integrity, and inclusiveness of leadership practices that guide academic and operational excellence. It emphasizes transparent decision-making, stakeholder satisfaction, and a culture of accountability. Through proactive planning, team development, and compliance with institutional policies, this area ensures that leadership at all levels is participative, future-oriented, and aligned with the university’s mission. Effective governance fosters engagement, builds trust, and strengthens institutional coherence across departments and campuses.
+                    </p>
+                </aside>
+                <div class="radar-wrap">
+                    <div class="card-body pt-2">
+                        <canvas class="chartjs" id="leadershipgovernanceRadarChart" data-height="355"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="kpi">
+            <table class="kpi-table">
+                <thead>
+                    <tr>
+                        <th>Sub KPA</th>
+                        <th>Target</th>
+                        <th>Achieved</th>
+                        <th>Avg</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @php
+                            $kpaResult = indicatorCategoryAvgScore(16, 7, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                        @endphp
+                        <td>Stakeholders Satisfaction</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                    <tr>
+                        @php
+                            $kpaResult = indicatorCategoryAvgScore(17, 7, Auth::user()->employee_id);
+                            $avg = $kpaResult['avg'];
+                            $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
+                            $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
+                                60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
+                        @endphp
+                        <td>Team Management and Development</td>
+                        <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
+                        <td class="report-center">{{ number_format($avg, 1) }}%</td>
+                        <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        @php
+            $noteable = getIndicatorsByScore('>=', 80, Auth::user()->employee_id, 7);
+            $areaOfDevelopment = getIndicatorsByScore('<', 70, Auth::user()->employee_id, 7);
+        @endphp
+
+        <section class="achievements">
+            <h3>Notable Performance Achievements</h3>
+            <div class="achievement-tags">
+                @foreach ($noteable as $tag)
+                    <span class="tag-pill">
+                        {{ $tag->indicator->indicator }} ({{ $tag->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="achievements">
+            <h3>Development Areas</h3>
+            <div class="achievement-tags">
+                @foreach ($areaOfDevelopment as $devArea)
+                    <span class="tag-pill">
+                        {{ $devArea->indicator->indicator }} ({{ $devArea->category->cat_short_code }})
+                    </span>
+                @endforeach
+            </div>
+        </section>
 
         <footer class="page-footer">Performance Insight Report of {{ Str::before($user->name, '-') }}</footer>
     </div>
@@ -1369,10 +1715,13 @@
             const chartLabels = [
                 "Teaching and Learning",
                 "Research, Innovation and Commercialisation",
-                "Institutional Engagement"
+                "Financial Sustainability",
+                "Internationalization",
+                "Brand Identity",
+                "Leadership and Governance",
             ];
 
-            const shortLabels = ["T&L", "RIC", "IE"];
+            const shortLabels = ["T&L", "RIC", "FS","Intl","BI","L&G"];
 
             var dataset1 = @json($dataset1) || [];
 
@@ -1426,7 +1775,7 @@
                 const tctx = triCanvas.getContext('2d');
 
                 // --- Data ---
-                const labels = ['TD (PG/UG)', 'TM', 'TO'];
+                const labels = ['TD (PG/UG)', 'TM', 'T&LO','SE'];
                 const dataValues = @json($datasetTeaching) || [];
 
                 // --- Function to get color based on avg ---
@@ -1486,7 +1835,7 @@
                 const rctx = researchCanvas.getContext('2d');
 
                 // --- Data ---
-                const labels = ['RP&Q', 'KP', 'RS PG Level', 'RI&C'];
+                const labels = ['RP&Q', 'KT/EA', 'I&C'];
                 const dataValues = @json($datasetResearch) || [];
 
                 // --- Function to get color based on avg ---
@@ -1545,7 +1894,7 @@
                 const tctx = researchTriangle.getContext('2d');
 
                 // --- Data ---
-                const labels = ['PID T', 'PIE'];
+                const labels = ['E&RS'];
                 const dataValues = @json($datasetInstitutional) || [];
 
                 // --- Function to get color based on avg ---
@@ -1653,6 +2002,183 @@
                                 grid: { color: '#e7e7e7' },
                                 angleLines: { color: '#e7e7e7' },
                                 pointLabels: { color: '#666', font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- Internationalization  Radar ---
+            const internationalization = document.getElementById('internationalizationRadarChart');
+            if (internationalization) {
+                const rctx = internationalization.getContext('2d');
+
+                // --- Data ---
+                const labels = ['Internat'];
+                const dataValues = @json($datasetinternationalization) || [];
+
+                // --- Function to get color based on avg ---
+                const getColor = (avg) => {
+                    if (avg < 60) return '#ff4c51';      // red
+                    if (avg < 70) return '#FFD580';      // orange
+                    if (avg < 80) return '#FFF799';      // yellow
+                    if (avg < 90) return '#96e2b4';      // green
+                    return '#6EA8FE';                    // blue
+                };
+
+                // --- Colors for each point ---
+                const pointColors = dataValues.map(getColor);
+
+                // --- Chart ---
+                new Chart(rctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Achievements',
+                            data: dataValues,
+                            fill: true,
+                            backgroundColor: 'rgba(115, 103, 240, 0.3)',
+                            borderColor: 'rgba(112, 25, 115, 1)',
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                ticks: { display: true, color: "#666" },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    color: (ctx) => pointColors[ctx.index],
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- Brand Identity  Radar ---
+            const brandidentity = document.getElementById('brandidentityRadarChart');
+            if (brandidentity) {
+                const rctx = brandidentity.getContext('2d');
+
+                // --- Data ---
+                const labels = ['A/A&M','SS/R&A'];
+                const dataValues = @json($datasetBrandIdentity) || [];
+
+                // --- Function to get color based on avg ---
+                const getColor = (avg) => {
+                    if (avg < 60) return '#ff4c51';      // red
+                    if (avg < 70) return '#FFD580';      // orange
+                    if (avg < 80) return '#FFF799';      // yellow
+                    if (avg < 90) return '#96e2b4';      // green
+                    return '#6EA8FE';                    // blue
+                };
+
+                // --- Colors for each point ---
+                const pointColors = dataValues.map(getColor);
+
+                // --- Chart ---
+                new Chart(rctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Achievements',
+                            data: dataValues,
+                            fill: true,
+                            backgroundColor: 'rgba(115, 103, 240, 0.3)',
+                            borderColor: 'rgba(112, 25, 115, 1)',
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                ticks: { display: true, color: "#666" },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    color: (ctx) => pointColors[ctx.index],
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- Leadership and Governance  Radar ---
+            const leadershipgovernance = document.getElementById('leadershipgovernanceRadarChart');
+            if (leadershipgovernance) {
+                const rctx = leadershipgovernance.getContext('2d');
+
+                // --- Data ---
+                const labels = ['SSati','TM&D'];
+                const dataValues = @json($datasetLeadershipGovernance) || [];
+
+                // --- Function to get color based on avg ---
+                const getColor = (avg) => {
+                    if (avg < 60) return '#ff4c51';      // red
+                    if (avg < 70) return '#FFD580';      // orange
+                    if (avg < 80) return '#FFF799';      // yellow
+                    if (avg < 90) return '#96e2b4';      // green
+                    return '#6EA8FE';                    // blue
+                };
+
+                // --- Colors for each point ---
+                const pointColors = dataValues.map(getColor);
+
+                // --- Chart ---
+                new Chart(rctx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Achievements',
+                            data: dataValues,
+                            fill: true,
+                            backgroundColor: 'rgba(115, 103, 240, 0.3)',
+                            borderColor: 'rgba(112, 25, 115, 1)',
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                ticks: { display: true, color: "#666" },
+                                grid: { color: "#ddd" },
+                                angleLines: { color: "#ddd" },
+                                pointLabels: {
+                                    color: (ctx) => pointColors[ctx.index],
+                                    font: { size: 10 }
+                                }
                             }
                         }
                     }

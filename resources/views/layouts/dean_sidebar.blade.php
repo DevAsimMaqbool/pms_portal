@@ -148,6 +148,20 @@
                     </li>
                 </ul>
             </li>
+             <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon icon-base ti tabler-report"></i>
+                    <div data-i18n="Reports">Reports</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ request()->routeIs('/dean_report/' . Auth::user()->id) ? 'active' : '' }}">
+                    <a href="{{ url('/dean_report/' . Auth::user()->id) }}" target="_blank" class="menu-link"
+                      data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Performance Insight Report">
+                      <div data-i18n="Performance Insight Report">Performance Insight Report</div>
+                    </a>
+                  </li>
+                </ul>
+            </li>
             <li class="menu-item">
                 <a href="#" class="menu-link">
                     <i class="menu-icon icon-base ti tabler-users"></i>
