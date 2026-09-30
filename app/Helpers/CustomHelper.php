@@ -38,6 +38,7 @@ use App\Models\ActiveRecord;
 use App\Models\AdmissionTargetAchieved;
 use App\Models\AlumniSatisfactionRate;
 use App\Models\DropoutRate;
+use App\Models\FacultyClassAttendance;
 use App\Models\FacultyPursuingSkill;
 use App\Models\FacultyRetention;
 use App\Models\Recovery;
@@ -5369,60 +5370,153 @@ function myDepartmentClassesAttendanceRecordHODbk($employeeId, $activeRoleId)
 
     return $allClasses;
 }
-function myDepartmentClassesAttendanceRecordHOD($employeeId, $activeRoleId,$activeTermId)
-{
+function myDepartmentClassesAttendanceRecordHOD(
+    $employeeId,
+    $activeRoleId,
+    $activeTermId
+) {
     $departmentId = auth()->user()->department_id;
 
-    // 1️⃣ Get all faculty in this department
-    $facultyMembers = User::where('department_id', $departmentId)
-        ->get(['id', 'faculty_id', 'name']);
+    /*
+    |--------------------------------------------------------------------------
+    | Get all faculty members of HOD's department
+    |--------------------------------------------------------------------------
+    */
+    $facultyUsers = User::where('department_id', $departmentId)
+        ->whereNotNull('faculty_id')
+        ->get([
+            'faculty_id',
+            'name'
+        ]);
 
-    $allClasses = collect();
-
-    foreach ($facultyMembers as $faculty) {
-
-        // ✅ FIX: use users.id instead of faculty_id
-        $classes = FacultyMemberClass::withCount([
-            'attendances as total_rows',
-            'attendances as class_held_count' => function ($query) {
-                $query->where('att_marked', 1);
-            },
-            'attendances as class_not_held_count' => function ($query) {
-                $query->where('att_marked', 0);
-            },
-        ])
-            ->where('faculty_id', $faculty->faculty_id) // ✅ FIXED HERE
-            ->where('term_id', $activeTermId)
-            ->get()
-            ->map(function ($class) use ($faculty) {
-
-                // Latest program name
-                $class->program = $class->attendances()
-                    ->latest('class_date')
-                    ->value('program_name');
-
-                // Held %
-                $class->held_percentage = $class->total_rows
-                    ? round(($class->class_held_count / $class->total_rows) * 100, 2)
-                    : 0;
-
-                // Not Held %
-                $class->not_held_percentage = $class->total_rows
-                    ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
-                    : 0;
-
-                // Faculty name
-                $class->faculty_name = $faculty->name;
-
-                return $class;
-            });
-
-        $allClasses = $allClasses->merge($classes);
+    if ($facultyUsers->isEmpty()) {
+        return collect();
     }
 
-   
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty IDs
+    |--------------------------------------------------------------------------
+    */
+    $facultyIds = $facultyUsers
+        ->pluck('faculty_id')
+        ->unique()
+        ->values();
 
-    return $allClasses;
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty names indexed by faculty_id
+    |--------------------------------------------------------------------------
+    */
+    $facultyNames = $facultyUsers
+        ->unique('faculty_id')
+        ->keyBy('faculty_id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get all classes + attendance counts in ONE query
+    |--------------------------------------------------------------------------
+    */
+    $classes = FacultyMemberClass::query()
+        ->whereIn(
+            'faculty_member_classes.faculty_id',
+            $facultyIds
+        )
+        ->where(
+            'faculty_member_classes.term_id',
+            $activeTermId
+        )
+
+        ->leftJoinSub(
+            FacultyClassAttendance::query()
+                ->select(
+                    'class_id',
+                    DB::raw('COUNT(*) as total_rows'),
+                    DB::raw(
+                        'SUM(CASE WHEN att_marked = 1 THEN 1 ELSE 0 END) as class_held_count'
+                    ),
+                    DB::raw(
+                        'SUM(CASE WHEN att_marked = 0 THEN 1 ELSE 0 END) as class_not_held_count'
+                    )
+                )
+                ->groupBy('class_id'),
+
+            'attendance_counts',
+
+            'attendance_counts.class_id',
+            '=',
+            'faculty_member_classes.c_class_id'
+        )
+
+        ->select([
+            'faculty_member_classes.*',
+
+            DB::raw(
+                'COALESCE(attendance_counts.total_rows, 0) as total_rows'
+            ),
+
+            DB::raw(
+                'COALESCE(attendance_counts.class_held_count, 0) as class_held_count'
+            ),
+
+            DB::raw(
+                'COALESCE(attendance_counts.class_not_held_count, 0) as class_not_held_count'
+            ),
+        ])
+
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Format result
+    |--------------------------------------------------------------------------
+    */
+    return $classes->map(function ($class) use ($facultyNames) {
+
+        $totalRows = (int) $class->total_rows;
+        $heldCount = (int) $class->class_held_count;
+        $notHeldCount = (int) $class->class_not_held_count;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Held percentage
+        |--------------------------------------------------------------------------
+        */
+        $class->held_percentage = $totalRows > 0
+            ? round(($heldCount / $totalRows) * 100, 2)
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Not held percentage
+        |--------------------------------------------------------------------------
+        */
+        $class->not_held_percentage = $totalRows > 0
+            ? round(($notHeldCount / $totalRows) * 100, 2)
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty name
+        |--------------------------------------------------------------------------
+        */
+        $faculty = $facultyNames->get($class->faculty_id);
+
+        $class->faculty_name = $faculty?->name ?? 'N/A';
+
+        /*
+        |--------------------------------------------------------------------------
+        | Program
+        |--------------------------------------------------------------------------
+        |
+        | Keep null if program is not available from
+        | faculty_member_classes.
+        |
+        */
+        $class->program = null;
+
+        return $class;
+    });
 }
 
 function saveOverallAttendancePercentageOfHOD($employeeId, $classes, $keyPerformanceAreaId, $indicatorCategoryId, $indicatorId, $activeRoleId)

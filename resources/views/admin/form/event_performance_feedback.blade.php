@@ -11,6 +11,17 @@
     <div class="container-xxl flex-grow-1 container-p-y">
     @if(in_array(getRoleName(activeRole()), ['HOD','Dean']))
         <div class="card">
+             <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <div class="d-flex flex-column justify-content-center">
+                    <h4 class="mb-1">Event Performance Feedback</h4>
+                </div>
+                <div class="d-flex align-content-center flex-wrap gap-4">
+                    <div class="d-flex gap-4">
+                    <a class="btn btn-label-primary" href="{{ route('employee.feedback.index') }}">View</a></div>
+                    
+                </div>
+            </div>
+             
             <div class="card-datatable table-responsive card-body">
 
                 <form id="researchForm">

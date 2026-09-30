@@ -329,9 +329,15 @@
             $fallTerm->id
         )
         : collect();
-
-   
-
+    $allClasses = $springClasses->concat($fallClasses);  
+    saveOverallAttendancePercentageOfHOD(
+        Auth::user()->employee_id,
+        $allClasses,
+        1,
+        3,
+        117,
+        $activeRoleId
+    );  
 
     
 @endphp
