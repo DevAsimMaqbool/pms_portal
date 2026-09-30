@@ -2764,7 +2764,7 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
         ->get();
 
     if ($feedbacks->isEmpty()) {
-        return [];
+        return $feedbacks;
     }
 
     $total = 0;
@@ -2773,7 +2773,7 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
     foreach ($feedbacks as $item) {
         $total += $item->rating;
 
-        // Label logic (keep this if needed for UI)
+        // Label logic
         $percentage = round($item->rating, 1);
 
         if ($percentage >= 90) {
@@ -2806,10 +2806,8 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
 
     /*
     |--------------------------------------------------------------------------
-    | Participation Score - 30%
+    | Highest Department Event Count
     |--------------------------------------------------------------------------
-    | Find the highest number of events participated in by any employee
-    | in the same department for the selected year.
     */
 
     $employee = User::find($facultyId);
@@ -2817,6 +2815,7 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
     $highestDepartmentCount = 1;
 
     if ($employee && $employee->department_id) {
+
         $departmentEmployeeIds = User::where(
             'department_id',
             $employee->department_id
@@ -2833,7 +2832,12 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
             ->value('total') ?? 1;
     }
 
-    // Convert employee's event count into a 100-point participation score
+    /*
+    |--------------------------------------------------------------------------
+    | Participation Score - 30%
+    |--------------------------------------------------------------------------
+    */
+
     $participationScore = ($count / $highestDepartmentCount) * 100;
     $participationScore = min($participationScore, 100);
 
@@ -2841,14 +2845,16 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
     |--------------------------------------------------------------------------
     | Final Score
     |--------------------------------------------------------------------------
-    | 70% = Average Feedback Rating
-    | 30% = Event Participation
     */
 
     $weightedRating = ($averageRating * 70) / 100;
+
     $weightedParticipation = ($participationScore * 30) / 100;
+
     $finalPercentage = $weightedRating + $weightedParticipation;
+
     $finalPercentage = min($finalPercentage, 100);
+
     // Apply role weight
     $weight = getRoleWeightage(
         $activeRoleId,
@@ -2869,6 +2875,15 @@ function lineManagerRatingOnEvents($facultyId, $activeRoleId, $currentYear = nul
         $finalPercentage,
         $currentYear
     );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attach Counts To Collection
+    |--------------------------------------------------------------------------
+    */
+
+    $feedbacks->employee_event_count = $count;
+    $feedbacks->max_department_count = $highestDepartmentCount;
 
     return $feedbacks;
 }
@@ -6921,7 +6936,6 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
             $q2Count = 0;
             $q3Count = 0;
             $q4Count = 0;
-
 
                 // Publications submitted by faculty (main)
                 $facultyRecords = AchievementOfResearchPublicationsTarget::where('created_by', $facultyId)

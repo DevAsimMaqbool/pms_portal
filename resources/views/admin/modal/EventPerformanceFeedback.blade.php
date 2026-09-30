@@ -39,7 +39,23 @@
     $activeRoleId = getRoleIdByName(activeRole());
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;   
-    $currentYear = SelectCurrentYear(1)->first();                                 
+    $currentYear = SelectCurrentYear(1)->first();   
+     $feedbacks = lineManagerRatingOnEvents(
+        Auth::user()->employee_id,
+        $activeRoleId,
+        $currentYear->id
+    );
+
+    $totalPercentage = 0;
+
+    if ($feedbacks->isNotEmpty()) {
+        $totalPercentage = $feedbacks->avg(
+            fn($item) => $item->rating_data['percentage']
+        );
+    }
+
+    $employeeEventCount = $feedbacks->employee_event_count ?? 0;
+    $maxDepartmentCount = $feedbacks->max_department_count ?? 0;                             
 @endphp
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader PG', 'Program Leader UG', 'Demonstrator']))
     <!-- / Payment Methods modal -->
@@ -58,20 +74,31 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0 fw-bold text-primary"></h4>
-                            <!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
-                                                                                                            <input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
-                                                                                                            <label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
+<!-- <div class="btn-group d-none d-sm-flex" role="group" aria-label="radio toggle button group">
+<input type="radio" class="btn-check" name="btnradio06" id="dailyRadio06" checked>
+<label class="btn btn-outline-secondary waves-effect" for="dailyRadio05"> 📅 Weekly</label>
 
-                                                                                                            <input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
-                                                                                                            <label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
-                                                                                                                Semesterly</label>
+<input type="radio" class="btn-check" name="btnradio06" id="monthlyRadio06">
+<label class="btn btn-outline-secondary waves-effect" for="monthlyRadio05"> 🎓
+Semesterly</label>
 
-                                                                                                            <input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
-                                                                                                            <label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
-                                                                                                        </div> -->
+<input type="radio" class="btn-check" name="btnradio06" id="yearlyRadio06">
+<label class="btn btn-outline-secondary waves-effect" for="yearlyRadio06"> 📅 Yearly</label>
+</div> -->
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-nowrap">
+                                <div class="d-flex justify-content-end gap-2 mb-2">
+
+    <span class="badge bg-label-primary">
+        Events: {{ $employeeEventCount }}
+    </span>
+
+    <span class="badge bg-label-warning">
+        Max Events: {{ $maxDepartmentCount }}
+    </span>
+
+</div>
                                 <table class="table table-striped align-middle custom-table">
                                     <thead class="table-primary">
                                         <tr>
