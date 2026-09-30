@@ -3523,6 +3523,7 @@ function indicatorCategoryAvgScore($category_id, $kpa_id, $emp_id, $member = nul
     return [
         'target' => $target,
         'avg' => $avg,
+        'weighted_kp'=>$avgs,
         'rating' => $rating,
         'color' => $color,
     ];
@@ -11269,5 +11270,6 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
         'avg' => $avgs,
         'rating' => $rating,
         'color' => $color,
+        'weightage' => $weightage,
     ];
 }
