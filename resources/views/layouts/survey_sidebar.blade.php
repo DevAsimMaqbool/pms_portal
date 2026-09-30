@@ -218,6 +218,7 @@
                         </div>
                     </a>
                 </li>
+                <li class="menu-item"> <a href="{{ route('detail.download-report') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="My Goals Report"> My Goals Report </div> </a> </li>
             </ul>
 
         </li>

@@ -106,10 +106,19 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Report</h5>
 
-                            <button type="button" id="downloadPdf" class="btn btn-danger">
-                                <i class="ti ti-file-type-pdf me-1"></i>
-                                Download PDF
-                            </button>
+                            <div class="d-flex gap-2">
+
+                                <button type="button" id="downloadExcel" class="btn btn-success">
+                                    <i class="ti ti-file-spreadsheet me-1"></i>
+                                    Download Excel
+                                </button>
+
+                                <button type="button" id="downloadPdf" class="btn btn-danger">
+                                    <i class="ti ti-file-type-pdf me-1"></i>
+                                    Download PDF
+                                </button>
+
+                            </div>
                         </div>
                         <div class="card-body">
 
@@ -764,6 +773,68 @@
                 }
 
             });
+
+            /*
+|--------------------------------------------------------------------------
+| DOWNLOAD EXCEL
+|--------------------------------------------------------------------------
+*/
+
+$('#downloadExcel').on('click', function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Check Report
+    |--------------------------------------------------------------------------
+    */
+
+    if (!$('#reportTableBody tr').length) {
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'No Report',
+            text: 'Please generate the report first.'
+        });
+
+        return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Filters
+    |--------------------------------------------------------------------------
+    */
+
+    let role = $('input[name="role"]:checked').val();
+
+    let facultyId = $('#faculty_id').val();
+
+    let departmentId = $('#department_id').val();
+
+    let programId = $('#program_id').val();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Build Download URL
+    |--------------------------------------------------------------------------
+    */
+
+    let url =
+        "{{ route('employee.report.excel') }}" +
+        '?role=' + encodeURIComponent(role || '') +
+        '&faculty_id=' + encodeURIComponent(facultyId || '') +
+        '&department_id=' + encodeURIComponent(departmentId || '') +
+        '&program_id=' + encodeURIComponent(programId || '');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Download
+    |--------------------------------------------------------------------------
+    */
+
+    window.location.href = url;
+
+});
 
         });
     </script>

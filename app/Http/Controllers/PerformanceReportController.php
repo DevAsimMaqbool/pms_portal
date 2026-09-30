@@ -6,6 +6,7 @@ use App\Models\GoalSelfReport;
 use App\Models\GoalOverallReview;
 use App\Models\LineManagerFeedback;
 use App\Models\GoalInitiative;
+use App\Models\NewGoal;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -1110,5 +1111,180 @@ public function dashboard()
             'finalized'
         )
     );
+}
+
+public function downloadGoalReport()
+{
+    $user = Auth::user();
+
+    /*
+    |--------------------------------------------------------------------------
+    | GET ALL GOALS OF EMPLOYEE
+    |--------------------------------------------------------------------------
+    |
+    | IMPORTANT:
+    | All goals will be shown.
+    | Manager approval is NOT required.
+    |
+    */
+
+    $goals = NewGoal::with([
+        's2rDriver',
+    ])
+        ->where('user_id', $user->id)
+        ->latest('id')
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | GET ALL SELF REPORTS
+    |--------------------------------------------------------------------------
+    |
+    | A goal can have multiple self reports.
+    | We only use the latest self report for each goal.
+    |
+    */
+
+    $allReports = GoalSelfReport::with([
+        'reviews.reviewer',
+    ])
+        ->where('user_id', $user->id)
+        ->orderByDesc('id')
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | LATEST SELF REPORT PER GOAL
+    |--------------------------------------------------------------------------
+    */
+
+    $latestReports = $allReports
+        ->groupBy('new_goal_id')
+        ->map(function ($goalReports) {
+
+            return $goalReports
+                ->sortByDesc('id')
+                ->first();
+
+        });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATTACH LATEST SELF REPORT TO EACH GOAL
+    |--------------------------------------------------------------------------
+    |
+    | Every goal will remain in the report even if:
+    |
+    | - No self report exists
+    | - Self report is pending
+    | - Self report is rejected
+    | - Self report is manager approved
+    |
+    */
+
+    $reports = $goals->map(function ($goal) use ($latestReports) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Latest self report for this goal
+        |--------------------------------------------------------------------------
+        */
+
+        $report = $latestReports->get($goal->id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Manager Review
+        |--------------------------------------------------------------------------
+        |
+        | If a self report exists, get latest manager review.
+        |
+        */
+
+        $managerReview = null;
+
+        if ($report) {
+
+            $managerReview = $report->reviews
+                ->where('reviewer_type', 'manager')
+                ->sortByDesc('id')
+                ->first();
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Manager Remarks
+        |--------------------------------------------------------------------------
+        */
+
+        $managerRemarks = null;
+
+        if ($managerReview) {
+
+            $managerRemarks = $managerReview->comments;
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Attach data to goal
+        |--------------------------------------------------------------------------
+        */
+
+        $goal->latest_self_report = $report;
+
+        $goal->latest_manager_review = $managerReview;
+
+        $goal->manager_remarks = $managerRemarks;
+
+        return $goal;
+
+    })
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | PDF
+    |--------------------------------------------------------------------------
+    */
+
+    $pdf = Pdf::loadView(
+        'admin.new_goals.goal-detail-pdf',
+        compact(
+            'user',
+            'reports'
+        )
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | PAPER
+    |--------------------------------------------------------------------------
+    */
+
+    $pdf->setPaper('A4', 'portrait');
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILE NAME
+    |--------------------------------------------------------------------------
+    */
+
+    $employeeCode =
+        $user->employee_code
+        ?? $user->employee_id
+        ?? $user->id;
+
+    $filename =
+        'Employee_Goals_Report_' .
+        preg_replace(
+            '/[^A-Za-z0-9_-]/',
+            '_',
+            $employeeCode
+        ) .
+        '_FY2026.pdf';
+
+    return $pdf->download($filename);
 }
 }

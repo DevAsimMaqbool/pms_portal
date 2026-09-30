@@ -108,6 +108,9 @@ use App\Http\Controllers\GoalHrReviewController;
 use App\Http\Controllers\GoalHistoryController;
 use App\Http\Controllers\GoalInitiativeController;
 use App\Http\Controllers\PerformanceReportController;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\EmployeeKpaReportExport;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Department;
@@ -732,6 +735,11 @@ Route::get(
 |--------------------------------------------------------------------------
 */
 Route::get(
+    '/download-report',
+    [PerformanceReportController::class, 'downloadGoalReport']
+)->name('detail.download-report');
+
+Route::get(
     '/my-performance-report/download',
     [PerformanceReportController::class, 'download']
 )->name('my-performance-report.download');
@@ -743,6 +751,20 @@ Route::get(
     '/performance-dashboard',
     [PerformanceReportController::class, 'dashboard']
 )->name('performance.dashboard');
+
+Route::get('/employee-report/excel', function (Request $request) {
+
+    return Excel::download(
+        new EmployeeKpaReportExport(
+            $request->get('role'),
+            $request->get('faculty_id'),
+            $request->get('department_id'),
+            $request->get('program_id')
+        ),
+        'Employee_KPA_Report.xlsx'
+    );
+
+})->name('employee.report.excel');
 
 });
 require __DIR__ . '/auth.php';

@@ -44,8 +44,26 @@ class EmployeeKpaReportExport implements
 
     protected $yearId = 1;
 
-    public function __construct()
-    {
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Report Filters
+    |--------------------------------------------------------------------------
+    */
+    protected $selectedRole = null;
+    protected $selectedFacultyId = null;
+    protected $selectedDepartmentId = null;
+    protected $selectedProgramId = null;
+
+    public function __construct(
+        $role = null,
+        $facultyId = null,
+        $departmentId = null,
+        $programId = null
+    ) {
+        $this->selectedRole = $role;
+        $this->selectedFacultyId = $facultyId;
+        $this->selectedDepartmentId = $departmentId;
+        $this->selectedProgramId = $programId;
         /*
         |--------------------------------------------------------------------------
         | KPA List
@@ -435,15 +453,86 @@ public function collection()
         33,
     ];
 
-    $users = User::with([
+    $usersQuery = User::with([
         'roles',
         'facultyyy',
         'departmentttt'
     ])
         ->whereHas('roles', function ($query) use ($allowedRoleIds) {
             $query->whereIn('roles.id', $allowedRoleIds);
-        })
-        ->get();
+        });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Role
+    |--------------------------------------------------------------------------
+    |
+    | Faculty means teaching roles, matching the existing report selection.
+    | Other selections use the selected role id directly.
+    |--------------------------------------------------------------------------
+    */
+    if ($this->selectedRole === 'faculty') {
+
+        $facultyRoleIds = [
+            21,
+            26,
+            27,
+            28,
+            33,
+        ];
+
+        $usersQuery->whereHas('roles', function ($query) use ($facultyRoleIds) {
+            $query->whereIn('roles.id', $facultyRoleIds);
+        });
+
+    } elseif (
+        $this->selectedRole !== null &&
+        $this->selectedRole !== ''
+    ) {
+
+        $selectedRoleId = (int) $this->selectedRole;
+
+        $usersQuery->whereHas('roles', function ($query) use ($selectedRoleId) {
+            $query->where('roles.id', $selectedRoleId);
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Faculty / Department / Program
+    |--------------------------------------------------------------------------
+    */
+    if (
+        $this->selectedFacultyId !== null &&
+        $this->selectedFacultyId !== ''
+    ) {
+        $usersQuery->where(
+            'faculty',
+            $this->selectedFacultyId
+        );
+    }
+
+    if (
+        $this->selectedDepartmentId !== null &&
+        $this->selectedDepartmentId !== ''
+    ) {
+        $usersQuery->where(
+            'department_id',
+            $this->selectedDepartmentId
+        );
+    }
+
+    if (
+        $this->selectedProgramId !== null &&
+        $this->selectedProgramId !== ''
+    ) {
+        $usersQuery->where(
+            'program_id',
+            $this->selectedProgramId
+        );
+    }
+
+    $users = $usersQuery->get();
 
     /*
     |--------------------------------------------------------------------------
@@ -1332,9 +1421,13 @@ public function collection()
                 |--------------------------------------------------------------------------
                 | Auto Filter
                 |--------------------------------------------------------------------------
+                |
+                | Keep the native filter on the complete report. The grouped cells remain
+                | vertically merged exactly as the report layout requires.
+                |--------------------------------------------------------------------------
                 */
                 $sheet->setAutoFilter(
-                    'A1:R' . $lastRow
+                    'K1:P' . $lastRow
                 );
 
                 /*
