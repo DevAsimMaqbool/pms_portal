@@ -924,7 +924,11 @@ public function collection()
                         */
                         $displayRole =
                             $isFirstOverallRow
-                                ? $role->name
+                                ? (
+                                    $role->name === 'Teacher'
+                                        ? 'Lecturer'
+                                        : $role->name
+                                )
                                 : '';
 
                         $displayUserName =
