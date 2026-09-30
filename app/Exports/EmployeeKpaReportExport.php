@@ -11,8 +11,16 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
-class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMapping
+class EmployeeKpaReportExport implements
+    FromCollection,
+    WithHeadings,
+    WithMapping,
+    WithEvents
 {
     protected $kpaList = [];
     protected $categoryList = [];
@@ -23,31 +31,17 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     protected $facultyTargets = [];
     protected $kpaWeights = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Achievement Counts
-    |--------------------------------------------------------------------------
-    |
-    | Stored as:
-    |
-    | [
-    |     user_id => [
-    |         indicator_id => count
-    |     ]
-    | ]
-    |
-    |--------------------------------------------------------------------------
-    */
     protected $achievementCounts = [];
 
     protected $facultyList = [];
     protected $departmentList = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Current PMS Year
-    |--------------------------------------------------------------------------
-    */
+    protected $employeesWithScores = [];
+
+    protected $mergeRanges = [];
+
+    protected $currentExcelRow = 2;
+
     protected $yearId = 1;
 
     public function __construct()
@@ -109,7 +103,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
         /*
         |--------------------------------------------------------------------------
-        | Role KPA Assignments + KPA Weightage
+        | Role KPA Assignments
         |--------------------------------------------------------------------------
         */
         $assignments = DB::table('role_kpa_assignments')
@@ -151,7 +145,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
             /*
             |--------------------------------------------------------------------------
-            | Save KPA Weight
+            | KPA Weight
             |--------------------------------------------------------------------------
             */
             $kpaId = (int) $assignment->key_performance_area_id;
@@ -166,7 +160,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
             /*
             |--------------------------------------------------------------------------
-            | Unique Indicator Assignment
+            | Indicator Assignment
             |--------------------------------------------------------------------------
             */
             $indicatorKey =
@@ -214,6 +208,22 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                 . $score->indicator_id;
 
             $this->indicatorScores[$key] = $score;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Employee Has Score
+            |--------------------------------------------------------------------------
+            |
+            | Used only for sorting.
+            | Calculation logic is not changed.
+            |--------------------------------------------------------------------------
+            */
+            if ($score->score !== null && $score->score !== '' && (float) $score->score > 0) 
+            {
+                $this->employeesWithScores[
+                    (int) $score->employee_id
+                ] = true;
+            }
         }
 
         /*
@@ -247,15 +257,6 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
         |--------------------------------------------------------------------------
         | Achievement Counts
         |--------------------------------------------------------------------------
-        |
-        | Achievement is calculated from created_by count.
-        |
-        | All these tables contain:
-        | - indicator_id
-        | - created_by
-        | - year_id
-        |
-        |--------------------------------------------------------------------------
         */
         $this->loadAchievementCounts();
     }
@@ -263,11 +264,6 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     /*
     |--------------------------------------------------------------------------
     | Load Achievement Counts
-    |--------------------------------------------------------------------------
-    |
-    | Preload all achievement counts so that no query is executed inside
-    | map() for every user/indicator row.
-    |
     |--------------------------------------------------------------------------
     */
     private function loadAchievementCounts()
@@ -388,7 +384,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
         /*
         |--------------------------------------------------------------------------
-        | Grant Proposals Submitted / Won
+        | Grant Proposals
         |--------------------------------------------------------------------------
         */
         $grantCounts = DB::table(
@@ -417,20 +413,59 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     }
 
     /*
+|--------------------------------------------------------------------------
+| Collection
+|--------------------------------------------------------------------------
+|
+| Employees having scores are shown first.
+| No calculation or report data is changed.
+|--------------------------------------------------------------------------
+*/
+public function collection()
+{
+    $allowedRoleIds = [
+        19,
+        21,
+        22,
+        23,
+        26,
+        27,
+        28,
+        29,
+        33,
+    ];
+
+    $users = User::with([
+        'roles',
+        'facultyyy',
+        'departmentttt'
+    ])
+        ->whereHas('roles', function ($query) use ($allowedRoleIds) {
+            $query->whereIn('roles.id', $allowedRoleIds);
+        })
+        ->get();
+
+    /*
     |--------------------------------------------------------------------------
-    | Collection
+    | SCORED EMPLOYEES FIRST
+    |--------------------------------------------------------------------------
+    |
+    | Employees who have an entry in indicators_percentages
+    | for the current year will appear first.
+    |
+    | No score calculation is changed here.
     |--------------------------------------------------------------------------
     */
-    public function collection()
-    {
-        return User::with([
-            'roles',
-            'facultyyy',
-            'departmentttt'
-        ])
-            ->whereHas('roles')
-            ->get();
-    }
+    return $users
+        ->sortByDesc(function ($user) {
+
+            return isset(
+                $this->employeesWithScores[(int) $user->id]
+            ) ? 1 : 0;
+
+        })
+        ->values();
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -478,17 +513,12 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
         /*
         |--------------------------------------------------------------------------
-        | Faculty
+        | Employee Information
         |--------------------------------------------------------------------------
         */
         $facultyName =
             $this->facultyList[$user->faculty] ?? 'N/A';
 
-        /*
-        |--------------------------------------------------------------------------
-        | Department
-        |--------------------------------------------------------------------------
-        */
         $departmentName =
             $this->departmentList[$user->department_id] ?? 'N/A';
 
@@ -532,6 +562,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                 $roleAssignments;
 
             foreach ($userAssignments as $indicatorKey => $assignment) {
+
                 $effectiveAssignments[$indicatorKey] =
                     $assignment;
             }
@@ -542,7 +573,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
             /*
             |--------------------------------------------------------------------------
-            | Group By KPA → Category → Indicator
+            | Group KPA -> Category -> Indicator
             |--------------------------------------------------------------------------
             */
             $kpaGroups = [];
@@ -564,7 +595,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
             /*
             |--------------------------------------------------------------------------
-            | KPA Raw + Weighted Totals
+            | KPA Totals
             |--------------------------------------------------------------------------
             */
             $kpaTotals = [];
@@ -590,20 +621,10 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                     }
                 }
 
-                /*
-                |--------------------------------------------------------------------------
-                | KPA Weight
-                |--------------------------------------------------------------------------
-                */
                 $kpaWeight =
                     $this->kpaWeights[$roleId][$kpaId]
                     ?? 0;
 
-                /*
-                |--------------------------------------------------------------------------
-                | Weighted KPA Score
-                |--------------------------------------------------------------------------
-                */
                 $weightedKpaScore =
                     $rawKpaScore * ($kpaWeight / 100);
 
@@ -623,15 +644,11 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
             |--------------------------------------------------------------------------
             | Overall Score
             |--------------------------------------------------------------------------
-            |
-            | Overall Score =
-            | KPA1 Weighted + KPA2 Weighted + KPA3 Weighted ...
-            |
-            |--------------------------------------------------------------------------
             */
             $overallScore = 0;
 
             foreach ($kpaTotals as $kpaTotal) {
+
                 $overallScore +=
                     (float) $kpaTotal['weighted'];
             }
@@ -649,9 +666,12 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
             /*
             |--------------------------------------------------------------------------
-            | Create Indicator Rows
+            | Employee Group Start
             |--------------------------------------------------------------------------
             */
+            $employeeStartRow =
+                $this->currentExcelRow;
+
             $isFirstOverallRow = true;
 
             foreach ($kpaGroups as $kpaId => $categories) {
@@ -659,14 +679,17 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                 $kpaName =
                     $this->kpaList[$kpaId] ?? 'N/A';
 
-                /*
-                |--------------------------------------------------------------------------
-                | Weighted KPA Score
-                |--------------------------------------------------------------------------
-                */
                 $kpaScore =
                     $kpaTotals[$kpaId]['weighted']
                     ?? 0;
+
+                /*
+                |--------------------------------------------------------------------------
+                | KPA Start Row
+                |--------------------------------------------------------------------------
+                */
+                $kpaStartRow =
+                    $this->currentExcelRow;
 
                 $isFirstKpaRow = true;
 
@@ -699,13 +722,21 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                     $categoryScore =
                         round($categoryScore, 2);
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Category Start Row
+                    |--------------------------------------------------------------------------
+                    */
+                    $categoryStartRow =
+                        $this->currentExcelRow;
+
                     $isFirstCategoryRow = true;
 
                     foreach ($indicators as $indicatorId => $assignment) {
 
                         /*
                         |--------------------------------------------------------------------------
-                        | Indicator
+                        | Indicator Name
                         |--------------------------------------------------------------------------
                         */
                         $indicatorName =
@@ -799,7 +830,49 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
                         /*
                         |--------------------------------------------------------------------------
-                        | KPA Values
+                        | Employee Level
+                        |--------------------------------------------------------------------------
+                        */
+                        $displayRole =
+                            $isFirstOverallRow
+                                ? $role->name
+                                : '';
+
+                        $displayUserName =
+                            $isFirstOverallRow
+                                ? $user->name
+                                : '';
+
+                        $displayEmployeeCode =
+                            $isFirstOverallRow
+                                ? (
+                                    $user->barcode
+                                    ?? $user->employee_id
+                                    ?? 'N/A'
+                                )
+                                : '';
+
+                        $displayDesignation =
+                            $isFirstOverallRow
+                                ? (
+                                    $user->job_title
+                                    ?? 'N/A'
+                                )
+                                : '';
+
+                        $displayFaculty =
+                            $isFirstOverallRow
+                                ? $facultyName
+                                : '';
+
+                        $displayDepartment =
+                            $isFirstOverallRow
+                                ? $departmentName
+                                : '';
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | KPA Level
                         |--------------------------------------------------------------------------
                         */
                         $displayKpaName =
@@ -814,7 +887,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
                         /*
                         |--------------------------------------------------------------------------
-                        | Category Values
+                        | Category Level
                         |--------------------------------------------------------------------------
                         */
                         $displayCategoryName =
@@ -829,7 +902,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
                         /*
                         |--------------------------------------------------------------------------
-                        | Overall Values
+                        | Overall Level
                         |--------------------------------------------------------------------------
                         */
                         $displayOverallScore =
@@ -844,25 +917,22 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
                         /*
                         |--------------------------------------------------------------------------
-                        | Add Row
+                        | Final Row
                         |--------------------------------------------------------------------------
                         */
                         $rows[] = [
 
-                            $role->name,
-
-                            $user->name,
-
-                            $user->employee_code
-                                ?? $user->employee_id
-                                ?? 'N/A',
-
-                            $user->job_title
-                                ?? 'N/A',
-
-                            $facultyName,
-
-                            $departmentName,
+                            /*
+                            |--------------------------------------------------------------------------
+                            | Employee
+                            |--------------------------------------------------------------------------
+                            */
+                            $displayRole,
+                            $displayUserName,
+                            $displayEmployeeCode,
+                            $displayDesignation,
+                            $displayFaculty,
+                            $displayDepartment,
 
                             /*
                             |--------------------------------------------------------------------------
@@ -870,7 +940,6 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                             |--------------------------------------------------------------------------
                             */
                             $displayKpaName,
-
                             $displayKpaScore,
 
                             /*
@@ -879,7 +948,6 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                             |--------------------------------------------------------------------------
                             */
                             $displayCategoryName,
-
                             $displayCategoryScore,
 
                             /*
@@ -888,31 +956,17 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
                             |--------------------------------------------------------------------------
                             */
                             $indicatorName,
-
                             $indicatorScore,
-
                             $indicatorWeight,
 
                             /*
                             |--------------------------------------------------------------------------
-                            | Target
+                            | Target / Achieved
                             |--------------------------------------------------------------------------
                             */
                             $target,
-
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Achieved
-                            |--------------------------------------------------------------------------
-                            */
                             $achieved,
 
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Achievement %
-                            |--------------------------------------------------------------------------
-                            */
-                            
                             /*
                             |--------------------------------------------------------------------------
                             | Indicator Rating
@@ -922,28 +976,409 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
 
                             /*
                             |--------------------------------------------------------------------------
-                            | Overall Score
+                            | Overall
                             |--------------------------------------------------------------------------
                             */
                             $displayOverallScore,
-
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Overall Rating
-                            |--------------------------------------------------------------------------
-                            */
                             $displayOverallRating,
                         ];
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Move Row
+                        |--------------------------------------------------------------------------
+                        */
+                        $this->currentExcelRow++;
 
                         $isFirstCategoryRow = false;
                         $isFirstKpaRow = false;
                         $isFirstOverallRow = false;
                     }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Save Category Merge Range
+                    |--------------------------------------------------------------------------
+                    */
+                    $categoryEndRow =
+                        $this->currentExcelRow - 1;
+
+                    if ($categoryEndRow > $categoryStartRow) {
+
+                        $this->mergeRanges[] =
+                            'I' . $categoryStartRow
+                            . ':I' . $categoryEndRow;
+
+                        $this->mergeRanges[] =
+                            'J' . $categoryStartRow
+                            . ':J' . $categoryEndRow;
+                    }
                 }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Save KPA Merge Range
+                |--------------------------------------------------------------------------
+                */
+                $kpaEndRow =
+                    $this->currentExcelRow - 1;
+
+                if ($kpaEndRow > $kpaStartRow) {
+
+                    $this->mergeRanges[] =
+                        'G' . $kpaStartRow
+                        . ':G' . $kpaEndRow;
+
+                    $this->mergeRanges[] =
+                        'H' . $kpaStartRow
+                        . ':H' . $kpaEndRow;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Employee End Row
+            |--------------------------------------------------------------------------
+            */
+            $employeeEndRow =
+                $this->currentExcelRow - 1;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Employee Information Merge
+            |--------------------------------------------------------------------------
+            */
+            if ($employeeEndRow > $employeeStartRow) {
+
+                foreach (['A', 'B', 'C', 'D', 'E', 'F'] as $column) {
+
+                    $this->mergeRanges[] =
+                        $column
+                        . $employeeStartRow
+                        . ':'
+                        . $column
+                        . $employeeEndRow;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Overall Score / Rating Merge
+                |--------------------------------------------------------------------------
+                */
+                $this->mergeRanges[] =
+                    'Q'
+                    . $employeeStartRow
+                    . ':Q'
+                    . $employeeEndRow;
+
+                $this->mergeRanges[] =
+                    'R'
+                    . $employeeStartRow
+                    . ':R'
+                    . $employeeEndRow;
             }
         }
 
         return $rows;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Excel Events
+    |--------------------------------------------------------------------------
+    */
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+
+                $sheet =
+                    $event->sheet->getDelegate();
+
+                /*
+                |--------------------------------------------------------------------------
+                | Header Styling
+                |--------------------------------------------------------------------------
+                |
+                | No colors.
+                | Only bold + alignment + border.
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getStyle('A1:R1')
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 11,
+                        ],
+                        'alignment' => [
+                            'horizontal' =>
+                                Alignment::HORIZONTAL_CENTER,
+
+                            'vertical' =>
+                                Alignment::VERTICAL_CENTER,
+
+                            'wrapText' => true,
+                        ],
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' =>
+                                    Border::BORDER_THIN,
+                            ],
+                        ],
+                    ]);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Header Height
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getRowDimension(1)
+                    ->setRowHeight(35);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Column Widths
+                |--------------------------------------------------------------------------
+                */
+                $widths = [
+
+                    'A' => 18,
+                    'B' => 25,
+                    'C' => 17,
+                    'D' => 25,
+                    'E' => 25,
+                    'F' => 25,
+
+                    'G' => 30,
+                    'H' => 14,
+
+                    'I' => 30,
+                    'J' => 16,
+
+                    'K' => 38,
+                    'L' => 16,
+                    'M' => 17,
+
+                    'N' => 14,
+                    'O' => 14,
+
+                    'P' => 18,
+
+                    'Q' => 16,
+                    'R' => 18,
+                ];
+
+                foreach ($widths as $column => $width) {
+
+                    $sheet
+                        ->getColumnDimension($column)
+                        ->setWidth($width);
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Used Range
+                |--------------------------------------------------------------------------
+                */
+                $lastRow =
+                    max(
+                        1,
+                        $this->currentExcelRow - 1
+                    );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Main Report Styling
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getStyle(
+                        'A1:R' . $lastRow
+                    )
+                    ->getAlignment()
+                    ->setVertical(
+                        Alignment::VERTICAL_CENTER
+                    );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Wrap Long Text
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getStyle(
+                        'A1:R' . $lastRow
+                    )
+                    ->getAlignment()
+                    ->setWrapText(true);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Borders
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getStyle(
+                        'A1:R' . $lastRow
+                    )
+                    ->getBorders()
+                    ->getAllBorders()
+                    ->setBorderStyle(
+                        Border::BORDER_THIN
+                    );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Center Numeric / Rating Columns
+                |--------------------------------------------------------------------------
+                */
+                foreach (
+                    [
+                        'H',
+                        'J',
+                        'L',
+                        'M',
+                        'N',
+                        'O',
+                        'P',
+                        'Q',
+                        'R'
+                    ] as $column
+                ) {
+
+                    $sheet
+                        ->getStyle(
+                            $column . '2:' . $column . $lastRow
+                        )
+                        ->getAlignment()
+                        ->setHorizontal(
+                            Alignment::HORIZONTAL_CENTER
+                        );
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Indicator Column
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getStyle(
+                        'K2:K' . $lastRow
+                    )
+                    ->getAlignment()
+                    ->setHorizontal(
+                        Alignment::HORIZONTAL_LEFT
+                    );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Grouped Columns
+                |--------------------------------------------------------------------------
+                */
+                foreach (
+                    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'Q', 'R']
+                    as $column
+                ) {
+
+                    $sheet
+                        ->getStyle(
+                            $column . '2:' . $column . $lastRow
+                        )
+                        ->getAlignment()
+                        ->setHorizontal(
+                            Alignment::HORIZONTAL_CENTER
+                        );
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Merge Employee / KPA / Category Groups
+                |--------------------------------------------------------------------------
+                */
+                foreach ($this->mergeRanges as $range) {
+
+                    $sheet->mergeCells($range);
+
+                    $sheet
+                        ->getStyle($range)
+                        ->getAlignment()
+                        ->setVertical(
+                            Alignment::VERTICAL_CENTER
+                        );
+
+                    $sheet
+                        ->getStyle($range)
+                        ->getAlignment()
+                        ->setHorizontal(
+                            Alignment::HORIZONTAL_CENTER
+                        );
+
+                    $sheet
+                        ->getStyle($range)
+                        ->getAlignment()
+                        ->setWrapText(true);
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Freeze Header
+                |--------------------------------------------------------------------------
+                */
+                $sheet->freezePane('A2');
+
+                /*
+                |--------------------------------------------------------------------------
+                | Auto Filter
+                |--------------------------------------------------------------------------
+                */
+                $sheet->setAutoFilter(
+                    'A1:R' . $lastRow
+                );
+
+                /*
+                |--------------------------------------------------------------------------
+                | Print Setup
+                |--------------------------------------------------------------------------
+                */
+                $sheet
+                    ->getPageSetup()
+                    ->setOrientation(
+                        \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
+                    );
+
+                $sheet
+                    ->getPageSetup()
+                    ->setPaperSize(
+                        \PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3
+                    );
+
+                $sheet
+                    ->getPageSetup()
+                    ->setFitToWidth(1);
+
+                $sheet
+                    ->getPageSetup()
+                    ->setFitToHeight(0);
+
+                $sheet
+                    ->getPageMargins()
+                    ->setTop(0.3);
+
+                $sheet
+                    ->getPageMargins()
+                    ->setBottom(0.3);
+
+                $sheet
+                    ->getPageMargins()
+                    ->setLeft(0.3);
+
+                $sheet
+                    ->getPageMargins()
+                    ->setRight(0.3);
+            },
+        ];
     }
 
     /*
@@ -1004,34 +1439,29 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
     |--------------------------------------------------------------------------
     | Calculate Indicator Percentage
     |--------------------------------------------------------------------------
-    |
-    | Indicator Score is already weighted.
-    |
-    | Example:
-    |
-    | Score  = 5.48
-    | Weight = 6
-    |
-    | Percentage = 5.48 / 6 × 100 = 91.33%
-    |
-    |--------------------------------------------------------------------------
     */
     private function calculateIndicatorPercentage(
         $indicatorScore,
         $indicatorWeight,
         $scoreRecord = null
     ) {
+
         if (
             $indicatorWeight !== null &&
             (float) $indicatorWeight > 0
         ) {
             return round(
-                ((float) $indicatorScore / (float) $indicatorWeight) * 100,
+                (
+                    (float) $indicatorScore
+                    /
+                    (float) $indicatorWeight
+                ) * 100,
                 2
             );
         }
 
         if ($scoreRecord) {
+
             return round(
                 (float) $scoreRecord->with_out_weight_score,
                 2
@@ -1056,26 +1486,12 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
         $targetRecord =
             $this->facultyTargets[$key] ?? null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Target
-        |--------------------------------------------------------------------------
-        */
         $target =
-            $targetRecord && $targetRecord->target !== null
+            $targetRecord &&
+            $targetRecord->target !== null
                 ? (float) $targetRecord->target
                 : null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Achievement
-        |--------------------------------------------------------------------------
-        |
-        | For the specified indicators achievement comes from
-        | COUNT(created_by) of the relevant table.
-        |
-        |--------------------------------------------------------------------------
-        */
         $achieved =
             $this->getAchievementCount(
                 $user->id,
@@ -1097,33 +1513,25 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
         $userId,
         $indicatorId
     ) {
-        /*
-        |--------------------------------------------------------------------------
-        | If this indicator has an achievement table and records exist,
-        | return the created_by count.
-        |--------------------------------------------------------------------------
-        */
+
         if (
-            isset($this->achievementCounts[(int) $userId])
+            isset(
+                $this->achievementCounts[(int) $userId]
+            )
             &&
             array_key_exists(
                 (int) $indicatorId,
                 $this->achievementCounts[(int) $userId]
             )
         ) {
-            return $this->achievementCounts[(int) $userId][(int) $indicatorId];
+
+            return $this->achievementCounts[
+                (int) $userId
+            ][
+                (int) $indicatorId
+            ];
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | No achievement source for this indicator
-        |--------------------------------------------------------------------------
-        |
-        | Return NULL rather than 0 because NULL means that this indicator
-        | does not have a configured achievement source.
-        |
-        |--------------------------------------------------------------------------
-        */
         return null;
     }
 
@@ -1136,6 +1544,7 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
         $target,
         $achieved
     ) {
+
         if (
             $target === null ||
             $achieved === null ||
@@ -1145,7 +1554,11 @@ class EmployeeKpaReportExport implements FromCollection, WithHeadings, WithMappi
         }
 
         return round(
-            ((float) $achieved / (float) $target) * 100,
+            (
+                (float) $achieved
+                /
+                (float) $target
+            ) * 100,
             2
         );
     }

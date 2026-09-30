@@ -1236,223 +1236,267 @@ if ($calculation === null) {
      * -------------------------------------------------------------
      */
     protected function getPublicationData(
-        int $employeeId,
-        int $indicatorId
-    ): ?array {
+    int $employeeId,
+    int $indicatorId
+): ?array {
 
-        $target =
-            FacultyTarget::query()
-                ->where(
-                    'user_id',
-                    $employeeId
-                )
-                ->where(
-                    'year_id',
-                    $this->yearId
-                )
-                ->where(
-                    'indicator_id',
-                    $indicatorId
-                )
-                ->sum('target');
+    $target = FacultyTarget::query()
+        ->where('user_id', $employeeId)
+        ->where('form_status', 'HOD')
+        ->where('year_id', $this->yearId)
+        ->where('indicator_id', $indicatorId)
+        ->sum('target');
 
-        if ((float) $target <= 0) {
-            return null;
-        }
-
-        $publications =
-            AchievementOfResearchPublicationsTarget::query()
-                ->where(
-                    'created_by',
-                    $employeeId
-                )
-                ->where(
-                    'form_status',
-                    'RESEARCHER'
-                )
-                ->where(
-                    'status',
-                    3
-                )
-                ->where(
-                    'year_id',
-                    $this->yearId
-                )
-                ->where(
-                    'indicator_id',
-                    $indicatorId
-                )
-                ->whereNotNull(
-                    'journal_clasification'
-                );
-
-        $submitted =
-            $publications->count();
-
-        return [
-            'target' =>
-                (float) $target,
-
-            'submitted' =>
-                (int) $submitted,
-
-            'query' =>
-                $publications,
-        ];
+    if ((float) $target <= 0) {
+        return null;
     }
+
+    $publications = AchievementOfResearchPublicationsTarget::query()
+        ->where('created_by', $employeeId)
+        ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
+        ->where('status', 3)
+        ->where('year_id', $this->yearId)
+        ->where('indicator_id', $indicatorId)
+        ->whereNotNull('journal_clasification');
+
+    return [
+        'target' => (float) $target,
+        'submitted' => (int) (clone $publications)->count(),
+        'query' => $publications,
+    ];
+}
 
     /**
-     * -------------------------------------------------------------
-     * INDICATOR 127
-     *
-     * Uses employee_id.
-     *
-     * International publications.
-     * -------------------------------------------------------------
-     */
-    protected function calculate127(
-        User $employee,
-        int $roleId,
-        int $indicatorId
-    ): ?array {
+ * -------------------------------------------------------------
+ * INDICATOR 127
+ *
+ * International publications.
+ *
+ * Formula:
+ *
+ * International Approved Publications
+ * ------------------------------------ x 100
+ *           Total Target
+ *
+ * Maximum raw score = 100
+ * -------------------------------------------------------------
+ */
+protected function calculate127(
+    User $employee,
+    int $roleId,
+    int $indicatorId
+): ?array {
 
-        $employeeId =
-            $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-        if (!$employeeId) {
-            return $this->noData(
-                'employee_id is missing'
-            );
-        }
-
-        $data =
-            $this->getPublicationData(
-                $employeeId,
-                $indicatorId
-            );
-
-        if (!$data) {
-            return $this->noData(
-                'No FacultyTarget found for indicator 127'
-            );
-        }
-
-        $international =
-            (clone $data['query'])
-                ->whereRaw(
-                    'LOWER(TRIM(nationality)) = ?',
-                    ['international']
-                )
-                ->count();
-
-        if ($international <= 0) {
-
-            $rawScore = 0;
-
-        } else {
-
-            $rawScore =
-                (
-                    $international /
-                    $data['target']
-                ) * 100;
-
-            $rawScore =
-                min(
-                    100,
-                    round(
-                        $rawScore,
-                        2
-                    )
-                );
-        }
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
     }
+
+    /*
+     * ---------------------------------------------------------
+     * Get target + approved publications
+     * ---------------------------------------------------------
+     */
+    $data = $this->getPublicationData(
+        $employeeId,
+        $indicatorId
+    );
+
+    if (!$data) {
+        return $this->noData(
+            'No HOD FacultyTarget found for indicator 127'
+        );
+    }
+
+    /*
+     * ---------------------------------------------------------
+     * Count international publications
+     * ---------------------------------------------------------
+     *
+     * Existing calculation:
+     *
+     * nationality = international
+     */
+    $internationalPapers = (clone $data['query'])
+        ->whereRaw(
+            'LOWER(TRIM(nationality)) = ?',
+            ['international']
+        )
+        ->count();
+
+    /*
+     * ---------------------------------------------------------
+     * Calculate raw score
+     * ---------------------------------------------------------
+     *
+     * International Papers / Total Target * 100
+     */
+    $rawScore = (
+        $internationalPapers /
+        $data['target']
+    ) * 100;
+
+    /*
+     * Maximum score = 100
+     */
+    $rawScore = min(
+        100,
+        round(
+            $rawScore,
+            2
+        )
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * Role-specific weight
+     * ---------------------------------------------------------
+     */
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * Weighted score
+     * ---------------------------------------------------------
+     */
+    $weightedScore = $this->weighted(
+        $rawScore,
+        $weight
+    );
+
+    return [
+        'raw_score' => $rawScore,
+
+        'weighted_score' => $weightedScore,
+    ];
+}
 
     /**
-     * -------------------------------------------------------------
-     * INDICATOR 128
-     *
-     * Uses employee_id.
-     *
-     * Scopus publications.
-     * -------------------------------------------------------------
-     */
-    protected function calculate128(
-        User $employee,
-        int $roleId,
-        int $indicatorId
-    ): ?array {
+ * -------------------------------------------------------------
+ * INDICATOR 128
+ *
+ * Scopus Publications.
+ *
+ * Formula:
+ *
+ * Total Approved Scopus Publications
+ * ---------------------------------- x 100
+ *          Total Target
+ *
+ * Maximum raw score = 100
+ *
+ * Target:
+ * - FacultyTarget.user_id = employee_id
+ * - FacultyTarget.form_status = HOD
+ * - FacultyTarget.year_id = PMS year
+ * - FacultyTarget.indicator_id = 128
+ *
+ * Publications:
+ * - created_by = employee_id
+ * - form_status IN (RESEARCHER, DEAN)
+ * - status = 3
+ * - year_id = PMS year
+ * - indicator_id = 128
+ * - journal_clasification IS NOT NULL
+ * -------------------------------------------------------------
+ */
+protected function calculate128(
+    User $employee,
+    int $roleId,
+    int $indicatorId
+): ?array {
 
-        $employeeId =
-            $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-        if (!$employeeId) {
-            return $this->noData(
-                'employee_id is missing'
-            );
-        }
-
-        $data =
-            $this->getPublicationData(
-                $employeeId,
-                $indicatorId
-            );
-
-        if (!$data) {
-            return $this->noData(
-                'No FacultyTarget found for indicator 128'
-            );
-        }
-
-        $rawScore =
-            (
-                $data['submitted'] /
-                $data['target']
-            ) * 100;
-
-        $rawScore =
-            min(
-                100,
-                round(
-                    $rawScore,
-                    2
-                )
-            );
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
     }
+
+    /*
+     * ---------------------------------------------------------
+     * Get target + approved publications
+     * ---------------------------------------------------------
+     */
+    $data = $this->getPublicationData(
+        $employeeId,
+        $indicatorId
+    );
+
+    if (!$data) {
+        return $this->noData(
+            'No HOD FacultyTarget found for indicator 128'
+        );
+    }
+
+    /*
+     * ---------------------------------------------------------
+     * Total approved Scopus publications
+     * ---------------------------------------------------------
+     */
+    $totalSubmitted = (int) $data['submitted'];
+
+    /*
+     * ---------------------------------------------------------
+     * Calculate percentage
+     * ---------------------------------------------------------
+     *
+     * Example:
+     *
+     * Target = 5
+     * Submitted = 4
+     *
+     * 4 / 5 × 100 = 80
+     */
+    $rawScore = (
+        $totalSubmitted /
+        $data['target']
+    ) * 100;
+
+    /*
+     * Maximum raw score = 100
+     */
+    $rawScore = min(
+        100,
+        round(
+            $rawScore,
+            2
+        )
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * Role-specific indicator weight
+     * ---------------------------------------------------------
+     */
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * Weighted score
+     * ---------------------------------------------------------
+     */
+    $weightedScore = $this->weighted(
+        $rawScore,
+        $weight
+    );
+
+    return [
+        'raw_score' => $rawScore,
+
+        'weighted_score' => $weightedScore,
+    ];
+}
 
     /**
      * -------------------------------------------------------------
@@ -1825,88 +1869,244 @@ if ($calculation === null) {
     }
 
     /**
-     * -------------------------------------------------------------
-     * INDICATOR 189
-     *
-     * Uses employee_id.
-     * -------------------------------------------------------------
-     */
+ * -------------------------------------------------------------
+ * INDICATOR 189
+ *
+ * Uses employee_id.
+ *
+ * Line Manager Event Feedback
+ *
+ * Final Score:
+ * 70% = Average Event Feedback Rating
+ * 30% = Event Participation Score
+ *
+ * Participation Score:
+ * Employee event count
+ * ---------------------------- x 100
+ * Highest event count in same department
+ * -------------------------------------------------------------
+ */
     protected function calculate189(
-        User $employee,
-        int $roleId,
-        int $indicatorId
+    User $employee,
+    int $roleId,
+    int $indicatorId
     ): ?array {
 
-        $employeeId =
-            $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-        if (!$employeeId) {
-            return $this->noData(
-                'employee_id is missing'
-            );
-        }
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
+    }
 
-        $row =
+    /*
+        * ---------------------------------------------------------
+        * Get employee department
+        * ---------------------------------------------------------
+        */
+    $departmentId = $employee->department_id;
+
+    if (!$departmentId) {
+        return $this->noData(
+            'department_id is missing for employee'
+        );
+    }
+
+    /*
+        * ---------------------------------------------------------
+        * Employee event feedback
+        * ---------------------------------------------------------
+        */
+    $feedbacks = LineManagerEventFeedback::query()
+        ->where(
+            'employee_id',
+            $employeeId
+        )
+        ->where(
+            'year_id',
+            $this->yearId
+        )
+        ->get();
+
+    if ($feedbacks->isEmpty()) {
+        return $this->noData(
+            'No line manager event feedback ratings found'
+        );
+    }
+
+    /*
+        * ---------------------------------------------------------
+        * 1. Average Feedback Rating
+        * ---------------------------------------------------------
+        */
+    $ratings = $feedbacks
+        ->pluck('rating')
+        ->filter(function ($rating) {
+            return $rating !== null
+                && is_numeric($rating);
+        })
+        ->map(function ($rating) {
+            return (float) $rating;
+        });
+
+    if ($ratings->isEmpty()) {
+        return $this->noData(
+            'No valid line manager event feedback ratings found'
+        );
+    }
+
+    $averageRating = round(
+        $ratings->avg(),
+        2
+    );
+
+    $averageRating = min(
+        $averageRating,
+        100
+    );
+
+    /*
+        * ---------------------------------------------------------
+        * 2. Employee Event Participation Count
+        * ---------------------------------------------------------
+        */
+    $employeeEventCount = $feedbacks->count();
+
+    /*
+        * ---------------------------------------------------------
+        * 3. Highest Event Count in Same Department
+        * ---------------------------------------------------------
+        *
+        * Get all users from same department.
+        */
+    $departmentEmployeeIds = User::query()
+        ->where(
+            'department_id',
+            $departmentId
+        )
+        ->pluck('employee_id')
+        ->filter()
+        ->values();
+
+    /*
+        * Find highest number of events participated by
+        * any employee in the same department for this year.
+        */
+    $highestDepartmentCount = 1;
+
+    if ($departmentEmployeeIds->isNotEmpty()) {
+
+        $highestDepartmentCount =
             LineManagerEventFeedback::query()
-                ->where(
+                ->whereIn(
                     'employee_id',
-                    $employeeId
+                    $departmentEmployeeIds
                 )
                 ->where(
                     'year_id',
                     $this->yearId
                 )
                 ->selectRaw(
-                    '
-                    SUM(rating) as total_rating,
-
-                    COUNT(rating) as rating_count
-                    '
+                    'employee_id, COUNT(*) as total'
                 )
-                ->first();
-
-        if (
-            !$row ||
-            (int) $row->rating_count <= 0
-        ) {
-            return $this->noData(
-                'No line manager event feedback ratings found'
-            );
-        }
-
-        $rawScore =
-            (
-                (float) $row->total_rating /
-                (int) $row->rating_count
-            );
-
-        $rawScore =
-            min(
-                100,
-                round(
-                    $rawScore,
-                    2
+                ->groupBy(
+                    'employee_id'
                 )
-            );
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+                ->orderByDesc(
+                    'total'
+                )
+                ->value(
+                    'total'
+                ) ?? 1;
     }
 
+    $highestDepartmentCount = max(
+        1,
+        (int) $highestDepartmentCount
+    );
+
+    /*
+        * ---------------------------------------------------------
+        * 4. Participation Score
+        * ---------------------------------------------------------
+        *
+        * Example:
+        *
+        * Employee events = 4
+        * Department highest = 5
+        *
+        * 4 / 5 * 100 = 80
+        */
+    $participationScore = (
+        $employeeEventCount /
+        $highestDepartmentCount
+    ) * 100;
+
+    $participationScore = min(
+        100,
+        round(
+            $participationScore,
+            2
+        )
+    );
+
+    /*
+        * ---------------------------------------------------------
+        * 5. Final 189 Raw Score
+        * ---------------------------------------------------------
+        *
+        * 70% Average Rating
+        * 30% Participation Score
+        */
+    $weightedRating = (
+        $averageRating * 70
+    ) / 100;
+
+    $weightedParticipation = (
+        $participationScore * 30
+    ) / 100;
+
+    $rawScore = (
+        $weightedRating +
+        $weightedParticipation
+    );
+
+    $rawScore = min(
+        100,
+        round(
+            $rawScore,
+            2
+        )
+    );
+
+    /*
+        * ---------------------------------------------------------
+        * 6. Role-specific Indicator Weightage
+        * ---------------------------------------------------------
+        */
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    /*
+        * ---------------------------------------------------------
+        * 7. Final Weighted Score
+        * ---------------------------------------------------------
+        */
+    $weightedScore = $this->weighted(
+        $rawScore,
+        $weight
+    );
+
+    return [
+        'raw_score' => $rawScore,
+
+        'weighted_score' => $weightedScore,
+    ];
+    }
+    
     /**
      * -------------------------------------------------------------
      * INDICATOR 194
@@ -2016,121 +2216,157 @@ if ($calculation === null) {
     }
 
     /**
-     * -------------------------------------------------------------
-     * INDICATOR 203
-     *
-     * Uses employee_id.
-     *
-     * Journal quartile.
-     * -------------------------------------------------------------
-     */
-    protected function calculate203(
-        User $employee,
-        int $roleId,
-        int $indicatorId
-    ): ?array {
+ * -------------------------------------------------------------
+ * INDICATOR 203
+ *
+ * Journal Quartile.
+ *
+ * Q1 = 20 points
+ * Q2 = 15 points
+ * Q3 = 10 points
+ * Q4 = 5 points
+ *
+ * Publication records:
+ * - indicator_id = 203
+ * - created_by = employee_id
+ * - target_category = Scopus-Indexed
+ * - form_status IN (RESEARCHER, DEAN)
+ * - year_id = PMS year
+ * - status = 3
+ *
+ * Maximum raw score = 100
+ * -------------------------------------------------------------
+ */
+protected function calculate203(
+    User $employee,
+    int $roleId,
+    int $indicatorId
+): ?array {
 
-        $employeeId =
-            $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-        if (!$employeeId) {
-            return $this->noData(
-                'employee_id is missing'
-            );
-        }
-
-        $records =
-            AchievementOfResearchPublicationsTarget::query()
-                ->where(
-                    'indicator_id',
-                    $indicatorId
-                )
-                ->where(
-                    'created_by',
-                    $employeeId
-                )
-                ->where(
-                    'target_category',
-                    'Scopus-Indexed'
-                )
-                ->where(
-                    'form_status',
-                    'RESEARCHER'
-                )
-                ->where(
-                    'year_id',
-                    $this->yearId
-                )
-                ->where(
-                    'status',
-                    3
-                )
-                ->whereNotNull(
-                    'journal_clasification'
-                )
-                ->get([
-                    'journal_clasification',
-                ]);
-
-        if ($records->isEmpty()) {
-            return $this->noData(
-                'No Scopus journal publication records found'
-            );
-        }
-
-        $quartilePoints = [
-            'Q1' => 20,
-            'Q2' => 15,
-            'Q3' => 10,
-            'Q4' => 5,
-        ];
-
-        $obtainedScore = 0;
-
-        foreach ($records as $record) {
-
-            $quartile =
-                strtoupper(
-                    trim(
-                        (string)
-                        $record->journal_clasification
-                    )
-                );
-
-            if (
-                isset(
-                    $quartilePoints[$quartile]
-                )
-            ) {
-
-                $obtainedScore +=
-                    $quartilePoints[$quartile];
-            }
-        }
-
-        $rawScore =
-            min(
-                100,
-                $obtainedScore
-            );
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
     }
+
+    /*
+     * ---------------------------------------------------------
+     * Quartile points
+     * ---------------------------------------------------------
+     */
+    $quartilePoints = [
+        'Q1' => 20,
+        'Q2' => 15,
+        'Q3' => 10,
+        'Q4' => 5,
+    ];
+
+    /*
+     * ---------------------------------------------------------
+     * Get approved Scopus publications
+     * ---------------------------------------------------------
+     *
+     * IMPORTANT:
+     * Include both RESEARCHER and DEAN.
+     */
+    $records = AchievementOfResearchPublicationsTarget::query()
+        ->where(
+            'indicator_id',
+            $indicatorId
+        )
+        ->where(
+            'created_by',
+            $employeeId
+        )
+        ->where(
+            'target_category',
+            'Scopus-Indexed'
+        )
+        ->whereIn(
+            'form_status',
+            [
+                'RESEARCHER',
+                'DEAN',
+            ]
+        )
+        ->where(
+            'year_id',
+            $this->yearId
+        )
+        ->where(
+            'status',
+            3
+        )
+        ->get([
+            'journal_clasification',
+        ]);
+
+    if ($records->isEmpty()) {
+        return $this->noData(
+            'No approved Scopus journal publication records found'
+        );
+    }
+
+    /*
+     * ---------------------------------------------------------
+     * Calculate quartile points
+     * ---------------------------------------------------------
+     */
+    $obtainedScore = 0;
+
+    foreach ($records as $record) {
+
+        $quartile = strtoupper(
+            trim(
+                (string) $record->journal_clasification
+            )
+        );
+
+        if (isset($quartilePoints[$quartile])) {
+
+            $obtainedScore +=
+                $quartilePoints[$quartile];
+        }
+    }
+
+    /*
+     * ---------------------------------------------------------
+     * Maximum raw score = 100
+     * ---------------------------------------------------------
+     */
+    $rawScore = min(
+        100,
+        $obtainedScore
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * Role-specific weight
+     * ---------------------------------------------------------
+     */
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * Weighted score
+     * ---------------------------------------------------------
+     */
+    $weightedScore = $this->weighted(
+        $rawScore,
+        $weight
+    );
+
+    return [
+        'raw_score' => $rawScore,
+
+        'weighted_score' => $weightedScore,
+    ];
+}
 
     /**
      * -------------------------------------------------------------
