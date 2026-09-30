@@ -270,7 +270,7 @@ class PermissionController extends Controller
                 return view('admin.hod-v2', compact('employee', 'researchData', 'showPasswordPopup'));
             case 'dean':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
-                return view('admin.dean-v2', compact('employee', 'researchData', 'showPasswordPopup'));
+                return view('admin.dean-v2', compact('employee','dataset1', 'researchData', 'showPasswordPopup'));
                 case 'survey':
                 return redirect()->route('performance.dashboard');
             default:
