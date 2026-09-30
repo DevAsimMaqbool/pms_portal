@@ -91,14 +91,18 @@
             </a>
         </li>
 
-        <li class="menu-item ">
-            <a href="#" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-download"></i>
-                <div data-i18n="Downloads">Downloads</div>
-            </a>
-        </li>
-        <li class="menu-item"> <a href="{{ route('my-performance-report.download') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="My Performance Report"> My Performance Report </div> </a> </li>
+        <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon icon-base ti tabler-download"></i>
+        <div data-i18n="Downloads">Downloads</div>
+      </a>
 
+      <ul class="menu-sub">
+        <li class="menu-item"> <a href="{{ route('my-performance-report.download') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="Download Report">Download Report </div> </a> </li>
+      </ul>
+
+    </li>
+        
         <li class="menu-item {{ request()->routeIs([
   'employee-tasks.index',
   'employee-tasks.create',
