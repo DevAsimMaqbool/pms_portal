@@ -1026,11 +1026,11 @@
                       <input type="radio" class="btn-check" name="termRadio" id="overall" checked>
                       <label class="btn btn-outline-primary waves-effect" for="overall">📆 Overall</label>
 
-                      <input type="radio" class="btn-check" name="termRadio" id="spring25">
+                      {{-- <input type="radio" class="btn-check" name="termRadio" id="spring25">
                       <label class="btn btn-outline-primary waves-effect" for="spring25">📆 Spring 2026</label>
 
                       <input type="radio" class="btn-check" name="termRadio" id="fall25">
-                      <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label>
+                      <label class="btn btn-outline-primary waves-effect" for="fall25">📆 Fall 2025</label> --}}
                     </div>
                   </div>
 
@@ -1298,15 +1298,15 @@
         "Research, Innovation and Commercialisation",
         "Financial Sustainability",
         "Internationalization",
-        "Social Responsibility",
         "Brand Identity",
         "Leadership and Governance",
       ];
 
-      var shortLabels = ["T&L", "RIC", "FS", "INT", "SR", "BI", "L&G"];
+      var shortLabels = ["T&L", "RIC", "FS", "INT", "BI", "L&G"];
 
       // ✅ Example dataset (7 values)
-      var dataset1 = [90, 85, 80, 70, 75, 65, 70];
+      //var dataset1 = [90, 85, 80, 70, 75, 65, 70];
+      var dataset1 = @json($dataset1) || [];
       var labelColors = [
         "#e74c3c",
         "#3498db",
@@ -1468,16 +1468,16 @@
         "Research, Innovation and Commercialisation",
         "Financial Sustainability",
         "Internationalization",
-        "Social Responsibility",
         "Brand Identity",
         "Leadership and Governance",
       ];
 
       // ✅ Matching short labels (7 total)
-      var shortLabels = ["T&L", "RIC", "FS", "INT", "SR", "BI", "L&G"];
+      var shortLabels = ["T&L", "RIC", "FS","Intl","BI","L&G"];
 
       // ✅ Sample dataset
-      var dataset1 = [90, 85, 80, 70, 75, 65, 70];
+      //var dataset1 = [90, 85, 80, 70, 75, 65, 70];
+      var dataset1 = @json($dataset1) || [];
       var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12", "#9b59b6", "#1abc9c", "#2c3e50"];
 
       var ctx = document.getElementById("radarChart1").getContext("2d");
