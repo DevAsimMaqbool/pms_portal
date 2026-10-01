@@ -97,7 +97,7 @@
                                 <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Line Manager's Review & Rating on Tasks</h5>
+                                            <h5 class="modal-title" id="commericaGainFormModalLabel">Edit Retention Rate of Faculty</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
@@ -121,11 +121,34 @@
                                                         <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
                                                             <div class="col-md-6">
                                                                 <label class="form-label">Faculty</label>
-                                                                <select name="retention_rate[0][faculty_id]" class="select2 form-select faculty-select">
+                                                                <select name="retention_rate[0][faculty_id]" class=" form-select faculty-select">
                                                                     <option value="">Select Faculty</option>
                                                                     @foreach(get_faculties() as $faculty)
                                                                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
                                                                     @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="department_id" class="form-label">Department</label>
+                                                                <select name="retention_rate[0][department_id]" id="department_id" class=" form-select department-select"
+                                                                    required>
+                                                                    <option value="">-- Select Department --</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="program" class="form-label">Program</label>
+                                                                <select name="retention_rate[0][program_id]" id="program_id" class=" form-select program-select"
+                                                                    >
+                                                                    <option value="">-- Select Program --</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="program_level" class="form-label">Program Level</label>
+                                                                <select name="retention_rate[0][program_level]" id="program_level"
+                                                                    class=" form-select faculty-member">
+                                                                    <option value="">-- Select Level --</option>
+                                                                    <option value="UG">UG</option>
+                                                                    <option value="PG">PG</option>
                                                                 </select>
                                                             </div>
 
@@ -197,278 +220,1357 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['Human Resources']))
-                <script>
-                    function fetchCommercialForms() {
-                        $.ajax({
-                            url: "{{ route('faculty-retention.index') }}",
-                            method: "GET",
-                            data: {
-                                status: "HOD" // you can send more values
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                const forms = data.forms || [];
 
-const rowData = forms.map((form, i) => {
+@if(in_array(getRoleName(activeRole()), ['Human Resources']))
 
-    const createdAt = form.created_at
-        ? new Date(form.created_at).toISOString().split('T')[0]
-        : 'N/A';
+<script>
 
-    const facultyName =
-        form.remarks?.[0]?.faculty?.name || 'N/A';
 
-    // Calculate Faculty Retention Rate
-    // Average of all department retention rates
-    const retentionRates = form.remarks
-        ?.map(remark => parseFloat(remark.no_retention_rate))
-        .filter(rate => !isNaN(rate)) || [];
+    /*
+    |--------------------------------------------------------------------------
+    | Fetch Data
+    |--------------------------------------------------------------------------
+    */
 
-    const retentionRate = retentionRates.length
-        ? (
-            retentionRates.reduce((sum, rate) => sum + rate, 0) /
-            retentionRates.length
-          ).toFixed(1)
-        : 'N/A';
+    function fetchCommercialForms() {
 
-    const formData = encodeURIComponent(
-        JSON.stringify(form)
-    );
+        $.ajax({
 
-    let editButton = '';
-    let deleteBtn = '';
+            url: "{{ route('faculty-retention.index') }}",
 
-    if (parseInt(form.status) === 1) {
+            method: "GET",
 
-        editButton = `
-            <button class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn" 
-                data-form="${formData}">
-                <span class="icon-xs icon-base ti tabler-eye me-2"></span>Edit
-            </button>`;
+            data: {
+                status: "HOD"
+            },
 
-        deleteBtn = `
-            <button class="btn rounded-pill btn-outline-danger delete-btn" 
-                data-id="${form.id}">
-                Delete
-            </button>`;
-    }
+            dataType: "json",
 
-    return [
-        i + 1,
-        form.year ? form.year.year : 'N/A',
-        facultyName,
-        retentionRate !== 'N/A' ? retentionRate + '%' : 'N/A',
-        createdAt,
-        editButton + ' ' + deleteBtn
-    ];
-});
+            success: function (data) {
 
-                                if (!$.fn.DataTable.isDataTable('#intellectualTable')) {
-                                    $('#intellectualTable').DataTable({
-                                        data: rowData,
-                                        scrollX: true,
-                                        scrollCollapse: true,
-                                        autoWidth: false,
-                                        columns: [
-                                            { title: "#" },
-                                            { title: "Year" },
-                                            { title: "Faculty" },
-                                            { title: "Retention Rate" },
-                                            { title: "Created Date" },
-                                            { title: "Actions" }
-                                        ]
-                                    });
-                                } else {
-                                    $('#intellectualTable').DataTable().clear().rows.add(rowData).draw();
-                                }
-                            },
-                            error: function (xhr) {
-                                console.error('Error fetching data:', xhr.responseText);
-                                alert('Unable to load data.');
-                            }
-                        });
-                    }
+                const forms = data.forms || [];
 
-                    $(document).ready(function () {
+                const rowData = forms.map((form, i) => {
 
-                        fetchCommercialForms();
+                    const createdAt = form.created_at
+                        ? new Date(form.created_at)
+                            .toISOString()
+                            .split('T')[0]
+                        : 'N/A';
 
-              // Submit updated data
-            $('#researchForm1').on('submit', function (e) {
-                e.preventDefault();
-                let form = $(this);
-                let formData = new FormData(this);
-                const recordId = $('#record_id').val();
-                Swal.fire({
-                    title: 'Updating...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
 
-                $.ajax({
-                    url: "{{ route('faculty-retention.update', '') }}/" + recordId,
-                    method: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    success: function (response) {
-                        Swal.close();
-                        Swal.fire('Success', response.message, 'success');
-                        $('#multidisciplinaryProjectFormModal').modal('hide');
-                        $('#researchForm1')[0].reset();
-                        form.find('.invalid-feedback').remove();
-                        form.find('.is-invalid').removeClass('is-invalid');
-                        fetchCommercialForms(); // reload table
-                    },
-                    error: function (xhr) {
-                        Swal.close();
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            $.each(errors, function (field, messages) {
-                                let input = $('#researchForm1').find('[name="' + field + '"]');
-                                input.addClass('is-invalid');
-                                input.after('<div class="invalid-feedback">' + messages[0] + '</div>');
-                            });
-                        } else {
-                            Swal.fire('Error', 'Something went wrong!', 'error');
-                        }
-                    }
-                });
-            });
-            $(document).on('click', '.delete-btn', function() {
-                let id = $(this).data('id');
+                    const facultyName =
+                        form.remarks?.[0]?.faculty?.name || 'N/A';
 
-                if(!confirm('Are you sure you want to delete this record?')) return;
 
-                $.ajax({
-                    url: `/faculty-retention/${id}`,
-                    type: 'DELETE',
-                    headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
-                    success: function(res) {
-                        alert(res.message);
-                        fetchCommercialForms();
-                    },
-                    error: function(xhr) {
-                        console.error(xhr.responseText);
-                        alert('Failed to delete record.');
-                    }
-                });
-            });
-            function initSelect2() {
-                $('#author-past-container .select2').select2({
-                    width: '100%',
-                    dropdownParent: $('#multidisciplinaryProjectFormModal')
-                });
-            }
-            function generateFacultyOptions(selectedId = '') {
-                let options = `<option value="">Select Faculty</option>`;
-                faculties.forEach(faculty => {
-                    options += `<option value="${faculty.id}" ${faculty.id == selectedId ? 'selected' : ''}>${faculty.name}</option>`;
-                });
-                return options;
-            }
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Calculate Faculty Retention Rate
+                    |--------------------------------------------------------------------------
+                    */
 
-        let index = $('#author-past-container .past-group').length;
+                    const retentionRates = form.remarks
+                        ?.map(remark =>
+                            parseFloat(remark.no_retention_rate)
+                        )
+                        .filter(rate => !isNaN(rate)) || [];
 
-        $(document).on('click', '#add-coauthor', function () {
-            let html = `
-            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
-                <div class="col-md-6">
-                    <label class="form-label">Faculty</label>
-                    <select name="retention_rate[${index}][faculty_id]" class="form-select select2 faculty-select">
-                        ${generateFacultyOptions()}
-                    </select>
-                </div>
+                    const retentionRate =
+                        retentionRates.length
+                            ? (
+                                retentionRates.reduce(
+                                    (sum, rate) => sum + rate,
+                                    0
+                                ) / retentionRates.length
+                            ).toFixed(1)
+                            : 'N/A';
 
-                <div class="col-md-6">
-                    <label class="form-label">Retention Rate</label>
-                    <div class="input-group">
-                        <span class="input-group-text">%</span>
-                        <input type="number" name="retention_rate[${index}][no_retention_rate]" class="form-control" min="1" step="1">
-                    </div>
-                </div>
 
-                <div class="col-md-12">
-                    <label class="form-label">Remarks</label>
-                    <textarea name="retention_rate[${index}][remarks]" class="form-control" rows="3"></textarea>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="button" class="btn btn-label-danger remove-past">Delete</button>
-                </div>
-            </div>`;
-
-            $('#author-past-container').append(html);
-
-            // Re-init Select2 for newly added select
-            initSelect2();
-
-            index++;
-        });
-
-        // Remove row
-        $(document).on('click', '.remove-past', function () {
-            $(this).closest('.past-group').remove();
-        });
-
-        $(document).on('click', '.edit-form-btn', function () {
-            //const form = $(this).data('form');
-            const encodedForm = $(this).attr('data-form');
-                    const form = JSON.parse(
-                        decodeURIComponent(encodedForm)
+                    const formData = encodeURIComponent(
+                        JSON.stringify(form)
                     );
 
-            $('#record_id').val(form.id);
-            //$('#select2Year').val(form.year).trigger('change');
-             $('#year_id').val(form.year_id).trigger('change');
 
-            $('#author-past-container').html('');
-            index = 0;
+                    let editButton = '';
+                    let deleteBtn = '';
 
-            form.remarks.forEach(item => {
-                let html = `
+
+                    if (parseInt(form.status) === 1) {
+
+                        editButton = `
+                            <button
+                                class="btn rounded-pill btn-outline-warning waves-effect edit-form-btn"
+                                data-form="${formData}">
+
+                                <span class="icon-xs icon-base ti tabler-eye me-2"></span>
+                                Edit
+
+                            </button>
+                        `;
+
+
+                        deleteBtn = `
+                            <button
+                                class="btn rounded-pill btn-outline-danger delete-btn"
+                                data-id="${form.id}">
+
+                                Delete
+
+                            </button>
+                        `;
+                    }
+
+
+                    return [
+
+                        i + 1,
+
+                        form.year
+                            ? form.year.year
+                            : 'N/A',
+
+                        facultyName,
+
+                        retentionRate !== 'N/A'
+                            ? retentionRate + '%'
+                            : 'N/A',
+
+                        createdAt,
+
+                        editButton + ' ' + deleteBtn
+
+                    ];
+
+                });
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | DataTable
+                |--------------------------------------------------------------------------
+                */
+
+                if (!$.fn.DataTable.isDataTable('#intellectualTable')) {
+
+                    $('#intellectualTable').DataTable({
+
+                        data: rowData,
+
+                        scrollX: true,
+
+                        scrollCollapse: true,
+
+                        autoWidth: false,
+
+                        columns: [
+
+                            { title: "#" },
+
+                            { title: "Year" },
+
+                            { title: "Faculty" },
+
+                            { title: "Retention Rate" },
+
+                            { title: "Created Date" },
+
+                            { title: "Actions" }
+
+                        ]
+
+                    });
+
+                } else {
+
+                    $('#intellectualTable')
+                        .DataTable()
+                        .clear()
+                        .rows
+                        .add(rowData)
+                        .draw();
+
+                }
+
+            },
+
+            error: function (xhr) {
+
+                console.error(
+                    'Error fetching data:',
+                    xhr.responseText
+                );
+
+                alert('Unable to load data.');
+
+            }
+
+        });
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Initialize Select2
+    |--------------------------------------------------------------------------
+    */
+
+    function initSelect2() {
+
+        $('#author-past-container .select2').select2({
+
+            width: '100%',
+
+            dropdownParent:
+                $('#multidisciplinaryProjectFormModal')
+
+        });
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generate Faculty Options
+    |--------------------------------------------------------------------------
+    */
+
+    function generateFacultyOptions(selectedId = '') {
+
+        let options =
+            `<option value="">Select Faculty</option>`;
+
+
+        faculties.forEach(function (faculty) {
+
+            options += `
+                <option
+                    value="${faculty.id}"
+                    ${faculty.id == selectedId ? 'selected' : ''}>
+
+                    ${faculty.name}
+
+                </option>
+            `;
+
+        });
+
+
+        return options;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load Departments
+    |--------------------------------------------------------------------------
+    */
+
+    function loadDepartments(
+        facultyId,
+        departmentSelect,
+        selectedDepartmentId = ''
+    ) {
+
+        departmentSelect.html(
+            '<option value="">Loading...</option>'
+        );
+
+
+        if (!facultyId) {
+
+            departmentSelect.html(
+                '<option value="">-- Select Department --</option>'
+            );
+
+            return $.Deferred()
+                .resolve()
+                .promise();
+
+        }
+
+
+        return $.ajax({
+
+            url: "/get-departments/" + facultyId,
+
+            type: "GET",
+
+            success: function (response) {
+
+                departmentSelect.empty();
+
+
+                departmentSelect.append(
+                    '<option value="">-- Select Department --</option>'
+                );
+
+
+                $.each(
+                    response,
+                    function (key, department) {
+
+                        departmentSelect.append(`
+                            <option value="${department.id}">
+                                ${department.name}
+                            </option>
+                        `);
+
+                    }
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Automatically Select Department
+                |--------------------------------------------------------------------------
+                */
+
+                if (selectedDepartmentId) {
+
+                    departmentSelect
+                        .val(selectedDepartmentId)
+                        .trigger('change.select2');
+
+                }
+
+            },
+
+            error: function () {
+
+                departmentSelect.html(
+                    '<option value="">Error loading departments</option>'
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load Programs
+    |--------------------------------------------------------------------------
+    */
+
+    function loadPrograms(
+        departmentId,
+        programSelect,
+        selectedProgramId = ''
+    ) {
+
+        programSelect.html(
+            '<option value="">Loading...</option>'
+        );
+
+
+        if (!departmentId) {
+
+            programSelect.html(
+                '<option value="">-- Select Program --</option>'
+            );
+
+            return $.Deferred()
+                .resolve()
+                .promise();
+
+        }
+
+
+        return $.ajax({
+
+            url: "/get-programs/" + departmentId,
+
+            type: "GET",
+
+            success: function (response) {
+
+                programSelect.empty();
+
+
+                programSelect.append(
+                    '<option value="">-- Select Program --</option>'
+                );
+
+
+                $.each(
+                    response,
+                    function (key, program) {
+
+                        programSelect.append(`
+                            <option value="${program.id}">
+                                ${program.program_name}
+                            </option>
+                        `);
+
+                    }
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Automatically Select Program
+                |--------------------------------------------------------------------------
+                */
+
+                if (selectedProgramId) {
+
+                    programSelect
+                        .val(selectedProgramId)
+                        .trigger('change.select2');
+
+                }
+
+            },
+
+            error: function () {
+
+                programSelect.html(
+                    '<option value="">Error loading programs</option>'
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty Change
+    |--------------------------------------------------------------------------
+    | Used when user manually changes Faculty
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).on(
+        'change',
+        '.faculty-select',
+        function () {
+
+            const facultyId = $(this).val();
+
+            const currentGroup =
+                $(this).closest('.past-group');
+
+
+            const departmentSelect =
+                currentGroup.find('.department-select');
+
+
+            const programSelect =
+                currentGroup.find('.program-select');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Reset Department & Program
+            |--------------------------------------------------------------------------
+            */
+
+            departmentSelect.html(
+                '<option value="">Loading...</option>'
+            );
+
+
+            programSelect.html(
+                '<option value="">-- Select Program --</option>'
+            );
+
+
+            if (!facultyId) {
+
+                departmentSelect.html(
+                    '<option value="">-- Select Department --</option>'
+                );
+
+                return;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Load Departments
+            |--------------------------------------------------------------------------
+            */
+
+            loadDepartments(
+                facultyId,
+                departmentSelect
+            );
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Department Change
+    |--------------------------------------------------------------------------
+    | Used when user manually changes Department
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).on(
+        'change',
+        '.department-select',
+        function () {
+
+            const departmentId = $(this).val();
+
+            const currentGroup =
+                $(this).closest('.past-group');
+
+
+            const programSelect =
+                currentGroup.find('.program-select');
+
+
+            programSelect.html(
+                '<option value="">Loading...</option>'
+            );
+
+
+            if (!departmentId) {
+
+                programSelect.html(
+                    '<option value="">-- Select Program --</option>'
+                );
+
+                return;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Load Programs
+            |--------------------------------------------------------------------------
+            */
+
+            loadPrograms(
+                departmentId,
+                programSelect
+            );
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Add New Row
+    |--------------------------------------------------------------------------
+    */
+
+    let index =
+        $('#author-past-container .past-group').length;
+
+
+    $(document).on(
+        'click',
+        '#add-coauthor',
+        function () {
+
+            let html = `
+
                 <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
 
                     <div class="col-md-6">
-                        <label class="form-label">Faculty</label>
-                        <select name="retention_rate[${index}][faculty_id]" class="form-select select2 faculty-select">
-                            ${generateFacultyOptions(item.faculty_id)}
+
+                        <label class="form-label">
+                            Faculty
+                        </label>
+
+                        <select
+                            name="retention_rate[${index}][faculty_id]"
+                            class="form-select  faculty-select">
+
+                            ${generateFacultyOptions()}
+
                         </select>
+
                     </div>
+
 
                     <div class="col-md-6">
-                        <label class="form-label">Retention Rate</label>
-                        <div class="input-group">
-                            <span class="input-group-text">%</span>
-                            <input type="number" name="retention_rate[${index}][no_retention_rate]" class="form-control" value="${item.no_retention_rate}">
-                        </div>
+
+                        <label class="form-label">
+                            Department
+                        </label>
+
+                        <select
+                            name="retention_rate[${index}][department_id]"
+                            class=" form-select department-select"
+                            required>
+
+                            <option value="">
+                                -- Select Department --
+                            </option>
+
+                        </select>
+
                     </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Program
+                        </label>
+
+                        <select
+                            name="retention_rate[${index}][program_id]"
+                            class=" form-select program-select">
+
+                            <option value="">
+                                -- Select Program --
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Program Level
+                        </label>
+
+                        <select
+                            name="retention_rate[${index}][program_level]"
+                            class="form-select ">
+
+                            <option value="">
+                                -- Select Level --
+                            </option>
+
+                            <option value="UG">
+                                UG
+                            </option>
+
+                            <option value="PG">
+                                PG
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Retention Rate
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                %
+                            </span>
+
+                            <input
+                                type="number"
+                                name="retention_rate[${index}][no_retention_rate]"
+                                class="form-control"
+                                min="1"
+                                step="1">
+
+                        </div>
+
+                    </div>
+
 
                     <div class="col-md-12">
-                        <label class="form-label">Remarks</label>
-                        <textarea name="retention_rate[${index}][remarks]" class="form-control" rows="3">${item.remarks ?? ''}</textarea>
+
+                        <label class="form-label">
+                            Remarks
+                        </label>
+
+                        <textarea
+                            name="retention_rate[${index}][remarks]"
+                            class="form-control"
+                            rows="3"></textarea>
+
                     </div>
+
 
                     <div class="col-md-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-label-danger remove-past">Delete</button>
+
+                        <button
+                            type="button"
+                            class="btn btn-label-danger remove-past">
+
+                            Delete
+
+                        </button>
+
                     </div>
-                </div>`;
 
-                $('#author-past-container').append(html);
-                index++;
-            });
+                </div>
+            `;
 
-            // Init Select2 after loading all rows
+
+            $('#author-past-container')
+                .append(html);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Initialize Select2 for new row
+            |--------------------------------------------------------------------------
+            */
+
             initSelect2();
 
-            $('#multidisciplinaryProjectFormModal').modal('show');
-        });
 
-        });
+            index++;
 
-                </script>
-    @endif
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Remove Row
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).on(
+        'click',
+        '.remove-past',
+        function () {
+
+            $(this)
+                .closest('.past-group')
+                .remove();
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT RECORD
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).on(
+        'click',
+        '.edit-form-btn',
+        function () {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Get Form Data
+            |--------------------------------------------------------------------------
+            */
+
+            const encodedForm =
+                $(this).attr('data-form');
+
+
+            const form =
+                JSON.parse(
+                    decodeURIComponent(encodedForm)
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Record ID
+            |--------------------------------------------------------------------------
+            */
+
+            $('#record_id')
+                .val(form.id);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Year
+            |--------------------------------------------------------------------------
+            */
+
+            $('#year_id')
+                .val(form.year_id)
+                .trigger('change');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Clear Existing Rows
+            |--------------------------------------------------------------------------
+            */
+
+            $('#author-past-container')
+                .html('');
+
+
+            index = 0;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create Rows From Existing Data
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                form.remarks &&
+                form.remarks.length
+            ) {
+
+                form.remarks.forEach(
+                    function (item) {
+
+                        let html = `
+
+                            <div class="past-group row g-3 mb-3 border p-3 mt-3 rounded">
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Faculty
+                                    </label>
+
+                                    <select
+                                        name="retention_rate[${index}][faculty_id]"
+                                        class="form-select  faculty-select">
+
+                                        ${generateFacultyOptions(
+                                            item.faculty_id
+                                        )}
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Department
+                                    </label>
+
+                                    <select
+                                        name="retention_rate[${index}][department_id]"
+                                        class=" form-select department-select"
+                                        required>
+
+                                        <option value="">
+                                            -- Select Department --
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Program
+                                    </label>
+
+                                    <select
+                                        name="retention_rate[${index}][program_id]"
+                                        class=" form-select program-select">
+
+                                        <option value="">
+                                            -- Select Program --
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Program Level
+                                    </label>
+
+                                    <select
+                                        name="retention_rate[${index}][program_level]"
+                                        class="form-select ">
+
+                                        <option value="">
+                                            -- Select Level --
+                                        </option>
+
+                                        <option
+                                            value="UG"
+                                            ${item.program_level == 'UG'
+                                                ? 'selected'
+                                                : ''}>
+
+                                            UG
+
+                                        </option>
+
+                                        <option
+                                            value="PG"
+                                            ${item.program_level == 'PG'
+                                                ? 'selected'
+                                                : ''}>
+
+                                            PG
+
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Retention Rate
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            %
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            name="retention_rate[${index}][no_retention_rate]"
+                                            class="form-control"
+                                            min="1"
+                                            step="1"
+                                            value="${item.no_retention_rate ?? ''}"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-12">
+
+                                    <label class="form-label">
+                                        Remarks
+                                    </label>
+
+                                    <textarea
+                                        name="retention_rate[${index}][remarks]"
+                                        class="form-control"
+                                        rows="3">${item.remarks ?? ''}</textarea>
+
+                                </div>
+
+
+                                <div class="col-md-2 d-flex align-items-end">
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-label-danger remove-past">
+
+                                        Delete
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+
+                        $('#author-past-container')
+                            .append(html);
+
+
+                        index++;
+
+                    }
+                );
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Initialize Select2
+            |--------------------------------------------------------------------------
+            */
+
+            initSelect2();
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | IMPORTANT:
+            | Faculty -> Department -> Program
+            |--------------------------------------------------------------------------
+            */
+
+            $('#author-past-container .past-group')
+                .each(function (rowIndex) {
+
+                    const currentGroup =
+                        $(this);
+
+
+                    const facultySelect =
+                        currentGroup.find(
+                            '.faculty-select'
+                        );
+
+
+                    const departmentSelect =
+                        currentGroup.find(
+                            '.department-select'
+                        );
+
+
+                    const programSelect =
+                        currentGroup.find(
+                            '.program-select'
+                        );
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Get saved values
+                    |--------------------------------------------------------------------------
+                    */
+
+                    const item =
+                        form.remarks[rowIndex];
+
+
+                    if (!item) {
+                        return;
+                    }
+
+
+                    const facultyId =
+                        item.faculty_id;
+
+
+                    const departmentId =
+                        item.department_id;
+
+
+                    const programId =
+                        item.program_id;
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Set Faculty
+                    |--------------------------------------------------------------------------
+                    */
+
+                    facultySelect
+                        .val(facultyId)
+                        .trigger('change.select2');
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Load Department
+                    |--------------------------------------------------------------------------
+                    */
+
+                    loadDepartments(
+                        facultyId,
+                        departmentSelect,
+                        departmentId
+                    )
+                    .then(function () {
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Load Program
+                        |--------------------------------------------------------------------------
+                        */
+
+                        return loadPrograms(
+                            departmentId,
+                            programSelect,
+                            programId
+                        );
+
+                    });
+
+                });
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Show Modal
+            |--------------------------------------------------------------------------
+            */
+
+            $('#multidisciplinaryProjectFormModal')
+                .modal('show');
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE
+    |--------------------------------------------------------------------------
+    */
+
+    $('#researchForm1').on(
+        'submit',
+        function (e) {
+
+            e.preventDefault();
+
+
+            const form =
+                $(this);
+
+
+            const formData =
+                new FormData(this);
+
+
+            const recordId =
+                $('#record_id').val();
+
+
+            Swal.fire({
+
+                title: 'Updating...',
+
+                allowOutsideClick: false,
+
+                didOpen: function () {
+
+                    Swal.showLoading();
+
+                }
+
+            });
+
+
+            $.ajax({
+
+                url:
+                    "{{ route('faculty-retention.update', '') }}/"
+                    + recordId,
+
+                method: 'POST',
+
+                data: formData,
+
+                contentType: false,
+
+                processData: false,
+
+                headers: {
+
+                    'X-CSRF-TOKEN':
+                        $('meta[name="csrf-token"]')
+                            .attr('content')
+
+                },
+
+
+                success: function (response) {
+
+                    Swal.close();
+
+
+                    Swal.fire(
+                        'Success',
+                        response.message,
+                        'success'
+                    );
+
+
+                    $('#multidisciplinaryProjectFormModal')
+                        .modal('hide');
+
+
+                    $('#researchForm1')[0]
+                        .reset();
+
+
+                    form.find(
+                        '.invalid-feedback'
+                    ).remove();
+
+
+                    form.find(
+                        '.is-invalid'
+                    ).removeClass(
+                        'is-invalid'
+                    );
+
+
+                    $('#author-past-container')
+                        .html('');
+
+
+                    index = 0;
+
+
+                    fetchCommercialForms();
+
+                },
+
+
+                error: function (xhr) {
+
+                    Swal.close();
+
+
+                    if (xhr.status === 422) {
+
+                        const errors =
+                            xhr.responseJSON.errors;
+
+
+                        $.each(
+                            errors,
+                            function (
+                                field,
+                                messages
+                            ) {
+
+                                const input =
+                                    $('#researchForm1')
+                                        .find(
+                                            '[name="' +
+                                            field +
+                                            '"]'
+                                        );
+
+
+                                input.addClass(
+                                    'is-invalid'
+                                );
+
+
+                                input.after(
+                                    '<div class="invalid-feedback">' +
+                                    messages[0] +
+                                    '</div>'
+                                );
+
+                            }
+                        );
+
+                    } else {
+
+                        Swal.fire(
+                            'Error',
+                            'Something went wrong!',
+                            'error'
+                        );
+
+                    }
+
+                }
+
+            });
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).on(
+        'click',
+        '.delete-btn',
+        function () {
+
+            const id =
+                $(this).data('id');
+
+
+            if (
+                !confirm(
+                    'Are you sure you want to delete this record?'
+                )
+            ) {
+                return;
+            }
+
+
+            $.ajax({
+
+                url:
+                    `/faculty-retention/${id}`,
+
+                type: 'DELETE',
+
+                headers: {
+
+                    'X-CSRF-TOKEN':
+                        "{{ csrf_token() }}"
+
+                },
+
+
+                success: function (res) {
+
+                    alert(res.message);
+
+                    fetchCommercialForms();
+
+                },
+
+
+                error: function (xhr) {
+
+                    console.error(
+                        xhr.responseText
+                    );
+
+                    alert(
+                        'Failed to delete record.'
+                    );
+
+                }
+
+            });
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PAGE LOAD
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).ready(function () {
+
+        fetchCommercialForms();
+
+    });
+
+</script>
+
+@endif
+
 @endpush

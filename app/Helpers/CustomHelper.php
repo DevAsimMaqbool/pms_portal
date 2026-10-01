@@ -7311,8 +7311,8 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
         $meta = getRatingMeta($avgRating);
 
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
-        $avgRating_weitage = min($avgRating, 100);
-        $weightedScore = ($avgRating_weitage * $weight) / 100;
+        $avgRating = min($avgRating, 100);
+        $weightedScore = ($avgRating * $weight) / 100;
 
         saveIndicatorPercentage90Plus(
             $employeeId,
@@ -7321,7 +7321,7 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
             $categoryId,
             $indicatorId,
             $weightedScore,
-            $avgRating_weitage,
+            $avgRating,
             $currentYear
         );
 
@@ -7363,6 +7363,8 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
             'rows' => $rows,
             'summary' => (object) [
                 'average_rating' => $avgRating,
+                'total_target' => $totalTarget,
+                'total_acheived' => $totalAchieved,
                 'weighted_score' => round($weightedScore, 2),
                 'color' => $meta->color,
                 'rating' => $meta->rating
@@ -7497,6 +7499,7 @@ if (!function_exists('noOfProfessionalMembershipsOfHOD')) {
         $avgRating = $totalTarget > 0
             ? round(($totalAchieved / $totalTarget) * 100, 2)
             : 0;
+        $avgRating = min($avgRating, 100);    
 
         // 6️⃣ RATING
         $meta = getRatingMeta($avgRating);
@@ -7574,6 +7577,7 @@ if (!function_exists('noOfProfessionalMembershipsOfHODPL')) {
             $avgRating,
             $currentYear
         );
+        
 
         // 8️⃣ RETURN
         return [
