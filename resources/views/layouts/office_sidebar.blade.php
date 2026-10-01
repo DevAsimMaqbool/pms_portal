@@ -85,6 +85,26 @@
 
       </ul>
     </li>
+    @if(in_array(getRoleName(activeRole()), ['Human Resources']))
+    <li class="menu-item {{ request()->routeIs([
+        'goal-hr.index',
+      ]) ? 'active open' : '' }}">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <i class="menu-icon icon-base ti tabler-target"></i>
+          <div data-i18n="Goal Settings">Goal Settings</div>
+        </a>
+
+        <ul class="menu-sub">
+          <li class="menu-item {{ request()->routeIs('goal-hr.index') ? 'active' : '' }}">
+            <a href="{{ route('goal-hr.index') }}" class="menu-link">
+              <i class="menu-icon icon-base ti tabler-files"></i>
+              <div data-i18n="HR Moderation">HR Moderation</div>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+    @endif  
   </ul>
 
 </aside>
