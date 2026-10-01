@@ -173,10 +173,10 @@
                                         <th>Department</th>
                                         <th>Program</th>
                                         <th>Level</th>
-                                        <th>Target</th>
-                                        <th>Achieved</th>
-                                        <th>Score</th>
-                                        <th>Rating</th>
+                                        {{-- <th>Target</th> --}}
+                                        <th>Count</th>
+                                        {{-- <th>Score</th>
+                                        <th>Rating</th> --}}
                                     </tr>
                                 </thead>
 
@@ -194,36 +194,41 @@
                                             <td>{{ $row->program_level }}</td>
 
                                             {{-- 🔥 TARGET --}}
-                                            <td>{{ $row->target }}</td>
+                                            {{-- <td>{{ $row->target }}</td> --}}
 
                                             {{-- 🔥 ACHIEVED --}}
                                             <td>{{ $row->achieved }}</td>
 
                                             {{-- SCORE --}}
-                                            <td>
+                                            {{-- <td>
                                                 <div class="badge" style="background-color: {{ $row->color }}">
                                                     {{ number_format($row->score, 2) }}%
                                                 </div>
-                                            </td>
+                                            </td> --}}
 
                                             {{-- RATING --}}
-                                            <td>
+                                            {{-- <td>
                                                 <span class="badge" style="background-color: {{ $row->color }}">
                                                     {{ $row->rating }}
                                                 </span>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
 
                                     {{-- SUMMARY --}}
                                     <tfoot>
                                         <tr class="table-primary fw-bold">
-                                            <td colspan="5">Overall Department</td>
-                                            <td colspan="2">—</td>
+                                            <td colspan="2">Overall Department</td>
+                                            <td>Total Trget <span class="badge">
+                                                    {{ number_format($data->summary->total_target, 1) }}
+                                                </span></td>
+                                            <td>Total Achieved <span class="badge">
+                                                     {{ number_format($data->summary->total_acheived, 1) }}
+                                                </span></td>
 
                                             <td>
                                                 <span class="badge" style="background-color: {{ $data->summary->color }}">
-                                                    {{ number_format($data->summary->average_rating, 2) }}%
+                                                    {{ number_format($data->summary->average_rating, 1) }}%
                                                 </span>
                                             </td>
 
