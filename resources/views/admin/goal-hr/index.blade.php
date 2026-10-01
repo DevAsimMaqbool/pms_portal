@@ -160,14 +160,17 @@
                         |--------------------------------------------------------------------------
                         */
 
-                        $managerRatings = $reports
-                            ->pluck('manager_rating')
-                            ->filter(fn($rating) => $rating !== null);
+                       $managerRatings = $reports
+                        ->filter(fn($report) => $report->manager_rating !== null);
 
-                        $managerOverall = $managerRatings->count()
-                            ? round($managerRatings->avg(), 2)
-                            : null;
+                        $weightedScore = $managerRatings->sum(fn($report) =>
+                        (float) $report->manager_rating *
+                        ((float) $report->weightage / 100)
+                        );
 
+                        $managerOverall = $managerRatings->isNotEmpty()
+                        ? $weightedScore
+                        : null;
                         /*
                         |--------------------------------------------------------------------------
                         | HR Overall Rating
@@ -223,10 +226,9 @@
                             </small>
 
                             <strong>
-                                {{ $selfOverall ?? '-' }}
-
+                                
                                 @if($selfOverall !== null)
-                                    / 5
+                                    {{ number_format($selfOverall*20, 2) }}<span>%</span>
                                 @endif
                             </strong>
 
@@ -240,10 +242,9 @@
                             </small>
 
                             <strong>
-                                {{ $managerOverall ?? '-' }}
-
+                                
                                 @if($managerOverall !== null)
-                                    / 5
+                                    {{ number_format($managerOverall*20, 2) }}<span>%</span>
                                 @endif
                             </strong>
 
@@ -257,10 +258,8 @@
                             </small>
 
                             <strong>
-                                {{ $overallReview->hr_overall_rating ?? '-' }}
-
                                 @if($overallReview?->hr_overall_rating !== null)
-                                    / 5
+                                   {{ number_format($overallReview?->hr_overall_rating, 2) }}<span>%</span>
                                 @endif
                             </strong>
 

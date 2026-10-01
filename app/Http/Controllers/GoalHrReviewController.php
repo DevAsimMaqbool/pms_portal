@@ -7,6 +7,7 @@ use App\Models\GoalOverallReview;
 use App\Exports\GoalHrOverallPerformanceExport;
 use App\Models\GoalHistory;
 use App\Models\User;
+use App\Models\LineManagerFeedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -129,6 +130,31 @@ class GoalHrReviewController extends Controller
             ->latest('id')
             ->first();
 
+        $lineManagerFeedback = LineManagerFeedback::where('employee_id', $user->id)
+        ->where('assessment_type', 'manager')
+        ->where('status', 1)
+        ->latest('id')
+        ->first();
+
+        $lineManagerAvg = $lineManagerFeedback
+            ? collect([
+                $lineManagerFeedback->responsibility_accountability_1,
+                $lineManagerFeedback->responsibility_accountability_2,
+                $lineManagerFeedback->responsibility_accountability_3,
+                $lineManagerFeedback->empathy_compassion_1,
+                $lineManagerFeedback->empathy_compassion_2,
+                $lineManagerFeedback->humility_service_1,
+                $lineManagerFeedback->humility_service_2,
+                $lineManagerFeedback->humility_service_3,
+                $lineManagerFeedback->honesty_integrity_1,
+                $lineManagerFeedback->honesty_integrity_2,
+                $lineManagerFeedback->honesty_integrity_3,
+                $lineManagerFeedback->inspirational_leadership_1,
+                $lineManagerFeedback->inspirational_leadership_2,
+                $lineManagerFeedback->inspirational_leadership_3,
+            ])->filter(fn($score) => $score !== null)->avg()
+            : null;
+
         /*
         |--------------------------------------------------------------------------
         | Manager Overall Rating
@@ -140,13 +166,15 @@ class GoalHrReviewController extends Controller
         */
 
         $managerRatings = $reports
-            ->pluck('manager_rating')
-            ->filter(function ($rating) {
-                return $rating !== null;
-            });
+        ->filter(fn($report) => $report->manager_rating !== null);
 
-        $managerOverallRating = $managerRatings->count()
-            ? round($managerRatings->avg(), 2)
+        $weightedScore = $managerRatings->sum(function ($report) {
+            return (float) $report->manager_rating
+                * ((float) ($report->weightage ?? 0) / 100);
+        });
+
+        $managerOverallRating = $managerRatings->isNotEmpty()
+            ? round($weightedScore, 2)
             : null;
 
         return view(
@@ -155,7 +183,8 @@ class GoalHrReviewController extends Controller
                 'user',
                 'reports',
                 'overallReview',
-                'managerOverallRating'
+                'managerOverallRating',
+                'lineManagerAvg'
             )
         );
     }
@@ -169,12 +198,12 @@ class GoalHrReviewController extends Controller
     public function review(Request $request, User $user)
     {
         $validated = $request->validate([
-            'hr_overall_rating' => [
-                'required',
-                'integer',
-                'min:0',
-                'max:5',
-            ],
+           'hr_overall_rating' => [
+            'required',
+            'numeric',
+            'min:0',
+            'max:100',
+        ],
 
             'decision' => [
                 'required',

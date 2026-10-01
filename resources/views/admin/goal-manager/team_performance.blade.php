@@ -217,7 +217,7 @@
 
                         $hrScore100 =
                             $hrScore !== null
-                                ? round((float) $hrScore * 20, 2)
+                                ? round((float) $hrScore, 2)
                                 : null;
 
                         /*

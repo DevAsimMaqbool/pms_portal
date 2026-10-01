@@ -204,26 +204,23 @@ class GoalManagerReviewController extends Controller
         */
 
         $weightedTotal = 0;
-        $totalWeight = 0;
+        $reviewedGoals = 0;
 
         foreach ($reports as $report) {
-
             if (
                 $report->manager_rating !== null &&
                 $report->weightage !== null
             ) {
-
                 $weightedTotal +=
-                    ((float) $report->manager_rating *
-                        (float) $report->weightage);
+                    (float) $report->manager_rating *
+                    ((float) $report->weightage / 100);
 
-                $totalWeight +=
-                    (float) $report->weightage;
+                $reviewedGoals++;
             }
         }
 
-        $calculatedOverallRating = $totalWeight > 0
-            ? round($weightedTotal / $totalWeight, 2)
+        $calculatedOverallRating = $reviewedGoals > 0
+            ? round($weightedTotal, 2)
             : null;
 
         /*
@@ -635,16 +632,22 @@ public function lineManagerForm()
 |--------------------------------------------------------------------------
 */
 
-$managerRatings = GoalSelfReport::where(
+$managerReports = GoalSelfReport::where(
     'user_id',
     $employee->id
 )
 ->whereNotNull('manager_rating')
-->pluck('manager_rating');
+->whereNotNull('weightage')
+->get(['manager_rating', 'weightage']);
+
+$weightedTotal = $managerReports->sum(function ($report) {
+    return (float) $report->manager_rating
+        * ((float) $report->weightage / 100);
+});
 
 $employee->manager_overall_rating =
-    $managerRatings->count()
-        ? round($managerRatings->avg(), 2)
+    $managerReports->isNotEmpty()
+        ? round($weightedTotal, 2)
         : null;
 
 /*

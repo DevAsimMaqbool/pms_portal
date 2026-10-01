@@ -163,13 +163,9 @@
 
             <strong class="overall-rating">
 
-                {{ $calculatedOverallRating !== null
-                    ? number_format($calculatedOverallRating, 2)
-                    : '-' }}
-
                 @if($calculatedOverallRating !== null)
 
-                    <small>/ 5</small>
+                    {{ number_format($calculatedOverallRating*20, 2) }}%
 
                 @endif
 

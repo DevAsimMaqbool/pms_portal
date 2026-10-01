@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-
+ @php
+        $totalGoalWeightage = $reports->sum(function ($report) {
+            return (float) ($report->weightage ?? 0);
+        });
+    @endphp
     <div class="container-fluid py-3">
 
         {{-- HEADER --}}
@@ -59,7 +63,7 @@
         {{-- SUMMARY --}}
         <div class="row g-3 mb-3">
 
-            <div class="col-md-4">
+            <div class="col-md-2 col-sm-6">
 
                 <div class="summary-card">
 
@@ -73,17 +77,22 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2 col-sm-6">
+                <div class="summary-card weightage">
+                    <small>Total Goal Weightage</small>
+                    <strong>{{ number_format($totalGoalWeightage, 2) }}<span>%</span></strong>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
 
                 <div class="summary-card manager">
 
                     <small>Manager Overall Rating</small>
 
                     <strong>
-                        {{ $managerOverallRating ?? '-' }}
-
                         @if($managerOverallRating !== null)
-                            <span>/ 5</span>
+                            <strong>{{ number_format($managerOverallRating*20, 2) }}<span>%</span></strong>
                         @endif
                     </strong>
 
@@ -91,7 +100,19 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2 col-sm-6">
+    <div class="summary-card feedback">
+        <small>Line Manager Feedback</small>
+        <strong>
+            {{ $lineManagerAvg !== null ? number_format($lineManagerAvg, 2) : '-' }}
+            @if($lineManagerAvg !== null)
+                <span>%</span>
+            @endif
+        </strong>
+    </div>
+</div>
+
+            <div class="col-md-3 col-sm-6">
 
                 <div class="summary-card hr">
 
@@ -101,7 +122,7 @@
                         {{ $overallReview->hr_overall_rating ?? '-' }}
 
                         @if($overallReview?->hr_overall_rating !== null)
-                            <span>/ 5</span>
+                            <span>%</span>
                         @endif
                     </strong>
 
@@ -130,6 +151,16 @@
 
                 @forelse($reports as $report)
 
+                    @php
+
+                    $managerReview = $report->reviews
+                    ->where('reviewer_type', 'manager')
+                    ->sortByDesc('id')
+                    ->first();
+                    $goalWeightage = (float) ($report->weightage ?? 0);
+
+                    @endphp
+
                     <div class="goal-row">
 
                         <div class="goal-number">
@@ -141,6 +172,10 @@
                             <div class="goal-title">
                                 {{ $report->goal->goal ?? 'N/A' }}
                             </div>
+                            <span class="weightage-badge">
+                                    <i class="fas fa-balance-scale me-1"></i>
+                                    Weightage: {{ number_format($goalWeightage, 2) }}%
+                                </span>
 
                             <div class="goal-meta">
 
@@ -150,11 +185,11 @@
                                     Driver:
 
                                     <strong>
-                                        {{ $report->goal->s2rDriver->name ?? 'N/A' }}
+                                        {{ $report->goal->s2rDriver->driver_name ?? 'N/A' }}
                                     </strong>
                                 </span>
 
-                                <span>
+                                <!-- <span>
                                     <i class="fas fa-calendar me-1"></i>
 
                                     Deadline:
@@ -162,7 +197,7 @@
                                     <strong>
                                         {{ optional($report->goal->deadline)->format('d M Y') }}
                                     </strong>
-                                </span>
+                                </span> -->
 
                             </div>
 
@@ -203,15 +238,6 @@
                                 </div>
 
                             </div>
-
-                            @php
-
-                                $managerReview = $report->reviews
-                                    ->where('reviewer_type', 'manager')
-                                    ->sortByDesc('id')
-                                    ->first();
-
-                            @endphp
 
                             @if($managerReview && $managerReview->comments)
 
@@ -300,11 +326,10 @@
                             </small>
 
                             <div class="big-rating">
+@if($managerOverallRating !== null)
+                                {{ $managerOverallRating * 20 ?? '-' }}
 
-                                {{ $managerOverallRating ?? '-' }}
-
-                                @if($managerOverallRating !== null)
-                                    <span>/ 5</span>
+                                    <span>%</span>
                                 @endif
 
                             </div>
@@ -330,26 +355,22 @@
 
                         </label>
 
-                        <div class="hr-rating-options">
+                        <div class="form-group">
+    <label for="hr_overall_rating">HR Overall Rating</label>
 
-                            @for($i = 0; $i <= 5; $i++)
-
-                                                    <label>
-
-                                                        <input type="radio" name="hr_overall_rating" value="{{ $i }}" {{ old(
-                                    'hr_overall_rating',
-                                    $overallReview->hr_overall_rating ?? null
-                                ) == $i ? 'checked' : '' }} required>
-
-                                                        <span>
-                                                            {{ $i }}
-                                                        </span>
-
-                                                    </label>
-
-                            @endfor
-
-                        </div>
+    <input
+        type="number"
+        name="hr_overall_rating"
+        id="hr_overall_rating"
+        class="form-control"
+        min="0"
+        max="100"
+        step="any"
+        value="{{ old('hr_overall_rating', $overallReview->hr_overall_rating ?? '') }}"
+        placeholder="Enter rating (0–100)"
+        required
+    >
+</div>
 
                     </div>
 
@@ -432,237 +453,431 @@
 
     </div>
 
-    <style>
-        .summary-card {
-            background: #fff;
-            border: 1px solid #e7edf4;
-            border-radius: 10px;
-            padding: 14px;
-            box-shadow: 0 2px 8px rgba(31, 78, 121, .04);
-        }
+<style>
+    /* Main summary cards */
+    .summary-card {
+        position: relative;
+        height: 100%;
+        background: #fff;
+        border: 1px solid #e7edf4;
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 3px 12px rgba(31, 78, 121, .05);
+        transition: all .2s ease;
+        overflow: hidden;
+    }
 
-        .summary-card small {
-            display: block;
-            color: #718096;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 4px;
+    .summary-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(31, 78, 121, .09);
+    }
+
+    .summary-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #1f4e79;
+    }
+
+    .summary-card.weightage::before {
+        background: #6366a5;
+    }
+
+    .summary-card.manager::before {
+        background: #d39e00;
+    }
+
+    .summary-card.hr::before {
+        background: #198754;
+    }
+
+    .summary-card small {
+        display: block;
+        color: #718096;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .35px;
+        margin-bottom: 8px;
+    }
+
+    .summary-card strong {
+        display: block;
+        color: #1f4e79;
+        font-size: 25px;
+        font-weight: 800;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .summary-card.weightage strong {
+        color: #6366a5;
+    }
+
+    .summary-card.manager strong {
+        color: #b77900;
+    }
+
+    .summary-card.hr strong {
+        color: #198754;
+    }
+
+    .summary-card span {
+        font-size: 12px;
+        font-weight: 600;
+        color: #718096;
+    }
+
+    /* Main cards */
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 16px 20px;
+    }
+
+    .card-header h6 {
+        color: #253449;
+        font-size: 14px;
+    }
+
+    .card-header small {
+        font-size: 11px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    /* Goal list */
+    .goal-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px;
+        border-bottom: 1px solid #edf1f5;
+        transition: background .2s ease;
+    }
+
+    .goal-row:hover {
+        background: #fbfcfe;
+    }
+
+    .goal-row:last-child {
+        border-bottom: 0;
+    }
+
+    .goal-number {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+        border-radius: 9px;
+        background: #e8f1fa;
+        color: #1f4e79;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+    }
+
+    .goal-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .goal-title {
+        color: #253449;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+
+    .weightage-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 10px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        background: #f0f0fa;
+        color: #6366a5;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .goal-meta {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        color: #718096;
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .goal-meta strong {
+        color: #465568;
+        font-weight: 600;
+    }
+
+    /* Employee progress */
+    .goal-progress {
+        margin-top: 13px;
+        padding: 12px 14px;
+        background: #f7f9fc;
+        border: 1px solid #edf1f5;
+        border-radius: 8px;
+    }
+
+    .goal-progress .label {
+        color: #718096;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        margin-bottom: 5px;
+    }
+
+    .goal-progress .text {
+        color: #344256;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    /* Ratings */
+    .ratings-row {
+        display: flex;
+        gap: 14px;
+        margin-top: 13px;
+        flex-wrap: wrap;
+    }
+
+    .ratings-row > div {
+        min-width: 125px;
+        padding: 10px 13px;
+        background: #f8fafc;
+        border: 1px solid #edf1f5;
+        border-radius: 8px;
+    }
+
+    .ratings-row small {
+        display: block;
+        color: #718096;
+        font-size: 10px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .ratings-row strong {
+        display: block;
+        color: #1f4e79;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .ratings-row .manager-rating {
+        color: #b77900;
+    }
+
+    /* Manager remarks */
+    .manager-remarks {
+        margin-top: 13px;
+        padding: 13px 15px;
+        background: #fffaf0;
+        border: 1px solid #f5e8c6;
+        border-left: 4px solid #b77900;
+        border-radius: 8px;
+    }
+
+    .remarks-title {
+        color: #8a6200;
+        font-size: 11px;
+        font-weight: 800;
+        margin-bottom: 6px;
+    }
+
+    .remarks-text {
+        color: #4a5568;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    /* HR moderation section */
+    .hr-icon {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        border-radius: 10px;
+        background: #e7f6ed;
+        color: #198754;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+    }
+
+    .rating-summary-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        background: #f8fafc;
+        border: 1px solid #e7edf4;
+        border-radius: 10px;
+        padding: 16px 18px;
+    }
+
+    .rating-summary-box small {
+        display: block;
+        color: #718096;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .3px;
+        margin-bottom: 5px;
+    }
+
+    .big-rating {
+        color: #b77900;
+        font-size: 25px;
+        font-weight: 800;
+        line-height: 1.4;
+    }
+
+    .big-rating span {
+        color: #718096;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* Form controls */
+    .form-label {
+        color: #344256;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 42px;
+        border: 1px solid #dce3eb;
+        border-radius: 8px;
+        color: #344256;
+        font-size: 13px;
+        box-shadow: none;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    textarea.form-control {
+        min-height: auto;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #5b8dbb;
+        box-shadow: 0 0 0 3px rgba(31, 78, 121, .09);
+    }
+
+    .btn-primary {
+        background: #1f4e79;
+        border-color: #1f4e79;
+        border-radius: 8px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all .2s ease;
+    }
+
+    .btn-primary:hover {
+        background: #163b60;
+        border-color: #163b60;
+        transform: translateY(-1px);
+    }
+
+    .btn-light {
+        border-radius: 7px;
+        font-weight: 600;
+    }
+    .summary-card.feedback::before {
+    background: #6366a5;
+}
+
+.summary-card.feedback strong {
+    color: #6366a5;
+}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .summary-card {
+            padding: 14px;
         }
 
         .summary-card strong {
-            color: #1f4e79;
-            font-size: 24px;
-        }
-
-        .summary-card.manager strong {
-            color: #b77900;
-        }
-
-        .summary-card.hr strong {
-            color: #198754;
-        }
-
-        .summary-card span {
-            font-size: 11px;
-            color: #718096;
+            font-size: 21px;
         }
 
         .goal-row {
-            display: flex;
-            gap: 12px;
-            padding: 16px;
-            border-bottom: 1px solid #edf1f5;
+            padding: 14px;
+            gap: 10px;
         }
 
-        .goal-row:last-child {
-            border-bottom: 0;
+        .goal-meta {
+            gap: 8px;
+            flex-direction: column;
         }
 
-        .goal-number {
-            width: 30px;
-            height: 30px;
-            flex: 0 0 30px;
-            border-radius: 8px;
-            background: #e8f1fa;
-            color: #1f4e79;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
+        .ratings-row {
+            gap: 8px;
         }
 
-        .goal-content {
+        .ratings-row > div {
             flex: 1;
             min-width: 0;
         }
 
-        .goal-title {
-            color: #253449;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .goal-meta {
-            display: flex;
-            gap: 18px;
-            flex-wrap: wrap;
-            color: #718096;
-            font-size: 11px;
-        }
-
-        .goal-progress {
-            margin-top: 10px;
-            padding: 10px;
-            background: #f8fafc;
-            border-radius: 7px;
-        }
-
-        .goal-progress .label {
-            color: #718096;
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-
-        .goal-progress .text {
-            color: #253449;
-            font-size: 12px;
-        }
-
-        .ratings-row {
-            display: flex;
-            gap: 25px;
-            margin-top: 10px;
-        }
-
-        .ratings-row small {
-            display: block;
-            color: #718096;
-            font-size: 10px;
-        }
-
-        .ratings-row strong {
-            display: block;
-            color: #1f4e79;
-            font-size: 16px;
-        }
-
-        .ratings-row .manager-rating {
-            color: #b77900;
-        }
-
-        .manager-remarks {
-            margin-top: 10px;
-            padding: 10px 12px;
-            background: #fffaf0;
-            border-left: 3px solid #b77900;
-            border-radius: 6px;
-        }
-
-        .remarks-title {
-            color: #8a6200;
-            font-size: 10px;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-
-        .remarks-text {
-            color: #4a5568;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
         .rating-summary-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            background: #f8fafc;
-            border: 1px solid #e7edf4;
-            border-radius: 8px;
-            padding: 12px 15px;
+            align-items: flex-start;
+            flex-direction: column;
         }
 
-        .rating-summary-box small {
-            display: block;
-            color: #718096;
-            font-size: 10px;
-            font-weight: 700;
+        .card-header {
+            padding: 14px;
+        }
+
+        .card-body {
+            padding: 14px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .goal-number {
+            width: 28px;
+            height: 28px;
+            flex-basis: 28px;
+        }
+
+        .goal-title {
+            font-size: 13px;
+        }
+
+        .summary-card strong {
+            font-size: 19px;
         }
 
         .big-rating {
-            color: #b77900;
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 22px;
         }
-
-        .big-rating span {
-            color: #718096;
-            font-size: 11px;
-        }
-
-        .hr-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            background: #e7f6ed;
-            color: #198754;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hr-rating-options {
-            display: flex;
-            gap: 8px;
-        }
-
-        .hr-rating-options label {
-            cursor: pointer;
-        }
-
-        .hr-rating-options input {
-            display: none;
-        }
-
-        .hr-rating-options span {
-            width: 48px;
-            height: 48px;
-            border: 1px solid #dbe2ea;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 700;
-            background: #fff;
-        }
-
-        .hr-rating-options input:checked+span {
-            background: #198754;
-            border-color: #198754;
-            color: #fff;
-        }
-
-        @media(max-width:768px) {
-
-            .rating-summary-box {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .goal-row {
-                padding: 12px;
-            }
-
-            .goal-meta {
-                gap: 8px;
-            }
-
-        }
-    </style>
+    }
+</style>
 
 @endsection
