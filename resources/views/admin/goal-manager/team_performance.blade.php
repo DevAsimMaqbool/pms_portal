@@ -587,7 +587,7 @@
                             {{-- RATING --}}
                             <div
                                 class="rating-value"
-                                style="color: {{ $hrScore100 }}; font-weight: 700;"
+                                style="color: {{ $totalColor }}; font-weight: 700;"
                             >
 
                                 @if($hrScore100 !== null)
