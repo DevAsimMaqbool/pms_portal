@@ -569,12 +569,12 @@
                             {{-- SCORE --}}
                             <div
                                 class="rating-score total-score"
-                                style="color: {{ $totalColor }}; font-weight: 800;"
+                                style="color: {{ $hrScore100 }}; font-weight: 800;"
                             >
 
-                                @if($totalScore !== null)
+                                @if($hrScore100 !== null)
 
-                                    {{ number_format($totalScore, 2) }}
+                                    {{ number_format($hrScore100, 2) }}
 
                                 @else
 
@@ -587,10 +587,10 @@
                             {{-- RATING --}}
                             <div
                                 class="rating-value"
-                                style="color: {{ $totalColor }}; font-weight: 700;"
+                                style="color: {{ $hrScore100 }}; font-weight: 700;"
                             >
 
-                                @if($totalScore !== null)
+                                @if($hrScore100 !== null)
 
                                     {{ $totalRating }}
 
