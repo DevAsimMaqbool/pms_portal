@@ -131,7 +131,6 @@ class GoalHrReviewController extends Controller
             ->first();
 
         $lineManagerFeedback = LineManagerFeedback::where('employee_id', $user->id)
-        ->where('assessment_type', 'manager')
         ->where('status', 1)
         ->latest('id')
         ->first();
