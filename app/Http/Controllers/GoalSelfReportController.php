@@ -111,18 +111,14 @@ public function index(Request $request)
 |--------------------------------------------------------------------------
 */
 
-$selfRatings = GoalSelfReport::where('user_id', Auth::id())
-    ->whereNotNull('rating')
-    ->pluck('rating');
+    $selfRatings = GoalSelfReport::where('user_id', Auth::id())
+        ->where('status', 'manager_approved')
+        ->whereNotNull('rating')
+        ->pluck('rating');
 
-$selfOverallRating = null;
-
-if ($selfRatings->count() > 0) {
-    $selfOverallRating = round(
-        $selfRatings->avg(),
-        2
-    );
-}
+    $selfOverallRating = $selfRatings->count() > 0
+        ? round($selfRatings->avg(), 2)
+        : null;
 
     return view(
         'admin.goal-self-reports.index',
