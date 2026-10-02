@@ -126,7 +126,8 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     ->addIndexColumn()
                     ->filter(function ($query) {
 
-                    $keyword = strtolower(request('search')['value'] ?? '');
+                    //$keyword = strtolower(request('search')['value'] ?? '');
+                    $keyword = strtolower(trim(request('search.value', '')));
 
                     if (!$keyword) {
                         return;
@@ -150,6 +151,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                                 });
                             });
                         });
+                        return;
 
                     } elseif (str_contains($keyword, 'waiting for hod approvel')) {
 
@@ -159,23 +161,42 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                                 $r->whereNull('reject_status')
                                     ->orWhere('reject_status', '0');
                             });
+                        return;    
 
                     } elseif (str_contains($keyword, 'verified')) {
 
                         $query->where('status', '3');
+                        return;
 
                     } elseif (str_contains($keyword, 'oric reject this application')) {
                         $query->where('status', '1')->where('reject_status', '2');
+                        return;
 
                     } elseif (str_contains($keyword, 'hod reject this application')) {
 
                         $query->where('status', '1')->where('reject_status', '1');
+                        return;
 
                     } elseif (str_contains($keyword, 'on hold')) {
 
                         $query->where('status', '2')
                             ->where('reject_status', '3');
+                        return;    
                     }
+                    $search = "%{$keyword}%";
+
+                    $creatorIds = User::where('name', 'LIKE', $search)
+                        ->pluck('employee_id');
+
+                    $query->where(function ($q) use ($search, $creatorIds) {
+
+                        $q->where('target_category', 'LIKE', $search)
+                            ->orWhere('journal_clasification', 'LIKE', $search)
+                            ->orWhere('created_at', 'LIKE', $search)
+                            ->orWhereIn('created_by', $creatorIds);
+
+                    });
+                    
                 })
                     ->make(true);
             }
