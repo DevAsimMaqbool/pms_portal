@@ -153,10 +153,10 @@
 
                     @if($selfOverallRating !== null)
 
-                        {{ number_format($selfOverallRating, 2)}}
+                        {{ number_format($selfOverallRating*20, 2)}}
 
                         <small class="rating-max">
-                            / 5
+                            %
                         </small>
 
                     @else
@@ -194,10 +194,10 @@
 
                     @if($overallReview && $overallReview->manager_overall_rating !== null)
 
-                        {{ number_format($overallReview->manager_overall_rating, 2) }}
+                        {{ number_format($overallReview->manager_overall_rating*20, 2) }}
 
                         <small class="rating-max">
-                            / 5
+                            %
                         </small>
 
                     @else
@@ -235,13 +235,9 @@
 
                     @if($managerFeedbackOverall !== null)
 
-                        {{ round(
-        ($managerFeedbackOverall / 100) * 5,
-        2
-    ) }}
-
+                        {{ round($managerFeedbackOverall,2) }}
                         <small class="rating-max">
-                            / 5
+                            %
                         </small>
 
                     @else
