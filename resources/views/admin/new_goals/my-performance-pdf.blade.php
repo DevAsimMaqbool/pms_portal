@@ -680,7 +680,7 @@
 
         $hrScore =
             $hrOverallRating !== null
-                ? ($hrOverallRating * 20)
+                ? ($hrOverallRating)
                 : null;
 
     @endphp
@@ -693,7 +693,7 @@
             <td class="score-card score-manager">
 
                 <div class="score-label">
-                    Manager Score
+                    Manager Rating
                 </div>
 
                 <div class="score-value">
@@ -731,7 +731,7 @@
             <td class="score-card score-total">
 
                 <div class="score-label">
-                    Weighted Total
+                    Manager Final Rating
                 </div>
 
                 <div class="score-value">
@@ -739,7 +739,7 @@
                 </div>
 
                 <div class="score-weight">
-                    Manager 70% + Feedback 30%
+                    Rating 70% + Feedback 30%
                 </div>
 
             </td>

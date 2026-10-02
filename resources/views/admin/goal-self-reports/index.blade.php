@@ -278,7 +278,7 @@
                         {{ number_format($overallReview->hr_overall_rating, 2) }}
 
                         <small class="rating-max">
-                            / 5
+                            %
                         </small>
 
                     @else

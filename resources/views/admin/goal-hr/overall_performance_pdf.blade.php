@@ -1,409 +1,324 @@
 <!DOCTYPE html>
-<html lang="en">
 
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <title>Overall Performance Report</title>
 
-    <style>
-        @page {
-            margin: 18px;
-        }
+```
+<style>
+    @page {
+        margin: 18px;
+    }
 
-        body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 8px;
-            color: #222;
-            margin: 0;
-            padding: 0;
-        }
+    * {
+        box-sizing: border-box;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 14px;
-        }
+    body {
+        font-family: DejaVu Sans, sans-serif;
+        font-size: 8px;
+        color: #222;
+        margin: 0;
+        padding: 0;
+    }
 
-        .header h1 {
-            margin: 0;
-            font-size: 17px;
-            font-weight: bold;
-            color: #1f4e79;
-        }
+    .header {
+        text-align: center;
+        margin-bottom: 14px;
+    }
 
-        .header .subtitle {
-            margin-top: 4px;
-            font-size: 9px;
-            color: #666;
-        }
+    .header h1 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e79;
+    }
 
-        .meta-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 12px;
-        }
+    .header .subtitle {
+        margin-top: 4px;
+        font-size: 9px;
+        color: #666;
+    }
 
-        .meta-table td {
-            padding: 5px 7px;
-            border: 1px solid #d9dee3;
-            background: #f8f9fa;
-        }
+    .meta-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+    }
 
-        .meta-label {
-            font-weight: bold;
-            color: #1f4e79;
-            width: 80px;
-        }
+    .meta-table td {
+        padding: 5px 7px;
+        border: 1px solid #d9dee3;
+        background: #f8f9fa;
+    }
 
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
+    .meta-label {
+        font-weight: bold;
+        color: #1f4e79;
+        width: 80px;
+    }
 
-        .report-table thead {
-            display: table-header-group;
-        }
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
 
-        .report-table tr {
-            page-break-inside: avoid;
-        }
+    .report-table thead {
+        display: table-header-group;
+    }
 
-        .report-table th {
-            background: #1f4e79;
-            color: #ffffff;
-            border: 1px solid #ffffff;
-            padding: 6px 4px;
-            text-align: center;
-            vertical-align: middle;
-            font-size: 7.5px;
-            font-weight: bold;
-        }
+    .report-table tr {
+        page-break-inside: avoid;
+    }
 
-        .report-table td {
-            border: 1px solid #d9dee3;
-            padding: 5px 4px;
-            vertical-align: middle;
-            font-size: 7.5px;
-        }
+    .report-table th {
+        background: #1f4e79;
+        color: #fff;
+        border: 1px solid #fff;
+        padding: 6px 3px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 7px;
+        font-weight: bold;
+        overflow-wrap: break-word;
+    }
 
-        .report-table tbody tr:nth-child(even) {
-            background: #f8fafc;
-        }
+    .report-table td {
+        border: 1px solid #d9dee3;
+        padding: 5px 3px;
+        vertical-align: middle;
+        font-size: 7px;
+        overflow-wrap: break-word;
+    }
 
-        .text-left {
-            text-align: left;
-        }
+    .report-table tbody tr:nth-child(even) {
+        background: #f8fafc;
+    }
 
-        .text-center {
-            text-align: center;
-        }
+    .text-left {
+        text-align: left;
+    }
 
-        .score {
-            text-align: center;
-            font-weight: 600;
-        }
+    .text-center,
+    .score {
+        text-align: center;
+    }
 
-        .total-score {
-            background: #edf4fb;
-            font-weight: bold;
-            text-align: center;
-        }
+    .score {
+        font-weight: 600;
+    }
 
-        .hr-score {
-            background: #faf5e8;
-            font-weight: bold;
-            text-align: center;
-        }
+    .total-score {
+        background: #edf4fb;
+        font-weight: bold;
+        text-align: center;
+    }
 
-        .final-score {
-            background: #eaf6ee;
-            font-weight: bold;
-            text-align: center;
-        }
+    .hr-score {
+        background: #faf5e8;
+        font-weight: bold;
+        text-align: center;
+    }
 
-        .rating {
-            text-align: center;
-            font-weight: bold;
-            font-size: 8px;
-        }
+    .final-score {
+        background: #eaf6ee;
+        font-weight: bold;
+        text-align: center;
+    }
 
-        .rating-os {
-            color: #6EA8FE;
-        }
+    .rating {
+        text-align: center;
+        font-weight: bold;
+        font-size: 8px;
+    }
 
-        .rating-ee {
-            color: #198754;
-        }
+    .rating-os { color: #6EA8FE; }
+    .rating-ee { color: #198754; }
+    .rating-me { color: #b78116; }
+    .rating-ni { color: #fd7e13; }
+    .rating-be { color: #ff4c51; }
+    .rating-default { color: #6c757d; }
 
-        .rating-me {
-            color: #b78116;
-        }
+    .total-heading {
+        line-height: 1.15;
+    }
 
-        .rating-ni {
-            color: #fd7e13;
-        }
+    .total-heading-main {
+        display: block;
+        font-size: 7px;
+        font-weight: bold;
+    }
 
-        .rating-be {
-            color: #ff4c51;
-        }
+    .total-heading-sub {
+        display: block;
+        margin-top: 2px;
+        font-size: 5.5px;
+        font-weight: normal;
+    }
 
-        .rating-default {
-            color: #6c757d;
-        }
+    .footer {
+        margin-top: 10px;
+        text-align: right;
+        font-size: 7px;
+        color: #777;
+    }
 
-        .total-heading {
-            line-height: 1.15;
-        }
+    /* Column widths: total = 100% */
+    .col-name        { width: 12%; }
+    .col-employee-id { width: 7%; }
+    .col-designation { width: 10%; }
+    .col-department  { width: 13%; }
+    .col-goals       { width: 6%; }
+    .col-weightage   { width: 7%; }
+    .col-self        { width: 7%; }
+    .col-manager     { width: 7%; }
+    .col-feedback    { width: 7%; }
+    .col-total       { width: 9%; }
+    .col-hr          { width: 5%; }
+    .col-final       { width: 6%; }
+    .col-rating      { width: 4%; }
+</style>
+```
 
-        .total-heading-main {
-            display: block;
-            font-size: 7.5px;
-            font-weight: bold;
-        }
-
-        .total-heading-sub {
-            display: block;
-            margin-top: 2px;
-            font-size: 5.5px;
-            font-weight: normal;
-        }
-
-        .footer {
-            margin-top: 10px;
-            text-align: right;
-            font-size: 7px;
-            color: #777;
-        }
-
-        /* Column widths */
-        .col-name {
-            width: 13%;
-        }
-
-        .col-employee-id {
-            width: 7%;
-        }
-
-        .col-designation {
-            width: 11%;
-        }
-
-        .col-department {
-            width: 15%;
-        }
-
-        .col-score {
-            width: 7%;
-        }
-
-        .col-feedback {
-            width: 8%;
-        }
-
-        .col-total {
-            width: 9%;
-        }
-
-        .col-hr {
-            width: 7%;
-        }
-
-        .col-final {
-            width: 8%;
-        }
-
-        .col-rating {
-            width: 6%;
-        }
-    </style>
 </head>
 
 <body>
 
-    <div class="header">
-        <h1>Overall Performance Report</h1>
-
-        <div class="subtitle">
-            Employee Performance Summary
-        </div>
+```
+<div class="header">
+    <h1>Overall Performance Report</h1>
+    <div class="subtitle">
+        Employee Performance Summary
     </div>
+</div>
 
-    <table class="meta-table">
+<table class="meta-table">
+    <tr>
+        <td class="meta-label">Department</td>
+        <td>{{ $department ?: 'All Departments' }}</td>
+
+        <td class="meta-label">Generated</td>
+        <td>{{ now()->format('d M Y') }}</td>
+
+        <td class="meta-label">Employees</td>
+        <td>{{ $rows->count() }}</td>
+    </tr>
+</table>
+
+<table class="report-table">
+    <thead>
         <tr>
-            <td class="meta-label">
-                Department
-            </td>
+            <th class="col-name">Name</th>
+            <th class="col-employee-id">Employee ID</th>
+            <th class="col-designation">Designation</th>
+            <th class="col-department">Department</th>
+            <th class="col-goals">Total Goals</th>
+            <th class="col-weightage">Total Weightage</th>
+            <th class="col-self">Self Score</th>
+            <th class="col-manager">Manager Score</th>
+            <th class="col-feedback">Manager Feedback</th>
 
-            <td>
-                {{ $department ?: 'All Departments' }}
-            </td>
+            <th class="col-total">
+                <div class="total-heading">
+                    <span class="total-heading-main">
+                        Total Score
+                    </span>
+                    <span class="total-heading-sub">
+                        70% Goal + 30% Feedback
+                    </span>
+                </div>
+            </th>
 
-            <td class="meta-label">
-                Generated
-            </td>
-
-            <td>
-                {{ now()->format('d M Y') }}
-            </td>
-
-            <td class="meta-label">
-                Employees
-            </td>
-
-            <td>
-                {{ $rows->count() }}
-            </td>
+            <th class="col-hr">HR Score</th>
+            <th class="col-final">Final Score</th>
+            <th class="col-rating">Rating</th>
         </tr>
-    </table>
+    </thead>
 
-    <table class="report-table">
+    <tbody>
+        @forelse ($rows as $row)
+            @php
+                $rating = $row['Rating'] ?? 'BE';
 
-        <thead>
+                $ratingClass = match ($rating) {
+                    'OS' => 'rating-os',
+                    'EE' => 'rating-ee',
+                    'ME' => 'rating-me',
+                    'NI' => 'rating-ni',
+                    'BE' => 'rating-be',
+                    default => 'rating-default',
+                };
+            @endphp
+
             <tr>
+                <td class="text-left">
+                    {{ $row['Name'] ?? '—' }}
+                </td>
 
-                <th class="col-name">
-                    Name
-                </th>
+                <td class="text-center">
+                    {{ $row['Employee ID'] ?? '—' }}
+                </td>
 
-                <th class="col-employee-id">
-                    Employee ID
-                </th>
+                <td class="text-left">
+                    {{ $row['Designation'] ?? '—' }}
+                </td>
 
-                <th class="col-designation">
-                    Designation
-                </th>
+                <td class="text-left">
+                    {{ $row['Department'] ?? '—' }}
+                </td>
 
-                <th class="col-department">
-                    Department
-                </th>
+                <td class="score">
+                    {{ $row['Total Goals'] ?? 0 }}
+                </td>
 
-                <th class="col-score">
-                    Self Score
-                </th>
+                <td class="score">
+                    {{ $row['Total Weightage'] ?? '0.00' }}
+                </td>
 
-                <th class="col-score">
-                    Manager Score
-                </th>
+                <td class="score">
+                    {{ $row['Self Score'] ?? '0.00' }}
+                </td>
 
-                <th class="col-feedback">
-                    Manager Feedback
-                </th>
+                <td class="score">
+                    {{ $row['Manager Score'] ?? '0.00' }}
+                </td>
 
-                <th class="col-total">
-                    <div class="total-heading">
-                        <span class="total-heading-main">
-                            Total Score
-                        </span>
+                <td class="score">
+                    {{ $row['Manager Feedback'] ?? '0.00' }}
+                </td>
 
-                        <span class="total-heading-sub">
-                            70% Goal + 30% Feedback
-                        </span>
-                    </div>
-                </th>
+                <td class="total-score">
+                    {{ $row['Total Score'] ?? '0.00' }}
+                </td>
 
-                <th class="col-hr">
-                    HR Score
-                </th>
+                <td class="hr-score">
+                    {{ $row['HR Score'] ?? '0.00' }}
+                </td>
 
-                <th class="col-final">
-                    Final Score
-                </th>
+                <td class="final-score">
+                    {{ $row['Final Score'] ?? '0.00' }}
+                </td>
 
-                <th class="col-rating">
-                    Rating
-                </th>
-
+                <td class="rating {{ $ratingClass }}">
+                    {{ $rating }}
+                </td>
             </tr>
-        </thead>
+        @empty
+            <tr>
+                <td colspan="13" class="text-center" style="padding: 15px;">
+                    No employees found.
+                </td>
+            </tr>
+        @endforelse
+    </tbody>
+</table>
 
-        <tbody>
-
-            @forelse ($rows as $row)
-
-                @php
-                    $rating = $row['Rating'] ?? 'BE';
-
-                    $ratingClass = match ($rating) {
-                        'OS' => 'rating-os',
-                        'EE' => 'rating-ee',
-                        'ME' => 'rating-me',
-                        'NI' => 'rating-ni',
-                        'BE' => 'rating-be',
-                        default => 'rating-default',
-                    };
-                @endphp
-
-                <tr>
-
-                    <td class="text-left">
-                        {{ $row['Name'] ?? '—' }}
-                    </td>
-
-                    <td class="text-center">
-                        {{ $row['Employee ID'] ?? '—' }}
-                    </td>
-
-                    <td class="text-left">
-                        {{ $row['Designation'] ?? '—' }}
-                    </td>
-
-                    <td class="text-left">
-                        {{ $row['Department'] ?? '—' }}
-                    </td>
-
-                    <td class="score">
-                        {{ $row['Self Score'] ?? '0.00' }}
-                    </td>
-
-                    <td class="score">
-                        {{ $row['Manager Score'] ?? '0.00' }}
-                    </td>
-
-                    <td class="score">
-                        {{ $row['Manager Feedback'] ?? '0.00' }}
-                    </td>
-
-                    <td class="total-score">
-                        {{ $row['Total Score'] ?? '0.00' }}
-                    </td>
-
-                    <td class="hr-score">
-                        {{ $row['HR Score'] ?? '0.00' }}
-                    </td>
-
-                    <td class="final-score">
-                        {{ $row['Final Score'] ?? '0.00' }}
-                    </td>
-
-                    <td class="rating {{ $ratingClass }}">
-                        {{ $rating }}
-                    </td>
-
-                </tr>
-
-            @empty
-
-                <tr>
-                    <td
-                        colspan="11"
-                        class="text-center"
-                        style="padding: 15px;"
-                    >
-                        No employees found.
-                    </td>
-                </tr>
-
-            @endforelse
-
-        </tbody>
-
-    </table>
-
-    <div class="footer">
-        Overall Performance Report - {{ now()->format('d M Y h:i A') }}
-    </div>
+<div class="footer">
+    Overall Performance Report - {{ now()->format('d M Y h:i A') }}
+</div>
+```
 
 </body>
-
 </html>

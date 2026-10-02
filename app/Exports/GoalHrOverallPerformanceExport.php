@@ -120,33 +120,29 @@ class GoalHrOverallPerformanceExport implements
                 ->sortByDesc('id')
                 ->first();
 
-            $managerOverallRating = 0;
+            /*
+            |--------------------------------------------------------------------------
+            | MANAGER OVERALL RATING — WEIGHTED SCORE SUM
+            |--------------------------------------------------------------------------
+            */
 
-            if (
-                $overallReview &&
-                $overallReview->manager_overall_rating !== null &&
-                is_numeric($overallReview->manager_overall_rating)
-            ) {
-                $managerOverallRating =
-                    (float) $overallReview->manager_overall_rating;
-            }
+            $managerWeightedReports = $reports
+                ->filter(function ($report) {
+                    return $report->manager_rating !== null
+                        && is_numeric($report->manager_rating)
+                        && $report->weightage !== null
+                        && is_numeric($report->weightage);
+                });
 
-            if ($managerOverallRating <= 0) {
-                $managerRatings = $reports
-                    ->pluck('manager_rating')
-                    ->filter(function ($value) {
-                        return $value !== null
-                            && is_numeric($value)
-                            && (float) $value > 0;
-                    })
-                    ->map(function ($value) {
-                        return (float) $value;
-                    });
-
-                $managerOverallRating = $managerRatings->count()
-                    ? round($managerRatings->avg(), 2)
-                    : 0;
-            }
+            $managerOverallRating = $managerWeightedReports->count()
+                ? round(
+                    $managerWeightedReports->sum(function ($report) {
+                        return (float) $report->manager_rating
+                            * ((float) $report->weightage / 100);
+                    }),
+                    2
+                )
+                : 0;
 
             $hrOverallRating = 0;
 
@@ -233,7 +229,7 @@ class GoalHrOverallPerformanceExport implements
             );
 
             $hrScore100 = round(
-                $hrOverallRating * 20,
+                $hrOverallRating,
                 2
             );
 
@@ -262,6 +258,25 @@ class GoalHrOverallPerformanceExport implements
                 $finalScore
             );
 
+            /*
+            |--------------------------------------------------------------------------
+            | TOTAL MANAGER-APPROVED GOALS & WEIGHTAGE
+            |--------------------------------------------------------------------------
+            */
+
+            $approvedGoals = $reports->unique('new_goal_id');
+
+            $totalApprovedGoals = $approvedGoals->count();
+
+            $totalWeightage = round(
+                $approvedGoals->sum(function ($report) {
+                    return is_numeric($report->weightage)
+                        ? (float) $report->weightage
+                        : 0;
+                }),
+                2
+            );
+
             $department =
                 $employee->hr_department_name
                 ?? $employee->department
@@ -279,7 +294,8 @@ class GoalHrOverallPerformanceExport implements
 
                 'Department' =>
                     $department,
-
+                'Total Goals' => $totalApprovedGoals,
+                'Total Weightage' => number_format($totalWeightage,2),
                 'Self Score' =>
                     number_format(
                         $selfScore100,

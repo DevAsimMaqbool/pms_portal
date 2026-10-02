@@ -129,12 +129,22 @@ class PerformanceReportController extends Controller
         */
         $managerOverallRating = null;
 
-        if (
-            $overallReview &&
-            $overallReview->manager_overall_rating !== null
-        ) {
-            $managerOverallRating = (float)
-                $overallReview->manager_overall_rating;
+        $managerWeightedReports = $reports
+        ->filter(function ($report) {
+        return $report->manager_rating !== null
+        && is_numeric($report->manager_rating)
+        && $report->weightage !== null
+        && is_numeric($report->weightage);
+        });
+
+        if ($managerWeightedReports->isNotEmpty()) {
+        $managerOverallRating = round(
+        $managerWeightedReports->sum(function ($report) {
+        return (float) $report->manager_rating
+        * ((float) $report->weightage / 100);
+        }),
+        2
+        );
         }
 
         /*
@@ -161,17 +171,17 @@ class PerformanceReportController extends Controller
         |
         */
         $selfRatings = $reports
-            ->pluck('rating')
-            ->filter(function ($value) {
-                return $value !== null && is_numeric($value);
-            })
-            ->map(function ($value) {
-                return (float) $value;
-            });
+        ->pluck('rating')
+        ->filter(function ($value) {
+        return $value !== null && is_numeric($value);
+        })
+        ->map(function ($value) {
+        return (float) $value;
+        });
 
-        $selfOverallRating = $selfRatings->count()
-            ? round($selfRatings->avg(), 2)
-            : null;
+        $selfOverallRating = $selfRatings->isNotEmpty()
+        ? round($selfRatings->avg(), 2)
+        : null;
 
         /*
         |--------------------------------------------------------------------------
