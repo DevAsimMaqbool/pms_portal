@@ -84,7 +84,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-2 col-sm-6">
 
                 <div class="summary-card manager">
 
@@ -101,18 +101,41 @@
             </div>
 
             <div class="col-md-2 col-sm-6">
-    <div class="summary-card feedback">
-        <small>Line Manager Feedback</small>
-        <strong>
-            {{ $lineManagerAvg !== null ? number_format($lineManagerAvg, 2) : '-' }}
-            @if($lineManagerAvg !== null)
-                <span>%</span>
-            @endif
-        </strong>
-    </div>
-</div>
+                <div class="summary-card feedback">
+                    <small>Line Manager Feedback</small>
+                    <strong>
+                        {{ $lineManagerAvg !== null ? number_format($lineManagerAvg, 2) : '-' }}
+                        @if($lineManagerAvg !== null)
+                            <span>%</span>
+                        @endif
+                    </strong>
+                </div>
+            </div>
 
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-2 col-sm-6">
+                <div class="summary-card feedback">
+                    <small>Manager Final Score</small>
+
+                    <strong>
+                        @php
+                            $managerFinalScore = ($managerOverallRating * 20 * 0.70)
+                                + ($lineManagerAvg * 0.30);
+                        @endphp
+
+                        {{ $managerFinalScore !== null ? number_format($managerFinalScore, 2) : '-' }}
+
+                        @if($managerFinalScore !== null)
+                            <span>%</span>
+                        @endif
+                    </strong>
+
+                    <div class="mt-1" style="font-size: 11px; color: #6c757d;">
+                         Rating 70% + Feedback 30%
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-6">
 
                 <div class="summary-card hr">
 
