@@ -695,16 +695,15 @@
                 <div class="score-label">
                     Manager Rating
                 </div>
-
+            @if($managerScore !== null)
                 <div class="score-value">
-                    {{ $managerScore !== null ? number_format($managerScore, 2) : '—' }}
+                    {{ $managerScore !== null ? number_format($managerScore*.70, 2) : '—' }}
                 </div>
 
-                @if($managerScore !== null)
                     <div class="score-weight">
-                        Weightage: 70%
+                        / 70
                     </div>
-                @endif
+            @endif
 
             </td>
 
@@ -714,14 +713,13 @@
                 <div class="score-label">
                     Feedback Score
                 </div>
-
-                <div class="score-value">
-                    {{ $feedbackScore !== null ? number_format($feedbackScore, 2) : '—' }}
-                </div>
-
                 @if($feedbackScore !== null)
+                    <div class="score-value">
+                        {{ $feedbackScore !== null ? number_format($feedbackScore*.30, 2) : '—' }}
+                    </div>
+
                     <div class="score-weight">
-                        Weightage: 30%
+                        / 30
                     </div>
                 @endif
 
@@ -739,7 +737,7 @@
                 </div>
 
                 <div class="score-weight">
-                    Rating 70% + Feedback 30%
+                    Manager Rating + Feedback Score
                 </div>
 
             </td>
