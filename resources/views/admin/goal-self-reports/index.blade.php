@@ -235,7 +235,7 @@
 
                     @if($managerFeedbackOverall !== null)
 
-                        {{ round($managerFeedbackOverall,2) }}
+                        {{ number_format($managerFeedbackOverall,2) }}
                         <small class="rating-max">
                             %
                         </small>
