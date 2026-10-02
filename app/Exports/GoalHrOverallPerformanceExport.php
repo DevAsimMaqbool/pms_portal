@@ -24,17 +24,24 @@ class GoalHrOverallPerformanceExport implements
     protected array $departments = [];
 
     public function __construct($departments = null)
-{
-    if (!is_array($departments)) {
-        $departments = [$departments];
-    }
+    {
+        if (!is_array($departments)) {
+            $departments = [$departments];
+        }
 
-    $this->departments = collect($departments)
-        ->filter()
-        ->unique()
-        ->values()
-        ->toArray();
-}
+        $this->departments = collect($departments)
+            ->filter(function ($department) {
+                return filled($department)
+                    && !in_array(
+                        strtolower(trim($department)),
+                        ['all', 'all departments'],
+                        true
+                    );
+            })
+            ->unique()
+            ->values()
+            ->toArray();
+    }
 
     public function collection(): Collection
     {
@@ -345,10 +352,12 @@ class GoalHrOverallPerformanceExport implements
             'Employee ID',
             'Designation',
             'Department',
+            'Total Goals',
+            'Total Weightage',
             'Self Score',
             'Manager Score',
             'Manager Feedback',
-            'Total Score',
+            'Manager Final Score',
             'HR Score',
             'Final Score',
             'Rating',
