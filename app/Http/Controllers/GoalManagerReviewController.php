@@ -610,21 +610,18 @@ public function lineManagerForm()
 
         /*
         |--------------------------------------------------------------------------
-        | SELF SCORE
+        | SELF SCORE — MANAGER APPROVED ONLY
         |--------------------------------------------------------------------------
         */
 
-        $selfRatings = GoalSelfReport::where(
-            'user_id',
-            $employee->id
-        )
-        ->whereNotNull('rating')
-        ->pluck('rating');
+        $selfRatings = GoalSelfReport::where('user_id', $employee->id)
+            ->where('status', 'manager_approved')
+            ->whereNotNull('rating')
+            ->pluck('rating');
 
-        $employee->self_overall_rating =
-            $selfRatings->count()
-                ? round($selfRatings->avg(), 2)
-                : null;
+        $employee->self_overall_rating = $selfRatings->isNotEmpty()
+            ? round($selfRatings->avg(), 2)
+            : null;
 
         /*
 |--------------------------------------------------------------------------

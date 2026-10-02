@@ -754,23 +754,22 @@ public function dashboard()
         ->latest('id')
         ->first();
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | MANAGER SCORE
     |--------------------------------------------------------------------------
     */
 
-    $managerOverallRating = null;
-
-    if (
-        $overallReview &&
-        $overallReview->manager_overall_rating !== null
-    ) {
-
-        $managerOverallRating =
-            (float) $overallReview->manager_overall_rating;
-
-    }
+    $managerOverallRating = $approvedReports
+        ->filter(function ($report) {
+            return $report->manager_rating !== null
+                && is_numeric($report->manager_rating)
+                && $report->weightage !== null;
+        })
+        ->sum(function ($report) {
+            return (float) $report->manager_rating
+                * ((float) $report->weightage / 100);
+        });
 
     /*
     |--------------------------------------------------------------------------
@@ -947,7 +946,7 @@ public function dashboard()
         : null;
 
     $hrScore100 = $hrOverallRating !== null
-        ? round($hrOverallRating * 20, 2)
+        ? round($hrOverallRating, 2)
         : null;
 
     /*
