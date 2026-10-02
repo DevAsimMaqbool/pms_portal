@@ -192,9 +192,9 @@
 
                 <h4 class="summary-value">
 
-                    @if($overallReview && $overallReview->manager_overall_rating !== null)
+                    @if($managerOverallRating !== null)
 
-                        {{ number_format($overallReview->manager_overall_rating*20, 2) }}
+                        {{ number_format($managerOverallRating*20, 2) }}
 
                         <small class="rating-max">
                             %

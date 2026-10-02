@@ -119,6 +119,33 @@ public function index(Request $request)
     $selfOverallRating = $selfRatings->count() > 0
         ? round($selfRatings->avg(), 2)
         : null;
+    
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER OVERALL RATING — MANAGER APPROVED ONLY
+        |--------------------------------------------------------------------------
+        */
+
+    $managerReports = GoalSelfReport::where('user_id', Auth::id())
+        ->where('status', 'manager_approved')
+        ->whereNotNull('manager_rating')
+        ->whereNotNull('weightage')
+        ->get(['manager_rating', 'weightage']);
+
+    $managerOverallRating = $managerReports->isNotEmpty()
+        ? round(
+            $managerReports->sum(function ($report) {
+                $report->weighted_score = round(
+                    (float) $report->manager_rating *
+                    ((float) $report->weightage / 100),
+                    2
+                );
+
+                return $report->weighted_score;
+            }),
+            2
+        )
+        : null;
 
     return view(
         'admin.goal-self-reports.index',
@@ -126,7 +153,8 @@ public function index(Request $request)
             'reports',
             'overallReview',
             'managerFeedbackOverall',
-            'selfOverallRating'
+            'selfOverallRating',
+            'managerOverallRating'
         )
     );
 }
