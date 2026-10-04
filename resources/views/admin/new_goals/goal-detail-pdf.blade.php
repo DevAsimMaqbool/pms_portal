@@ -1,759 +1,1224 @@
-<!DOCTYPE html>
-<html>
+        <!DOCTYPE html>
+        <html>
 
-<head>
+        <head>
 
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
 
-    <title>
+        <title>
         Performance Evaluation Report
-    </title>
+        </title>
 
-    <style>
+        <style>
 
         @page {
-            margin: 28px 30px 35px 30px;
+        margin: 28px 30px 35px 30px;
         }
 
         * {
-            box-sizing: border-box;
+        box-sizing: border-box;
         }
 
         body {
-            font-family: DejaVu Sans, sans-serif;
-            color: #253449;
-            font-size: 9px;
-            line-height: 1.45;
-            margin: 0;
-            padding: 0;
+        font-family: DejaVu Sans, sans-serif;
+        color: #253449;
+        font-size: 9px;
+        line-height: 1.45;
+        margin: 0;
+        padding: 0;
         }
 
         /* =========================================================
-           COLORS
+        COLORS
         ========================================================= */
 
         .primary {
-            color: #1f4e79;
+        color: #1f4e79;
         }
 
         .gold {
-            color: #b78116;
+        color: #b78116;
         }
 
         .muted {
-            color: #718096;
+        color: #718096;
         }
 
         /* =========================================================
-           HEADER
+        HEADER
         ========================================================= */
 
         .report-header {
-            border-bottom: 3px solid #b78116;
-            padding-bottom: 12px;
-            margin-bottom: 15px;
+        border-bottom: 3px solid #b78116;
+        padding-bottom: 12px;
+        margin-bottom: 15px;
         }
 
         .report-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #173a5c;
-            margin: 0 0 4px 0;
+        font-size: 20px;
+        font-weight: bold;
+        color: #173a5c;
+        margin: 0 0 4px 0;
         }
 
         .report-subtitle {
-            font-size: 9px;
-            color: #718096;
+        font-size: 9px;
+        color: #718096;
         }
 
         /* =========================================================
-           EMPLOYEE CARD
+        EMPLOYEE CARD
         ========================================================= */
 
         .employee-card {
-            width: 100%;
-            border: 1px solid #dfe6ee;
-            background: #f5f8fc;
-            padding: 11px;
-            margin-bottom: 15px;
+        width: 100%;
+        border: 1px solid #dfe6ee;
+        background: #f5f8fc;
+        padding: 11px;
+        margin-bottom: 15px;
         }
 
         .employee-table {
-            width: 100%;
-            border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
         }
 
         .employee-table td {
-            width: 25%;
-            padding: 5px 7px;
-            vertical-align: top;
+        width: 25%;
+        padding: 5px 7px;
+        vertical-align: top;
         }
 
         .employee-label {
-            color: #718096;
-            font-size: 7px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 2px;
+        color: #718096;
+        font-size: 7px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 2px;
         }
 
         .employee-value {
-            color: #253449;
-            font-size: 9px;
-            font-weight: bold;
+        color: #253449;
+        font-size: 9px;
+        font-weight: bold;
         }
 
         /* =========================================================
-           SUMMARY
+        SUMMARY
         ========================================================= */
 
         .summary-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 6px 0;
-            margin: 0 -6px 16px -6px;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 6px 0;
+        margin: 0 -6px 16px -6px;
         }
 
         .summary-card {
-            border: 1px solid #dfe6ee;
-            background: #ffffff;
-            padding: 9px;
-            text-align: center;
+        border: 1px solid #dfe6ee;
+        background: #ffffff;
+        padding: 9px;
+        text-align: center;
         }
 
         .summary-label {
-            font-size: 7px;
-            color: #718096;
-            text-transform: uppercase;
-            font-weight: bold;
+        font-size: 7px;
+        color: #718096;
+        text-transform: uppercase;
+        font-weight: bold;
         }
 
         .summary-value {
-            font-size: 17px;
-            font-weight: bold;
-            color: #1f4e79;
-            margin-top: 3px;
+        font-size: 17px;
+        font-weight: bold;
+        color: #1f4e79;
+        margin-top: 3px;
         }
 
         /* =========================================================
-           SECTION
+        SECTION
         ========================================================= */
 
         .section {
-            margin-top: 15px;
+        margin-top: 15px;
         }
 
         .section-title {
-            background: #1f4e79;
-            color: #ffffff;
-            padding: 8px 10px;
-            font-size: 11px;
-            font-weight: bold;
-            border-left: 5px solid #b78116;
+        background: #1f4e79;
+        color: #ffffff;
+        padding: 8px 10px;
+        font-size: 11px;
+        font-weight: bold;
+        border-left: 5px solid #b78116;
         }
 
         .section-subtitle {
-            background: #edf4fa;
-            color: #1f4e79;
-            padding: 6px 10px;
-            font-size: 8px;
-            font-weight: bold;
-            border: 1px solid #d8e4ef;
-            border-top: 0;
-            margin-bottom: 8px;
+        background: #edf4fa;
+        color: #1f4e79;
+        padding: 6px 10px;
+        font-size: 8px;
+        font-weight: bold;
+        border: 1px solid #d8e4ef;
+        border-top: 0;
+        margin-bottom: 8px;
         }
 
         /* =========================================================
-           GOAL TABLE
+        GOAL TABLE
         ========================================================= */
 
         table.goal-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
         }
 
         .goal-table th {
-            background: #edf1f6;
-            color: #526174;
-            border: 1px solid #d7dee8;
-            padding: 7px 5px;
-            font-size: 7.5px;
-            font-weight: bold;
-            text-align: left;
-            vertical-align: middle;
+        background: #edf1f6;
+        color: #526174;
+        border: 1px solid #d7dee8;
+        padding: 7px 5px;
+        font-size: 7.5px;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: middle;
         }
 
         .goal-table td {
-            border: 1px solid #d7dee8;
-            padding: 7px 5px;
-            vertical-align: top;
-            font-size: 8px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+        border: 1px solid #d7dee8;
+        padding: 7px 5px;
+        vertical-align: top;
+        font-size: 8px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
         }
 
         .goal-table tr:nth-child(even) td {
-            background: #fbfcfe;
+        background: #fbfcfe;
         }
+/* =========================================================
+   GOAL CONTENT
+========================================================= */
 
-        /* =========================================================
-           GOAL
-        ========================================================= */
+.goal-name {
+    display: block;
+    color: #173a5c;
+    font-size: 8.5px;
+    font-weight: bold;
+    line-height: 1.5;
+    padding: 2px 0;
+}
 
-        .goal-number {
-            display: inline-block;
-            background: #1f4e79;
-            color: #ffffff;
-            font-weight: bold;
-            padding: 3px 6px;
-            margin-right: 4px;
-            font-size: 7px;
-        }
+.goal-number {
+    display: inline-block;
+    background: #1f4e79;
+    color: #ffffff;
+    font-size: 7px;
+    font-weight: bold;
+    padding: 3px 6px;
+    margin-right: 4px;
+    border-radius: 3px;
+    vertical-align: middle;
+}
 
-        .goal-name {
-            color: #173a5c;
-            font-weight: bold;
-            font-size: 8.5px;
-        }
+.goal-objective {
+    margin-top: 7px;
+    padding: 5px 7px;
+    background: #f5f8fc;
+    border-left: 2px solid #b78116;
+    color: #526174;
+    font-size: 7.5px;
+    line-height: 1.5;
+}
 
-        .goal-objective {
-            color: #718096;
-            font-size: 7.5px;
-            margin-top: 4px;
-        }
+.target-text {
+    color: #253449;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1.6;
+    background: #f5f8fc;
+    border-left: 2px solid #1f4e79;
+    padding: 5px 7px;
+    border-radius: 2px;
+}
 
-        /* =========================================================
-           TARGET
-        ========================================================= */
-
-        .target-text {
-            color: #253449;
-            font-weight: 600;
-        }
+.progress-box {
+    color: #344256;
+    font-size: 8px;
+    line-height: 1.6;
+    background: #f7fafc;
+    border-left: 2px solid #b78116;
+    padding: 6px 7px;
+    border-radius: 2px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 
         .deadline {
-            margin-top: 5px;
-            font-size: 7px;
-            color: #718096;
+        margin-top: 5px;
+        font-size: 7px;
+        color: #718096;
         }
 
         /* =========================================================
-           PROGRESS
+        PROGRESS
         ========================================================= */
 
         .progress-label {
-            font-size: 7px;
-            color: #718096;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 3px;
+        font-size: 7px;
+        color: #718096;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 3px;
         }
 
         .progress-text {
-            color: #1f4e79;
-            font-weight: 600;
-            font-size: 8px;
+        color: #1f4e79;
+        font-weight: 600;
+        font-size: 8px;
         }
 
         /* =========================================================
-           RATINGS
+        RATINGS
         ========================================================= */
 
         .rating {
-            text-align: center;
-            font-weight: bold;
-            font-size: 10px;
-            color: #1f4e79;
+        text-align: center;
+        font-weight: bold;
+        font-size: 10px;
+        color: #1f4e79;
         }
 
         .manager-rating {
-            text-align: center;
-            font-weight: bold;
-            font-size: 10px;
-            color: #b78116;
+        text-align: center;
+        font-weight: bold;
+        font-size: 10px;
+        color: #b78116;
         }
 
         .rating-max {
-            font-size: 7px;
-            color: #718096;
-            font-weight: normal;
+        font-size: 7px;
+        color: #718096;
+        font-weight: normal;
         }
 
         /* =========================================================
-           MANAGER REMARKS
+        MANAGER REMARKS
         ========================================================= */
 
         .manager-remarks {
-           
-            font-size: 7.8px;
+
+        font-size: 7.8px;
         }
 
         .no-remark {
-            color: #a0aec0;
-            font-style: italic;
+        color: #a0aec0;
+        font-style: italic;
         }
 
         /* =========================================================
-           EMPTY
+        EMPTY
         ========================================================= */
 
         .empty {
-            padding: 18px;
-            text-align: center;
-            color: #718096;
-            background: #f8fafc;
-            border: 1px solid #e0e6ed;
+        padding: 18px;
+        text-align: center;
+        color: #718096;
+        background: #f8fafc;
+        border: 1px solid #e0e6ed;
         }
 
         /* =========================================================
-           FOOTER
+        FOOTER
         ========================================================= */
 
         .footer {
-            margin-top: 18px;
-            padding-top: 8px;
-            border-top: 1px solid #dfe5ec;
-            text-align: center;
-            color: #718096;
-            font-size: 7px;
+        margin-top: 18px;
+        padding-top: 8px;
+        border-top: 1px solid #dfe5ec;
+        text-align: center;
+        color: #718096;
+        font-size: 7px;
         }
 
         .avoid-break {
-            page-break-inside: avoid;
+        page-break-inside: avoid;
         }
 
-    </style>
+        /* =========================================================
+        RATING CRITERIA
+        ========================================================= */
 
-</head>
+        .rating-criteria-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin-bottom: 10px;
+        font-size: 7.5px;
+        }
 
-<body>
+        .rating-criteria-table th {
+        background: #edf1f6;
+        color: #1f4e79;
+        border: 1px solid #d7dee8;
+        padding: 6px;
+        text-align: left;
+        font-weight: bold;
+        }
 
-<div class="page">
+        .rating-criteria-table td {
+        border: 1px solid #d7dee8;
+        padding: 6px;
+        vertical-align: middle;
+        line-height: 1.4;
+        }
 
-    {{-- =========================================================
-         HEADER
-    ========================================================== --}}
+        .rating-criteria-table tbody tr:nth-child(even) {
+        background: #f8fafc;
+        }
 
-    <div class="report-header">
+        .criteria-rating {
+        text-align: center;
+        font-weight: bold;
+        color: #1f4e79;
+        font-size: 9px;
+        }
 
-        <div class="report-title">
-            Performance Evaluation Report
-        </div>
+/* =========================================================
+   LEADERSHIP BEHAVIOURS / VIRTUES
+========================================================= */
 
-        <div class="report-subtitle">
-            Performance Goals &amp; Manager Evaluation — FY 2025-2026
-        </div>
+.virtue-section {
+    margin-top: 12px;
+    page-break-before: auto;
+}
 
-    </div>
+.virtue-intro {
+    padding: 7px 9px;
+    margin-bottom: 8px;
+    background: #f5f8fc;
+    border: 1px solid #dfe6ee;
+    color: #526174;
+    font-size: 8px;
+    line-height: 1.4;
+}
 
-    {{-- =========================================================
-         EMPLOYEE INFORMATION
-    ========================================================== --}}
+.virtue-block {
+    margin-bottom: 10px;
+    page-break-inside: auto;
+}
 
-    <div class="employee-card">
+.virtue-title {
+    background: #1f4e79;
+    color: #ffffff;
+    padding: 7px 10px;
+    font-size: 9px;
+    font-weight: bold;
+    border-left: 4px solid #b78116;
+    page-break-after: avoid;
+}
+
+.virtue-item {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 5px;
+    page-break-inside: avoid;
+}
+
+.virtue-item td {
+    border: 1px solid #dfe5ec;
+    padding: 6px 8px;
+    vertical-align: top;
+}
+
+.virtue-question {
+    color: #344256;
+    font-size: 8px;
+    line-height: 1.4;
+    font-weight: normal;
+}
+
+.virtue-options-cell {
+    padding: 5px 8px !important;
+    background: #f8fafc;
+}
+
+.virtue-rating-options {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.virtue-rating-options td.rating-option {
+    width: 20%;
+    border: none;
+    padding: 3px 2px;
+    text-align: center;
+    vertical-align: top;
+    color: #344256;
+    font-size: 7px;
+    line-height: 1.35;
+}
+
+.rating-checkbox {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 1px solid #718096;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 8px;
+    line-height: 10px;
+    color: #1f4e79;
+    margin-right: 2px;
+}
+
+.rating-label {
+    display: inline;
+    vertical-align: middle;
+}
+
+.virtue-question-number {
+    color: #1f4e79;
+    font-weight: bold;
+    margin-right: 3px;
+}
+
+/* Reduce unnecessary gaps across the PDF */
+.section {
+    margin-top: 10px;
+}
+
+.footer {
+    margin-top: 10px;
+    padding-top: 5px;
+}
+
+/* Avoid splitting a question and its options */
+.virtue-item,
+.virtue-title {
+    page-break-inside: avoid;
+}
+
+/* =========================================================
+   LINE MANAGER REMARKS
+========================================================= */
+
+.line-manager-remarks {
+    margin-top: 10px;
+    padding: 9px 10px;
+    border: 1px solid #dfe6ee;
+    background: #f8fafc;
+    page-break-inside: avoid;
+}
+
+.line-manager-remarks-title {
+    color: #1f4e79;
+    font-size: 9px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.remarks-line {
+    height: 19px;
+    border-bottom: 1px solid #aeb9c7;
+}
+
+/* =========================================================
+   HEADER LOGO
+========================================================= */
+
+.report-header-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-header-table td {
+    vertical-align: middle;
+}
+
+.report-logo-cell {
+    width: 100px;
+    text-align: right;
+}
+
+.report-logo {
+    max-width: 85px;
+    max-height: 65px;
+    object-fit: contain;
+}
+        </style>
+
+        </head>
+
+        <body>
+
+        <div class="page">
+
+        {{-- =========================================================
+        HEADER
+        ========================================================== --}}
+
+        <div class="report-header">
+
+    <table class="report-header-table">
+        <tr>
+            <td>
+                <div class="report-title">
+                    Performance Evaluation Report
+                </div>
+
+                <div class="report-subtitle">
+                    Performance Goals &amp; Manager Evaluation — FY 2025-2026
+                </div>
+            </td>
+
+            <td class="report-logo-cell">
+                <img
+                    src="{{ public_path('images/logo.jpeg') }}"
+                    class="report-logo"
+                    alt="Institution Logo"
+                >
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+        {{-- =========================================================
+        EMPLOYEE INFORMATION
+        ========================================================== --}}
+
+        <div class="employee-card">
 
         <table class="employee-table">
 
-            <tr>
+        <tr>
 
-                <td>
+        <td>
 
-                    <div class="employee-label">
-                        Employee
-                    </div>
+        <div class="employee-label">
+        Employee
+        </div>
 
-                    <div class="employee-value">
-                        {{ $user->name ?? '—' }}
-                    </div>
+        <div class="employee-value">
+        {{ $user->name ?? '—' }}
+        </div>
 
-                </td>
+        </td>
 
-                <td>
+        <td>
 
-                    <div class="employee-label">
-                        Employee Code
-                    </div>
+        <div class="employee-label">
+        Employee Code
+        </div>
 
-                    <div class="employee-value">
-                        {{ $user->barcode ?? $user->employee_id ?? '—' }}
-                    </div>
+        <div class="employee-value">
+        {{ $user->barcode ?? $user->employee_id ?? '—' }}
+        </div>
 
-                </td>
+        </td>
 
-                <td>
+        <td>
 
-                    <div class="employee-label">
-                        Designation
-                    </div>
+        <div class="employee-label">
+        Designation
+        </div>
 
-                    <div class="employee-value">
-                        {{ $user->job_title ?? '—' }}
-                    </div>
+        <div class="employee-value">
+        {{ $user->job_title ?? '—' }}
+        </div>
 
-                </td>
+        </td>
 
-                <td>
+        <td>
 
-                    <div class="employee-label">
-                        Department
-                    </div>
+        <div class="employee-label">
+        Department
+        </div>
 
-                    <div class="employee-value">
-                        {{ $user->department ?? '—' }}
-                    </div>
+        <div class="employee-value">
+       {{ isset($user->hr_department_name) && str_contains($user->hr_department_name, '/') ? trim(last(explode('/', $user->hr_department_name))) : ($user->hr_department_name ?? '—') }}
+        </div>
 
-                </td>
+        </td>
 
-            </tr>
+        </tr>
 
-            <tr>
+        <tr>
 
-                <td colspan="2">
+        <td colspan="2">
 
-                    <div class="employee-label">
-                        Reporting Manager
-                    </div>
+        <div class="employee-label">
+        Reporting Manager
+        </div>
 
-                    <div class="employee-value">
-                        {{ $user->manager_name ?? '—' }}
-                    </div>
+        <div class="employee-value">
+        {{ $user->manager_name ?? '—' }}
+        </div>
 
-                </td>
+        </td>
 
-                <td colspan="2">
+        <td colspan="2">
 
-                    <div class="employee-label">
-                        Report Generated
-                    </div>
+        <div class="employee-label">
+        Report Generated
+        </div>
 
-                    <div class="employee-value">
-                        {{ now()->format('d M Y, h:i A') }}
-                    </div>
+        <div class="employee-value">
+        {{ now()->format('d M Y, h:i A') }}
+        </div>
 
-                </td>
+        </td>
 
-            </tr>
+        </tr>
 
         </table>
 
-    </div>
+        </div>
 
-    {{-- =========================================================
-         SUMMARY
-    ========================================================== --}}
+        {{-- =========================================================
+        SUMMARY
+        ========================================================== --}}
 
-    {{-- =========================================================
-         GOALS
-    ========================================================== --}}
+        {{-- =========================================================
+        GOALS
+        ========================================================== --}}
 
-    <div class="section">
+        <div class="section">
 
         <div class="section-title">
-            Goals &amp; Manager Evaluation
+        Goals &amp; Manager Evaluation
         </div>
 
         <div class="section-subtitle">
-            Complete list of employee goals with latest progress,
-            employee rating and manager evaluation.
+        Rating Criteria
         </div>
+
+        <table class="rating-criteria-table">
+        <thead>
+        <tr>
+        <th style="width: 10%;">Rating</th>
+        <th style="width: 22%;">Level</th>
+        <th style="width: 68%;">Descriptor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td class="criteria-rating">1</td>
+        <td><strong>Unsatisfactory</strong></td>
+        <td>
+        Less than 50% of the agreed goal achieved, with significant
+        gaps in quality, completeness, output and/or timelines.
+        </td>
+        </tr>
+        <tr>
+        <td class="criteria-rating">2</td>
+        <td><strong>Needs Improvement</strong></td>
+        <td>
+        50–79% of the agreed goal achieved, but required quality,
+        completeness, output and/or timelines are not consistently met.
+        </td>
+        </tr>
+        <tr>
+        <td class="criteria-rating">3</td>
+        <td><strong>Meets Expectations</strong></td>
+        <td>
+        80–100% of the agreed goal achieved, meeting the expected
+        quality and completeness standards and delivered within
+        the agreed timeline.
+        </td>
+        </tr>
+        <tr>
+        <td class="criteria-rating">4</td>
+        <td><strong>Exceeds Expectations</strong></td>
+        <td>
+        101–120% of the agreed goal achieved, while maintaining
+        the required quality and completeness, and/or delivering
+        meaningful additional scope, output or value beyond
+        the agreed goal.
+        </td>
+        </tr>
+        <tr>
+        <td class="criteria-rating">5</td>
+        <td><strong>Exceptional</strong></td>
+        <td>
+        More than 120% of the agreed goal achieved, with
+        consistently high quality and completeness, and
+        significant additional scope, impact or value beyond
+        the original goal.
+        </td>
+        </tr>
+        </tbody>
+        </table>
 
         @if($reports->count())
 
-            <table class="goal-table">
+        <table class="goal-table">
 
-                <thead>
+        <thead>
 
-                <tr>
+        <tr>
 
-                    <th style="width:22%;">
-                        Goal
-                    </th>
+        <th style="width:22%;">
+        Goal
+        </th>
 
-                    <th style="width:16%;">
-                        Goal Target
-                    </th>
+        <th style="width:16%;">
+        Goal Target
+        </th>
 
-                    <th style="width:22%;">
-                        Goal Progress
-                    </th>
+        <th style="width:22%;">
+        Goal Progress
+        </th>
 
-                    <th style="width:9%; text-align:center;">
-                        Goal Rating
-                    </th>
+        <th style="width:9%; text-align:center;">
+        Goal Rating
+        </th>
 
-                    <th style="width:20%;">
-                        Manager Remarks
-                    </th>
+        <th style="width:20%;">
+        Manager Remarks
+        </th>
 
-                    <th style="width:11%; text-align:center;">
-                        Manager Rating
-                    </th>
+        <th style="width:11%; text-align:center;">
+        Manager Rating
+        </th>
 
-                </tr>
+        </tr>
 
-                </thead>
+        </thead>
 
-                <tbody>
+        <tbody>
 
-                @foreach($reports as $index => $goal)
+        @foreach($reports as $index => $goal)
 
-                    @php
+        @php
 
-                        /*
-                        |--------------------------------------------------------------------------
-                        | LATEST SELF REPORT
-                        |--------------------------------------------------------------------------
-                        */
+        /*
+        |--------------------------------------------------------------------------
+        | LATEST SELF REPORT
+        |--------------------------------------------------------------------------
+        */
 
-                        $report =
-                            $goal->latest_self_report;
+        $report =
+        $goal->latest_self_report;
 
-                        /*
-                        |--------------------------------------------------------------------------
-                        | MANAGER REVIEW
-                        |--------------------------------------------------------------------------
-                        */
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER REVIEW
+        |--------------------------------------------------------------------------
+        */
 
-                        $managerReview =
-                            $goal->latest_manager_review;
+        $managerReview =
+        $goal->latest_manager_review;
 
-                        /*
-                        |--------------------------------------------------------------------------
-                        | PROGRESS
-                        |--------------------------------------------------------------------------
-                        |
-                        | IMPORTANT:
-                        | Progress comes ONLY from
-                        | GoalSelfReport.progress_against_goal
-                        |
-                        */
+        /*
+        |--------------------------------------------------------------------------
+        | PROGRESS
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        | Progress comes ONLY from
+        | GoalSelfReport.progress_against_goal
+        |
+        */
 
-                        $progress =
-                            $report->progress_against_goal
-                            ?? null;
+        $progress =
+        $report->progress_against_goal
+        ?? null;
 
-                        /*
-                        |--------------------------------------------------------------------------
-                        | MANAGER REMARKS
-                        |--------------------------------------------------------------------------
-                        */
+        /*
+        |--------------------------------------------------------------------------
+        | MANAGER REMARKS
+        |--------------------------------------------------------------------------
+        */
 
-                        $managerRemarks =
-                            $goal->manager_remarks
-                            ?? null;
+        $managerRemarks =
+        $goal->manager_remarks
+        ?? null;
 
-                    @endphp
+        @endphp
 
-                    <tr class="avoid-break">
+        <tr class="avoid-break">
 
-                        {{-- =================================================
-                             GOAL
-                        ================================================== --}}
+        {{-- =================================================
+        GOAL
+        ================================================== --}}
 
-                        <td>
+        <td>
 
-                            <div>
+        <div>
 
-                                <span class="goal-number">
-                                    {{ $index + 1 }}
-                                </span>
+        <span class="goal-number">
+        {{ $index + 1 }}
+        </span>
 
-                                <span class="goal-name">
-                                    {{ $goal->goal ?? '—' }}
-                                </span>
+        <span class="goal-name">
+        {{ $goal->goal ?? '—' }}
+        </span>
 
-                            </div>
+        </div>
 
-                            @if(!empty($goal->objectives))
+        @if(!empty($goal->objectives))
 
-                                <div class="goal-objective">
+        <div class="goal-objective">
 
-                                    <strong>
-                                        Objective:
-                                    </strong>
+        <strong>
+        Objective:
+        </strong>
 
-                                    {{ $goal->objectives }}
+        {{ $goal->objectives }}
 
-                                </div>
-
-                            @endif
-
-                            @if($goal->s2rDriver)
-
-                                <div
-                                    style="
-                                        margin-top:5px;
-                                        font-size:7px;
-                                        color:#718096;
-                                    "
-                                >
-
-                                    <strong class="primary">
-                                        S2R:
-                                    </strong>
-
-                                    {{ $goal->s2rDriver->driver_name ?? '—' }}
-
-                                </div>
-
-                            @endif
-
-                        </td>
-
-                        {{-- =================================================
-                             TARGET
-                        ================================================== --}}
-
-                        <td>
-
-                            @if(!empty($goal->target))
-
-                                <div class="target-text">
-                                    {{ $goal->target }}
-                                </div>
-
-                            @else
-
-                                <span class="muted">
-                                    —
-                                </span>
-
-                            @endif
-
-                        </td>
-
-                        {{-- =================================================
-                             PROGRESS
-                        ================================================== --}}
-
-                        <td>
-
-                            @if(filled($progress))
-
-                                <div class="progress-box">
-
-                                        {{ $progress }}
-                                    
-                                </div>
-
-                            @else
-
-                                <span class="no-remark">
-                                    No progress reported.
-                                </span>
-
-                            @endif
-
-                        </td>
-
-                        {{-- =================================================
-                             GOAL RATING
-                        ================================================== --}}
-
-                        <td style="text-align:center;">
-
-                            @if(
-                                $report &&
-                                $report->rating !== null &&
-                                $report->rating !== ''
-                            )
-
-                                <div class="rating">
-
-                                    {{ $report->rating }}
-
-                                    <span class="rating-max">
-                                        / 5
-                                    </span>
-
-                                </div>
-
-                            @else
-
-                                <span class="muted">
-                                    —
-                                </span>
-
-                            @endif
-
-                        </td>
-
-                        {{-- =================================================
-                             MANAGER REMARKS
-                        ================================================== --}}
-
-                        <td>
-
-                            @if(filled($managerRemarks))
-
-                                <div class="manager-remarks">
-
-                                    {{ $managerRemarks }}
-
-                                </div>
-
-                            @endif
-
-                        </td>
-
-                        {{-- =================================================
-                             MANAGER RATING
-                        ================================================== --}}
-
-                        <td style="text-align:center;">
-
-                            @if(
-                                $report &&
-                                $report->manager_rating !== null &&
-                                $report->manager_rating !== ''
-                            )
-
-                                <div class="manager-rating">
-
-                                    {{ $report->manager_rating }}
-
-                                    <span class="rating-max">
-                                        / 5
-                                    </span>
-
-                                </div>
-
-                            @else
-
-                                <span class="muted">
-                                    / 5
-                                </span>
-
-                            @endif
-
-                        </td>
-
-                    </tr>
-
-                @endforeach
-
-                </tbody>
-
-            </table>
-
-        @else
-
-            <div class="empty">
-
-                No goals have been created for this employee.
-
-            </div>
+        </div>
 
         @endif
 
+        @if($goal->s2rDriver)
+
+        <div
+        style="
+        margin-top:5px;
+        font-size:7px;
+        color:#718096;
+        "
+        >
+
+        <strong class="primary">
+        S2R:
+        </strong>
+
+        {{ $goal->s2rDriver->driver_name ?? '—' }}
+
+        </div>
+
+        @endif
+
+        </td>
+
+        {{-- =================================================
+        TARGET
+        ================================================== --}}
+
+        <td>
+
+        @if(!empty($goal->target))
+
+        <div class="target-text">
+        {{ $goal->target }}
+        </div>
+
+        @else
+
+        <span class="muted">
+        —
+        </span>
+
+        @endif
+
+        </td>
+
+        {{-- =================================================
+        PROGRESS
+        ================================================== --}}
+
+        <td>
+
+        @if(filled($progress))
+
+        <div class="progress-box">
+
+        {{ $progress }}
+
+        </div>
+
+        @else
+
+        <span class="no-remark">
+        No progress reported.
+        </span>
+
+        @endif
+
+        </td>
+
+        {{-- =================================================
+        GOAL RATING
+        ================================================== --}}
+
+        <td style="text-align:center;">
+
+        @if(
+        $report &&
+        $report->rating !== null &&
+        $report->rating !== ''
+        )
+
+        <div class="rating">
+
+        {{ $report->rating }}
+
+        <span class="rating-max">
+        / 5
+        </span>
+
+        </div>
+
+        @else
+
+        <span class="muted">
+        —
+        </span>
+
+        @endif
+
+        </td>
+
+        {{-- =================================================
+        MANAGER REMARKS
+        ================================================== --}}
+
+        <td>
+
+        @if(filled($managerRemarks))
+
+        <div class="manager-remarks">
+
+        {{ $managerRemarks }}
+
+        </div>
+
+        @endif
+
+        </td>
+
+        {{-- =================================================
+        MANAGER RATING
+        ================================================== --}}
+
+        <td style="text-align:center;">
+
+        @if(
+        $report &&
+        $report->manager_rating !== null &&
+        $report->manager_rating !== ''
+        )
+
+        <div class="manager-rating">
+
+        {{ $report->manager_rating }}
+
+        <span class="rating-max">
+        / 5
+        </span>
+
+        </div>
+
+        @else
+
+        <span class="muted">
+        / 5
+        </span>
+
+        @endif
+
+        </td>
+
+        </tr>
+
+        @endforeach
+
+        </tbody>
+
+        </table>
+
+        @else
+
+        <div class="empty">
+
+        No goals have been created for this employee.
+
+        </div>
+
+        @endif
+
+        </div>
+
+{{-- =========================================================
+     LEADERSHIP BEHAVIOURS / VIRTUES
+========================================================== --}}
+
+<div class="section virtue-section">
+    @php
+        $virtues = [
+            [
+                'name' => '1. Responsibility & Accountability',
+                'statements' => [
+                    'Takes clear ownership of the outcomes of their function and ensures commitments are translated into measurable results.',
+                    'Anticipates risks, addresses challenges proactively, and remains accountable for outcomes, including when results fall short of expectations.',
+                    'Ensures that strategic and operational commitments within their area are delivered with discipline, consistency and appropriate follow-through.',
+                ],
+            ],
+            [
+                'name' => '2. Honesty & Integrity',
+                'statements' => [
+                    'Demonstrates integrity and ethical judgment in decisions, particularly when faced with pressure, competing interests or difficult choices.',
+                    'Promotes transparency and ensures that decisions, information and institutional matters are communicated honestly and responsibly.',
+                    'Consistently acts in the best interests of the institution and upholds its principles even when doing so is difficult or personally inconvenient.',
+                ],
+            ],
+            [
+                'name' => '3. Empathy & Compassion',
+                'statements' => [
+                    'Demonstrates genuine understanding of the needs, concerns and perspective of his/her team, line manager and other stakeholders when making decisions.',
+                    'Creates an environment in which people feel heard, respected and appropriately supported while maintaining accountability for performance.',
+                    'Balances institutional priorities with compassion and fairness, particularly when dealing with people-related challenges or difficult circumstances.',
+                ],
+            ],
+            [
+                'name' => '4. Humility & Service',
+                'statements' => [
+                    'Places institutional purpose and collective success above personal recognition, position or credit.',
+                    'Actively supports colleagues and other functions, promotes collaboration and contributes beyond the boundaries of their own portfolio when institutional priorities require it.',
+                    'Remains open to feedback, acknowledges the contributions of others and demonstrates a willingness to learn, adapt and share credit.',
+                ],
+            ],
+            [
+                'name' => '5. Courage & Drive',
+                'statements' => [
+                    'Demonstrates the courage to make timely and well-considered decisions, even in situations involving uncertainty, complexity or resistance.',
+                    'Constructively challenges the status quo and initiates meaningful improvements that advance institutional priorities.',
+                    'Demonstrates persistence and determination in translating strategic priorities into action, particularly when implementation is difficult or requires change.',
+                ],
+            ],
+        ];
+    @endphp
+
+{{-- =========================================================
+     LEADERSHIP BEHAVIOURS / VIRTUES
+========================================================== --}}
+
+{{-- =========================================================
+     LEADERSHIP BEHAVIOURS / VIRTUES ASSESSMENT
+========================================================== --}}
+
+<div class="section virtue-section">
+
+    <div class="section-title">
+        Leadership Behaviours &amp; Virtues Assessment
     </div>
 
-    {{-- =========================================================
-         FOOTER
-    ========================================================== --}}
+    <div class="virtue-intro">
+        Please rate the extent to which your Direct Report
+        consistently demonstrates each of the following
+        leadership behaviours in the discharge of his/her
+        role and responsibilities.
+    </div>
 
-    <div class="footer">
+    @php
+        $ratingOptions = [
+            1 => 'Strongly Disagree',
+            2 => 'Disagree',
+            3 => 'Neither Agree nor Disagree',
+            4 => 'Agree',
+            5 => 'Strongly Agree',
+        ];
+    @endphp
+
+    @foreach($virtues as $virtueIndex => $virtue)
+
+        <div class="virtue-block">
+
+            {{-- VIRTUE TITLE --}}
+            <div class="virtue-title">
+                {{ $virtue['name'] }}
+            </div>
+
+            @foreach($virtue['statements'] as $statementIndex => $statement)
+
+                @php
+                    $selectedRating =
+                        $virtueRatings[$virtueIndex][$statementIndex]
+                        ?? null;
+                @endphp
+
+                <table class="virtue-item">
+
+                    {{-- STATEMENT --}}
+                    <tr>
+                        <td class="virtue-question">
+
+                            <span class="virtue-question-number">
+                                {{ $statementIndex + 1 }}.
+                            </span>
+
+                            {{ $statement }}
+
+                        </td>
+                    </tr>
+
+                    {{-- RATING OPTIONS BELOW STATEMENT --}}
+                    <tr>
+                        <td class="virtue-options-cell">
+
+                            <table class="virtue-rating-options">
+                                <tr>
+
+                                    @foreach($ratingOptions as $value => $label)
+
+                                        <td class="rating-option">
+
+                                            <span class="rating-checkbox">
+                                                @if((string) $selectedRating === (string) $value)
+                                                    &#10003;
+                                                @endif
+                                            </span>
+
+                                            <span class="rating-label">
+                                                {{ $label }}
+                                            </span>
+
+                                        </td>
+
+                                    @endforeach
+
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                </table>
+
+            @endforeach
+
+        </div>
+
+    @endforeach
+
+    @if($virtue['name'] === '5. Courage & Drive')
+
+    <div class="line-manager-remarks">
+
+        <div class="line-manager-remarks-title">
+            Line Manager's Remarks
+        </div>
+
+        @for($line = 0; $line < 6; $line++)
+            <div class="remarks-line"></div>
+        @endfor
+
+    </div>
+
+@endif
+
+</div>
+
+        {{-- =========================================================
+        FOOTER
+        ========================================================== --}}
+
+        <div class="footer">
 
         Performance Goals Report — FY 2025-2026
 
@@ -766,10 +1231,10 @@
         Auto Generated on
         {{ now()->format('d M Y, h:i A') }}
 
-    </div>
+        </div>
 
-</div>
+        </div>
 
-</body>
+        </body>
 
-</html>
+        </html>

@@ -183,6 +183,7 @@
                         <div data-i18n="Line Manager Feedback">Line Manager Feedback</div>
                     </a>
             </li>
+            <li class="menu-item"> <a href="{{ route('detail.download-report') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="My Goals Report"> My Goals Report </div> </a> </li>
             <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-report"></i>
@@ -222,7 +223,6 @@
                         </div>
                     </a>
                 </li>
-                <li class="menu-item"> <a href="{{ route('detail.download-report') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="My Goals Report"> My Goals Report </div> </a> </li>
             </ul>
 
         </li>
