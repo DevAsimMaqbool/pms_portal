@@ -294,7 +294,7 @@ class GoalHrOverallPerformanceExport implements
                     $employee->name ?? '—',
 
                 'Employee ID' =>
-                    $employee->employee_id ?? '—',
+                    $employee->barcode ?? '—',
 
                 'Designation' =>
                     $employee->job_title ?? '—',
