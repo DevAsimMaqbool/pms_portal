@@ -26,6 +26,9 @@
                     <div class="">
                         <a href="{{ url('kpa/1/category/1/indicator/103') }}" class="btn btn-success">Add</a>
                     </div>
+                    <div class="">
+                        <a href="{{ route('employability.show_count') }}" class="btn btn-success">Show Count</a>
+                    </div>
                 </div>
                 <div class="card-datatable table-responsive card-body">
                     @if(in_array(getRoleName(activeRole()), ['Employability Center']))

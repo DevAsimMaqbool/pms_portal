@@ -394,5 +394,143 @@ class EmployabilityController extends Controller
         ], 500);
     }
 }
+
+public function departmentCount(Request $request)
+{
+    try {
+
+        $user = Auth::user();
+        $employee_id = $user->employee_id;
+
+        if (getRoleName(activeRole()) !== 'Employability Center') {
+            abort(403);
+        }
+
+        $query = Employability::query()
+            ->select([
+                'employabilities.program_id',
+                'employabilities.faculty_id',
+                'employabilities.department_id',
+
+                DB::raw('COUNT(*) as total_students'),
+
+                DB::raw('SUM(employabilities.salary) as total_salary'),
+
+                DB::raw('SUM(employabilities.employer_satisfaction) as total_employer_satisfaction'),
+
+                DB::raw('SUM(employabilities.graduate_satisfaction) as total_graduate_satisfaction'),
+                DB::raw("ROUND((COUNT(CASE WHEN employer_name IS NOT NULL THEN 1 END) / COUNT(*)) * 100, 2) AS employability"),
+                DB::raw(" ROUND( ( SUM(CASE
+                        WHEN employer_name IS NOT NULL
+                        AND employer_satisfaction IS NOT NULL
+                        THEN employer_satisfaction
+                        ELSE 0 END) * 20) / NULLIF(SUM(
+                    CASE
+                        WHEN employer_name IS NOT NULL
+                        THEN 1
+                        ELSE 0
+                    END ),0),2) AS employer_satisfaction_score"),
+                    DB::raw("
+                        ROUND(
+                            (
+                                SUM(
+                                    CASE
+                                        WHEN employer_name IS NOT NULL
+                                        AND graduate_satisfaction IS NOT NULL
+                                        THEN graduate_satisfaction
+                                        ELSE 0
+                                    END
+                                ) * 20
+                            )
+                            / NULLIF(
+                                SUM(
+                                    CASE
+                                        WHEN employer_name IS NOT NULL
+                                        THEN 1
+                                        ELSE 0
+                                    END
+                                ),
+                                0
+                            ),
+                            2
+                        ) AS graduate_sat
+                    ")
+                ])
+
+            ->with([
+                'faculty',
+                'department',
+                'program',
+            ])
+
+            ->where('employabilities.created_by', $employee_id)
+
+            ->groupBy(
+                'employabilities.program_id',
+                'employabilities.faculty_id',
+                'employabilities.department_id'
+            )
+
+            ->orderByDesc('employabilities.department_id');
+
+        return DataTables::eloquent($query)
+
+            ->addIndexColumn()
+
+            ->addColumn('faculty_name', function ($form) {
+                return $form->faculty?->name ?? 'N/A';
+            })
+
+            ->addColumn('department_name', function ($form) {
+                return $form->department?->name ?? 'N/A';
+            })
+
+            ->addColumn('program_name', function ($form) {
+                return $form->program?->program_name ?? 'N/A';
+            })
+
+            ->filter(function ($query) use ($request) {
+
+                $search = $request->input('search.value');
+
+                if (!empty($search)) {
+
+                    $query->where(function ($q) use ($search) {
+
+                        $q->whereHas('faculty', function ($faculty) use ($search) {
+                            $faculty->where('name', 'like', "%{$search}%");
+                        })
+
+                        ->orWhereHas('department', function ($department) use ($search) {
+                            $department->where('name', 'like', "%{$search}%");
+                        })
+
+                        ->orWhereHas('program', function ($program) use ($search) {
+                            $program->where('program_name', 'like', "%{$search}%");
+                        })
+
+                        ->orWhere(
+                            'employabilities.program_level',
+                            'like',
+                            "%{$search}%"
+                        );
+                    });
+                }
+            })
+
+            ->toJson();
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'message' => 'Oops! Something went wrong',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+    public function showDepartmentCount()
+    {
+        return view('admin.indicator_crud.employability_count');
+    }
 }
 

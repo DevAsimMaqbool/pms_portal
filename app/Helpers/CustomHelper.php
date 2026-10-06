@@ -11277,3 +11277,52 @@ function kpaAvgScoreForReport($kpa_id, $emp_id, $member = null)
         'weightage' => $weightage,
     ];
 }
+if (!function_exists('getHodAdminScoresByFaculty')) {
+    function getHodAdminScoresByFaculty()
+    {
+        $employeeId = Auth::user()->employee_id;
+
+        // HOD details
+        $hods = User::query()
+            ->where('users.manager_id', $employeeId)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'HOD');
+            })
+            ->whereNotNull('users.faculty')
+            ->join('faculties', 'faculties.id', '=', 'users.faculty')
+            ->select(
+                'users.employee_id',
+                'users.name',
+                'users.faculty',
+                'faculties.name as faculty_name',
+                'users.as_admin_score'
+            )
+            ->orderBy('users.faculty')
+            ->orderBy('users.name')
+            ->get();
+
+        // Faculty-wise overall score
+        $facultyScores = $hods
+            ->groupBy('faculty')
+            ->map(function ($facultyHods) {
+                 $totalHods = $facultyHods->count();
+                 $totalAdminScore = $facultyHods->sum(function ($hod) {
+                        return (float) ($hod->as_admin_score ?? 0);
+                    });
+
+                return [
+                    'faculty' => $facultyHods->first()->faculty,
+                    'faculty_name' => $facultyHods->first()->faculty_name,
+                    'total_admin_score' => $totalAdminScore,
+                    'total_hods' => $totalHods,
+                    'overall_admin_score' => round($totalAdminScore / $totalHods,2),
+                ];
+            })
+            ->values();
+
+        return [
+            'hods' => $hods,
+            'facultyScores' => $facultyScores,
+        ];
+    }
+}

@@ -390,6 +390,78 @@
       </div>
     </div>
 
+@if(in_array(getRoleName(activeRole()), ['Dean']))
+   <div class="row g-6">
+     <div class="col-md-12 col-xxl-12 mb-6">
+        <div class="card h-100">
+          <div class="card-body">
+            @php
+                $hodData = getHodAdminScoresByFaculty();
+
+                $hods = $hodData['hods'];
+                $facultyScores = $hodData['facultyScores'];
+            @endphp
+
+
+            {{-- =========================
+                HOD DETAILS
+            ========================= --}}
+
+            <h5>HOD Admin Scores</h5>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Faculty</th>
+                        <th>HOD</th>
+                        <th>Admin Score</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($hods as $hod)
+                        <tr>
+                            <td>{{ $hod->faculty_name }}</td>
+                            <td>{{ $hod->name }}</td>
+                            <td>{{ $hod->as_admin_score ?? 0 }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+
+            {{-- =========================
+                FACULTY OVERALL SCORE
+            ========================= --}}
+
+            <h5 class="mt-4">Faculty Overall Score</h5>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Faculty</th>
+                        <th>Total HODs</th>
+                        <th>Score</th>
+                        <th>Overall Admin Score</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($facultyScores as $faculty)
+                        <tr>
+                            <td>{{ $faculty['faculty_name'] }}</td>
+                            <td>{{ $faculty['total_hods'] }}</td>
+                            <td>{{ $faculty['total_admin_score'] }}</td>
+                            <td>{{ $faculty['overall_admin_score'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>    
+   </div>
+@endif
 
   </div>
   <!-- / Content -->
