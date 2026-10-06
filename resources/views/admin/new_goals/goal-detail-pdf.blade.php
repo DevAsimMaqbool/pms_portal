@@ -12,29 +12,32 @@
 
 <style>
 
+/*
+|--------------------------------------------------------------------------
+| PAGE SETUP
+|--------------------------------------------------------------------------
+*/
 @page {
     size: A4;
-    margin: 32px 30px 35px 30px;
+    margin: 118px 0 25px 0;
 }
 
 * {
     box-sizing: border-box;
 }
 
-html,
+html {
+    width: 100%;
+}
+
 body {
     width: 100%;
     margin: 0;
     padding: 0;
-}
-
-body {
     font-family: DejaVu Sans, sans-serif;
     color: #253449;
     font-size: 9px;
     line-height: 1.45;
-    margin: 0;
-    padding: 0;
 }
 
 /* =========================================================
@@ -54,13 +57,26 @@ body {
 }
 
 /* =========================================================
+   FIXED HEADER
+========================================================= */
+
+.fixed-header {
+    position: fixed;
+    top: -93px;
+    left: 0;
+    right: 0;
+    height: 78px;
+    padding: 0 12px;
+}
+
+/* =========================================================
    PAGE / INNER CONTENT FRAME
 ========================================================= */
 
 .page {
     width: auto;
     margin: 0px 12px 12px 12px;
-    padding: 25px 0 0 0;
+    padding: 0;
 }
 
 .virtue-page {
@@ -70,7 +86,7 @@ body {
 
     width: auto;
     margin: 0px 12px 12px 12px;
-    padding: 25px 0 0 0;
+    padding: 0;
 }
 
 .remarks-page {
@@ -80,7 +96,7 @@ body {
 
     width: auto;
     margin: 0px 12px 12px 12px;
-    padding: 25px 0 0 0;
+    padding: 0;
 }
 
 .avoid-break {
@@ -99,7 +115,7 @@ body {
     width: 100%;
     border-bottom: 3px solid #b78116;
     padding-bottom: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 0;
 }
 
 .report-header-table {
@@ -186,6 +202,9 @@ body {
 .section {
     width: 100%;
     margin-top: 10px;
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: auto;
 }
 
 .section-title {
@@ -209,186 +228,6 @@ body {
 }
 
 /* =========================================================
-   GOAL TABLE
-========================================================= */
-
-table.goal-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-
-    /*
-    |--------------------------------------------------------------------------
-    | IMPORTANT:
-    |--------------------------------------------------------------------------
-    | The spacer row below is repeated by DomPDF when the table
-    | continues onto another page.
-    |
-    | This negative margin cancels the spacer on the first page,
-    | while the repeated table fragment keeps the white space.
-    |--------------------------------------------------------------------------
-    */
-    margin-top: -20px;
-}
-
-.goal-table th {
-    background: #edf4fa;
-    color: #1f4e79;
-    border: 1px solid #d7dee8;
-    border-bottom: 2px solid #b78116;
-    padding: 7px 5px;
-    font-size: 7.5px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
-}
-
-.goal-table tr {
-    page-break-inside: avoid;
-}
-
-/*
-|--------------------------------------------------------------------------
-| ONLY FOR GOAL TABLE CONTINUATION PAGE
-|--------------------------------------------------------------------------
-*/
-
-.goal-table-page-spacer td {
-    height: 20px !important;
-    padding: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-}
-
-.goal-table td {
-    border: 1px solid #d7dee8;
-    padding: 7px 5px;
-    vertical-align: top;
-    font-size: 8px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.goal-table tr:nth-child(even) td {
-    background: #fbfcfe;
-}
-
-/* =========================================================
-   GOAL CONTENT
-========================================================= */
-
-.goal-name {
-    display: inline;
-    color: #173a5c;
-    font-size: 8.5px;
-    font-weight: bold;
-    line-height: 1.5;
-}
-
-.goal-number {
-    display: inline-block;
-    background: #1f4e79;
-    color: #ffffff;
-    font-size: 7px;
-    font-weight: bold;
-    padding: 3px 6px;
-    margin-right: 4px;
-    border-radius: 3px;
-    vertical-align: middle;
-}
-
-.goal-objective {
-    margin-top: 7px;
-    padding: 5px 7px;
-    background: #f5f8fc;
-    border-left: 2px solid #b78116;
-    color: #526174;
-    font-size: 7.5px;
-    line-height: 1.5;
-}
-
-.target-text {
-    color: #253449;
-    font-size: 8px;
-    font-weight: 600;
-    line-height: 1.6;
-    background: #f5f8fc;
-    border-left: 2px solid #1f4e79;
-    padding: 5px 7px;
-    border-radius: 2px;
-}
-
-.progress-box {
-    color: #344256;
-    font-size: 8px;
-    line-height: 1.6;
-    background: #f7fafc;
-    border-left: 2px solid #b78116;
-    padding: 6px 7px;
-    border-radius: 2px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.deadline {
-    margin-top: 5px;
-    font-size: 7px;
-    color: #718096;
-}
-
-/* =========================================================
-   RATINGS
-========================================================= */
-
-.rating {
-    text-align: center;
-    font-weight: bold;
-    font-size: 10px;
-    color: #1f4e79;
-}
-
-.manager-rating {
-    text-align: center;
-    font-weight: bold;
-    font-size: 10px;
-    color: #b78116;
-}
-
-.rating-max {
-    font-size: 7px;
-    color: #718096;
-    font-weight: normal;
-}
-
-/* =========================================================
-   MANAGER REMARKS IN GOAL TABLE
-========================================================= */
-
-.manager-remarks {
-    font-size: 7.8px;
-    line-height: 1.5;
-}
-
-.no-remark {
-    color: #a0aec0;
-    font-style: italic;
-}
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.empty {
-    padding: 18px;
-    text-align: center;
-    color: #718096;
-    background: #f8fafc;
-    border: 1px solid #e0e6ed;
-}
-
-/* =========================================================
    RATING CRITERIA
 ========================================================= */
 
@@ -396,8 +235,20 @@ table.goal-table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    margin-bottom: 10px;
+    margin: 0 0 10px 0;
     font-size: 7.5px;
+
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: auto;
+}
+
+.rating-criteria-table thead {
+    display: table-header-group;
+}
+
+.rating-criteria-table tbody {
+    display: table-row-group;
 }
 
 .rating-criteria-table th {
@@ -428,6 +279,250 @@ table.goal-table {
 }
 
 /* =========================================================
+   GOAL TABLE
+========================================================= */
+
+table.goal-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+
+    /*
+     * IMPORTANT:
+     *
+     * Header and goal data must ALWAYS stay together.
+     *
+     * If there is not enough room for the complete
+     * table on the current page, DomPDF moves the
+     * complete goal table to the next page.
+     */
+    margin: 0 0 8px 0;
+
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+}
+
+.goal-table tr {
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+}
+
+/* =========================================================
+   GOAL TABLE HEADER CELLS
+========================================================= */
+
+.goal-table th {
+    background: #edf4fa;
+    color: #1f4e79;
+    border: 1px solid #d7dee8;
+    border-bottom: 2px solid #b78116;
+
+    padding: 7px 5px;
+
+    font-size: 7.2px;
+    font-weight: bold;
+
+    text-align: left;
+    vertical-align: middle;
+
+    line-height: 1.25;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* =========================================================
+   GOAL TABLE BODY CELLS
+========================================================= */
+
+.goal-table td {
+    border: 1px solid #d7dee8;
+
+    padding: 7px 5px;
+
+    vertical-align: top;
+
+    font-size: 8px;
+    line-height: 1.45;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
+
+    overflow: visible;
+}
+
+/* =========================================================
+   GOAL CONTENT
+========================================================= */
+
+.goal-name {
+    display: inline;
+
+    color: #173a5c;
+    font-size: 8.3px;
+    font-weight: bold;
+    line-height: 1.45;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.goal-number {
+    display: inline-block;
+
+    background: #1f4e79;
+    color: #ffffff;
+
+    font-size: 7px;
+    font-weight: bold;
+
+    padding: 3px 6px;
+    margin-right: 4px;
+
+    border-radius: 3px;
+
+    vertical-align: middle;
+}
+
+.goal-objective {
+    margin-top: 7px;
+
+    padding: 5px 7px;
+
+    background: #f5f8fc;
+    border-left: 2px solid #b78116;
+
+    color: #526174;
+
+    font-size: 7.5px;
+    line-height: 1.45;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.target-text {
+    color: #253449;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    line-height: 1.5;
+
+    background: #f5f8fc;
+    border-left: 2px solid #1f4e79;
+
+    padding: 5px 7px;
+
+    border-radius: 2px;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.progress-box {
+    color: #344256;
+
+    font-size: 7px;
+
+    line-height: 1.5;
+
+    background: #f7fafc;
+    border-left: 2px solid #b78116;
+
+    padding: 6px 7px;
+
+    border-radius: 2px;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.deadline {
+    margin-top: 5px;
+
+    font-size: 7px;
+
+    color: #718096;
+}
+
+/* =========================================================
+   RATINGS
+========================================================= */
+
+.rating {
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 10px;
+
+    color: #1f4e79;
+}
+
+.manager-rating {
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 10px;
+
+    color: #b78116;
+}
+
+.rating-max {
+    font-size: 7px;
+
+    color: #718096;
+
+    font-weight: normal;
+}
+
+/* =========================================================
+   MANAGER REMARKS IN GOAL TABLE
+========================================================= */
+
+.manager-remarks {
+    font-size: 7.8px;
+
+    line-height: 1.5;
+
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.no-remark {
+    color: #a0aec0;
+
+    font-style: italic;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    padding: 18px;
+
+    text-align: center;
+
+    color: #718096;
+
+    background: #f8fafc;
+
+    border: 1px solid #e0e6ed;
+}
+
+/* =========================================================
    LEADERSHIP BEHAVIOURS / VIRTUES
 ========================================================= */
 
@@ -437,94 +532,138 @@ table.goal-table {
 
 .virtue-intro {
     padding: 7px 9px;
+
     margin-bottom: 7px;
+
     background: #f5f8fc;
+
     border: 1px solid #dfe6ee;
+
     color: #526174;
+
     font-size: 7.7px;
+
     line-height: 1.35;
 }
 
 .virtue-block {
     margin-bottom: 6px;
+
     page-break-inside: avoid;
 }
 
 .virtue-title {
     background: #1f4e79;
+
     color: #ffffff;
+
     padding: 6px 9px;
+
     font-size: 8.5px;
+
     font-weight: bold;
+
     border-left: 4px solid #b78116;
+
     page-break-inside: avoid;
+
     page-break-after: avoid;
 }
 
 .virtue-item {
     width: 100%;
+
     border-collapse: collapse;
+
     table-layout: fixed;
+
     margin-bottom: 3px;
+
     page-break-inside: avoid;
 }
 
 .virtue-item td {
     border: 1px solid #dfe5ec;
+
     padding: 5px 7px;
+
     vertical-align: top;
 }
 
 .virtue-question {
     color: #344256;
+
     font-size: 7.5px;
+
     line-height: 1.35;
+
     font-weight: normal;
 }
 
 .virtue-options-cell {
     padding: 4px 7px !important;
+
     background: #f8fafc;
 }
 
 .virtue-rating-options {
     width: 100%;
+
     border-collapse: collapse;
+
     table-layout: fixed;
 }
 
 .virtue-rating-options td.rating-option {
     width: 20%;
+
     border: none;
+
     padding: 2px 1px;
+
     text-align: center;
+
     vertical-align: middle;
+
     color: #344256;
+
     font-size: 6.6px;
+
     line-height: 1.25;
 }
 
 .rating-checkbox {
     display: inline-block;
+
     width: 10px;
     height: 10px;
+
     border: 1px solid #718096;
+
     text-align: center;
+
     vertical-align: middle;
+
     font-size: 7px;
+
     line-height: 9px;
+
     color: #1f4e79;
+
     margin-right: 2px;
 }
 
 .rating-label {
     display: inline;
+
     vertical-align: middle;
 }
 
 .virtue-question-number {
     color: #1f4e79;
+
     font-weight: bold;
+
     margin-right: 3px;
 }
 
@@ -534,33 +673,49 @@ table.goal-table {
 
 .remarks-page-title {
     background: #1f4e79;
+
     color: #ffffff;
+
     padding: 8px 10px;
+
     font-size: 11px;
+
     font-weight: bold;
+
     border-left: 5px solid #b78116;
+
     margin-bottom: 10px;
 }
 
 .line-manager-remarks {
     margin-bottom: 12px;
+
     padding: 9px 10px 10px 10px;
+
     border: 1px solid #dfe6ee;
+
     background: #f8fafc;
+
     page-break-inside: avoid;
 }
 
 .line-manager-remarks-title {
     color: #1f4e79;
+
     font-size: 9px;
+
     font-weight: bold;
+
     padding-bottom: 6px;
+
     margin-bottom: 4px;
+
     border-bottom: 1px solid #d8e4ef;
 }
 
 .remarks-line {
-    height: 19px;
+    height: 35px;
+
     border-bottom: 1px solid #aeb9c7;
 }
 
@@ -570,35 +725,45 @@ table.goal-table {
 
 .signature-area {
     margin-top: 20px;
+
     page-break-inside: avoid;
 }
 
 .signature-table {
     width: 100%;
+
     border-collapse: collapse;
 }
 
 .signature-table td {
     width: 50%;
+
     vertical-align: bottom;
+
     padding: 5px 20px 0 20px;
 }
 
 .signature-line {
     height: 35px;
+
     border-bottom: 1px solid #253449;
+
     margin-bottom: 5px;
 }
 
 .signature-label {
     color: #526174;
+
     font-size: 7.5px;
+
     font-weight: bold;
 }
 
 .signature-date {
     margin-top: 4px;
+
     color: #718096;
+
     font-size: 7px;
 }
 
@@ -608,10 +773,15 @@ table.goal-table {
 
 .footer {
     margin-top: 15px;
+
     padding-top: 6px;
+
     border-top: 1px solid #dfe5ec;
+
     text-align: center;
+
     color: #718096;
+
     font-size: 7px;
 }
 
@@ -620,12 +790,48 @@ table.goal-table {
 ========================================================= */
 
 table {
+    page-break-before: auto;
+    page-break-after: auto;
     page-break-inside: auto;
 }
 
-tr {
+/*
+|--------------------------------------------------------------------------
+| GOAL TABLE OVERRIDE
+|--------------------------------------------------------------------------
+|
+| This MUST come after the global table rule above.
+|
+| It prevents DomPDF from putting the goal header at
+| the bottom of one page while its data starts on
+| the next page.
+|
+|--------------------------------------------------------------------------
+*/
+
+table.goal-table {
+    page-break-before: auto;
+    page-break-after: auto;
     page-break-inside: avoid;
 }
+
+.goal-table tr {
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+}
+
+/*
+|--------------------------------------------------------------------------
+| IMPORTANT:
+| No global:
+|
+| tr {
+|     page-break-inside: avoid;
+| }
+|
+|--------------------------------------------------------------------------
+*/
 
 </style>
 
@@ -633,45 +839,49 @@ tr {
 
 <body>
 
-<div class="page">
-
 {{-- =========================================================
-HEADER
+FIXED HEADER — REPEATS ON EVERY PAGE
 ========================================================= --}}
 
-<div class="report-header">
+<div class="fixed-header">
 
-<table class="report-header-table">
+    <div class="report-header">
 
-    <tr>
+        <table class="report-header-table">
 
-        <td class="report-title-cell">
+            <tr>
 
-            <div class="report-title">
-                Performance Evaluation Report
-            </div>
+                <td class="report-title-cell">
 
-            <div class="report-subtitle">
-                Performance Goals &amp; Manager Evaluation — FY 2025-2026
-            </div>
+                    <div class="report-title">
+                        Performance Evaluation Report
+                    </div>
 
-        </td>
+                    <div class="report-subtitle">
+                        Performance Goals &amp; Manager Evaluation — FY 2025-2026
+                    </div>
 
-        <td class="report-logo-cell">
+                </td>
 
-            <img
-                src="{{ public_path('images/sup-logo.png') }}"
-                class="report-logo"
-                alt="Institution Logo"
-            >
+                <td class="report-logo-cell">
 
-        </td>
+                    <img
+                        src="{{ public_path('images/sup-logo.png') }}"
+                        class="report-logo"
+                        alt="Institution Logo"
+                    >
 
-    </tr>
+                </td>
 
-</table>
+            </tr>
+
+        </table>
+
+    </div>
 
 </div>
+
+<div class="page">
 
 {{-- =========================================================
 EMPLOYEE INFORMATION
@@ -811,75 +1021,95 @@ GOALS
     <tbody>
 
         <tr>
-            <td class="criteria-rating">1</td>
+
+            <td class="criteria-rating">
+                1
+            </td>
 
             <td>
                 <strong>Unsatisfactory</strong>
             </td>
 
             <td>
-                Less than 50% of the agreed goal achieved,
+                Less than 60% of the agreed goal achieved,
                 with significant gaps in quality, completeness,
                 output and/or timelines.
             </td>
+
         </tr>
 
         <tr>
-            <td class="criteria-rating">2</td>
+
+            <td class="criteria-rating">
+                2
+            </td>
 
             <td>
                 <strong>Needs Improvement</strong>
             </td>
 
             <td>
-                50–79% of the agreed goal achieved, but required
+                60–69% of the agreed goal achieved, but required
                 quality, completeness, output and/or timelines
                 are not consistently met.
             </td>
+
         </tr>
 
         <tr>
-            <td class="criteria-rating">3</td>
+
+            <td class="criteria-rating">
+                3
+            </td>
 
             <td>
                 <strong>Meets Expectations</strong>
             </td>
 
             <td>
-                80–100% of the agreed goal achieved, meeting
+                70–79% of the agreed goal achieved, meeting
                 the expected quality and completeness standards
                 and delivered within the agreed timeline.
             </td>
+
         </tr>
 
         <tr>
-            <td class="criteria-rating">4</td>
+
+            <td class="criteria-rating">
+                4
+            </td>
 
             <td>
                 <strong>Exceeds Expectations</strong>
             </td>
 
             <td>
-                101–120% of the agreed goal achieved, while
+                80–89% of the agreed goal achieved, while
                 maintaining the required quality and completeness,
                 and/or delivering meaningful additional scope,
                 output or value beyond the agreed goal.
             </td>
+
         </tr>
 
         <tr>
-            <td class="criteria-rating">5</td>
+
+            <td class="criteria-rating">
+                5
+            </td>
 
             <td>
                 <strong>Exceptional</strong>
             </td>
 
             <td>
-                More than 120% of the agreed goal achieved,
+                More than 90% of the agreed goal achieved,
                 with consistently high quality and completeness,
                 and significant additional scope, impact or value
                 beyond the original goal.
             </td>
+
         </tr>
 
     </tbody>
@@ -888,83 +1118,78 @@ GOALS
 
 @if($reports->count())
 
-<table class="goal-table">
+    @foreach($reports as $index => $goal)
 
-    <thead>
+        @php
+
+            $report =
+                $goal->latest_self_report;
+
+            $managerReview =
+                $goal->latest_manager_review;
+
+            $progress =
+                $report->progress_against_goal
+                ?? null;
+
+            $managerRemarks =
+                $goal->manager_remarks
+                ?? null;
+
+        @endphp
 
         {{-- =================================================
-             CONTINUATION PAGE SPACER
-
-             DomPDF repeats THEAD when this table continues
-             onto the next page.
-
-             This row is invisible and creates 20px white
-             space before the repeated table header.
+             EACH GOAL = ONE COMPLETE INDEPENDENT TABLE
+             HEADER + DATA MUST STAY TOGETHER
         ================================================== --}}
 
-        <tr class="goal-table-page-spacer">
+        <table class="goal-table">
 
-            <td colspan="7"></td>
+            {{-- =================================================
+                 HEADER FOR THIS GOAL
+            ================================================== --}}
 
-        </tr>
+            <tr>
 
-        <tr>
+                <th style="width:18%;">
+                    Goal
+                </th>
 
-            <th style="width:20%;">
-                Goal
-            </th>
+                <th style="width:15%;">
+                    Goal Target
+                </th>
 
-            <th style="width:15%;">
-                Goal Target
-            </th>
+                <th style="width:19%;">
+                    Goal Progress
+                </th>
 
-            <th style="width:20%;">
-                Goal Progress
-            </th>
+                <th style="width:8%; text-align:center;">
+                    Goal Rating
+                </th>
 
-            <th style="width:8%; text-align:center;">
-                Goal Rating
-            </th>
+                <th style="width:18%;">
+                    Manager Remarks
+                </th>
 
-            <th style="width:18%;">
-                Manager Remarks
-            </th>
+                <th style="width:12%; text-align:center;">
+                    Goal Weightage (%)
+                </th>
 
-            <th style="width:9%; text-align:center;">
-                Goal Weightage (%)
-            </th>
+                <th style="width:10%; text-align:center;">
+                    Manager Rating
+                </th>
 
-            <th style="width:10%; text-align:center;">
-                Manager Rating
-            </th>
+            </tr>
 
-        </tr>
+            {{-- =================================================
+                 ONLY THIS GOAL
+            ================================================== --}}
 
-    </thead>
+            <tr>
 
-    <tbody>
-
-        @foreach($reports as $index => $goal)
-
-            @php
-
-                $report =
-                    $goal->latest_self_report;
-
-                $managerReview =
-                    $goal->latest_manager_review;
-
-                $progress =
-                    $report->progress_against_goal
-                    ?? null;
-
-                $managerRemarks =
-                    $goal->manager_remarks
-                    ?? null;
-
-            @endphp
-
-            <tr class="avoid-break">
+                {{-- =================================================
+                     GOAL
+                ================================================== --}}
 
                 <td>
 
@@ -1001,6 +1226,8 @@ GOALS
                                 margin-top:5px;
                                 font-size:7px;
                                 color:#718096;
+                                word-wrap:break-word;
+                                overflow-wrap:break-word;
                             "
                         >
 
@@ -1015,6 +1242,10 @@ GOALS
                     @endif
 
                 </td>
+
+                {{-- =================================================
+                     GOAL TARGET
+                ================================================== --}}
 
                 <td>
 
@@ -1034,6 +1265,10 @@ GOALS
 
                 </td>
 
+                {{-- =================================================
+                     GOAL PROGRESS
+                ================================================== --}}
+
                 <td>
 
                     @if(filled($progress))
@@ -1051,6 +1286,10 @@ GOALS
                     @endif
 
                 </td>
+
+                {{-- =================================================
+                     GOAL RATING
+                ================================================== --}}
 
                 <td style="text-align:center;">
 
@@ -1080,6 +1319,10 @@ GOALS
 
                 </td>
 
+                {{-- =================================================
+                     MANAGER REMARKS
+                ================================================== --}}
+
                 <td>
 
                     @if(filled($managerRemarks))
@@ -1098,12 +1341,20 @@ GOALS
 
                 </td>
 
+                {{-- =================================================
+                     GOAL WEIGHTAGE
+                ================================================== --}}
+
                 <td style="text-align:center;">
 
                     {{-- Keep existing data logic here if weightage
                          is available on your Goal model. --}}
 
                 </td>
+
+                {{-- =================================================
+                     MANAGER RATING
+                ================================================== --}}
 
                 <td style="text-align:center;">
 
@@ -1135,17 +1386,15 @@ GOALS
 
             </tr>
 
-        @endforeach
+        </table>
 
-    </tbody>
-
-</table>
+    @endforeach
 
 @else
 
-<div class="empty">
-    No goals have been created for this employee.
-</div>
+    <div class="empty">
+        No goals have been created for this employee.
+    </div>
 
 @endif
 
