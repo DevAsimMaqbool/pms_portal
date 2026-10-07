@@ -11,7 +11,7 @@
   <title>{{ config('app.name', 'Laravel1') }}</title>
 
   <link rel="icon" type="image/x-icon"
-    href="https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/favicon/favicon.ico" />
+    href="{{ asset('admin/assets/img/avatars/superior.svg') }}" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com/" />

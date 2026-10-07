@@ -3960,11 +3960,19 @@ if (!function_exists('getStudentFeedbackByBarcode')) {
             return [0, 0, 0, 0];
         }
 
+        // return [
+        //     number_format($feedback->responsibility_accountability, 1),
+        //     number_format($feedback->empathy_compassion, 1),
+        //     number_format($feedback->inspirational_leadership, 1),
+        //     number_format($feedback->honesty_integrity, 1),
+        //     number_format($feedback->inspirational_leadership, 1),
+        // ];
+
         return [
             number_format($feedback->responsibility_accountability, 1),
+            number_format($feedback->honesty_integrity, 1),
             number_format($feedback->empathy_compassion, 1),
             number_format($feedback->inspirational_leadership, 1),
-            number_format($feedback->honesty_integrity, 1),
             number_format($feedback->inspirational_leadership, 1),
         ];
     }
@@ -6886,7 +6894,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
         // Get all faculty IDs in the department
         $facultyIds = User::where('department_id', $departmentId)
             ->whereNotNull('faculty_id')
-            ->pluck('id');
+            ->pluck('id');  
 
         if ($facultyIds->isEmpty()) {
             return [
@@ -7009,7 +7017,12 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
         //dd($totalsubmissionCount);
         $hodEmployeeId = auth()->user()->employee_id;
         $departmentInternationalFraction = min($departmentInternationalFraction, 100);
-        $totalQuartileScore = min($totalQuartileScore, 100);
+        
+        if($totalTarget > 0){
+             $totalQuartileScore = min($totalQuartileScore, 100);
+        }else{
+            $totalQuartileScore = 0;
+        }
 
         $weights = [
             'weight127' => getRoleWeightage($activeRoleId, 'indicator', 127)['weightage'],
