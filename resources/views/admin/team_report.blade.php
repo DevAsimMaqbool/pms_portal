@@ -7,6 +7,8 @@
     <title>Performance Insight Report 2025-2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="icon" type="image/x-icon"
+    href="{{ asset('admin/assets/img/avatars/superior.svg') }}" />
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap"
         rel="stylesheet">
@@ -823,6 +825,7 @@
                         <th>KPA</th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Avg</th>
                         <th>Rating</th>
                     </tr>
                 </thead>
@@ -834,9 +837,11 @@
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
                             $color = $kpaResult['color'];
+                            $weightage = $kpaResult['weightage'];
                         @endphp
                         <td>Teaching and Learning</td>
                         <td class="report-center">{{ $target }}%</td>
+                         <td class="report-center">{{ number_format($weightage, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -847,9 +852,11 @@
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
                             $color = $kpaResult['color'];
+                            $weightage = $kpaResult['weightage'];
                         @endphp
                         <td>Research, Innovation and Commercialisation</td>
                         <td class="report-center">{{ $target }}%</td>
+                        <td class="report-center">{{ number_format($weightage, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -860,9 +867,11 @@
                             $target = $kpaResult['target'];
                             $rating = $kpaResult['rating'];
                             $color = $kpaResult['color'];
+                            $weightage = $kpaResult['weightage'];
                         @endphp
                         <td>Institutional Engagement</td>
                         <td class="report-center">{{ $target }}%</td>
+                        <td class="report-center">{{ number_format($weightage, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -946,6 +955,7 @@
                         <th>Sub KPA</th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Avg</th>
                         <th>Rating</th>
                     </tr>
                 </thead>
@@ -955,11 +965,13 @@
                             $kpaResult = indicatorCategoryAvgScore(23, 1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Delivery  (PG/UG)</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -968,11 +980,13 @@
                             $kpaResult = indicatorCategoryAvgScore(3, 1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Management</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -981,11 +995,13 @@
                             $kpaResult = indicatorCategoryAvgScore(25, 1, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Teaching Output</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1076,6 +1092,7 @@
                         <th>Sub KPA</th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Avg</th>
                         <th>Rating</th>
                     </tr>
                 </thead>
@@ -1085,11 +1102,13 @@
                             $kpaResult = indicatorCategoryAvgScore(5, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Productivity & Quality</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1098,11 +1117,13 @@
                             $kpaResult = indicatorCategoryAvgScore(32, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Other Knowledge Products</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1111,11 +1132,13 @@
                             $kpaResult = indicatorCategoryAvgScore(34, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Research Operations</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1124,11 +1147,13 @@
                             $kpaResult = indicatorCategoryAvgScore(8, 2, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Innovation & Commercialization</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ $avg }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1222,6 +1247,7 @@
                         <th>Sub KPA</th>
                         <th>Target</th>
                         <th>Achieved</th>
+                        <th>Avg</th>
                         <th>Rating</th>
                     </tr>
                 </thead>
@@ -1231,11 +1257,13 @@
                             $kpaResult = indicatorCategoryAvgScore(27, 13, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Departmental Tasks</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1244,11 +1272,13 @@
                             $kpaResult = indicatorCategoryAvgScore(28, 13, $user->employee_id, 1);
                             $avg = $kpaResult['avg'];
                             $rating = $kpaResult['rating'];
+                            $weighted_kp = $kpaResult['weighted_kp'];
                             $color = $avg >= 90 ? '#6EA8FE' : ($avg >= 80 ? '#96e2b4' : ($avg >= 70 ? '#ffcb9a' : ($avg >=
                                 60 ? '#fd7e13' : '#ff4c51'))); // this will be used for bg and bg-label
                         @endphp
                         <td>Performance in Events</td>
                         <td class="report-center">{{ number_format($kpaResult['target'], 1) }}%</td>
+                        <td class="report-center">{{ number_format($weighted_kp, 1) }}%</td>
                         <td class="report-center">{{ number_format($avg, 1) }}%</td>
                         <td class="achieved-cell" style="color:{{ $color }}">{{$rating}}</td>
                     </tr>
@@ -1398,7 +1428,8 @@
                 const tctx = triCanvas.getContext('2d');
 
                 // --- Data ---
-                const labels = ['TD (PG/UG)', 'TM', 'TO'];
+                //const labels = ['TD (PG/UG)', 'TM', 'TO'];
+                const labels = ['TM', 'TD (PG/UG)', 'TO'];
                 const dataValues = @json($datasetTeaching) || [];
 
                 // --- Function to get color based on avg ---
