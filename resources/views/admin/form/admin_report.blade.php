@@ -37,8 +37,23 @@
                                 <div class="col-12 col-lg-12">
                                     <!-- Product Information -->
                                     <div class="card mb-6">
-                                        <div class="card-header">
-                                            <h5 class="card-tile mb-0">Generate Report</h5>
+                                        <div class="card-header d-flex justify-content-between pb-4">
+                                         <div class="card-title mb-0">
+                                            <h5 class="">Generate Report</h5>
+                                        </div>
+                                        <div class="dropdown">
+                                            <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1" type="button" id="salesLastMonthMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="icon-base ti tabler-dots-vertical icon-md text-body-secondary"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="salesLastMonthMenu">
+                                            <a href="{{ route('dean.report.excel') }}" class="dropdown-item">
+                                                Download All Faculty Report in Excel
+                                            </a>
+                                            </div>
+                                        </div>
+                                            {{-- <a href="{{ route('dean.report.excel') }}" class="btn btn-success">
+                                                All Faculty Report Excel
+                                            </a> --}}
                                         </div>
                                         <div class="card-body">
                                             <div class="row">

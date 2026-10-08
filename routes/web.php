@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\DeanKpaMatrixExport;
 use App\Http\Controllers\AcademicGovernanceComplianceController;
 use App\Http\Controllers\AchievementOfResearchPublicationsTargetController;
 use App\Http\Controllers\ActiveInternationalResearchPartnerController;
@@ -768,6 +769,15 @@ Route::get('/employee-report/excel', function (Request $request) {
     );
 
 })->name('employee.report.excel');
+Route::get('/dean-report/excel', function (Request $request) {
+    $yearId=1;
+
+    return Excel::download(
+         new DeanKpaMatrixExport($yearId),
+         'dean-kpa-matrix.xlsx'
+    );
+
+})->name('dean.report.excel');
 
 });
 require __DIR__ . '/auth.php';
