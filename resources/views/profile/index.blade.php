@@ -17,8 +17,9 @@
           </div>
           <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-5">
             <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
-              <img src="{{ asset('admin/assets/img/avatars/1.png') }}" alt="user image"
-                class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" />
+              <img src="{{ strtolower(Auth::user()->gender) == 'male'
+                ? asset('admin/assets/img/avatars/male_avatar.png')
+                : asset('admin/assets/img/avatars/female_avatar.png') }}" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img" />  
             </div>
             <div class="flex-grow-1 mt-3 mt-lg-5">
               <div

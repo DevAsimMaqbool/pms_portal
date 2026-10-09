@@ -7,6 +7,8 @@
     <title>Performance Insight Report 2025-2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="icon" type="image/x-icon"
+    href="{{ asset('admin/assets/img/avatars/superior.svg') }}" />
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap"
         rel="stylesheet">
@@ -1426,7 +1428,8 @@
                 const tctx = triCanvas.getContext('2d');
 
                 // --- Data ---
-                const labels = ['TD (PG/UG)', 'TM', 'TO'];
+                //const labels = ['TD (PG/UG)', 'TM', 'TO'];
+                const labels = ['TM', 'TD (PG/UG)', 'TO'];
                 const dataValues = @json($datasetTeaching) || [];
 
                 // --- Function to get color based on avg ---
