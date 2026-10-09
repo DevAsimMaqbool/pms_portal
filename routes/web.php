@@ -742,6 +742,10 @@ Route::get(
     '/download-report',
     [PerformanceReportController::class, 'downloadGoalReport']
 )->name('detail.download-report');
+Route::get(
+    '/ovelall-download-report',
+    [PerformanceReportController::class, 'OvelalldownloadGoalReport']
+)->name('ovelall.download-report');
 
 Route::get(
     '/my-performance-report/download',
