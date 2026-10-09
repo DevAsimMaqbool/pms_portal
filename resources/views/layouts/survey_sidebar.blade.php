@@ -165,6 +165,14 @@
                     </div>
                 </a>
             </li>
+            <li class="menu-item {{ request()->routeIs('ovelall.download-report') ? 'active' : '' }}">
+                <a href="{{ route('ovelall.download-report') }}" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-download"></i>
+                    <div data-i18n="All Users Goals Report">
+                        All Users Goals Report
+                    </div>
+                </a>
+            </li>
             <li class="menu-item {{ request()->routeIs('goal-initiatives.manager.index') ? 'active' : '' }}">
             <a href="{{ route('goal-initiatives.manager.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-bulb"></i>

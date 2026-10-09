@@ -7,6 +7,7 @@ use App\Models\GoalOverallReview;
 use App\Models\LineManagerFeedback;
 use App\Models\GoalInitiative;
 use App\Models\NewGoal;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -1295,5 +1296,56 @@ public function downloadGoalReport()
         '_FY2026.pdf';
 
     return $pdf->download($filename);
+}
+
+public function OvelalldownloadGoalReport()
+{
+     $groupedGoals = collect();
+     // Current manager
+    $currentUser = Auth::user();
+
+    // Report generation date
+    $reportDate = now()->format('d M Y, h:i A');
+    // Get employees under the current manager
+    $employees = User::where('manager_id', Auth::id())
+        ->pluck('id');
+
+    NewGoal::query()
+        ->select([
+            'id',
+            'user_id',
+            's2r_driver_enabler_alignment',
+            'goal',
+            'target',
+        ])
+        ->whereIn('user_id', $employees)
+        ->with([
+            's2rDriver:id,driver_name',
+            'user:id,name',
+            'latestSelfReport',
+        ])
+        ->orderBy('s2r_driver_enabler_alignment')
+        ->orderBy('id')
+        ->chunk(100, function ($goals) use (&$groupedGoals) {
+            foreach ($goals as $goal) {
+                $driverId = $goal->s2r_driver_enabler_alignment ?? 'no_driver';
+
+                if (!$groupedGoals->has($driverId)) {
+                    $groupedGoals->put($driverId, collect());
+                }
+
+                $groupedGoals->get($driverId)->push($goal);
+            }
+        });
+
+
+    $pdf = Pdf::loadView(
+        'admin.new_goals.goal-report-pdf',
+        compact('groupedGoals', 'currentUser','reportDate')
+    );
+
+    $pdf->setPaper('A4', 'portrait');
+
+    return $pdf->download('All_Employees_Goals_Report.pdf');
 }
 }

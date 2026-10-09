@@ -673,7 +673,10 @@
                                 }
                                
                             } 
-                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>';   
+                            else if (form.status == 2) statusText = '<span class="badge bg-label-success">Verified</span>'; 
+                            const formData = encodeURIComponent(
+                                    JSON.stringify(form)
+                                );   
 
                             // Pass entire form as JSON in button's data attribute
                             return [
@@ -683,7 +686,7 @@
                                 form.faculty ? form.faculty.name : 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${JSON.stringify(form)}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -747,7 +750,14 @@
                 // Extra fields for Form 2
                
                 $(document).on('click', '.view-form-btn', function () {
-                    const form = $(this).data('form');
+                    
+                    //const form = $(this).data('form');
+
+                    //const form = $(this).data('form');
+                    const encodedForm = $(this).attr('data-form');
+                    const form = JSON.parse(
+                        decodeURIComponent(encodedForm)
+                    );
                     $('#modalExtraFields').find('.optional-field').remove();
                     $('#modalExtraFieldsHistory').find('.optional-field').remove();
 

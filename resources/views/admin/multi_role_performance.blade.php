@@ -196,7 +196,7 @@
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row g-6">
-      @php
+      {{-- @php
         $colors_cards = ['warning', 'info', 'info', 'primary', 'danger'];
         $icon_cards = ['user', 'school', 'info', 'primary', 'danger'];
       @endphp
@@ -242,7 +242,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> --}}
 
     <div class="row g-6">
       @php
@@ -251,14 +251,33 @@
       @endphp
       @foreach($scores as $index => $data)
         @php
-          $scorerating = $data['percentage_score'] ?? 0;
+          $scorerating = $data['score'] ?? 0;
           $meta_avg = getRatingMeta($scorerating);
           $color_res = $colors_cards[$index % count($colors_cards)];
           $icon_res = $icon_cards[$index % count($icon_cards)];
         @endphp
 
         <div class="col-md-6 col-xxl-4 mb-6">
-          <div class="card h-100">
+
+
+         <div class="card text-bg-{{ $color_res }}">
+            <div class="card-header">
+              <h5 class="mb-1 text-white">As {{ $data['role_name'] }}</h5>
+            </div>
+            <div class="card-body row">
+              <div class="col-12 col-sm-4">
+                <div class="avatar flex-shrink-0 me-4">
+                  <span class="avatar-initial rounded bg-label-{{ $color_res }}"><i
+                      class="icon-base ti tabler-{{ $icon_res }} icon-26px"></i></span>
+                </div>
+              </div>
+              <div class="col-12 col-md-8">
+                <div id="{{ $data['chart_id'] }}"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
             <div class="card-body">
               <ul class="p-0 m-0">
                 <li class="d-flex mb-3 pb-1 align-items-center">
@@ -267,7 +286,7 @@
                   </div>
                   <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                     <div class="me-2">
-                      <h6 class="mb-0">Total Score</h6>
+                      <h6 class="mb-0">{{ $data['role_name'] }} Weight</h6>
                     </div>
                     <div class="user-progress d-flex align-items-center gap-1">
                       <h6 class="mb-0 text-{{ $color_res }}">{{ number_format($data['weight'], 1) }}%</h6>
@@ -280,7 +299,7 @@
                   </div>
                   <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                     <div class="me-2">
-                      <h6 class="mb-0">Your Obtained</h6>
+                      <h6 class="mb-0">Performance Score</h6>
                     </div>
                     <div class="user-progress d-flex align-items-center gap-1">
                       <h6 class="mb-0 text-{{ $color_res }}">{{ $data['score'] }}%</h6>
@@ -293,10 +312,10 @@
                   </div>
                   <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                     <div class="me-2">
-                      <h6 class="mb-0">Percentage Obtained</h6>
+                      <h6 class="mb-0">Obtained</h6>
                     </div>
                     <div class="user-progress d-flex align-items-center gap-1">
-                      <h6 class="mb-0 text-{{ $color_res }}"> {{ number_format($data['percentage_score'], 1) }}%</h6>
+                      <h6 class="mb-0 text-{{ $color_res }}"> {{ number_format($data['percentage_score'], 1) }}%/{{ number_format($data['weight'], 1) }}%</h6>
                     </div>
                   </div>
                 </li>
@@ -321,14 +340,33 @@
       @php
         $totalWeight = collect($scores)->sum('weight');
         $totalscore = collect($scores)->sum('score');
-        //$overallpercentage = ($combinedScore / $totalWeight) * 100;
-        $overallpercentage = $totalWeight > 0? round(($combinedScore / $totalWeight) * 100, 2): 0;
+        $totalscorecount = collect($scores)->count('score');
+        $overallscore = ($totalscore / $totalscorecount);
         $totalweighted_score = collect($scores)->sum('percentage_score');
+        $overallpercentage = $totalWeight > 0? round(($totalweighted_score / $totalWeight) * 100, 2): 0;
 
-        $meta_avg_combine = getRatingMeta($overallpercentage);
+        $meta_avg_combine = getRatingMeta($overallscore);
       @endphp
       <div class="col-md-6 col-xxl-4 mb-6">
-        <div class="card h-100">
+
+         <div class="card text-bg-success">
+          <div class="card-header">
+            <h5 class="mb-1 text-white">Combined Score</h5>
+          </div>
+          <div class="card-body row">
+            <div class="col-12 col-sm-4">
+              <div class="avatar flex-shrink-0 me-4">
+                <span class="avatar-initial rounded bg-label-success"><i
+                    class="icon-base ti tabler-blend-mode icon-26px"></i></span>
+              </div>
+            </div>
+            <div class="col-12 col-md-8">
+              <div id="combinedScoreChart"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
           <div class="card-body">
             <ul class="p-0 m-0">
               <li class="d-flex mb-3 pb-1 align-items-center">
@@ -337,7 +375,7 @@
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                   <div class="me-2">
-                    <h6 class="mb-0">Total Score</h6>
+                    <h6 class="mb-0">Total Weight</h6>
                   </div>
                   <div class="user-progress d-flex align-items-center gap-1">
                     <h6 class="mb-0 text-success">{{ number_format($totalWeight, 1) }}%</h6>
@@ -350,10 +388,10 @@
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                   <div class="me-2">
-                    <h6 class="mb-0">Your Obtained</h6>
+                    <h6 class="mb-0">Performance Score</h6>
                   </div>
                   <div class="user-progress d-flex align-items-center gap-1">
-                    <h6 class="mb-0 text-success">{{ number_format($combinedScore, 1) }}%</h6>
+                    <h6 class="mb-0 text-success">{{ number_format($overallscore, 1) }}%</h6>
                   </div>
                 </div>
               </li>
@@ -363,10 +401,10 @@
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                   <div class="me-2">
-                    <h6 class="mb-0">Percentage Obtained</h6>
+                    <h6 class="mb-0">Obtained</h6>
                   </div>
                   <div class="user-progress d-flex align-items-center gap-1">
-                    <h6 class="mb-0 text-success">{{ number_format($overallpercentage, 1) }}%</h6>
+                    <h6 class="mb-0 text-success">{{ number_format($overallpercentage, 1) }}%/{{ number_format($totalWeight, 1) }}%</h6>
                   </div>
                 </div>
               </li>
@@ -526,7 +564,7 @@
       @endforeach
 
       // Combined score chart
-      renderChart("#combinedScoreChart", {{ number_format($combinedScore, 1) }}, "Score");
+      renderChart("#combinedScoreChart", {{ number_format($overallscore, 1) }}, "Score");
 
     });
   </script>
