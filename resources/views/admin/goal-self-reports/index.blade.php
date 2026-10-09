@@ -275,11 +275,11 @@
 
                     @if($overallReview && $overallReview->hr_overall_rating !== null)
 
-                        {{ number_format($overallReview->hr_overall_rating, 2) }}
+                        <!-- {{ number_format($overallReview->hr_overall_rating, 2) }}
 
                         <small class="rating-max">
                             %
-                        </small>
+                        </small> -->
 
                     @else
 

@@ -521,7 +521,7 @@
                         <div class="rating-group">
 
                             {{-- SCORE --}}
-                            <div
+                            <!-- <div
                                 class="rating-score hr-score"
                                 style="color: {{ $hrColor }}; font-weight: 700;"
                             >
@@ -536,10 +536,10 @@
 
                                 @endif
 
-                            </div>
+                            </div> -->
 
                             {{-- RATING --}}
-                            <div
+                            <!-- <div
                                 class="rating-value"
                                 style="color: {{ $hrColor }}; font-weight: 700;"
                             >
@@ -556,7 +556,7 @@
 
                                 @endif
 
-                            </div>
+                            </div> -->
 
                         </div>
 
@@ -574,7 +574,7 @@
 
                                 @if($hrScore100 !== null)
 
-                                    {{ number_format($hrScore100, 2) }}
+                                    <!-- {{ number_format($hrScore100, 2) }} -->
 
                                 @else
 
@@ -585,7 +585,7 @@
                             </div>
 
                             {{-- RATING --}}
-                            <div
+                            <!-- <div
                                 class="rating-value"
                                 style="color: {{ $totalColor }}; font-weight: 700;"
                             >
@@ -602,7 +602,7 @@
 
                                 @endif
 
-                            </div>
+                            </div> -->
 
                         </div>
 

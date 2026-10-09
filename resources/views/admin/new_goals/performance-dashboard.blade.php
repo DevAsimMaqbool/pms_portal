@@ -240,7 +240,7 @@
 
                 </div>
 
-                <div
+                <!-- <div
                     class="header-final-score-number"
                     style="color: {{ $finalRatingMeta['text'] }};"
                 >
@@ -263,9 +263,9 @@
 
                     @endif
 
-                </div>
+                </div> -->
 
-                <div class="header-final-score-rating">
+                <!-- <div class="header-final-score-rating">
 
                     <span style="color: {{ $finalRatingMeta['text'] }};">
                         Rating
@@ -284,7 +284,7 @@
                         }}
                     </strong>
 
-                </div>
+                </div> -->
 
             </div>
 
@@ -681,14 +681,14 @@
 
             </div>
 
-            <div
+            <!-- <div
                 class="performance-score-value"
                 style="color: {{ $hrRatingMeta['color'] }};"
             >
 
                 @if($hrScore100 !== null)
 
-                    {{ number_format($hrScore100, 2) }}
+                {{ number_format($hrScore100, 2) }} 
 
                     <span>/100</span>
 
@@ -698,9 +698,9 @@
 
                 @endif
 
-            </div>
+            </div> -->
 
-            <div class="score-card-bottom">
+            <!-- <div class="score-card-bottom">
 
                 <span
                     class="score-rating"
@@ -719,7 +719,7 @@
                     HR Score
                 </span>
 
-            </div>
+            </div> -->
 
         </div>
 
