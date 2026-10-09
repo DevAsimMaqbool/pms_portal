@@ -125,6 +125,11 @@
     }
 
     $avgScore = round($avgScore, 2);
+    $weights = [
+        'pass' => getRoleWeightage($activeRoleId, 'indicator', 185)['weightage'],
+    ];
+    $weightedPassScore = ($avgScore * $weights['pass']) / 100;
+    saveIndicatorPercentage90Plus(auth()->id(), $activeRoleId, 1, 25, 185, $weightedPassScore,$avgScore);
 @endphp
 <!-- / Payment Methods modal -->
 <div class="modal fade" id="StudentPassPercentage" tabindex="-1" aria-hidden="true">

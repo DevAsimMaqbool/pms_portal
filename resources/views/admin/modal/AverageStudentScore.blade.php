@@ -114,6 +114,11 @@
             : $fallAvg);
 
     $avgScore = round($avgScore, 2);
+    $weights = [
+        'marks' => getRoleWeightage($activeRoleId, 'indicator', 186)['weightage'],
+    ];
+    $weightedPassScore = ($avgScore * $weights['marks']) / 100;
+    saveIndicatorPercentage(auth()->id(), $activeRoleId, 1, 25, 186, $weightedPassScore,$avgScore);
 @endphp
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
