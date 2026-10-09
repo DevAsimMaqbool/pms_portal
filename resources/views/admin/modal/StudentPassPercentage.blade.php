@@ -66,14 +66,28 @@
     $spring = $springData['classes'] ?? collect();
     $fall = $fallData['classes'] ?? collect();
 
-    $springAvg = $spring->isNotEmpty()
-        ? (float) $spring->avg(
+    /*
+     * Exclude courses where total student count is 0
+     */
+    $springValid = $spring->filter(function ($class) {
+        return $class->attendances->sum('total_students') > 0;
+    });
+
+    $fallValid = $fall->filter(function ($class) {
+        return $class->attendances->sum('total_students') > 0;
+    });
+
+    /*
+     * Calculate average Pass % only from valid courses
+     */
+    $springAvg = $springValid->isNotEmpty()
+        ? (float) $springValid->avg(
             fn($class) => (float) ($class->passing_percentage ?? 0)
         )
         : 0;
 
-    $fallAvg = $fall->isNotEmpty()
-        ? (float) $fall->avg(
+    $fallAvg = $fallValid->isNotEmpty()
+        ? (float) $fallValid->avg(
             fn($class) => (float) ($class->passing_percentage ?? 0)
         )
         : 0;
@@ -301,8 +315,7 @@
                                                     <td>{{ $class->class_name }}</td>
                                                     <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
                                                     <td>{{ $class->career_code }}</td>
-                                                    <td>{{ round($class->attendances->sum('total_students') / $class->attendances->count(), 1) }}
-                                                    </td>
+                                                    <td> {{ $class->attendances->count() > 0 ? round($class->attendances->sum('total_students') / $class->attendances->count(), 1) : 0 }} </td>
                                                     <td>{{ number_format($pass, 1) ?? 'N/A' }}</td>
                                                     <td>{{ number_format($fail, 1) ?? 'N/A' }}</td>
                                                     <td>

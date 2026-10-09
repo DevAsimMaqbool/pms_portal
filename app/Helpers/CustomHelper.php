@@ -469,23 +469,44 @@ function myClassesBK27Feb($facultyId, $activeRoleId)
 
 function myClasses($facultyId, $activeRoleId, $term = null)
 {
-    // 1️⃣ Get count and averages for selected term
-    $stats = FacultyMemberClass::where('faculty_id', $facultyId)
+    // 1️⃣ Get courses
+    $classesQuery = FacultyMemberClass::where('faculty_id', $facultyId)
         ->when($term !== null, function ($query) use ($term) {
             $query->where('term_id', $term);
-        })
-        ->selectRaw('COUNT(*) as total_courses, 
-        SUM(COALESCE(passing_percentage,0)) as total_pass,
-        SUM(COALESCE(average_marks,0)) as total_average_marks,
-        AVG(COALESCE(average_marks,0)) as avg_marks, 
-        AVG(COALESCE(passing_percentage,0)) as avg_pass')
-        ->first();
+        });
 
-    $totalCourses = $stats->total_courses ?? 0;
-    $totalPassPercentage = $stats->total_pass ?? 0;
-    $totalAverageMarks = $stats->total_average_marks ?? 0;
-    $averagePassPercentage = $stats->avg_pass ?? 0;
-    $averageStudentScore = $stats->avg_marks ?? 0;
+    $classes = $classesQuery->with([
+        'attendances' => function ($query) {
+            $query->orderBy('class_date', 'desc');
+        }
+    ])->get();
+
+    // Exclude courses where total students = 0
+    $validClasses = $classes->filter(function ($class) {
+        return $class->attendances->sum('total_students') > 0;
+    });
+
+    $totalCourses = $classes->count();
+
+    $totalPassPercentage = $validClasses->sum(function ($class) {
+        return (float) ($class->passing_percentage ?? 0);
+    });
+
+    $totalAverageMarks = $validClasses->sum(function ($class) {
+        return (float) ($class->average_marks ?? 0);
+    });
+
+    $averagePassPercentage = $validClasses->count() > 0
+        ? $validClasses->avg(function ($class) {
+            return (float) ($class->passing_percentage ?? 0);
+        })
+        : 0;
+
+    $averageStudentScore = $validClasses->count() > 0
+        ? $validClasses->avg(function ($class) {
+            return (float) ($class->average_marks ?? 0);
+        })
+        : 0;
 
     // 2️⃣ Course Load Score
     $courseLoadScore = $totalCourses > 3
@@ -502,18 +523,6 @@ function myClasses($facultyId, $activeRoleId, $term = null)
     $weightedCourseLoad = ($courseLoadScore * $weights['course_load']) / 100;
     $weightedPassScore = ($averagePassPercentage * $weights['pass']) / 100;
     $weightedMarksScore = ($averageStudentScore * $weights['marks']) / 100;
-
-    // 4️⃣ Get classes for selected term
-    $classes = FacultyMemberClass::with([
-        'attendances' => function ($query) {
-            $query->orderBy('class_date', 'desc');
-        }
-    ])
-        ->where('faculty_id', $facultyId)
-        ->when($term !== null, function ($query) use ($term) {
-            $query->where('term_id', $term);
-        })
-        ->get();
 
     return [
         'classes' => $classes,
@@ -7578,7 +7587,6 @@ if (!function_exists('noOfProfessionalMembershipsOfHODPL')) {
             $currentYear
         );
         
-
         // 8️⃣ RETURN
         return [
             'average_rating' => round($avgRating, 2),

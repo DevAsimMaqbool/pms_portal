@@ -37,60 +37,84 @@
 </style>
 @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
     <!--  Payment Methods modal -->
-    @php   
-            $activeRoleId = getRoleIdByName(activeRole());
-        // Initialize totalFeedback to 0 in case nothing is set later
-        $totalFeedback = 0;
-        $activeTerms = \App\Models\Term::where('status', '1')
-            ->get()
-            ->keyBy('term');
+    @php
+    $activeRoleId = getRoleIdByName(activeRole());
 
-        $springTerm = $activeTerms->get('Spring');
-        $fallTerm = $activeTerms->get('Fall');
+    // Initialize totalFeedback to 0 in case nothing is set later
+    $totalFeedback = 0;
 
-        $springData = $springTerm
-            ? myClasses(
-                Auth::user()->faculty_id,
-                $activeRoleId,
-                $springTerm->id
-            )
-            : null;
+    $activeTerms = \App\Models\Term::where('status', '1')
+        ->get()
+        ->keyBy('term');
 
-        $fallData = $fallTerm
-            ? myClasses(
-                Auth::user()->faculty_id,
-                $activeRoleId,
-                $fallTerm->id
-            )
-            : null;
+    $springTerm = $activeTerms->get('Spring');
+    $fallTerm = $activeTerms->get('Fall');
 
-        $spring = $springData['classes'] ?? collect();
-        $fall = $fallData['classes'] ?? collect();
+    $springData = $springTerm
+        ? myClasses(
+            Auth::user()->faculty_id,
+            $activeRoleId,
+            $springTerm->id
+        )
+        : null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Average Student Marks
-        |--------------------------------------------------------------------------
-        */
+    $fallData = $fallTerm
+        ? myClasses(
+            Auth::user()->faculty_id,
+            $activeRoleId,
+            $fallTerm->id
+        )
+        : null;
 
-        $springAvg = $spring->isNotEmpty()
-            ? $spring->avg(fn($class) => (float) ($class->average_marks ?? 0))
-            : 0;
+    $spring = $springData['classes'] ?? collect();
+    $fall = $fallData['classes'] ?? collect();
 
-        $fallAvg = $fall->isNotEmpty()
-            ? $fall->avg(fn($class) => (float) ($class->average_marks ?? 0))
-            : 0;
+    /*
+    |--------------------------------------------------------------------------
+    | Exclude Courses With 0 Students
+    |--------------------------------------------------------------------------
+    */
 
-        /*
-        |--------------------------------------------------------------------------
-        | Overall Average - Spring + Fall
-        |--------------------------------------------------------------------------
-        */
+    $springValid = $spring->filter(function ($class) {
+        return $class->attendances->sum('total_students') > 0;
+    });
 
-        $avgScore = ($spring->isNotEmpty() && $fall->isNotEmpty())
-            ? ($springAvg + $fallAvg) / 2
-            : ($spring->isNotEmpty() ? $springAvg : $fallAvg);
-    @endphp
+    $fallValid = $fall->filter(function ($class) {
+        return $class->attendances->sum('total_students') > 0;
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Average Student Marks
+    |--------------------------------------------------------------------------
+    */
+
+    $springAvg = $springValid->isNotEmpty()
+        ? $springValid->avg(
+            fn($class) => (float) ($class->average_marks ?? 0)
+        )
+        : 0;
+
+    $fallAvg = $fallValid->isNotEmpty()
+        ? $fallValid->avg(
+            fn($class) => (float) ($class->average_marks ?? 0)
+        )
+        : 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Average - Spring + Fall
+    |--------------------------------------------------------------------------
+    */
+
+    $avgScore = ($springValid->isNotEmpty() && $fallValid->isNotEmpty())
+        ? ($springAvg + $fallAvg) / 2
+        : ($springValid->isNotEmpty()
+            ? $springAvg
+            : $fallAvg);
+
+    $avgScore = round($avgScore, 2);
+@endphp
     <div class="modal fade" id="AverageStudentScore" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content custom-modal">
