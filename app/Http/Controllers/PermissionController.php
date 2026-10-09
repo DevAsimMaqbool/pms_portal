@@ -489,7 +489,7 @@ class PermissionController extends Controller
                     'chart_id' => 'supportTrackerTeacher',
                     'weight' => $weight,
                     'weighted_score' => $score * $weight / 100, // weighted score
-                    'percentage_score' => ($score / $weight) * 100 // weighted score
+                    'percentage_score' => ($score * $weight) / 100 // weighted score
                 ];
 
                 $totalWeightedScore += $score * $weight / 100;
@@ -505,7 +505,7 @@ class PermissionController extends Controller
                     'chart_id' => 'supportTrackerAdmin',
                     'weight' => $weight,
                     'weighted_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
-                    'percentage_score' => $weight > 0 ? round(($score / $weight) * 100, 2) : 0,
+                    'percentage_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
                 ];
 
                 $totalWeightedScore += $score * $weight / 100;
