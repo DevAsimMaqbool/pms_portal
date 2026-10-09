@@ -15,7 +15,7 @@ class PerformanceReportController extends Controller
     /**
      * Download logged-in employee's finalized performance appraisal report.
      */
-    public function downloaddd()
+    public function download()
     {
         $user = Auth::user();
 

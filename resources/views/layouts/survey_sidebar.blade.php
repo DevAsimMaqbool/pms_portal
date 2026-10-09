@@ -98,9 +98,11 @@
       </a>
 
       <ul class="menu-sub">
-        <li class="menu-item"> <a href="{{ route('my-performance-report.download') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="Download Report">Download Report </div> </a> </li>
+        <li class="menu-item"> <a href="#" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="Download Report">Download Report </div> </a> </li>
       </ul>
-
+<!-- <ul class="menu-sub">
+        <li class="menu-item"> <a href="{{ route('my-performance-report.download') }}" class="menu-link"> <i class="menu-icon icon-base ti tabler-report"></i> <div data-i18n="Download Report">Download Report </div> </a> </li>
+      </ul> -->
     </li>
         
         <li class="menu-item {{ request()->routeIs([
