@@ -631,9 +631,14 @@ function myClassesAttendanceRecord($facultyId, $activeRoleId, $activeTermId)
         ->map(function ($class) {
             $class->program = $class->attendances()->latest('class_date')->value('program_name');
 
-            $class->held_percentage = $class->total_rows
-                ? round(($class->class_held_count / $class->total_rows) * 100, 2)
-                : 0;
+            // $class->held_percentage = $class->total_rows
+            //     ? round(($class->class_held_count / 16) * 100, 2)
+            //     : 0;
+            $class->held_percentage = $class->class_held_count >= 16
+    ? 100
+    : ($class->total_rows
+        ? round(($class->class_held_count / 16) * 100, 2)
+        : 0);
 
             $class->not_held_percentage = $class->total_rows
                 ? round(($class->class_not_held_count / $class->total_rows) * 100, 2)
@@ -5515,9 +5520,7 @@ function myDepartmentClassesAttendanceRecordHOD(
         | Held percentage
         |--------------------------------------------------------------------------
         */
-        $class->held_percentage = $totalRows > 0
-            ? round(($heldCount / $totalRows) * 100, 2)
-            : 0;
+        $class->held_percentage = $class->class_held_count >= 16 ? 100 : ($class->total_rows ? round(($class->class_held_count / $class->total_rows) * 100, 2) : 0);
 
         /*
         |--------------------------------------------------------------------------

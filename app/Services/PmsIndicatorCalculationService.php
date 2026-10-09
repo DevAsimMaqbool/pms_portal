@@ -294,21 +294,6 @@ class PmsIndicatorCalculationService
             $employee->load('roles');
         }
 
-        Log::info(
-            'PMS indicator calculation started',
-            [
-                'employee_id' => $employee->employee_id,
-                'user_id'     => $employee->id,
-                'faculty_id'  => $employee->faculty_id,
-                'roles'       => $employee->roles
-                    ->pluck('id')
-                    ->values()
-                    ->toArray(),
-                'active_term_ids' => $this->activeTermIds,
-                'year_id'        => $this->yearId,
-            ]
-        );
-
         foreach ($this->roleIds as $roleId) {
 
             if (!$employee->roles->contains('id', $roleId)) {
@@ -680,132 +665,136 @@ if ($calculation === null) {
     ];
 }
 
-    /**
-     * -------------------------------------------------------------
-     * INDICATOR 117
-     *
-     * Uses faculty_id.
-     *
-     * Classes held percentage.
-     * -------------------------------------------------------------
-     */
-    protected function calculate117(
+protected function calculate117(
     User $employee,
     int $roleId,
     int $indicatorId
 ): ?array {
 
-    $facultyId = $employee->faculty_id;
-
-    if (!$facultyId) {
+    if (!$employee->faculty_id) {
         return $this->noData(
             'faculty_id is missing for employee'
         );
     }
 
-    $termScores = [];
+    // Get active Spring and Fall terms.
+    $activeTerms = Term::query()
+        ->where('status', '1')
+        ->whereIn('term', ['Spring', 'Fall'])
+        ->get()
+        ->keyBy('term');
 
-    foreach ($this->activeTermIds as $termId) {
-
-        if (!$termId) {
-            continue;
-        }
-
-        /*
-         * IMPORTANT:
-         * Use the existing FacultyMemberClass -> attendances
-         * relationship because this is already working in Blade.
-         */
-        $classes = \App\Models\FacultyMemberClass::with([
-            'attendances' => function ($query) {
-                $query->orderBy('class_date', 'desc');
-            }
-        ])
-            ->where('faculty_id', $facultyId)
-            ->where('term_id', $termId)
-            ->get();
-
-        if ($classes->isEmpty()) {
-            continue;
-        }
-
-        $classPercentages = [];
-
-        foreach ($classes as $class) {
-
-            $attendances = $class->attendances;
-
-            $totalAttendance = $attendances->count();
-
-            if ($totalAttendance <= 0) {
-                continue;
-            }
-
-            $heldCount = $attendances->where(
-                'att_marked',
-                1
-            )->count();
-
-            $percentage = (
-                $heldCount / $totalAttendance
-            ) * 100;
-
-            $classPercentages[] = round(
-                min($percentage, 100),
-                2
-            );
-        }
-
-        if (!$classPercentages) {
-            continue;
-        }
-
-        /*
-         * Same logic as existing Blade calculation:
-         * average percentage of all classes for this term.
-         */
-        $termScores[] = round(
-            array_sum($classPercentages) /
-            count($classPercentages),
-            2
-        );
-    }
-
-    if (!$termScores) {
-        return $this->noData(
-            'No class attendance marking data found for active Spring/Fall terms'
-        );
-    }
+    $springTerm = $activeTerms->get('Spring');
+    $fallTerm = $activeTerms->get('Fall');
 
     /*
-     * If both Spring and Fall exist:
-     * average both term scores.
-     */
-    $rawScore = count($termScores) === 1
-        ? $termScores[0]
-        : round(
-            array_sum($termScores) /
-            count($termScores),
+    |--------------------------------------------------------------------------
+    | Calculate the average held percentage for one term.
+    |--------------------------------------------------------------------------
+    */
+    $calculateTermScore = function ($termId) use ($employee) {
+
+        if (!$termId) {
+            return 0.0;
+        }
+
+        $classes = FacultyMemberClass::query()
+            ->where('faculty_id', $employee->faculty_id)
+            ->where('term_id', $termId)
+            ->with('attendances')
+            ->withCount([
+                'attendances as total_rows',
+
+                'attendances as class_held_count' => function ($query) {
+                    $query->where('att_marked', 1);
+                },
+
+                'attendances as class_not_held_count' => function ($query) {
+                    $query->where('att_marked', 0);
+                },
+            ])
+            ->get()
+            ->map(function ($class) {
+
+                $class->total_classes = $class->attendances->count();
+
+                $class->held_percentage =
+                    $class->class_held_count >= 16
+                        ? 100
+                        : (
+                            $class->total_rows
+                                ? round(
+                                    ($class->class_held_count / 16) * 100,
+                                    2
+                                )
+                                : 0
+                        );
+
+                return $class;
+            })
+            // Match myClassesAttendanceRecord(): exclude classes
+            // that have no attendance records.
+            ->filter(function ($class) {
+                return $class->total_classes > 0;
+            })
+            ->values();
+
+        if ($classes->isEmpty()) {
+            return 0.0;
+        }
+
+        return round(
+            (float) $classes->avg('held_percentage'),
+            2
+        );
+    };
+
+    // Calculate each term independently, just like Blade.
+    $springScore = $calculateTermScore(
+        $springTerm?->id
+    );
+
+    $fallScore = $calculateTermScore(
+        $fallTerm?->id
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Apply the exact overall-score conditions from Blade.
+    |--------------------------------------------------------------------------
+    */
+    if ($springScore > 0 && $fallScore > 0) {
+
+        $rawScore = round(
+            ($springScore + $fallScore) / 2,
             2
         );
 
-    $rawScore = min($rawScore, 100);
+    } elseif ($springScore > 0) {
 
-    $weight = $this->getWeight(
-        $roleId,
-        $indicatorId
-    );
+        $rawScore = $springScore;
+
+    } elseif ($fallScore > 0) {
+
+        $rawScore = $fallScore;
+
+    } else {
+
+        $rawScore = 0.0;
+    }
+
+    // Apply the existing role-specific indicator weightage.
+    $weight = $this->getWeight($roleId, $indicatorId);
 
     return [
         'raw_score' => $rawScore,
-
         'weighted_score' => $this->weighted(
             $rawScore,
             $weight
         ),
     ];
 }
-
+    
     /**
      * -------------------------------------------------------------
      * INDICATOR 120
@@ -1026,6 +1015,85 @@ if ($calculation === null) {
 
         return $scores ?: null;
     }
+/**
+ * -------------------------------------------------------------
+ * VALID COURSE RAW SCORES FOR INDICATORS 185 AND 186
+ *
+ * Excludes courses where total attendance students = 0.
+ * Processes active Spring and Fall terms only.
+ *
+ * IMPORTANT:
+ * This is a separate helper so Indicator 122 remains unchanged.
+ * -------------------------------------------------------------
+ */
+protected function getValidCourseRawScoresFor185And186(
+    User $employee
+): ?array {
+
+    $facultyId = $employee->faculty_id;
+
+    if (!$facultyId) {
+        return null;
+    }
+
+    /*
+     * Match the existing Blade logic:
+     * Only active Spring and Fall terms.
+     */
+    $terms = Term::query()
+        ->where('status', '1')
+        ->whereIn('term', ['Spring', 'Fall'])
+        ->get(['id', 'term']);
+
+    $scores = [];
+
+    foreach ($terms as $term) {
+
+        $classes = FacultyMemberClass::query()
+            ->where('faculty_id', $facultyId)
+            ->where('term_id', $term->id)
+            ->with('attendances')
+            ->get();
+
+        /*
+         * Exclude courses whose total student count is zero.
+         * This matches the existing Blade filtering.
+         */
+        $validClasses = $classes->filter(
+            function ($class) {
+                return $class->attendances
+                    ->sum('total_students') > 0;
+            }
+        );
+
+        /*
+         * No valid courses in this term.
+         */
+        if ($validClasses->isEmpty()) {
+            continue;
+        }
+
+        $scores[$term->term] = [
+            'pass' => (float) $validClasses->avg(
+                function ($class) {
+                    return (float) (
+                        $class->passing_percentage ?? 0
+                    );
+                }
+            ),
+
+            'marks' => (float) $validClasses->avg(
+                function ($class) {
+                    return (float) (
+                        $class->average_marks ?? 0
+                    );
+                }
+            ),
+        ];
+    }
+
+    return $scores ?: null;
+}
 
     /**
      * -------------------------------------------------------------
@@ -1091,142 +1159,172 @@ if ($calculation === null) {
     }
 
     /**
-     * -------------------------------------------------------------
-     * INDICATOR 185
-     *
-     * Uses faculty_id.
-     * -------------------------------------------------------------
-     */
-    protected function calculate185(
-        User $employee,
-        int $roleId,
-        int $indicatorId
-    ): ?array {
+ * -------------------------------------------------------------
+ * INDICATOR 185
+ *
+ * Average Pass Percentage.
+ *
+ * Excludes courses with zero total students.
+ * Averages Spring and Fall scores using existing Blade logic.
+ * -------------------------------------------------------------
+ */
+protected function calculate185(
+    User $employee,
+    int $roleId,
+    int $indicatorId
+): ?array {
 
-        if (!$employee->faculty_id) {
-            return $this->noData(
-                'faculty_id is missing for employee'
-            );
-        }
-
-        $scores =
-            $this->getCourseRawScores(
-                $employee
-            );
-
-        if (!$scores) {
-            return $this->noData(
-                'No faculty classes found for active Spring/Fall terms'
-            );
-        }
-
-        $rawScores =
-            array_column(
-                $scores,
-                'pass'
-            );
-
-        $rawScore =
-            count($rawScores) === 1
-                ? $rawScores[0]
-                : round(
-                    array_sum($rawScores) /
-                    count($rawScores),
-                    2
-                );
-
-        $rawScore =
-            min(
-                100,
-                $rawScore
-            );
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+    if (!$employee->faculty_id) {
+        return $this->noData(
+            'faculty_id is missing for employee'
+        );
     }
+
+    $scores = $this->getValidCourseRawScoresFor185And186(
+        $employee
+    );
+
+    if (!$scores) {
+        return $this->noData(
+            'No valid faculty classes with students found in active Spring/Fall terms'
+        );
+    }
+
+    /*
+     * Match Blade logic:
+     * Only positive term averages are used.
+     */
+    $springAvg = (float) (
+        $scores['Spring']['pass'] ?? 0
+    );
+
+    $fallAvg = (float) (
+        $scores['Fall']['pass'] ?? 0
+    );
+
+    if ($springAvg > 0 && $fallAvg > 0) {
+
+        $rawScore = ($springAvg + $fallAvg) / 2;
+
+    } elseif ($springAvg > 0) {
+
+        $rawScore = $springAvg;
+
+    } elseif ($fallAvg > 0) {
+
+        $rawScore = $fallAvg;
+
+    } else {
+
+        $rawScore = 0;
+    }
+
+    $rawScore = round(
+        min(100, $rawScore),
+        2
+    );
+
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    return [
+        'raw_score' => $rawScore,
+
+        'weighted_score' => $this->weighted(
+            $rawScore,
+            $weight
+        ),
+    ];
+}
 
     /**
-     * -------------------------------------------------------------
-     * INDICATOR 186
-     *
-     * Uses faculty_id.
-     * -------------------------------------------------------------
-     */
-    protected function calculate186(
-        User $employee,
-        int $roleId,
-        int $indicatorId
-    ): ?array {
+ * -------------------------------------------------------------
+ * INDICATOR 186
+ *
+ * Average Student Marks.
+ *
+ * Excludes courses with zero total students.
+ * Averages available Spring and Fall term scores.
+ * -------------------------------------------------------------
+ */
+protected function calculate186(
+    User $employee,
+    int $roleId,
+    int $indicatorId
+): ?array {
 
-        if (!$employee->faculty_id) {
-            return $this->noData(
-                'faculty_id is missing for employee'
-            );
-        }
-
-        $scores =
-            $this->getCourseRawScores(
-                $employee
-            );
-
-        if (!$scores) {
-            return $this->noData(
-                'No faculty classes found for active Spring/Fall terms'
-            );
-        }
-
-        $rawScores =
-            array_column(
-                $scores,
-                'marks'
-            );
-
-        $rawScore =
-            count($rawScores) === 1
-                ? $rawScores[0]
-                : round(
-                    array_sum($rawScores) /
-                    count($rawScores),
-                    2
-                );
-
-        $rawScore =
-            min(
-                100,
-                $rawScore
-            );
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+    if (!$employee->faculty_id) {
+        return $this->noData(
+            'faculty_id is missing for employee'
+        );
     }
+
+    $scores = $this->getValidCourseRawScoresFor185And186(
+        $employee
+    );
+
+    if (!$scores) {
+        return $this->noData(
+            'No valid faculty classes with students found in active Spring/Fall terms'
+        );
+    }
+
+    /*
+     * Match Blade logic:
+     * Average both terms when both have valid courses.
+     * Otherwise use the available term.
+     */
+    $hasSpring = isset($scores['Spring']);
+    $hasFall = isset($scores['Fall']);
+
+    $springAvg = (float) (
+        $scores['Spring']['marks'] ?? 0
+    );
+
+    $fallAvg = (float) (
+        $scores['Fall']['marks'] ?? 0
+    );
+
+    if ($hasSpring && $hasFall) {
+
+        $rawScore = ($springAvg + $fallAvg) / 2;
+
+    } elseif ($hasSpring) {
+
+        $rawScore = $springAvg;
+
+    } elseif ($hasFall) {
+
+        $rawScore = $fallAvg;
+
+    } else {
+
+        return $this->noData(
+            'No valid Spring/Fall course marks found'
+        );
+    }
+
+    $rawScore = round(
+        min(100, $rawScore),
+        2
+    );
+
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    return [
+        'raw_score' => $rawScore,
+
+        'weighted_score' => $this->weighted(
+            $rawScore,
+            $weight
+        ),
+    ];
+}
 
     /**
      * -------------------------------------------------------------
@@ -1265,116 +1363,90 @@ if ($calculation === null) {
         'query' => $publications,
     ];
 }
+/**
 
-    /**
- * -------------------------------------------------------------
- * INDICATOR 127
- *
- * International publications.
- *
- * Formula:
- *
- * International Approved Publications
- * ------------------------------------ x 100
- *           Total Target
- *
- * Maximum raw score = 100
- * -------------------------------------------------------------
- */
+* ---
+* INDICATOR 127 — INTERNATIONAL SCOPUS PUBLICATIONS
+*
+* Source data: Indicator 128 (Scopus Publications)
+* Saved result: Indicator 127
+*
+* Formula:
+* International Publications / Total Target * 100
+*
+* Maximum raw score = 100
+* ---
+
+*/
 protected function calculate127(
-    User $employee,
-    int $roleId,
-    int $indicatorId
+User $employee,
+int $roleId,
+int $indicatorId
 ): ?array {
 
-    $employeeId = $employee->employee_id;
+$employeeId = $employee->employee_id;
 
-    if (!$employeeId) {
-        return $this->noData(
-            'employee_id is missing'
-        );
-    }
-
-    /*
-     * ---------------------------------------------------------
-     * Get target + approved publications
-     * ---------------------------------------------------------
-     */
-    $data = $this->getPublicationData(
-        $employeeId,
-        $indicatorId
+if (!$employeeId) {
+    return $this->noData(
+        'employee_id is missing'
     );
+}
 
-    if (!$data) {
-        return $this->noData(
-            'No HOD FacultyTarget found for indicator 127'
-        );
-    }
+// Indicator 127 derives its publication data from indicator 128.
+$sourceIndicatorId = 128;
 
-    /*
-     * ---------------------------------------------------------
-     * Count international publications
-     * ---------------------------------------------------------
-     *
-     * Existing calculation:
-     *
-     * nationality = international
-     */
-    $internationalPapers = (clone $data['query'])
-        ->whereRaw(
-            'LOWER(TRIM(nationality)) = ?',
-            ['international']
-        )
+$facultyTargets = FacultyTarget::query()
+    ->where('user_id', $employeeId)
+    ->where('form_status', 'HOD')
+    ->where('year_id', $this->yearId)
+    ->where('indicator_id', $sourceIndicatorId)
+    ->with([
+        'researchPublicationTargets' => function ($query) use (
+            $sourceIndicatorId
+        ) {
+            $query
+                ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
+                ->where('indicator_id', $sourceIndicatorId)
+                ->where('year_id', $this->yearId)
+                ->where('status', 3)
+                ->whereNotNull('journal_clasification');
+        },
+    ])
+    ->get();
+
+$totalTarget = (float) $facultyTargets->sum(
+    fn ($target) => (float) ($target->target ?? 0)
+);
+
+$totalSubmitted = 0;
+$internationalPapers = 0;
+
+foreach ($facultyTargets as $facultyTarget) {
+    $publications = $facultyTarget->researchPublicationTargets;
+
+    $totalSubmitted += $publications->count();
+
+    $internationalPapers += $publications
+        ->filter(function ($publication) {
+            return strtolower(
+                trim((string) ($publication->nationality ?? ''))
+            ) === 'international';
+        })
         ->count();
+}
 
-    /*
-     * ---------------------------------------------------------
-     * Calculate raw score
-     * ---------------------------------------------------------
-     *
-     * International Papers / Total Target * 100
-     */
-    $rawScore = (
-        $internationalPapers /
-        $data['target']
-    ) * 100;
+$rawScore = $totalTarget > 0
+    ? round(($internationalPapers / $totalTarget) * 100, 2)
+    : 0.0;
 
-    /*
-     * Maximum score = 100
-     */
-    $rawScore = min(
-        100,
-        round(
-            $rawScore,
-            2
-        )
-    );
+$rawScore = min(100, $rawScore);
 
-    /*
-     * ---------------------------------------------------------
-     * Role-specific weight
-     * ---------------------------------------------------------
-     */
-    $weight = $this->getWeight(
-        $roleId,
-        $indicatorId
-    );
+$weight = $this->getWeight($roleId, $indicatorId);
 
-    /*
-     * ---------------------------------------------------------
-     * Weighted score
-     * ---------------------------------------------------------
-     */
-    $weightedScore = $this->weighted(
-        $rawScore,
-        $weight
-    );
-
-    return [
-        'raw_score' => $rawScore,
-
-        'weighted_score' => $weightedScore,
-    ];
+return [
+    'raw_score' => $rawScore,
+    'weighted_score' => $this->weighted($rawScore, $weight),
+];
 }
 
     /**
@@ -2215,157 +2287,89 @@ protected function calculate128(
         ];
     }
 
-    /**
- * -------------------------------------------------------------
- * INDICATOR 203
- *
- * Journal Quartile.
- *
- * Q1 = 20 points
- * Q2 = 15 points
- * Q3 = 10 points
- * Q4 = 5 points
- *
- * Publication records:
- * - indicator_id = 203
- * - created_by = employee_id
- * - target_category = Scopus-Indexed
- * - form_status IN (RESEARCHER, DEAN)
- * - year_id = PMS year
- * - status = 3
- *
- * Maximum raw score = 100
- * -------------------------------------------------------------
- */
+/**
+
+* ---
+* INDICATOR 203 — SCOPUS JOURNAL QUARTILE SCORE
+*
+* Source data: Indicator 128 (Scopus Publications)
+* Saved result: Indicator 203
+*
+* Q1 = 20 points
+* Q2 = 15 points
+* Q3 = 10 points
+* Q4 = 5 points
+*
+* Maximum raw score = 100
+* ---
+
+*/
 protected function calculate203(
-    User $employee,
-    int $roleId,
-    int $indicatorId
+User $employee,
+int $roleId,
+int $indicatorId
 ): ?array {
 
-    $employeeId = $employee->employee_id;
+$employeeId = $employee->employee_id;
 
-    if (!$employeeId) {
-        return $this->noData(
-            'employee_id is missing'
-        );
-    }
+if (!$employeeId) {
+    return $this->noData(
+        'employee_id is missing'
+    );
+}
 
-    /*
-     * ---------------------------------------------------------
-     * Quartile points
-     * ---------------------------------------------------------
-     */
-    $quartilePoints = [
-        'Q1' => 20,
-        'Q2' => 15,
-        'Q3' => 10,
-        'Q4' => 5,
-    ];
+// Indicator 203 derives its publication data from indicator 128.
+$sourceIndicatorId = 128;
 
-    /*
-     * ---------------------------------------------------------
-     * Get approved Scopus publications
-     * ---------------------------------------------------------
-     *
-     * IMPORTANT:
-     * Include both RESEARCHER and DEAN.
-     */
-    $records = AchievementOfResearchPublicationsTarget::query()
-        ->where(
-            'indicator_id',
-            $indicatorId
-        )
-        ->where(
-            'created_by',
-            $employeeId
-        )
-        ->where(
-            'target_category',
-            'Scopus-Indexed'
-        )
-        ->whereIn(
-            'form_status',
-            [
-                'RESEARCHER',
-                'DEAN',
-            ]
-        )
-        ->where(
-            'year_id',
-            $this->yearId
-        )
-        ->where(
-            'status',
-            3
-        )
-        ->get([
-            'journal_clasification',
-        ]);
+$quartilePoints = [
+    'Q1' => 20,
+    'Q2' => 15,
+    'Q3' => 10,
+    'Q4' => 5,
+];
 
-    if ($records->isEmpty()) {
-        return $this->noData(
-            'No approved Scopus journal publication records found'
-        );
-    }
+$records = AchievementOfResearchPublicationsTarget::query()
+    ->where('indicator_id', $sourceIndicatorId)
+    ->where('created_by', $employeeId)
+    ->where('target_category', 'Scopus-Indexed')
+    ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
+    ->where('year_id', $this->yearId)
+    ->where('status', 3)
+    ->whereNotNull('journal_clasification')
+    ->get([
+        'journal_clasification',
+    ]);
 
-    /*
-     * ---------------------------------------------------------
-     * Calculate quartile points
-     * ---------------------------------------------------------
-     */
-    $obtainedScore = 0;
+$obtainedScore = 0;
+$quartileCounts = [
+    'Q1' => 0,
+    'Q2' => 0,
+    'Q3' => 0,
+    'Q4' => 0,
+];
 
-    foreach ($records as $record) {
-
-        $quartile = strtoupper(
-            trim(
-                (string) $record->journal_clasification
-            )
-        );
-
-        if (isset($quartilePoints[$quartile])) {
-
-            $obtainedScore +=
-                $quartilePoints[$quartile];
-        }
-    }
-
-    /*
-     * ---------------------------------------------------------
-     * Maximum raw score = 100
-     * ---------------------------------------------------------
-     */
-    $rawScore = min(
-        100,
-        $obtainedScore
+foreach ($records as $record) {
+    $quartile = strtoupper(
+        trim((string) $record->journal_clasification)
     );
 
-    /*
-     * ---------------------------------------------------------
-     * Role-specific weight
-     * ---------------------------------------------------------
-     */
-    $weight = $this->getWeight(
-        $roleId,
-        $indicatorId
-    );
+    if (!isset($quartilePoints[$quartile])) {
+        continue;
+    }
 
-    /*
-     * ---------------------------------------------------------
-     * Weighted score
-     * ---------------------------------------------------------
-     */
-    $weightedScore = $this->weighted(
-        $rawScore,
-        $weight
-    );
+    $obtainedScore += $quartilePoints[$quartile];
+    $quartileCounts[$quartile]++;
+}
 
-    return [
-        'raw_score' => $rawScore,
+$rawScore = min(100, $obtainedScore);
 
-        'weighted_score' => $weightedScore,
-    ];
+$weight = $this->getWeight($roleId, $indicatorId);
+
+return [
+    'raw_score' => $rawScore,
+    'weighted_score' => $this->weighted($rawScore, $weight),
+];
+
 }
 
     /**

@@ -171,7 +171,7 @@
                                             <th>Term</th>
                                             <th>Total Classes</th>
                                             <th>Held</th>
-                                            <th>Not Held</th>
+                                            <!-- <th>Not Held</th> -->
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -196,7 +196,7 @@
                                                     <td>{{ $class->term }}</td>
                                                     <td>{{ $class->total_classes }}</td>
                                                     <td>{{ $class->class_held_count }}</td>
-                                                    <td>{{ $class->class_not_held_count }}</td>
+                                                    <!-- <td>{{ $class->class_not_held_count }}</td> -->
                                                     <td>
                                                         <div class="badge" style="background-color: {{ $class->color }}">
                                                             {{ number_format($class->held_percentage, 1) }}%
@@ -212,7 +212,7 @@
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
-                                                <th colspan="8" class="text-end"></th>
+                                                <th colspan="7" class="text-end"></th>
                                                 <th style="font-size: 0.960rem;">
                                                     <b class="badge"
                                                         style="background-color: {{ getRatingMeta100($totalHeldPercentage)->color }}">
@@ -243,7 +243,7 @@
                                             <th>Term</th>
                                             <th>Total Classes</th>
                                             <th>Held</th>
-                                            <th>Not Held</th>
+                                            <!-- <th>Not Held</th> -->
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -269,7 +269,7 @@
                                                     <td>{{ $class->term }}</td>
                                                     <td>{{ $class->total_classes }}</td>
                                                     <td>{{ $class->class_held_count }}</td>
-                                                    <td>{{ $class->class_not_held_count }}</td>
+                                                    <!-- <td>{{ $class->class_not_held_count }}</td> -->
                                                     <td>
                                                         <div class="badge" style="background-color: {{ $class->color }}">
                                                             {{ number_format($class->held_percentage, 1) }}%
@@ -285,7 +285,7 @@
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="text-end">Total</th>
-                                                <th colspan="8" class="text-end"></th>
+                                                <th colspan="7" class="text-end"></th>
                                                 <th style="font-size: 0.960rem;">
                                                     <b class="badge"
                                                         style="background-color: {{ getRatingMeta100($totalHeldPercentage)->color }}">
@@ -339,7 +339,6 @@
         $activeRoleId
     );  
 
-    
 @endphp
     <!--  Payment Methods modal -->
     <div class="modal fade" id="ClassesHeld" tabindex="-1" aria-hidden="true">
@@ -386,7 +385,7 @@
                                             <th>Sr#</th>
                                             <th>Total Classes</th>
                                             <th>Held</th>
-                                            <th>Not Held</th>
+                                            <!-- <th>Not Held</th> -->
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -420,7 +419,7 @@
                                                 <td>{{ $sr++ }}</td>
                                                 <td>{{ $totalClasses }}</td>
                                                 <td>{{ $totalHeld }}</td>
-                                                <td>{{ $totalNotHeld }}</td>
+                                                <!-- <td>{{ $totalNotHeld }}</td> -->
                                                 <td>
                                                     <div class="badge bg-{{ $color }}">
                                                         {{ number_format($overall, 1) }}%
@@ -434,7 +433,7 @@
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th>Total</th>
-                                                <th colspan="3" class="text-end"></th>
+                                                <th colspan="2" class="text-end"></th>
                                                 <th style="font-size: 0.960rem;">
                                                     <b class="badge"
                                                         style="background-color: {{ getRatingMeta100($overallAvg)->color }}">
@@ -460,7 +459,7 @@
                                             <th>Sr#</th>
                                             <th>Total Classes</th>
                                             <th>Held</th>
-                                            <th>Not Held</th>
+                                            <!-- <th>Not Held</th> -->
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
@@ -494,7 +493,7 @@
                                                 <td>{{ $sr++ }}</td>
                                                 <td>{{ $totalClasses }}</td>
                                                 <td>{{ $totalHeld }}</td>
-                                                <td>{{ $totalNotHeld }}</td>
+                                                <!-- <td>{{ $totalNotHeld }}</td> -->
                                                 <td>
                                                     <div class="badge bg-{{ $color }}">
                                                         {{ number_format($overall, 1) }}%
@@ -508,7 +507,7 @@
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th>Total</th>
-                                                <th colspan="3" class="text-end"></th>
+                                                <th colspan="2" class="text-end"></th>
                                                 <th style="font-size: 0.960rem;">
                                                     <b class="badge"
                                                         style="background-color: {{ getRatingMeta100($overallAvg)->color }}">
