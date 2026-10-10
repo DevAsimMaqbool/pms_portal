@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Maatwebsite\Excel\Events\AfterSheet;
 use App\Models\Faculty;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class DeanKpaMatrixExport implements
     FromCollection,
@@ -21,68 +22,50 @@ class DeanKpaMatrixExport implements
 {
     protected $yearId = 1;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Dynamic Deans
-    |--------------------------------------------------------------------------
-    */
     protected $deans = [];
     protected $facultyList = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | KPA / Category / Indicator Lists
-    |--------------------------------------------------------------------------
-    */
     protected $kpaList = [];
     protected $categoryList = [];
     protected $indicatorList = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Assignments
-    |--------------------------------------------------------------------------
-    */
     protected $assignments = [];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Indicator Scores
-    |--------------------------------------------------------------------------
-    */
     protected $indicatorScores = [];
+    protected $indicatorTargets = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Excel Merge Ranges
-    |--------------------------------------------------------------------------
-    */
     protected $mergeRanges = [];
-
     protected $currentExcelRow = 2;
 
     public function __construct($yearId = 1)
     {
         $this->yearId = $yearId;
 
+        /*
+        |--------------------------------------------------------------------------
+        | Load Faculties
+        |--------------------------------------------------------------------------
+        */
+
         $this->facultyList = Faculty::query()
-        ->pluck('name', 'id')
-        ->toArray();
+            ->pluck('name', 'id')
+            ->toArray();
 
         /*
         |--------------------------------------------------------------------------
-        | KPA List
+        | Load KPA List
         |--------------------------------------------------------------------------
         */
+
         $this->kpaList = KeyPerformanceArea::query()
             ->pluck('performance_area', 'id')
             ->toArray();
 
         /*
         |--------------------------------------------------------------------------
-        | Indicator Categories
+        | Load Indicator Categories
         |--------------------------------------------------------------------------
         */
+
         $this->categoryList = DB::table('indicator_categories')
             ->select(
                 'id',
@@ -94,9 +77,10 @@ class DeanKpaMatrixExport implements
 
         /*
         |--------------------------------------------------------------------------
-        | Indicators
+        | Load Indicators
         |--------------------------------------------------------------------------
         */
+
         $this->indicatorList = DB::table('indicators')
             ->select(
                 'id',
@@ -110,10 +94,8 @@ class DeanKpaMatrixExport implements
         |--------------------------------------------------------------------------
         | Find Dean Role Dynamically
         |--------------------------------------------------------------------------
-        |
-        | No hard-coded Dean role ID.
-        |
         */
+
         $deanRoleIds = DB::table('roles')
             ->where('name', 'Dean')
             ->pluck('id')
@@ -122,9 +104,10 @@ class DeanKpaMatrixExport implements
 
         /*
         |--------------------------------------------------------------------------
-        | Load All Deans Dynamically
+        | Load All Deans
         |--------------------------------------------------------------------------
         */
+
         if (!empty($deanRoleIds)) {
             $this->deans = DB::table('users')
                 ->join(
@@ -133,8 +116,14 @@ class DeanKpaMatrixExport implements
                     '=',
                     'users.id'
                 )
-                ->where('model_has_roles.model_type', 'App\\Models\\User')
-                ->whereIn('model_has_roles.role_id', $deanRoleIds)
+                ->where(
+                    'model_has_roles.model_type',
+                    'App\\Models\\User'
+                )
+                ->whereIn(
+                    'model_has_roles.role_id',
+                    $deanRoleIds
+                )
                 ->select(
                     'users.id',
                     'users.name',
@@ -154,6 +143,7 @@ class DeanKpaMatrixExport implements
         | Load Role KPA Assignments
         |--------------------------------------------------------------------------
         */
+
         if (!empty($deanRoleIds)) {
             $assignments = DB::table('role_kpa_assignments')
                 ->select(
@@ -177,18 +167,12 @@ class DeanKpaMatrixExport implements
             foreach ($assignments as $assignment) {
                 $roleId = (int) $assignment->role_id;
 
-                /*
-                | user_id NULL means role-default assignment.
-                */
+                // NULL user_id means role-level assignment.
                 $userId = $assignment->user_id !== null
                     ? (int) $assignment->user_id
                     : 0;
 
                 $key = $roleId . '_' . $userId;
-
-                if (!isset($this->assignments[$key])) {
-                    $this->assignments[$key] = [];
-                }
 
                 $indicatorKey =
                     (int) $assignment->key_performance_area_id
@@ -197,9 +181,7 @@ class DeanKpaMatrixExport implements
                     . '_'
                     . (int) $assignment->indicator_id;
 
-                /*
-                | Latest assignment wins because records are loaded by id.
-                */
+                // Latest assignment wins.
                 $this->assignments[$key][$indicatorKey] = $assignment;
             }
         }
@@ -209,6 +191,7 @@ class DeanKpaMatrixExport implements
         | Load Indicator Scores
         |--------------------------------------------------------------------------
         */
+
         $scores = IndicatorsPercentage::query()
             ->select(
                 'employee_id',
@@ -239,13 +222,39 @@ class DeanKpaMatrixExport implements
 
             $this->indicatorScores[$key] = $score;
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Load Dean Targets
+        |--------------------------------------------------------------------------
+        | One target column will be added for each Dean.
+        | The latest record wins if duplicate records exist for
+        | the same Dean, indicator, and year.
+        */
+
+        $targets = DB::table('faculty_targets_dean')
+            ->select(
+                'created_by',
+                'indicator_id',
+                DB::raw('SUM(target) as total_target')
+            )
+            ->where('year_id', $this->yearId)
+            ->groupBy('created_by', 'indicator_id')
+            ->get();
+
+        foreach ($targets as $target) {
+            $key = $target->created_by . '_' . $target->indicator_id;
+
+            $this->indicatorTargets[$key] = $target->total_target;
+        }
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Headings
+    | Excel Headings
     |--------------------------------------------------------------------------
     */
+
     public function headings(): array
     {
         $headings = [
@@ -256,7 +265,14 @@ class DeanKpaMatrixExport implements
 
         foreach ($this->deans as $dean) {
             $facultyName = $this->facultyList[$dean->faculty] ?? 'N/A';
-            $headings[] = $dean->name . ' (' . $facultyName . ')';
+
+            $deanName = $dean->name
+                . '-' . $dean->employee_id
+                . ' (' . $facultyName . ')';
+
+            // Two columns for each Dean.
+            $headings[] = $deanName . ' - Score';
+            $headings[] = $deanName . ' - Target';
         }
 
         return $headings;
@@ -264,9 +280,10 @@ class DeanKpaMatrixExport implements
 
     /*
     |--------------------------------------------------------------------------
-    | Collection
+    | Generate Excel Matrix
     |--------------------------------------------------------------------------
     */
+
     public function collection()
     {
         $rows = [];
@@ -277,20 +294,19 @@ class DeanKpaMatrixExport implements
 
         /*
         |--------------------------------------------------------------------------
-        | Build Effective Assignment For Each Dean
+        | Build Effective Assignments for Each Dean
         |--------------------------------------------------------------------------
-        |
         | Role-level assignments are used first.
-        | User-specific assignments override them.
-        |
+        | User-specific assignments override role-level assignments.
         */
+
         $deanEffectiveAssignments = [];
 
         foreach ($this->deans as $dean) {
             $roleId = $this->getDeanRoleId($dean->id);
 
             if (!$roleId) {
-                $deanEffectiveAssignments[$dean->id] = [];
+                $deanEffectiveAssignments[$dean->id] = null;
                 continue;
             }
 
@@ -314,12 +330,17 @@ class DeanKpaMatrixExport implements
 
         /*
         |--------------------------------------------------------------------------
-        | Build Union Of All KPA -> Category -> Indicator
+        | Build Union of All Assigned Indicators
         |--------------------------------------------------------------------------
         */
+
         $matrix = [];
 
-        foreach ($deanEffectiveAssignments as $deanId => $deanData) {
+        foreach ($deanEffectiveAssignments as $deanData) {
+            if (!$deanData) {
+                continue;
+            }
+
             foreach ($deanData['assignments'] as $assignment) {
                 $kpaId = (int) $assignment->key_performance_area_id;
                 $categoryId = (int) $assignment->indicator_category_id;
@@ -334,6 +355,7 @@ class DeanKpaMatrixExport implements
         | Generate Matrix Rows
         |--------------------------------------------------------------------------
         */
+
         foreach ($matrix as $kpaId => $categories) {
             $kpaName = $this->kpaList[$kpaId] ?? 'N/A';
 
@@ -361,19 +383,13 @@ class DeanKpaMatrixExport implements
 
                     /*
                     |--------------------------------------------------------------------------
-                    | One Dynamic Column Per Dean
+                    | Add Score and Target for Every Dean
                     |--------------------------------------------------------------------------
                     */
+
                     foreach ($this->deans as $dean) {
                         $deanData =
                             $deanEffectiveAssignments[$dean->id] ?? null;
-
-                        if (!$deanData) {
-                            $row[] = '';
-                            continue;
-                        }
-
-                        $roleId = $deanData['role_id'];
 
                         $assignmentKey =
                             $kpaId
@@ -383,46 +399,53 @@ class DeanKpaMatrixExport implements
                             . $indicatorId;
 
                         /*
-                        | Only show a score when this Dean has the indicator
-                        | in their effective assignment.
+                        |--------------------------------------------------------------------------
+                        | Score
+                        |--------------------------------------------------------------------------
+                        | Preserve the existing score logic.
+                        | If the indicator is not assigned to this Dean,
+                        | display a blank score.
                         */
+
                         if (
-                            !isset(
+                            $deanData &&
+                            isset(
                                 $deanData['assignments'][$assignmentKey]
                             )
                         ) {
+                            $roleId = $deanData['role_id'];
+
+                            $scoreRecord = $this->getScoreRecord(
+                                $dean->id,
+                                $roleId,
+                                $kpaId,
+                                $categoryId,
+                                $indicatorId
+                            );
+
+                            $row[] = $scoreRecord
+                                && $scoreRecord->with_out_weight_score !== null
+                                && $scoreRecord->with_out_weight_score !== ''
+                                    ? (float) $scoreRecord->with_out_weight_score
+                                    : '';
+                        } else {
                             $row[] = '';
-                            continue;
                         }
 
-                        $scoreRecord = $this->getScoreRecord(
-                            $dean->id,
-                            $roleId,
-                            $kpaId,
-                            $categoryId,
-                            $indicatorId
-                        );
-
                         /*
-                        | Blank when there is no score.
-                        | Do not convert missing scores to zero.
+                        |--------------------------------------------------------------------------
+                        | Target
+                        |--------------------------------------------------------------------------
+                        | Target is retrieved independently of the score.
+                        | It is matched by Dean user ID and indicator ID.
                         */
-                        $row[] = $scoreRecord
-                            && $scoreRecord->with_out_weight_score !== null
-                            && $scoreRecord->with_out_weight_score !== ''
-                                ? (float) $scoreRecord->with_out_weight_score
-                                : '';
-                        // $row[] = $scoreRecord
-                        // && $scoreRecord->score !== null
-                        // && $scoreRecord->score !== ''
-                        //     ? (float) $scoreRecord->score
-                        //         . (
-                        //             $scoreRecord->with_out_weight_score !== null
-                        //             && $scoreRecord->with_out_weight_score !== ''
-                        //                 ? ' (' . (float) $scoreRecord->with_out_weight_score . ')'
-                        //                 : ''
-                        //         )
-                        //     : '';
+                         $targetKey = $dean->id . '_' . $indicatorId;
+
+                        $row[] = isset($this->indicatorTargets[$targetKey])
+                            ? (float) $this->indicatorTargets[$targetKey]
+                            : '';
+
+                       
                     }
 
                     $rows[] = $row;
@@ -435,11 +458,11 @@ class DeanKpaMatrixExport implements
 
                 /*
                 |--------------------------------------------------------------------------
-                | Category Merge
+                | Merge Category Cells
                 |--------------------------------------------------------------------------
                 */
-                $categoryEndRow =
-                    $this->currentExcelRow - 1;
+
+                $categoryEndRow = $this->currentExcelRow - 1;
 
                 if ($categoryEndRow > $categoryStartRow) {
                     $this->mergeRanges[] =
@@ -450,11 +473,11 @@ class DeanKpaMatrixExport implements
 
             /*
             |--------------------------------------------------------------------------
-            | KPA Merge
+            | Merge KPA Cells
             |--------------------------------------------------------------------------
             */
-            $kpaEndRow =
-                $this->currentExcelRow - 1;
+
+            $kpaEndRow = $this->currentExcelRow - 1;
 
             if ($kpaEndRow > $kpaStartRow) {
                 $this->mergeRanges[] =
@@ -471,35 +494,33 @@ class DeanKpaMatrixExport implements
     | Get Dean Role ID
     |--------------------------------------------------------------------------
     */
+
     private function getDeanRoleId($userId)
     {
-        foreach (
-            DB::table('model_has_roles')
-                ->join(
-                    'roles',
-                    'roles.id',
-                    '=',
-                    'model_has_roles.role_id'
-                )
-                ->where('model_has_roles.model_id', $userId)
-                ->where(
-                    'model_has_roles.model_type',
-                    'App\\Models\\User'
-                )
-                ->where('roles.name', 'Dean')
-                ->pluck('roles.id') as $roleId
-        ) {
-            return (int) $roleId;
-        }
+        $roleId = DB::table('model_has_roles')
+            ->join(
+                'roles',
+                'roles.id',
+                '=',
+                'model_has_roles.role_id'
+            )
+            ->where('model_has_roles.model_id', $userId)
+            ->where(
+                'model_has_roles.model_type',
+                'App\\Models\\User'
+            )
+            ->where('roles.name', 'Dean')
+            ->value('roles.id');
 
-        return null;
+        return $roleId ? (int) $roleId : null;
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Get Score Record
+    | Get Indicator Score Record
     |--------------------------------------------------------------------------
     */
+
     private function getScoreRecord(
         $employeeId,
         $roleId,
@@ -523,21 +544,22 @@ class DeanKpaMatrixExport implements
 
     /*
     |--------------------------------------------------------------------------
-    | Excel Events
+    | Excel Styling and Page Setup
     |--------------------------------------------------------------------------
     */
+
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
-                $lastColumnIndex = 3 + count($this->deans);
+                // Three fixed columns + two columns per Dean.
+                $lastColumnIndex = 3 + (count($this->deans) * 2);
 
-                $lastColumn =
-                    \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(
-                        $lastColumnIndex
-                    );
+                $lastColumn = Coordinate::stringFromColumnIndex(
+                    max(3, $lastColumnIndex)
+                );
 
                 $lastRow = max(
                     1,
@@ -546,9 +568,10 @@ class DeanKpaMatrixExport implements
 
                 /*
                 |--------------------------------------------------------------------------
-                | Header
+                | Header Styling
                 |--------------------------------------------------------------------------
                 */
+
                 $sheet
                     ->getStyle('A1:' . $lastColumn . '1')
                     ->applyFromArray([
@@ -557,124 +580,92 @@ class DeanKpaMatrixExport implements
                             'size' => 11,
                         ],
                         'alignment' => [
-                            'horizontal' =>
-                                Alignment::HORIZONTAL_CENTER,
-                            'vertical' =>
-                                Alignment::VERTICAL_CENTER,
+                            'horizontal' => Alignment::HORIZONTAL_CENTER,
+                            'vertical' => Alignment::VERTICAL_CENTER,
                             'wrapText' => true,
                         ],
                         'borders' => [
                             'allBorders' => [
-                                'borderStyle' =>
-                                    Border::BORDER_THIN,
+                                'borderStyle' => Border::BORDER_THIN,
                             ],
                         ],
                     ]);
 
-                $sheet
-                    ->getRowDimension(1)
-                    ->setRowHeight(35);
+                $sheet->getRowDimension(1)->setRowHeight(45);
 
                 /*
                 |--------------------------------------------------------------------------
                 | Column Widths
                 |--------------------------------------------------------------------------
                 */
-                $sheet
-                    ->getColumnDimension('A')
-                    ->setWidth(32);
 
-                $sheet
-                    ->getColumnDimension('B')
-                    ->setWidth(38);
-
-                $sheet
-                    ->getColumnDimension('C')
-                    ->setWidth(42);
+                $sheet->getColumnDimension('A')->setWidth(32);
+                $sheet->getColumnDimension('B')->setWidth(38);
+                $sheet->getColumnDimension('C')->setWidth(42);
 
                 for ($i = 4; $i <= $lastColumnIndex; $i++) {
-                    $column =
-                        \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(
-                            $i
-                        );
+                    $column = Coordinate::stringFromColumnIndex($i);
 
-                    $sheet
-                        ->getColumnDimension($column)
-                        ->setWidth(16);
+                    $sheet->getColumnDimension($column)->setWidth(18);
                 }
 
                 /*
                 |--------------------------------------------------------------------------
-                | Main Styling
+                | Main Table Styling
                 |--------------------------------------------------------------------------
                 */
+
                 if ($lastRow >= 2) {
                     $sheet
                         ->getStyle('A1:' . $lastColumn . $lastRow)
                         ->getAlignment()
-                        ->setVertical(
-                            Alignment::VERTICAL_CENTER
-                        )
+                        ->setVertical(Alignment::VERTICAL_CENTER)
                         ->setWrapText(true);
 
                     $sheet
                         ->getStyle('A1:' . $lastColumn . $lastRow)
                         ->getBorders()
                         ->getAllBorders()
-                        ->setBorderStyle(
-                            Border::BORDER_THIN
-                        );
+                        ->setBorderStyle(Border::BORDER_THIN);
 
-                    /*
-                    | KPA / Category / Indicator left aligned.
-                    */
+                    // KPA, category, and indicator: left aligned.
                     $sheet
                         ->getStyle('A2:C' . $lastRow)
                         ->getAlignment()
-                        ->setHorizontal(
-                            Alignment::HORIZONTAL_LEFT
-                        );
+                        ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-                    /*
-                    | Dean score columns centered.
-                    */
+                    // All Dean score and target columns: centered.
                     if ($lastColumnIndex >= 4) {
                         $sheet
-                            ->getStyle(
-                                'D2:' . $lastColumn . $lastRow
-                            )
+                            ->getStyle('D2:' . $lastColumn . $lastRow)
                             ->getAlignment()
-                            ->setHorizontal(
-                                Alignment::HORIZONTAL_CENTER
-                            );
+                            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
                     }
                 }
 
                 /*
                 |--------------------------------------------------------------------------
-                | Merge KPA / Category Cells
+                | Merge KPA and Category Cells
                 |--------------------------------------------------------------------------
                 */
+
                 foreach ($this->mergeRanges as $range) {
                     $sheet->mergeCells($range);
 
                     $sheet
                         ->getStyle($range)
                         ->getAlignment()
-                        ->setVertical(
-                            Alignment::VERTICAL_CENTER
-                        )
-                        ->setHorizontal(
-                            Alignment::HORIZONTAL_LEFT
-                        )
+                        ->setVertical(Alignment::VERTICAL_CENTER)
+                        ->setHorizontal(Alignment::HORIZONTAL_LEFT)
                         ->setWrapText(true);
                 }
 
                 /*
                 |--------------------------------------------------------------------------
-                | Freeze Header
+                | Freeze Fixed Columns and Header
                 |--------------------------------------------------------------------------
                 */
+
                 $sheet->freezePane('D2');
 
                 /*
@@ -682,28 +673,24 @@ class DeanKpaMatrixExport implements
                 | Auto Filter
                 |--------------------------------------------------------------------------
                 */
-                if ($lastColumnIndex >= 3) {
-                    $sheet->setAutoFilter(
-                        'A1:' . $lastColumn . $lastRow
-                    );
-                }
+
+                $sheet->setAutoFilter(
+                    'A1:' . $lastColumn . $lastRow
+                );
 
                 /*
                 |--------------------------------------------------------------------------
                 | Print Setup
                 |--------------------------------------------------------------------------
                 */
-                $sheet
-                    ->getPageSetup()
-                    ->setOrientation(
-                        PageSetup::ORIENTATION_LANDSCAPE
-                    );
 
                 $sheet
                     ->getPageSetup()
-                    ->setPaperSize(
-                        PageSetup::PAPERSIZE_A3
-                    );
+                    ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+
+                $sheet
+                    ->getPageSetup()
+                    ->setPaperSize(PageSetup::PAPERSIZE_A3);
 
                 $sheet
                     ->getPageSetup()

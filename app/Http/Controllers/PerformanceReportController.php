@@ -1325,6 +1325,7 @@ public function OvelalldownloadGoalReport()
             'latestSelfReport',
         ])
         ->orderBy('s2r_driver_enabler_alignment')
+        ->orderBy('user_id')
         ->orderBy('id')
         ->chunk(100, function ($goals) use (&$groupedGoals) {
             foreach ($goals as $goal) {
