@@ -165,8 +165,8 @@
                     </div>
                 </a>
             </li>
-            <li class="menu-item {{ request()->routeIs('ovelall.download-report') ? 'active' : '' }}">
-                <a href="{{ route('ovelall.download-report') }}" class="menu-link">
+            <li class="menu-item {{ request()->routeIs('goals_dashboard.report') ? 'active' : '' }}">
+                <a href="{{ route('goals_dashboard.report') }}" class="menu-link">
                     <i class="menu-icon icon-base ti tabler-download"></i>
                     <div data-i18n="All Users Goals Report">
                         All Users Goals Report

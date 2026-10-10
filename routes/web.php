@@ -112,6 +112,8 @@ use App\Http\Controllers\PerformanceReportController;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\EmployeeKpaReportExport;
+
+use App\Exports\OverallGoalsReportExport;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Department;
@@ -440,6 +442,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/survey/{faculty_code}/download-pdf', [SurveyController::class, 'downloadPdf'])
         ->name('survey.downloadPdf');
     Route::get('/survey-report-dashboard', [SurveyController::class, 'surveyReportDashboard'])->name('survey_dashboard.report');
+    Route::get('/goals-report-download', [PerformanceReportController::class, 'surveyReportDashboard'])->name('goals_dashboard.report');
+    Route::get('/goals-report-download', function () {
+        return view('admin.download_gals_report');
+    })->name('goals_dashboard.report');
 
     Route::get('area-of-improvements', [TeacherController::class, 'areaOfImprovements'])->name('teacher.area_of_improvements');
     Route::get('noteable-performance', [TeacherController::class, 'noteablePerformance'])->name('teacher.noteable_performance');
@@ -782,6 +788,18 @@ Route::get('/dean-report/excel', function (Request $request) {
     );
 
 })->name('dean.report.excel');
+
+
+Route::get(
+    '/ovelall-download-report-excel',
+    function () {
+        return Excel::download(
+            new OverallGoalsReportExport(),
+            'All_Employees_Goals_Report.xlsx'
+        );
+    }
+)->name('ovelall.download-report.excel');
+
 
 });
 require __DIR__ . '/auth.php';
