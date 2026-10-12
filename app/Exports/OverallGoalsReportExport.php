@@ -50,6 +50,7 @@ class OverallGoalsReportExport implements
                 'latestSelfReport',
             ])
             ->orderBy('s2r_driver_enabler_alignment')
+            ->orderBy('user_id')
             ->orderBy('id')
             ->get();
     }
@@ -57,11 +58,14 @@ class OverallGoalsReportExport implements
     public function headings(): array
     {
         return [
-            'S2R Driver / Enabler',
-            'Goal',
-            'Goal Target',
-            'Achieved / Progress',
-            'Owner',
+            ['Employee Performance Report'],
+            [
+                'S2R Driver / Enabler',
+                'Goal',
+                'Goal Target',
+                'Achieved / Progress',
+                'Owner',
+            ],
         ];
     }
 
@@ -77,9 +81,27 @@ class OverallGoalsReportExport implements
         ];
     }
 
-    public function styles(Worksheet $sheet): array
+  public function styles(Worksheet $sheet): array
 {
-    return [];
+    return [
+        // Employee Performance Report title
+        1 => [
+            'font' => [
+                'bold' => true,
+                'size' => 16,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ],
+
+        // Column headers
+        2 => [
+            'font' => [
+                'bold' => true,
+            ],
+        ],
+    ];
 }
 
 public function registerEvents(): array
