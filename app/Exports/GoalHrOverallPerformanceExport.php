@@ -22,8 +22,9 @@ class GoalHrOverallPerformanceExport implements
     WithStyles
 {
     protected array $departments = [];
+    protected string $manager = '';
 
-    public function __construct($departments = null)
+    public function __construct($departments = null, $manager = '')
     {
         if (!is_array($departments)) {
             $departments = [$departments];
@@ -41,22 +42,49 @@ class GoalHrOverallPerformanceExport implements
             ->unique()
             ->values()
             ->toArray();
+            $this->manager = trim((string) $manager);
     }
 
     public function collection(): Collection
     {
+        
         $query = User::query()
-            ->with([
-                'goalSelfReports' => function ($q) {
-                    $q->where('status', 'manager_approved')
-                        ->with('reviews')
-                        ->orderByDesc('id');
-                },
-                'goalOverallReviews' => function ($q) {
-                    $q->latest('id');
-                },
-            ])
-            ->orderBy('name');
+
+        // Only employees having at least one manager-approved goal
+        ->whereHas('goalSelfReports', function ($q) {
+        $q->where('status', 'manager_approved');
+        })
+
+        ->with([
+
+        'goalSelfReports' => function ($q) {
+
+        $q->where('status', 'manager_approved')
+        ->with('reviews')
+        ->orderByDesc('id');
+
+        },
+
+        'goalOverallReviews' => function ($q) {
+
+        $q->latest('id');
+
+        },
+
+        ])
+
+        // Existing manager filter
+        ->when($this->manager !== '', function ($query) {
+
+        $query->where(
+        'manager_name',
+        'like',
+        '%' . $this->manager . '%'
+        );
+
+        })
+
+        ->orderBy('name');
 
         if (!empty($this->departments)) {
 

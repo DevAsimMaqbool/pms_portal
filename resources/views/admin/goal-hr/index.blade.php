@@ -61,6 +61,8 @@
 
                     </div>
 
+                    <div class="col-md-2"> <label class="form-label mb-1">Search by Manager</label> <input type="text" name="manager" class="form-control form-control-sm" placeholder="Enter manager name..." value="{{ request('manager') }}"> </div>
+
                     <div class="col-md-auto">
 
                         <button type="submit"
@@ -89,41 +91,39 @@
 
                     @endif
 
-                    {{-- EXCEL --}}
-                    <div class="col-md-auto">
+{{-- EXCEL --}}
+<div class="col-md-auto">
+    <a href="{{ route('goal-hr.export', [
+        'department' => $selectedDepartments,
+        'manager' => request('manager', '')
+    ]) }}"
+       class="btn btn-success btn-sm">
 
-                        <a href="{{ route('goal-hr.export', [
-                            'department' => $selectedDepartments
-                        ]) }}"
-                           class="btn btn-success btn-sm">
+        <i class="fas fa-file-excel me-1"></i>
+        Download Excel
 
-                            <i class="fas fa-file-excel me-1"></i>
-                            Download Excel
+    </a>
+</div>
 
-                        </a>
+{{-- PDF --}}
+<div class="col-md-auto">
+    <a href="{{ route('goal-hr.export-pdf', [
+        'department' => $selectedDepartments,
+        'manager' => request('manager', '')
+    ]) }}"
+       class="btn btn-danger btn-sm">
 
-                    </div>
+        <i class="fas fa-file-pdf me-1"></i>
 
-                    {{-- PDF --}}
-                    <div class="col-md-auto">
+        @if(count($selectedDepartments) > 1)
+            Download PDFs
+        @else
+            Download PDF
+        @endif
 
-                        <a href="{{ route('goal-hr.export-pdf', [
-                            'department' => $selectedDepartments
-                        ]) }}"
-                           class="btn btn-danger btn-sm">
-
-                            <i class="fas fa-file-pdf me-1"></i>
-
-                            @if(count($selectedDepartments) > 1)
-                                Download PDFs
-                            @else
-                                Download PDF
-                            @endif
-
-                        </a>
-
-                    </div>
-
+    </a>
+</div>
+                    
                 </form>
 
             </div>

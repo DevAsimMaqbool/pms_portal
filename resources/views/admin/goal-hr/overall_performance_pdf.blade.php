@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Overall Performance Report</title>
 
-```
 <style>
     @page {
         margin: 18px;
@@ -180,13 +179,11 @@
     .col-final       { width: 6%; }
     .col-rating      { width: 4%; }
 </style>
-```
 
 </head>
 
 <body>
 
-```
 <div class="header">
     <h1>Overall Performance Report</h1>
     <div class="subtitle">
@@ -318,7 +315,6 @@
 <div class="footer">
     Overall Performance Report - {{ now()->format('d M Y h:i A') }}
 </div>
-```
 
 </body>
 </html>

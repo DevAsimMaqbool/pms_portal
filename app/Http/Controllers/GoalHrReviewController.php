@@ -54,6 +54,8 @@ class GoalHrReviewController extends Controller
             );
 
         })
+        // Independent Manager Name Search
+         ->when($request->filled('manager'), function ($query) use ($request) { $query->where( 'manager_name', 'like', '%' . trim($request->input('manager')) . '%' ); })
         ->with([
             'goalSelfReports' => function ($query) {
                 $query->where('status', 'manager_approved')
@@ -306,7 +308,7 @@ class GoalHrReviewController extends Controller
             );
     }
 
-    public function export(Request $request)
+public function export(Request $request)
 {
     $departments = $request->input('department', []);
 
@@ -315,8 +317,13 @@ class GoalHrReviewController extends Controller
     }
 
     $departments = array_values(
-        array_filter($departments)
+        array_unique(
+            array_filter($departments)
+        )
     );
+
+    // Manager Name Search
+    $manager = trim((string) $request->input('manager', ''));
 
     /*
     |--------------------------------------------------------------------------
@@ -325,27 +332,21 @@ class GoalHrReviewController extends Controller
     */
 
     if (count($departments) === 0) {
-
         $departmentName = 'All_Departments';
-
     } elseif (count($departments) === 1) {
-
         $departmentName = $departments[0];
 
         if (str_contains($departmentName, '/')) {
-            $departmentName = trim(
-                last(explode('/', $departmentName))
-            );
+            $parts = explode('/', $departmentName);
+            $departmentName = trim(end($parts));
         }
-
     } else {
-
         $departmentName = 'Multiple_Departments';
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Safe File Name
+    | Safe File Names
     |--------------------------------------------------------------------------
     */
 
@@ -355,9 +356,19 @@ class GoalHrReviewController extends Controller
         $departmentName
     );
 
-    $filename =
-        'Overall_Performance_Report_' .
+    $managerName = $manager !== ''
+        ? preg_replace('/[^A-Za-z0-9_-]+/', '_', $manager)
+        : '';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Excel File Name
+    |--------------------------------------------------------------------------
+    */
+
+    $filename = 'Overall_Performance_Report_' .
         $departmentName .
+        ($managerName !== '' ? '_Manager_' . $managerName : '') .
         '_' .
         now()->format('Y-m-d') .
         '.xlsx';
@@ -366,17 +377,23 @@ class GoalHrReviewController extends Controller
     |--------------------------------------------------------------------------
     | Download Excel
     |--------------------------------------------------------------------------
+    | Pass both department and manager filters.
     */
 
     return Excel::download(
-        new GoalHrOverallPerformanceExport($departments),
+        new GoalHrOverallPerformanceExport(
+            $departments,
+            $manager
+        ),
         $filename
     );
 }
 
-    public function exportPdf(Request $request)
+public function exportPdf(Request $request)
 {
     $departments = $request->input('department', []);
+
+    $manager = trim((string) $request->input('manager', ''));
 
     if (!is_array($departments)) {
         $departments = [$departments];
@@ -389,16 +406,29 @@ class GoalHrReviewController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | No department OR one department
+    | Safe Manager File Name
+    |--------------------------------------------------------------------------
+    */
+
+    $managerName = $manager !== ''
+        ? preg_replace('/[^A-Za-z0-9_-]+/', '_', $manager)
+        : '';
+
+    /*
+    |--------------------------------------------------------------------------
+    | No Department OR One Department
     |--------------------------------------------------------------------------
     | Return a normal PDF.
     */
+
     if ($departments->count() <= 1) {
 
         $department = $departments->first();
 
+        // Pass manager filter to the export class.
         $rows = (new GoalHrOverallPerformanceExport(
-            $department
+            $department,
+            $manager
         ))->collection();
 
         $departmentName = $department
@@ -409,9 +439,9 @@ class GoalHrReviewController extends Controller
             )
             : 'All_Departments';
 
-        $filename =
-            'Overall_Performance_Report_' .
+        $filename = 'Overall_Performance_Report_' .
             $departmentName .
+            ($managerName !== '' ? '_Manager_' . $managerName : '') .
             '_' .
             now()->format('Y-m-d') .
             '.pdf';
@@ -429,39 +459,36 @@ class GoalHrReviewController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Multiple departments
+    | Multiple Departments
     |--------------------------------------------------------------------------
-    | Generate a separate PDF for every selected department
-    | and place all PDFs inside one ZIP file.
+    | Generate a separate filtered PDF for each department.
     */
-    $zipName =
-        'Overall_Performance_Reports_' .
+
+    $zipName = 'Overall_Performance_Reports' .
+        ($managerName !== '' ? '_Manager_' . $managerName : '') .
+        '_' .
         now()->format('Y-m-d') .
         '.zip';
 
-    $zipPath = storage_path(
-        'app/' . $zipName
-    );
+    $zipPath = storage_path('app/' . $zipName);
 
-    $zip = new ZipArchive();
+    $zip = new \ZipArchive();
 
     if (
         $zip->open(
             $zipPath,
-            ZipArchive::CREATE |
-            ZipArchive::OVERWRITE
+            \ZipArchive::CREATE | \ZipArchive::OVERWRITE
         ) !== true
     ) {
-        abort(
-            500,
-            'Unable to create ZIP file.'
-        );
+        abort(500, 'Unable to create ZIP file.');
     }
 
     foreach ($departments as $index => $department) {
 
+        // IMPORTANT: pass manager filter for every department.
         $rows = (new GoalHrOverallPerformanceExport(
-            $department
+            $department,
+            $manager
         ))->collection();
 
         $pdf = Pdf::loadView(
@@ -472,25 +499,21 @@ class GoalHrReviewController extends Controller
             ]
         )->setPaper('a4', 'landscape');
 
-        $departmentName = preg_replace(
+        $safeDepartmentName = preg_replace(
             '/[^A-Za-z0-9_-]+/',
             '_',
             $department
         );
 
-        $departmentName = trim(
-            $departmentName,
-            '_'
-        );
+        $safeDepartmentName = trim($safeDepartmentName, '_');
 
-        if (!$departmentName) {
-            $departmentName =
-                'Department_' . ($index + 1);
+        if ($safeDepartmentName === '') {
+            $safeDepartmentName = 'Department_' . ($index + 1);
         }
 
-        $pdfFileName =
-            'Overall_Performance_Report_' .
-            $departmentName .
+        $pdfFileName = 'Overall_Performance_Report_' .
+            $safeDepartmentName .
+            ($managerName !== '' ? '_Manager_' . $managerName : '') .
             '_' .
             now()->format('Y-m-d') .
             '.pdf';
@@ -504,10 +527,7 @@ class GoalHrReviewController extends Controller
     $zip->close();
 
     return response()
-        ->download(
-            $zipPath,
-            $zipName
-        )
+        ->download($zipPath, $zipName)
         ->deleteFileAfterSend(true);
 }
 }
