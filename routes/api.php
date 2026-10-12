@@ -10,6 +10,7 @@ use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\Api\ManagerEmployeeTaskController;
 use App\Http\Controllers\Api\OricApiController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\NewGoalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/industry-collaboration-dashboard', [OricApiController::class, 'industryCollaborationDashboard']);
         Route::get('/active-international-research-partnership-dashboard', [OricApiController::class, 'activeInternationalResearchPartnershipDashboard']);
         Route::get('/international-student-dashboard', [OricApiController::class, 'internationalStudentDashboard']);
+        Route::get('/goal-dashboard', [NewGoalController::class, 'goalsDashboard']);
 
     });
 

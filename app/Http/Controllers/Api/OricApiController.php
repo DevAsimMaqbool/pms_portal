@@ -516,7 +516,7 @@ class OricApiController extends Controller
             ->whereIn('no_of_grants_submit_and_wons.status', [1, 2, 3]);
 
         $funding = CommercialGainsCounsultancyResearchIncome::query()
-            ->where('commercial_gains_counsultancy_research_incomes.status', 2);
+            ->where('commercial_gains_counsultancy_research_incomes.status', 3);
 
         /*
         |--------------------------------------------------------------------------
@@ -1857,7 +1857,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
             ->where('industrial_projects.status', 2);
 
         $consultancyQuery = CommercialGainsCounsultancyResearchIncome::query()
-            ->where('commercial_gains_counsultancy_research_incomes.status', 2);
+            ->where('commercial_gains_counsultancy_research_incomes.status', 3);
 
         /*
         |--------------------------------------------------------------------------
@@ -2491,6 +2491,19 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
 
         /*
         |--------------------------------------------------------------------------
+        | Competitive Salary Score
+        |--------------------------------------------------------------------------
+        */
+
+        $competitiveSalaryAvg = round(
+            (clone $query)
+                ->whereNotNull('market_competitive_salary')
+                ->avg('salary'),
+            2
+        );
+
+        /*
+        |--------------------------------------------------------------------------
         | Job Placements
         |--------------------------------------------------------------------------
         */
@@ -2498,7 +2511,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         $totalGraduates = (clone $query)->count();
 
         $jobPlacements = (clone $query)
-            ->whereNotNull('date_of_appointment')
+            ->whereNotNull('employer_name')
             ->count();
 
         $jobPlacementPercentage = $totalGraduates > 0
@@ -2521,7 +2534,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                 $total = (clone $facultyQuery)->count();
 
                 $placements = (clone $facultyQuery)
-                    ->whereNotNull('date_of_appointment')
+                    ->whereNotNull('employer_name')
                     ->count();
 
                 return [
@@ -2562,7 +2575,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                 $total = (clone $departmentQuery)->count();
 
                 $placements = (clone $departmentQuery)
-                    ->whereNotNull('date_of_appointment')
+                    ->whereNotNull('employer_name')
                     ->count();
 
                 return [
@@ -2614,8 +2627,9 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                     'employer_satisfaction_score' => $employerSatisfactionScore,
 
                     'job_placements' => $jobPlacements,
-
+                    'job_placement_target' => 80,
                     'job_placement_percentage' => $jobPlacementPercentage,
+                    'competitive_salary_avg' => $competitiveSalaryAvg
 
                 ],
 
@@ -2898,7 +2912,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
             ->whereIn('status', ['1', '2', '3', '4', '5', '6']);
 
         $consultancyProjectsQuery = CommercialGainsCounsultancyResearchIncome::query()
-            ->where('status', '2');
+            ->where('status', '3');
 
         $this->applyDateFilterNew($industryProjectsQuery, $request, 'industrial_projects.created_at');
         $this->applyDateFilterNew($consultancyProjectsQuery, $request, 'commercial_gains_counsultancy_research_incomes.created_at');
@@ -2906,6 +2920,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
         $industryFundedProjects = (clone $industryProjectsQuery)->count();
         $jointResearchProjects = $industryFundedProjects; // same table currently
         $consultancyProjects = (clone $consultancyProjectsQuery)->count();
+        $consultancyFees = CommercialGainsCounsultancyResearchIncome::query()->where('status', '3')->sum('consultancy_fee');
         $appliedResearchInitiatives = $industryFundedProjects + $jointResearchProjects + $consultancyProjects;
 
         $distribution = [
@@ -2939,6 +2954,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
             'success' => true,
             'summary_cards' => [
                 'industry_funded_projects' => (int) $industryFundedProjects,
+                'research_funding' => $consultancyFees,
                 'joint_research_projects' => (int) $jointResearchProjects,
                 'consultancy_projects' => (int) $consultancyProjects,
                 'applied_research_initiatives' => (int) $appliedResearchInitiatives,
@@ -3055,7 +3071,7 @@ SUM(CASE WHEN spin_offs.status=2 THEN 1 ELSE 0 END) commercialization_score
                 DB::raw("{$nameColumn} as " . last(explode('.', $nameColumn))),
                 DB::raw('COUNT(commercial_gains_counsultancy_research_incomes.id) as consultancy_projects')
             )
-            ->where('commercial_gains_counsultancy_research_incomes.status', '2')
+            ->where('commercial_gains_counsultancy_research_incomes.status', '3')
             ->groupBy("users.{$groupColumn}", $nameColumn);
 
         $this->applyDateFilterNew($query, $request, 'commercial_gains_counsultancy_research_incomes.created_at');
