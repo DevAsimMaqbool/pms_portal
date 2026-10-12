@@ -266,6 +266,7 @@ class EmployabilityController extends Controller
             'domicile',
             'gender',
             'faculty_id',
+            'department_id',
             'program_id',
             'program_level',
             'batch',
