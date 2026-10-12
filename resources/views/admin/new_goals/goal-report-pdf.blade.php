@@ -261,7 +261,7 @@
             <tr>
                 <td class="title-cell">
                     <div class="report-title">
-                        Employees Goals Report
+                        Employee Performance Report
                     </div>
 
                     <div class="report-subtitle">
