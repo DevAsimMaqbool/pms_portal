@@ -71,7 +71,6 @@
                                         <th>Department</th>
                                         <th>Program</th>
                                         <th>Level</th>
-                                        <th>Target</th>
                                         <th>Achieved</th>
                                         <th>Score</th>
                                         <th>Rating</th>
@@ -80,7 +79,18 @@
 
                                 <tbody>
                                     @php
-                                        $data = ProgramAccreditationOfHODPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 154,$currentYear->id);
+                                    $roleName = getRoleName(activeRole());
+                                    $value = match($roleName) {
+                                        'Program Leader UG' => 'UG',
+                                        'Program Leader PG' => 'PG',
+                                        default => ''
+                                    };
+                                    if (getManagerRole() === 'Dean') {
+                                        $data = ProgramAccreditationOfHODPLDean(Auth::user()->employee_id, $activeRoleId, 6, 14, 154,$currentYear->id,$value);
+                                    } else {
+                                        $data = ProgramAccreditationOfHODPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 154,$currentYear->id,$value);
+                                    }
+                                       
                                     @endphp
                                     @foreach($data->rows as $index => $row)
                                         <tr>
@@ -91,8 +101,6 @@
                                             <td>{{ $row->program }}</td>
                                             <td>{{ $row->program_level }}</td>
 
-                                            {{-- 🔥 TARGET --}}
-                                            <td>{{ $row->target }}</td>
 
                                             {{-- 🔥 ACHIEVED --}}
                                             <td>{{ $row->achieved }}</td>
@@ -116,8 +124,9 @@
                                     {{-- SUMMARY --}}
                                     <tfoot>
                                         <tr class="table-primary fw-bold">
-                                            <td colspan="5">Overall Department</td>
-                                            <td colspan="2">—</td>
+                                            <td colspan="4">Overall Department</td>
+                                            <td colspan="">Targer {{ number_format($data->summary->total_target, 2) }}</td>
+                                            <td colspan="">Achieved {{ number_format($data->summary->total_achieved, 2) }}</td>
 
                                             <td>
                                                 <span class="badge" style="background-color: {{ $data->summary->color }}">

@@ -164,7 +164,12 @@
 
                                 <tbody>
                                     @php
+                                    if (getManagerRole() === 'Dean') {
+                                        $data = noOfProfessionalMembershipsOfHODPLDean(Auth::user()->employee_id, $activeRoleId, 6, 14, 155,$currentYear->id);
+                                    } else {
                                         $data = noOfProfessionalMembershipsOfHODPL(Auth::user()->employee_id, $activeRoleId, 6, 14, 155,$currentYear->id);
+                                    }
+                                        
                                     @endphp
                                     <tr>
                                         <td>1</td>

@@ -34,6 +34,16 @@
                             <h5 class="text-primary" id="indicatorTargetDean">Dean Target 0</h5>
                             <p class="" id="indicatorDescriptionDean"></p>
                             <div class="mb-3">Dean Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYearDean"></div></div>
+                            @elseif(in_array(getRoleName(activeRole()), ['Program Leader UG','Program Leader PG']))
+                            @if (getManagerRole() === 'Dean')
+                                <h5 class="text-primary" id="indicatorTargetDean">Dean Target 0</h5>
+                                <p class="" id="indicatorDescriptionDean"></p>
+                                <div class="mb-3">Dean Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYearDean"></div></div>
+                            @else
+                            <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+                            <p class="" id="indicatorDescription"></p>
+                            <div class="mb-3">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
+                            @endif
                             @else
                             <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
                             <p class="" id="indicatorDescription"></p>

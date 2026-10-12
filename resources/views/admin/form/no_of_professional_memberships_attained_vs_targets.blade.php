@@ -44,6 +44,17 @@ href="{{ asset('admin/assets/vendor/libs/datatables-responsive-bs5/responsive.bo
 <h5 class="text-primary" id="indicatorTargetDean">Dean Target 0</h5>
 <p class="" id="indicatorDescriptionDean"></p>
  <div class="mb-3">Dean Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYearDean"></div></div>
+@elseif(in_array(getRoleName(activeRole()), ['Program Leader UG','Program Leader PG']))
+@if (getManagerRole() === 'Dean')
+    <h5 class="text-primary" id="indicatorTargetDean">Dean Target 0</h5>
+    <p class="" id="indicatorDescriptionDean"></p>
+    <div class="mb-3">Dean Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYearDean"></div></div>
+@else
+   <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
+   <p class="" id="indicatorDescription"></p>
+   <div class="mb-3">Target year<div class="ms-4 badge bg-label-primary" id="indicatorTargetYear"></div></div>
+@endif
+
 @else
 <h5 class="text-primary" id="indicatorTarget">Target 0</h5>
 <p class="" id="indicatorDescription"></p>
@@ -456,13 +467,13 @@ class="country-dropdown select2 form-select" required>
                                 );
                                 $('#indicatorTargetYearDean').text(res.year && res.year ? res.year : 'N/A');
                             } else {
-                                $('#indicatorTargetDean').text('Target: N/A');
+                                $('#indicatorTargetDean').text('Dean Target: N/A');
                                  $('#indicatorDescriptionDean').text('Description: N/A');
                                  $('#indicatorTargetYearDean').text('N/A');
                             }
                         },
                         error: function() {
-                            $('#indicatorTargetDean').text('Target: N/A');
+                            $('#indicatorTargetDean').text('Dean Target: N/A');
                              $('#indicatorDescriptionDean').text('Description: N/A');
                              $('#indicatorTargetYearDean').text('N/A');
                         }

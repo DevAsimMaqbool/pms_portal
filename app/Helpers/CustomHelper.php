@@ -7048,6 +7048,14 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
         saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 127, $weightedScore127, $departmentInternationalFraction, $currentYear); // International
         saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 203, $weightedScore203, $totalQuartileScore, $currentYear); // Quartile
         saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128, $overdepartmentResearchPercentage, $currentYear); // Overall Research % (dummy indicator_id 999, change as needed)
+        saveUserTargetAchieved(
+            $hodEmployeeId,
+            $activeRoleId,
+            128,
+            $currentYear,
+            $totalTarget,
+            $oversubmissionCount
+        );
         return [
             'total_target' => $totalTarget,
             'total_submit' => $oversubmissionCount,
@@ -7289,6 +7297,14 @@ if (!function_exists('departmentTargetIndicatorsAnalysisOfHOD')) {
             $departmentAvgPercentage,
             $currentYear
         );
+        saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $currentYear,
+            $totalTarget,
+            $totalSubmitted
+        );
 
         return [
             'department_avg_percentage' => $departmentAvgPercentage,
@@ -7304,6 +7320,15 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
     function ProgramAccreditationOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null)
     {
         $departmentId = auth()->user()->department_id;
+        $managedEmployees = User::query()
+            ->where('manager_id', $employeeId)
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Program Leader UG', 'Program Leader PG']);
+            })
+            ->pluck('employee_id')
+            ->push($employeeId)
+            ->unique()
+            ->values();
 
         // 1️⃣ Model
         $modelClass = \App\Models\ProgramAccreditation::class;
@@ -7312,7 +7337,7 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
         $records = $modelClass::with(['faculty', 'department', 'program'])
             ->where('indicator_id', $indicatorId)
             ->where('department_id', $departmentId)
-            ->where('created_by', $employeeId)
+            ->whereIn('created_by', $managedEmployees)
             ->where('year_id', $currentYear)
             ->where('status', 2)
             ->get();
@@ -7382,6 +7407,14 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
                 'color' => $metaP->color,
             ];
         }
+        saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $currentYear,
+            $totalTarget,
+            $totalAchieved
+        );
 
         // 8️⃣ RETURN
         return (object) [
@@ -7400,7 +7433,7 @@ if (!function_exists('ProgramAccreditationOfHOD')) {
 
 if (!function_exists('ProgramAccreditationOfHODPL')) {
 
-    function ProgramAccreditationOfHODPL($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null)
+    function ProgramAccreditationOfHODPL($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null,$program_level=null)
     {
         $departmentId = auth()->user()->department_id;
 
@@ -7411,11 +7444,12 @@ if (!function_exists('ProgramAccreditationOfHODPL')) {
         $records = $modelClass::with(['faculty', 'department', 'program'])
             ->where('indicator_id', $indicatorId)
             ->where('department_id', $departmentId)
+            ->where('program_level', $program_level)
             ->where('created_by', $employeeId)
             ->where('year_id', $currentYear)
             ->where('status', 2)
             ->get();
-
+        
         // 3️⃣ TOTAL TARGET (calculate once)
         $totalTarget = FacultyTarget::where('user_id', $employeeId)
             ->where('indicator_id', $indicatorId)
@@ -7485,6 +7519,116 @@ if (!function_exists('ProgramAccreditationOfHODPL')) {
         return (object) [
             'rows' => $rows,
             'summary' => (object) [
+                 'total_target' => $totalTarget,
+                'total_achieved' => $totalAchieved,
+                'average_rating' => $avgRating,
+                'weighted_score' => round($weightedScore, 2),
+                'color' => $meta->color,
+                'rating' => $meta->rating
+            ]
+        ];
+    }
+}
+if (!function_exists('ProgramAccreditationOfHODPLDean')) {
+
+    function ProgramAccreditationOfHODPLDean($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null, $program_level=null)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // 1️⃣ Model
+        $modelClass = \App\Models\ProgramAccreditation::class;
+
+        // 2️⃣ Records (modal data)
+        $records = $modelClass::with(['faculty', 'department', 'program'])
+            ->where('indicator_id', $indicatorId)
+            ->where('department_id', $departmentId)
+            ->where('program_level', $program_level)
+            ->where('created_by', $employeeId)
+            ->where('year_id', $currentYear)
+            ->where('status', 2)
+            ->get();
+
+        $totalTargetDean = FacultyTargetsDean::where('user_id', $employeeId)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
+            ->first();
+        $totalTarget = $totalTargetDean->target ?? 0;    
+        
+
+        // 4️⃣ ACHIEVED
+        $totalAchieved = $records->count();
+
+        // 5️⃣ AVG
+        $avgRating = $totalTarget > 0
+            ? round(($totalAchieved / $totalTarget) * 100, 2)
+            : 0;
+
+        // 6️⃣ RATING
+        $meta = getRatingMeta($avgRating);
+
+        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+        $avgRating_weitage = min($avgRating, 100);
+        $weightedScore = ($avgRating_weitage * $weight) / 100;
+
+        saveIndicatorPercentage90Plus(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $avgRating_weitage,
+            $currentYear
+        );
+
+        // 7️⃣ GROUP BY PROGRAM
+        $grouped = $records->groupBy('program_id');
+
+        $rows = [];
+
+        foreach ($grouped as $programId => $items) {
+
+            $achieved = $items->count();
+
+            // same target for all programs (no program_id in DB)
+            $programTarget = $totalTarget;
+
+            $programAvg = $programTarget > 0
+                ? round(($achieved / $programTarget) * 100, 2)
+                : 0;
+
+            $metaP = getRatingMeta($programAvg);
+
+            $rows[] = (object) [
+                'faculty' => optional($items->first()->faculty)->name,
+                'department' => optional($items->first()->department)->name,
+                'program' => optional($items->first()->program)->program_name,
+                'program_level' => $items->first()->program_level,
+
+                'target' => $programTarget,
+                'achieved' => $achieved,
+
+                'score' => $programAvg,
+                'rating' => $metaP->rating,
+                'color' => $metaP->color,
+            ];
+        }
+        saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $currentYear,
+            $totalTarget,
+            $totalAchieved
+        );
+        
+
+        // 8️⃣ RETURN
+        return (object) [
+            'rows' => $rows,
+            'summary' => (object) [
+                'total_target' => $totalTarget,
+                'total_achieved' => $totalAchieved,
                 'average_rating' => $avgRating,
                 'weighted_score' => round($weightedScore, 2),
                 'color' => $meta->color,
@@ -7499,13 +7643,22 @@ if (!function_exists('noOfProfessionalMembershipsOfHOD')) {
     function noOfProfessionalMembershipsOfHOD($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null)
     {
         $departmentId = auth()->user()->department_id;
+        $managedEmployees = User::query()
+            ->where('manager_id', $employeeId)
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['Program Leader UG', 'Program Leader PG']);
+            })
+            ->pluck('employee_id')
+            ->push($employeeId)
+            ->unique()
+            ->values();
 
         // 1️⃣ Model
         $modelClass = \App\Models\ProfessionalMembership::class;
 
         // 2️⃣ Records (modal data)
         $records = $modelClass::where('indicator_id', $indicatorId)
-            ->where('created_by', $employeeId)
+            ->whereIn('created_by', $managedEmployees)
             ->where('year_id', $currentYear)
             ->where('status', 2)
             ->get();
@@ -7542,6 +7695,14 @@ if (!function_exists('noOfProfessionalMembershipsOfHOD')) {
             $weightedScore,
             $avgRating,
             $currentYear
+        );
+         saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $currentYear,
+            $totalTarget,
+            $totalAchieved
         );
 
         // 8️⃣ RETURN
@@ -7601,6 +7762,75 @@ if (!function_exists('noOfProfessionalMembershipsOfHODPL')) {
             $weightedScore,
             $avgRating,
             $currentYear
+        );
+        
+        // 8️⃣ RETURN
+        return [
+            'average_rating' => round($avgRating, 2),
+            'weighted_score' => round($weightedScore, 2),
+            'total_target' => $totalTarget,
+            'total_submitted' => $totalAchieved,
+            'color' => $meta->color,
+            'rating' => $meta->rating
+        ];
+    }
+}
+if (!function_exists('noOfProfessionalMembershipsOfHODPLDean')) {
+
+    function noOfProfessionalMembershipsOfHODPLDean($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null)
+    {
+        $departmentId = auth()->user()->department_id;
+
+        // 1️⃣ Model
+        $modelClass = \App\Models\ProfessionalMembership::class;
+
+        // 2️⃣ Records (modal data)
+        $records = $modelClass::where('indicator_id', $indicatorId)
+            ->where('created_by', $employeeId)
+            ->where('year_id', $currentYear)
+            ->where('status', 2)
+            ->get();
+
+        $totalTargetdean = FacultyTargetsDean::where('user_id', $employeeId)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
+            ->first();
+
+        $totalTarget = $totalTargetdean->target ?? 0;  
+
+
+        // 4️⃣ ACHIEVED
+        $totalAchieved = $records->count();
+
+        // 5️⃣ AVG
+        $avgRating = $totalTarget > 0
+            ? round(($totalAchieved / $totalTarget) * 100, 2)
+            : 0;
+
+        // 6️⃣ RATING
+        $meta = getRatingMeta($avgRating);
+
+        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+
+        $weightedScore = ($avgRating * $weight) / 100;
+
+        saveIndicatorPercentage90Plus(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $avgRating,
+            $currentYear
+        );
+        saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $currentYear,
+            $totalTarget,
+            $totalAchieved
         );
         
         // 8️⃣ RETURN
