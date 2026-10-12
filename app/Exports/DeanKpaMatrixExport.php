@@ -10,6 +10,8 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use App\Models\Faculty;
+use App\Models\User;
+use App\Models\UserTargetAchieved;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
@@ -32,6 +34,7 @@ class DeanKpaMatrixExport implements
     protected $assignments = [];
     protected $indicatorScores = [];
     protected $indicatorTargets = [];
+    protected $indicatorAchievements = [];
 
     protected $mergeRanges = [];
     protected $currentExcelRow = 2;
@@ -247,6 +250,59 @@ class DeanKpaMatrixExport implements
 
             $this->indicatorTargets[$key] = $target->total_target;
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Load Employee Achievements
+        |--------------------------------------------------------------------------
+        | Get achieved values for employees assigned to each Dean.
+        | users.manager_id matches the Dean's users.id.
+        | UserTargetAchieved.employ_id matches users.employee_id.
+        */
+
+        $deanIds = collect($this->deans)->pluck('id');
+
+        $employeeIdsByDean = DB::table('users')
+            ->whereIn('manager_id', $deanIds)
+            ->select('id', 'manager_id', 'employee_id')
+            ->get()
+            ->groupBy('manager_id');
+
+        $allEmployeeIds = $employeeIdsByDean
+            ->flatten(1)
+            ->pluck('employee_id')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $achievements = UserTargetAchieved::query()
+            ->select(
+                'employ_id',
+                'indicator_id',
+                DB::raw('SUM(acheived) as total_acheived')
+            )
+            ->where('year_id', $this->yearId)
+            ->whereIn('employ_id', $allEmployeeIds)
+            ->groupBy('employ_id', 'indicator_id')
+            ->get();
+
+        foreach ($this->deans as $dean) {
+            $employeeIds = $employeeIdsByDean
+                ->get($dean->id, collect())
+                ->pluck('employee_id')
+                ->filter()
+                ->unique();
+
+            foreach ($achievements->whereIn('employ_id', $employeeIds) as $achievement) {
+                $key = $dean->id . '_' . $achievement->indicator_id;
+
+                $this->indicatorAchievements[$key] =
+                    ($this->indicatorAchievements[$key] ?? 0)
+                    + (float) $achievement->total_acheived;
+            }
+        }
+
+       
     }
 
     /*
@@ -272,7 +328,7 @@ class DeanKpaMatrixExport implements
 
             // Two columns for each Dean.
             $headings[] = $deanName . ' - Score';
-            $headings[] = $deanName . ' - Target';
+            $headings[] = $deanName . ' - Target / Achieved';
         }
 
         return $headings;
@@ -441,8 +497,10 @@ class DeanKpaMatrixExport implements
                         */
                          $targetKey = $dean->id . '_' . $indicatorId;
 
-                        $row[] = isset($this->indicatorTargets[$targetKey])
-                            ? (float) $this->indicatorTargets[$targetKey]
+                         $target = $this->indicatorTargets[$targetKey] ?? null;
+                         $achieved = $this->indicatorAchievements[$targetKey] ?? 0;
+                         $row[] = $target !== null
+                            ? (float) $target . ' / ' . (float) $achieved
                             : '';
 
                        

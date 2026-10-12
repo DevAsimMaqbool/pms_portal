@@ -39,8 +39,8 @@
                             <option value="199">Products Delivered to Industry (I&C)</option>
                             <option value="194">Number of Knowledge Products (I&C)</option>
                             <option value="197">Industrial Visits (I&C)</option>
-                            <option value="155">No of Professional Memberships attained vs targets</option>
-                            <option value="154">No of Programs accredited or affiliated nationally/ Internationally and ranking</option>
+                            <option value="155">No of Professional Memberships attained vs targets  ->(only for UG AND PG)</option>
+                            <option value="154">No of Programs accredited or affiliated nationally/ Internationally and ranking ->(only for UG)</option>
                             <option value="140">Rating on Impact of Research Conferences Organized</option>
                         </select>
                         <div class="invalid-feedback" id="indicatorError"></div>

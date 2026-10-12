@@ -7,7 +7,9 @@ use App\Models\Department;
 use App\Models\FacultyTarget;
 use App\Models\Role;
 use App\Models\Term;
+use App\Models\UserTargetAchieved;
 use App\Models\Years;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('hodTopPerformers')) {
@@ -857,6 +859,55 @@ if (!function_exists('SelectAllTerm')) {
     function SelectAllTerm()
     {
         return Term::all();
+    }
+}
+if (! function_exists('saveUserTargetAchieved')) {
+    function saveUserTargetAchieved(
+        $employId,
+        $roleId,
+        $indicatorId,
+        $yearId,
+        $target,
+        $acheived
+    ) {
+        return UserTargetAchieved::updateOrCreate(
+            [
+                'employ_id'    => $employId,
+                'role_id'      => $roleId,
+                'indicator_id' => $indicatorId,
+                'year_id'      => $yearId,
+            ],
+            [
+                'target'   => $target,
+                'acheived' => $acheived,
+            ]
+        );
+    }
+}
+if (!function_exists('getManagerRole')) {
+    function getManagerRole()
+    {
+        $user = Auth::user();
+
+        if (!$user || !$user->manager_id) {
+            return null;
+        }
+
+        $manager = User::with('roles')->find($user->manager_id);
+
+        if (!$manager) {
+            return null;
+        }
+
+        if ($manager->hasRole('HOD')) {
+            return 'HOD';
+        }
+
+        if ($manager->hasRole('Dean')) {
+            return 'Dean';
+        }
+
+        return null;
     }
 }
 
