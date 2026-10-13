@@ -472,6 +472,11 @@ class PermissionController extends Controller
 
         $teacherRoles = [21, 26, 27, 28];
         $adminRoles = [19, 22, 23, 29];
+        // if ($userRoles->contains(function ($role) {
+        //     return $role->name === 'Dean';
+        // })) {
+        //     $adminRoles = array_values(array_diff($adminRoles, [22]));
+        // }
 
         $scores = [];
         $totalWeightedScore = 0;
