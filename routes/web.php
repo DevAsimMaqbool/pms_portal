@@ -41,6 +41,7 @@ use App\Http\Controllers\TrainingsSeminarsWorkshopConductedWithImpactController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SelfAssessmentWorkingController;
 use App\Http\Controllers\ComparitiveAnalysisController;
+use App\Http\Controllers\FacultyTargetsAdminController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\DownloadsController;
@@ -326,6 +327,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('employability', EmployabilityController::class);
         Route::resource('faculty-target', FacultyTargetController::class);
         Route::resource('faculty-target-dean', FacultyTargetsDeanController::class);
+        Route::resource('faculty-target-admin', FacultyTargetsAdminController::class);
         Route::resource('admission-targets', AdmissionTargetAchievedController::class);
         Route::resource('recovery', RecoveryController::class);
         Route::resource('internationalization-section', InternationalizationSectionController::class);
@@ -434,6 +436,7 @@ Route::middleware('auth')->group(function () {
         ->name('faculty-target.getTarget');
     Route::get('/faculty-target-dean-gets', [FacultyTargetsDeanController::class, 'getTarget'])->name('faculty-target-dean.getTarget');
     Route::get('/show_deanfaculty_target', [FacultyTargetsDeanController::class, 'showDeanTarget'])->name('show-dean-target');
+    Route::get('/show_adminfaculty_target', [FacultyTargetsAdminController::class, 'showAdminTarget'])->name('show-admin-target');
 
     Route::resource('/survey', SurveyController::class);
     Route::get('/survey-report', [SurveyController::class, 'report'])->name('survey.report');
@@ -493,6 +496,9 @@ Route::middleware('auth')->group(function () {
     });
     Route::middleware('role:ORIC')->group(function () {
         Route::get('/oric-target', [FormBuilderController::class, 'OricTargetForms'])->name('oric.target');
+        Route::get('/admin-target', [FormBuilderController::class, 'AdminTargetForms'])->name('admin.target');
+        Route::get('/publication-admin-target', [FormBuilderController::class, 'PublicationTargetForms'])->name('publication.admin.target');
+        
     });
     Route::middleware('role:Human Resources')->group(function () {
         Route::get('/hr-target', [FormBuilderController::class, 'HrTargetForms'])->name('hr.target');
