@@ -245,6 +245,52 @@
     </div> --}}
 
     <div class="row g-6">
+    @if(in_array(getRoleName(activeRole()), ['HOD']))
+     <div class="col-12">
+          {{-- Department Header --}}
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body py-4">
+
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="avatar avatar-xl">
+                            <span class="avatar-initial rounded-3 bg-label-primary">
+                                <i class="icon-base ti tabler-building icon-lg"></i>
+                            </span>
+                        </div>
+
+                        <div>
+                            <span class="text-muted small fw-medium text-uppercase">
+                                Department
+                            </span>
+                            <h4 class="mb-1 mt-1 fw-bold">
+                                Hi, {{ Auth::user()->name }} 🎉
+                            </h4>
+
+                            <p class="mb-0 text-muted">
+                                <i class="ti tabler-users me-1"></i>
+                                {{ Auth::user()->department }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <a href="{{ route('department-employees.index') }}" class="btn btn-primary waves-effect waves-light">
+                        <span class="icon-xs icon-base ti tabler-hearts me-2"></span>
+                        Show Overall HOD Performance
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+        </div>
+       @endif 
+
       @php
         $colors_cards = ['warning', 'info', 'info', 'primary', 'danger'];
         $icon_cards = ['user', 'school', 'info', 'primary', 'danger'];

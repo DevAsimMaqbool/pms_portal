@@ -1113,6 +1113,11 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      let hasDeanAndHOD = @json(
+            auth()->user()->roles->contains(fn($role) => getRoleName($role->name) === 'Dean')
+            &&
+            auth()->user()->roles->contains(fn($role) => getRoleName($role->name) === 'HOD')
+        );
       let total = {{ $totalWeightSS }};
       total = parseFloat(total.toFixed(1));
       function getRatingAndColor(percentage) {
@@ -1160,6 +1165,7 @@
       let ratingColor = document.getElementById('rating-teachercolor');
       let avgScore = total.toFixed(1);
       let rating = result.rating;
+      
       let userId = {{ auth()->id() }};
       $.ajax({
         url: "{{ route('users.update_score') }}",
@@ -1170,6 +1176,19 @@
           as_admin_score: avgScore
         }
       });
+      /*if (!hasDeanAndHOD) {
+            let userId = {{ auth()->id() }};
+
+            $.ajax({
+                url: "{{ route('users.update_score') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: userId,
+                    as_admin_score: avgScore
+                }
+            });
+        }*/
 
       if (avgElement) {
 

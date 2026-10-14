@@ -23,6 +23,7 @@ use App\Http\Controllers\YearController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\DepartmentAssignmentController;
 use App\Http\Controllers\FormBuilderController;
+use App\Http\Controllers\AllDepartmentEmployeeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AssignFormToUserController;
 use App\Http\Controllers\AwardController;
@@ -473,6 +474,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:HOD')->group(function () {
         Route::get('/hod-target', [FormBuilderController::class, 'HodTargetForms'])->name('hod.target');
+        Route::get('/department-employees', [AllDepartmentEmployeeController::class, 'index'])->name('department-employees.index');
+
     });
     Route::middleware('role:HOD|Dean')->group(function () {
         Route::get('/employee-feedback', [LineManagerEventFeedbackController::class, 'index'])->name('employee.feedback.index');
