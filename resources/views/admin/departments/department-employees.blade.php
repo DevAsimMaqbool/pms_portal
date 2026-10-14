@@ -11,6 +11,7 @@
   <!-- Page CSS -->
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/cards-advance.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/assets/vendor/css/pages/page-misc.css') }}" />
   <style>
   
 
@@ -169,7 +170,69 @@
   <!-- Content -->
   <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Accordion1 -->
+    <!-- Hour chart  -->
+    @if($departments->isNotEmpty())
+    @php
+        $scores = $departments->flatMap(function ($department) {
+            return $department->user->pluck('as_admin_score');
+        });
+
+        $teamscore = round($scores->sum() ?? 0, 2);
+        $teamAverage = round($scores->avg() ?? 0, 2);
+        $teamcount = round($scores->count() ?? 0, 2);
+    @endphp
+  <div class="card bg-transparent shadow-none my-6 border-0">
+    <div class="card-body row p-0 pb-6 g-6">
+      <div class="col-12 col-lg-12 card-separator">
+        <h5 class="mb-2">Welcome,<span class="h4"> {{ Auth::user()->name }} 👋🏻</span></h5>
+        <div class="d-flex justify-content-between flex-wrap gap-4 me-12">
+          <div class="d-flex align-items-center gap-4 me-6 me-sm-0">
+            <div class="avatar avatar-lg">
+              <div class="avatar-initial bg-label-primary rounded">
+                <div class="text-primary">
+                 <i class="icon-base ti tabler-scoreboard icon-xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="content-right">
+              <p class="mb-0 fw-medium">Total Score</p>
+              <h4 class="text-primary mb-0">{{ $teamAverage }}%</h4>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-4">
+            <div class="avatar avatar-lg">
+              <div class="avatar-initial bg-label-info rounded">
+                <div class="text-info">
+                  <i class="icon-base ti tabler-users icon-xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="content-right">
+              <p class="mb-0 fw-medium">Teame Score</p>
+              <h4 class="text-info mb-0">{{ $teamscore }}</h4>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-4">
+            <div class="avatar avatar-lg">
+              <div class="avatar-initial bg-label-warning rounded">
+                <div class="text-warning">
+                 <i class="icon-base ti tabler-number-123 icon-xl"></i>
+                </div>
+              </div>
+            </div>
+            <div class="content-right">
+              <p class="mb-0 fw-medium">Team Members</p>
+              <h4 class="text-warning mb-0">{{ $teamcount }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!-- Hour chart End  -->
       <!-- Website Analytics -->
+
       @foreach($departments as $department)
       <div class="row gy-6 mb-5">
         <div class="col-12">
@@ -373,6 +436,16 @@
       @endforeach
 
       <!--/ Website Analytics -->
+      @else
+           <div class="misc-wrapper">
+                <h1 class="mb-2 mx-2" style="line-height: 6rem;font-size: 6rem;">401</h1>
+                <h4 class="mb-2 mx-2">You are not authorized! 🔐</h4>
+                <p class="mb-6 mx-2">You don’t have permission to access this page. Go back!</p>
+                <div class="mt-12">
+                    <img src="{{ asset('admin/assets/img/illustrations/page-misc-you-are-not-authorized.png') }}" alt="page-misc-not-authorized" width="170" class="img-fluid" />
+                </div>
+            </div>
+      @endif
   
       
   </div>

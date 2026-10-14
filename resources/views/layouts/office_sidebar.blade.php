@@ -85,6 +85,14 @@
 
       </ul>
     </li>
+    @if(auth()->user()->hasRole(['ORIC']))
+    <li class="menu-item {{ request()->routeIs('admin.target') ? 'active' : '' }}">
+            <a href="{{ route('admin.target') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-contract"></i>
+                <div data-i18n="Target">Target</div>
+            </a>
+        </li>
+     @endif
     @if(in_array(getRoleName(activeRole()), ['Human Resources']))
     <li class="menu-item {{ request()->routeIs([
         'goal-hr.index',

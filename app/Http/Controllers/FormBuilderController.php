@@ -128,6 +128,22 @@ class FormBuilderController extends Controller
         $facultyMembers = User::with('roles')->where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
         return view('admin.form.dean_user_targets', compact('facultyMembers'));
     }
+     public function AdminTargetForms()
+    {
+        $facultyMembers = User::with('roles')
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'Dean');
+        })->get(['id', 'name', 'department', 'job_title']);
+        return view('admin.form.admin_targets', compact('facultyMembers'));
+    }
+    public function PublicationTargetForms()
+    {
+        $facultyMembers = User::with('roles')
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'Dean');
+        })->get(['id', 'name', 'department', 'job_title']);
+        return view('admin.form.publivationadmin_targets', compact('facultyMembers'));
+    }
      public function DeanTargetVerifyForms()
     {
          return view('admin.form.dean_targets');
