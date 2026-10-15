@@ -1173,7 +1173,7 @@
         data: {
           _token: "{{ csrf_token() }}",
           id: userId,
-          as_admin_score: avgScore
+          as_hod_score: avgScore
         }
       });
       /*if (!hasDeanAndHOD) {

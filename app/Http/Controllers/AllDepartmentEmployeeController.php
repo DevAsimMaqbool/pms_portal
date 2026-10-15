@@ -23,7 +23,8 @@ class AllDepartmentEmployeeController extends Controller
                     'email',
                     'department_id',
                     'employee_id',
-                    'as_admin_score'
+                    'as_admin_score',
+                    'as_hod_score'
                 )->whereHas('roles', function ($roleQuery) {
                     $roleQuery->where('name', 'HOD');
                 });

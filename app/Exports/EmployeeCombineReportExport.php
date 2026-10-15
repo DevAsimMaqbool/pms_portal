@@ -75,9 +75,13 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
 
         $teacherScore = 0;
         $adminScore = 0;
+        $adminScores = [];
+        $scores = 0;
 
         $totalWeightedScore = 0;
         $totalWeight = 0;
+        $teacherWeightAdded = false;
+        $adminWeightAdded = false;
 
         foreach ($userRoles as $role) {
 
@@ -91,25 +95,47 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
                 $teacherScore = $score;
 
                 $totalWeightedScore += $score * $weight / 100;
-                $totalWeight += $weight;
+                //$totalWeight += $weight;
+                if (!$teacherWeightAdded) {
+                    $totalWeight += $weight;
+                    $teacherWeightAdded = true;
+                }
             }
 
             // ADMIN
             if (in_array($role->id, $this->adminRoles)) {
 
-                $score = $user->as_admin_score ?? 0;
+                // $score = $user->as_admin_score ?? 0;
 
-                $adminScore = $score;
+                // $adminScore = $score;
+                if ($role->id == 22) {
+                    $scores = $user->as_hod_score ?? 0;
+                }
 
-                $totalWeightedScore += $score * $weight / 100;
-                $totalWeight += $weight;
+                if ($role->id == 23) {
+                    $scores = $user->as_admin_score ?? 0;
+                }
+
+                // Show role name and score only if score is greater than 0
+                if ($scores > 0) {
+                    $adminScores[] = $role->name . ' (' . $scores . ')';
+                }  
+
+
+                $totalWeightedScore += $scores * $weight / 100;
+                //$totalWeight += $weight;
+                if (!$adminWeightAdded) {
+                    $totalWeight += $weight;
+                    $adminWeightAdded = true;
+                }
             }
         }
+        $adminScore = implode('/', $adminScores);
 
         $combinedScore = $totalWeight > 0
             ? round($totalWeightedScore / ($totalWeight / 100), 2)
             : 0;
-
+        
         return [
             // Teaching Role
             implode(' | ', $teachingRoles),

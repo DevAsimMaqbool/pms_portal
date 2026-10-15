@@ -51,6 +51,7 @@ class User extends Authenticatable
         'status',
         'as_teacher_score',
         'as_admin_score',
+        'as_hod_score',
         'is_first_time_login',
         'password',
     ];

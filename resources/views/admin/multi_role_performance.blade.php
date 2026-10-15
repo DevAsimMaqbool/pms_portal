@@ -293,7 +293,7 @@
 
       @php
         $colors_cards = ['warning', 'info', 'info', 'primary', 'danger'];
-        $icon_cards = ['user', 'school', 'info', 'primary', 'danger'];
+        $icon_cards = ['scoreboard', 'scoreboard', 'scoreboard', 'scoreboard', 'scoreboard'];
       @endphp
       @foreach($scores as $index => $data)
         @php
@@ -507,7 +507,7 @@
                         <tr>
                             <td>{{ $hod->faculty_name }}</td>
                             <td>{{ $hod->name }}</td>
-                            <td>{{ $hod->as_admin_score ?? 0 }}</td>
+                            <td>{{ $hod->as_hod_score ?? 0 }}</td>
                         </tr>
                     @endforeach
                 </tbody>

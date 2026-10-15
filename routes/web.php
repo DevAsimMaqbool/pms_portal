@@ -43,6 +43,7 @@ use App\Http\Controllers\SelfAssessmentWorkingController;
 use App\Http\Controllers\ComparitiveAnalysisController;
 use App\Http\Controllers\FacultyTargetsAdminController;
 use App\Models\RatingOnImpactOfResearchConferencesOrganized;
+use App\Models\Years;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\DownloadsController;
 use App\Http\Controllers\FacultyTargetController;
@@ -789,7 +790,8 @@ Route::get('/employee-report/excel', function (Request $request) {
 
 })->name('employee.report.excel');
 Route::get('/dean-report/excel', function (Request $request) {
-    $yearId=1;
+    
+    $yearId= Years::where('active', 1)->value('id');
 
     return Excel::download(
          new DeanKpaMatrixExport($yearId),
