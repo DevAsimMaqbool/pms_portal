@@ -174,7 +174,7 @@
     @if($departments->isNotEmpty())
     @php
         $scores = $departments->flatMap(function ($department) {
-            return $department->user->pluck('as_admin_score');
+            return $department->user->pluck('as_hod_score');
         });
 
         $teamscore = round($scores->sum() ?? 0, 2);
@@ -309,7 +309,7 @@
                                     </span>
                                      <span class="badge bg-label-secondary rounded-pill">
                                         <i class="me-1 icon-base ti tabler-scoreboard"></i>
-                                       Score: {{ $hod->as_admin_score }}
+                                       Score: {{ $hod->as_hod_score }}
                                     </span>
 
                                     <span class="text-muted small">

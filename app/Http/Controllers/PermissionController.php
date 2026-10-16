@@ -471,12 +471,8 @@ class PermissionController extends Controller
         $userRoles = $user->roles; // Collection of Role models
 
         $teacherRoles = [21, 26, 27, 28];
-        $adminRoles = [19, 22, 23, 29];
-        // if ($userRoles->contains(function ($role) {
-        //     return $role->name === 'Dean';
-        // })) {
-        //     $adminRoles = array_values(array_diff($adminRoles, [22]));
-        // }
+        $adminRoles = [19, 23, 29];
+        $hodRoles = [22];
 
         $scores = [];
         $totalWeightedScore = 0;
@@ -484,7 +480,7 @@ class PermissionController extends Controller
 
         foreach ($userRoles as $role) {
             $weight = $role->weightage ?? 0; // get weightage from roles table
-
+             
             if (in_array($role->id, $teacherRoles)) {
                 $score = $user->as_teacher_score ?? 0;
                 $scores[] = [
@@ -500,22 +496,41 @@ class PermissionController extends Controller
                 $totalWeightedScore += $score * $weight / 100;
                 $totalWeight += $weight;
             }
+            if(in_array(getRoleName(activeRole()), ['Dean'])){
+                if (in_array($role->id, $adminRoles)) {
+                    $score = $user->as_admin_score ?? 0;
+                    $scores[] = [
+                        'role_name' => $role->name,
+                        'score' => $score,
+                        'type' => 'admin',
+                        'chart_id' => 'supportTrackerAdmin',
+                        'weight' => $weight,
+                        'weighted_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
+                        'percentage_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
+                    ];
 
-            if (in_array($role->id, $adminRoles)) {
-                $score = $user->as_admin_score ?? 0;
-                $scores[] = [
-                    'role_name' => $role->name,
-                    'score' => $score,
-                    'type' => 'admin',
-                    'chart_id' => 'supportTrackerAdmin',
-                    'weight' => $weight,
-                    'weighted_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
-                    'percentage_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
-                ];
+                    $totalWeightedScore += $score * $weight / 100;
+                    $totalWeight += $weight;
+                }
+            }else if(in_array(getRoleName(activeRole()), ['HOD'])){
+               if (in_array($role->id, $hodRoles)) {
+                    $score = $user->as_hod_score ?? 0;
+                    $scores[] = [
+                        'role_name' => $role->name,
+                        'score' => $score,
+                        'type' => 'admin',
+                        'chart_id' => 'supportTrackerHOD',
+                        'weight' => $weight,
+                        'weighted_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
+                        'percentage_score' => $weight > 0 ? round(($score * $weight) / 100, 2) : 0,
+                    ];
 
-                $totalWeightedScore += $score * $weight / 100;
-                $totalWeight += $weight;
+                    $totalWeightedScore += $score * $weight / 100;
+                    $totalWeight += $weight;
+                }
             }
+
+            
         }
 
         // Calculate combined weighted score (avoid division by zero)

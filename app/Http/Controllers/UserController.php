@@ -458,6 +458,10 @@ class UserController extends Controller
             $user->as_admin_score = $request->as_admin_score;
         }
 
+        if ($request->has('as_hod_score')) {
+            $user->as_hod_score = $request->as_hod_score;
+        }
+
         $user->save();
     }
 }

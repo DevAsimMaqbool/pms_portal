@@ -11549,7 +11549,8 @@ if (!function_exists('getHodAdminScoresByFaculty')) {
                 'users.name',
                 'users.faculty',
                 'faculties.name as faculty_name',
-                'users.as_admin_score'
+                'users.as_admin_score',
+                'users.as_hod_score'
             )
             ->orderBy('users.faculty')
             ->orderBy('users.name')
@@ -11561,7 +11562,7 @@ if (!function_exists('getHodAdminScoresByFaculty')) {
             ->map(function ($facultyHods) {
                  $totalHods = $facultyHods->count();
                  $totalAdminScore = $facultyHods->sum(function ($hod) {
-                        return (float) ($hod->as_admin_score ?? 0);
+                        return (float) ($hod->as_hod_score ?? 0);
                     });
 
                 return [
