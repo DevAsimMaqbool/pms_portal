@@ -119,10 +119,15 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
                 // Show role name and score only if score is greater than 0
                 if ($scores > 0) {
                     $adminScores[] = $role->name . ' (' . $scores . ')';
-                }  
+                } 
+                if ($userRoles->contains('id', 22) && $userRoles->contains('id', 23)) {
+                    $totalWeightedScore += $scores * 35 / 100;
+                }else{
+                   $totalWeightedScore += $scores * $weight / 100;
+                }
 
 
-                $totalWeightedScore += $scores * $weight / 100;
+                
                 //$totalWeight += $weight;
                 if (!$adminWeightAdded) {
                     $totalWeight += $weight;
