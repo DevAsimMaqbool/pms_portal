@@ -255,44 +255,44 @@ class FacultyTargetsDeanController extends Controller
                                 'created_by' => $employeeId,
                                 'updated_by' => $employeeId,
                             ]);
-                            if ($kpaId == 2 && $indicatorCategoryId == 8) {
-                                // ✅ Insert record in role_kpa_assignments
-                                DB::table('role_kpa_assignments')->updateOrInsert(
-                                    [
-                                        'role_id' => $roleId,
-                                        'key_performance_area_id' => $kpaId,
-                                        'indicator_category_id' => $indicatorCategoryId,
-                                        'indicator_id' => $indicatorId,
-                                    ],
-                                    [
-                                        'status' => 1,
-                                        'updated_at' => now(),
-                                    ]
-                                );
-                                DB::table('sidebar_kpa_assignments')->updateOrInsert(
-                                    [
-                                        'role_id' => $roleId,
-                                        'key_performance_area_id' => $kpaId,
-                                        'indicator_category_id' => $indicatorCategoryId,
-                                        'indicator_id' => $indicatorId,
-                                    ],
-                                    [
-                                        'form_status' => 1
-                                    ]
-                                );
-                                $count = RoleKpaAssignment::where('role_id', $roleId)
-                                    ->where('key_performance_area_id', $kpaId)
-                                    ->where('indicator_category_id', $indicatorCategoryId)
-                                    ->count();
-                                $weightage = round(10 / $count, 2);
-                                DB::table('role_kpa_assignments')
-                                    ->where('role_id', $roleId)
-                                    ->where('key_performance_area_id', $kpaId)
-                                    ->where('indicator_category_id', $indicatorCategoryId)
-                                    ->update([
-                                        'indicator_weightage' => $weightage,
-                                    ]);
-                            }
+                            // if ($kpaId == 2 && $indicatorCategoryId == 8) {
+                            //     // ✅ Insert record in role_kpa_assignments
+                            //     DB::table('role_kpa_assignments')->updateOrInsert(
+                            //         [
+                            //             'role_id' => $roleId,
+                            //             'key_performance_area_id' => $kpaId,
+                            //             'indicator_category_id' => $indicatorCategoryId,
+                            //             'indicator_id' => $indicatorId,
+                            //         ],
+                            //         [
+                            //             'status' => 1,
+                            //             'updated_at' => now(),
+                            //         ]
+                            //     );
+                            //     DB::table('sidebar_kpa_assignments')->updateOrInsert(
+                            //         [
+                            //             'role_id' => $roleId,
+                            //             'key_performance_area_id' => $kpaId,
+                            //             'indicator_category_id' => $indicatorCategoryId,
+                            //             'indicator_id' => $indicatorId,
+                            //         ],
+                            //         [
+                            //             'form_status' => 1
+                            //         ]
+                            //     );
+                            //     $count = RoleKpaAssignment::where('role_id', $roleId)
+                            //         ->where('key_performance_area_id', $kpaId)
+                            //         ->where('indicator_category_id', $indicatorCategoryId)
+                            //         ->count();
+                            //     $weightage = round(10 / $count, 2);
+                            //     DB::table('role_kpa_assignments')
+                            //         ->where('role_id', $roleId)
+                            //         ->where('key_performance_area_id', $kpaId)
+                            //         ->where('indicator_category_id', $indicatorCategoryId)
+                            //         ->update([
+                            //             'indicator_weightage' => $weightage,
+                            //         ]);
+                            // }
                         }
                     }
                 }
