@@ -709,7 +709,14 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
     {
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $faculty = auth()->user()->faculty;
-        $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
+       // $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
+
+        $hod_ids = User::where('faculty', $faculty)
+            ->role('HOD')
+            ->whereHas('department', function ($query) {
+                $query->where('id', '!=', 609);
+            })
+            ->pluck('employee_id');
         $count_hod_ids = $hod_ids->count();
         $record = IndicatorsPercentage::with([
             'user:id,employee_id,department_id,name',

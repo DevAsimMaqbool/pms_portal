@@ -55,13 +55,14 @@ class ProductsDeliveredToIndustryController extends Controller
                 }
                 if($status=="HOD"){
                      $employeeIds = User::where('manager_id', $employee_id)
-                    ->role('Teacher')->pluck('employee_id');
+                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                    $all_ids = $employeeIds->merge($employee_id);
                     $forms = ProductsDeliveredToIndustry::with([
                             'creator' => function ($q) {
                                 $q->select('employee_id', 'name');
                             }
                         ])
-                         ->whereIn('created_by', $employeeIds)
+                         ->whereIn('created_by', $all_ids)
                         ->whereIn('status', [1, 2])
                         ->where('form_status', 'RESEARCHER')
                         ->orderBy('id', 'desc')
