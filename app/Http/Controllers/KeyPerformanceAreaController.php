@@ -191,29 +191,43 @@ class KeyPerformanceAreaController extends Controller
         // =====================================================
         // ✅ STEP 1: Get SUM of scores per category
         // =====================================================
-        $indicatorScores = \App\Models\IndicatorsPercentage::select(
-            'indicator_category_id',
-            DB::raw('SUM(score) as total_score')
-        )
-            ->where('employee_id', $employeeId)
-            ->where('key_performance_area_id', $id)
-            ->where('role_id', $userRoleId)
-            ->where('year_id', $ActiveRecord->id)
-            ->groupBy('indicator_category_id')
-            ->get()
-            ->keyBy('indicator_category_id');
+        // $indicatorScores = \App\Models\IndicatorsPercentage::select(
+        //     'indicator_category_id',
+        //     DB::raw('SUM(score) as total_score')
+        // )
+        //     ->where('employee_id', $employeeId)
+        //     ->where('key_performance_area_id', $id)
+        //     ->where('role_id', $userRoleId)
+        //     ->where('year_id', $ActiveRecord->id)
+        //     ->groupBy('indicator_category_id')
+        //     ->get()
+        //     ->keyBy('indicator_category_id');
 
         // =====================================================
         // ✅ STEP 2: Map score + divide by SUM(weightage)
         // =====================================================
-        $area['category'] = collect($area['category'])->map(function ($cat) use ($indicatorScores) {
+        $area['category'] = collect($area['category'])->map(function ($cat) use ($employeeId,
+    $id,
+    $userRoleId,
+    $ActiveRecord) {
 
             $categoryId = $cat['id'];
 
             // SUM of scores
-            $totalScore = isset($indicatorScores[$categoryId])
-                ? $indicatorScores[$categoryId]->total_score
-                : 0;
+           // Get total score for this category's assigned indicators only
+            $assignedIndicatorIds = collect($cat['indicator'])
+                ->pluck('id')
+                ->toArray();
+
+            $totalScore = empty($assignedIndicatorIds)
+                ? 0
+                : \App\Models\IndicatorsPercentage::where('employee_id', $employeeId)
+                    ->where('key_performance_area_id', $id)
+                    ->where('role_id', $userRoleId)
+                    ->where('year_id', $ActiveRecord->id)
+                    ->where('indicator_category_id', $categoryId)
+                    ->whereIn('indicator_id', $assignedIndicatorIds)
+                    ->sum('score');
 
             // SUM of weightage from role_kpa_assignments (already inside indicators list)
             $totalWeight = collect($cat['indicator'])

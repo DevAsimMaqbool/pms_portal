@@ -226,6 +226,9 @@
                                     </button>`;
                                 deleteBtn = `<button class="btn rounded-pill btn-outline-danger delete-btn" data-id="${form.id}">Delete</button>`;
                             }   
+                             const formDataHis = encodeURIComponent(
+                                    JSON.stringify(form.update_history || [])
+                                );
                                
 
                             // Pass entire form as JSON in button's data attribute
@@ -236,7 +239,7 @@
                                 form.achieved_target || 'N/A',
                                 statusText,
                                  `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn"
-                                    data-history='${JSON.stringify(form.update_history)}'
+                                    data-history="${formDataHis}"
                                     data-user='${form.creator ? form.creator.name : "N/A"}'
                                     data-created='${form.created_at}'>
                                     <span class="icon-xs icon-base ti tabler-history me-2"></span>History
@@ -289,17 +292,28 @@
                 $('#modalCreatedBy').text('');
                 $('#modalCreatedDate').text('');
 
+
                 // Read data-history
                 let historyData = $(this).attr('data-history'); // raw string
                 let history = [];
 
                 try {
-                    // Decode HTML entities first
-                    historyData = historyData.replace(/&quot;/g, '"'); // convert &quot; → "
-                    // Parse JSON (sometimes it's double-encoded)
-                    history = JSON.parse(historyData);
-                    if (typeof history === 'string') {
-                        history = JSON.parse(history); // decode inner string if needed
+                    if (historyData) {
+                        // Decode URL-encoded JSON
+                        historyData = decodeURIComponent(historyData);
+
+                        // Parse JSON
+                        history = JSON.parse(historyData);
+
+                        // Handle double-encoded JSON
+                        if (typeof history === 'string') {
+                            history = JSON.parse(history);
+                        }
+
+                        // Ensure history is an array
+                        if (!Array.isArray(history)) {
+                            history = [];
+                        }
                     }
                 } catch (e) {
                     console.error('Failed to parse history JSON:', e);
@@ -313,7 +327,7 @@
                 $('#modalCreatedDate').text(new Date(created).toLocaleString());
 
                 // Build timeline
-                if (Array.isArray(history) && history.length > 0) {
+                if (history.length > 0) {
                     let historyHtml = '';
                     history.forEach(update => {
                         let histortText = 'N/A';

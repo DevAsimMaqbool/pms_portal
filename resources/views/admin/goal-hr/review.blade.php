@@ -379,21 +379,24 @@
                         </label>
 
                         <div class="form-group">
-    <label for="hr_overall_rating">HR Overall Rating</label>
+                         @if(in_array(getRoleName(activeRole()), ['Human Resources']))
+                          
+                            <label for="hr_overall_rating">HR Overall Rating</label>
 
-    <input
-        type="number"
-        name="hr_overall_rating"
-        id="hr_overall_rating"
-        class="form-control"
-        min="0"
-        max="100"
-        step="any"
-        value="{{ old('hr_overall_rating', $overallReview->hr_overall_rating ?? '') }}"
-        placeholder="Enter rating (0–100)"
-        required
-    >
-</div>
+                            <input
+                                type="number"
+                                name="hr_overall_rating"
+                                id="hr_overall_rating"
+                                class="form-control"
+                                min="0"
+                                max="100"
+                                step="any"
+                                value="{{ old('hr_overall_rating', $overallReview->hr_overall_rating ?? '') }}"
+                                placeholder="Enter rating (0–100)"
+                                required
+                            >
+                        </div>
+                        @endif 
 
                     </div>
 
@@ -457,7 +460,7 @@
                     </div>
 
                     <div class="text-end">
-
+                    @if(in_array(getRoleName(activeRole()), ['Human Resources']))
                         <button type="submit" class="btn btn-primary px-4">
 
                             <i class="fas fa-check-circle me-1"></i>
@@ -465,6 +468,7 @@
                             Save Overall Moderation
 
                         </button>
+                    @endif    
 
                     </div>
 
