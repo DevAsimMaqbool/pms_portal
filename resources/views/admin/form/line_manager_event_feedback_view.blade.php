@@ -17,6 +17,13 @@
                 <h5 class="card-title mb-0">Employee Event Feedbacks</h5>
                 <a href="{{ route('linemanagerevent.form') }}" class="btn btn-primary">Add Feedback</a>
             </div>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show m-3">
+                    {{ session('success') }}
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
             <!-- <div class="px-3 pb-3">
                 <span class="badge bg-primary">Total: {{ $total }}</span>
                 <span class="badge bg-success">Completed: {{ $completed }}</span>
@@ -48,11 +55,24 @@
                                     <td>{{ $member->department ?? 'N/A' }}</td>
                                     <td>{{ $feedback->event_name ?? 'N/A' }}</td>
                                     <td>{{ $feedback->created_at->format('Y-m-d') }}</td>
-                                    <td>
+                                    <td class="text-center">
+                                     <div class="d-inline-flex align-items-center gap-2">
                                         <a href="{{ route('employee.feedback.edit', $feedback->id) }}"
                                             class="btn btn-sm btn-primary">
                                             Edit
                                         </a>
+                                        <form action="{{ route('employee.feedback.destroy', $feedback->id) }}"
+                                            method="POST"
+                                            style="display: inline-block;"
+                                            onsubmit="return confirm('Are you sure you want to delete this feedback?');">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                Delete
+                                            </button>
+                                        </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
