@@ -645,7 +645,7 @@
 
             @php
 
-  $recoveryhodHotIndicators = hodHotIndicators(146, $activeRoleId);
+  $recoveryhodHotIndicators = hodHotIndicators(163, $activeRoleId);
   $recoveryTargetPercentage = getRatingByPercentage($recoveryhodHotIndicators['avg']);
              @endphp
             <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -657,7 +657,7 @@
                       class="icon-base ti tabler-book-2 icon-md"></i>
                   </div>
                   <div>
-                    <small class="text-dark text-cut-hot">% of Recovery</small>
+                    <small class="text-dark text-cut-hot">Alumni Satisfaction Rate</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
@@ -675,7 +675,7 @@
 
             @php
 
-  $ProfitabilityhodHotIndicators = hodHotIndicators(147, $activeRoleId);
+  $ProfitabilityhodHotIndicators = hodHotIndicators(161, $activeRoleId);
   $ProfitabilityTargetPercentage = getRatingByPercentage($ProfitabilityhodHotIndicators['avg']);
              @endphp
             <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -687,7 +687,7 @@
                       class="icon-base ti tabler-stars icon-md"></i>
                   </div>
                   <div>
-                    <small class="text-dark text-cut-hot">Profitability of the Programs</small>
+                    <small class="text-dark text-cut-hot">Net Promoter Score of Faculty</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
@@ -718,7 +718,7 @@
                       class="icon-base ti tabler-stars icon-md"></i>
                   </div>
                   <div>
-                    <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
+                    <small class="text-dark text-cut-hot">HODs and Faculty Satisfaction Score</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
@@ -738,7 +738,7 @@
 
             @php
 
-  $StudentFeedbackScoretshodHotIndicators = hodHotIndicators(179, $activeRoleId);
+  $StudentFeedbackScoretshodHotIndicators = hodHotIndicators(182, $activeRoleId);
   $StudentFeedbackScorePercentage = getRatingByPercentage($StudentFeedbackScoretshodHotIndicators['avg']);
              @endphp
             <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -750,7 +750,7 @@
                       class="icon-base ti tabler-stars icon-md"></i>
                   </div>
                   <div>
-                    <small class="text-dark text-cut-hot">Student Feedback Score</small>
+                    <small class="text-dark text-cut-hot">Student Satisfaction</small>
                   </div>
                 </div>
                 <div class="d-flex flex-grow-1 align-items-center">
@@ -766,36 +766,7 @@
               </div>
             </div>
 
-
-            @php
-
-  $PunctualityhodHotIndicators = hodHotIndicators(181, $activeRoleId);
-  $PunctualityScorePercentage = getRatingByPercentage($PunctualityhodHotIndicators['avg']);
-             @endphp
-            <div class="card scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-              data-bs-custom-class="tooltip-{{ $PunctualityhodHotIndicators['color'] }}"
-              data-bs-original-title="{{ $PunctualityScorePercentage['description'] }}">
-              <div class="card-body d-flex">
-                <div class="d-flex w-50 align-items-center me-4">
-                  <div class="badge bg-label-{{ $PunctualityhodHotIndicators['color'] }} rounded p-1_5 me-4"><i
-                      class="icon-base ti tabler-stars icon-md"></i>
-                  </div>
-                  <div>
-                    <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
-                  </div>
-                </div>
-                <div class="d-flex flex-grow-1 align-items-center">
-                  <div class="progress w-100 me-4" style="height:8px;">
-                    <div class="progress-bar bg-{{ $PunctualityhodHotIndicators['color'] }}" role="progressbar"
-                      style="width:{{ $PunctualityhodHotIndicators['avg'] }}%" aria-valuenow="65" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span class="text-body-secondary">{{ $PunctualityhodHotIndicators['avg'] }}%</span>
-                  <span
-                    class="badge bg-label-{{ $PunctualityhodHotIndicators['color'] }} ms-1">{{ $PunctualityhodHotIndicators['rating'] }}</span>
-                </div>
-              </div>
-            </div>
+            
           </div>
 
         </div>
