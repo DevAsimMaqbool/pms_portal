@@ -11,6 +11,7 @@ class Term extends Model
         'start_year',
         'end_year',
         'status',
+        'other_status',
         'created_by',
         'updated_by',
     ];

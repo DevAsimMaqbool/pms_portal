@@ -688,7 +688,7 @@
                         `);
                         // Create Reject radio
                         const emptyRadio = $(`
-                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by International Office.</span>
+                            <span class="p-1 rounded-pill bg-label-danger">Waiting for user to update the application. Rejected by ORIC.</span>
                         `);
 
                         // Pre-select based on existing status
