@@ -76,11 +76,7 @@ class GoalHrOverallPerformanceExport implements
         // Existing manager filter
         ->when($this->manager !== '', function ($query) {
 
-        $query->where(
-        'manager_name',
-        'like',
-        '%' . $this->manager . '%'
-        );
+        $query->where('manager_id',$this->manager);
 
         })
 
@@ -180,6 +176,7 @@ class GoalHrOverallPerformanceExport implements
                 : 0;
 
             $hrOverallRating = 0;
+            $hrOverallComments = '';
 
             if (
                 $overallReview &&
@@ -188,6 +185,7 @@ class GoalHrOverallPerformanceExport implements
             ) {
                 $hrOverallRating =
                     (float) $overallReview->hr_overall_rating;
+                    $hrOverallComments = $overallReview->comments;
             }
 
             $lineManagerFeedback =
@@ -318,57 +316,33 @@ class GoalHrOverallPerformanceExport implements
                 ?? '—';
 
             return [
-                'Name' =>
-                    $employee->name ?? '—',
+                'Name' => $employee->name ?? '—',
 
-                'Employee ID' =>
-                    $employee->barcode ?? '—',
+                'Employee ID' => $employee->barcode ?? '—',
 
-                'Designation' =>
-                    $employee->job_title ?? '—',
+                'Designation' => $employee->job_title ?? '—',
 
-                'Department' =>
-                    $department,
+                'Department' => $department,
+
                 'Total Goals' => $totalApprovedGoals,
-                'Total Weightage' => number_format($totalWeightage,2),
-                'Self Score' =>
-                    number_format(
-                        $selfScore100,
-                        2
-                    ),
 
-                'Manager Score' =>
-                    number_format(
-                        $managerScore100,
-                        2
-                    ),
+                'Total Weightage' => number_format($totalWeightage, 2),
 
-                'Manager Feedback' =>
-                    number_format(
-                        $feedbackScore100,
-                        2
-                    ),
+                'Self Score' => number_format($selfScore100, 2),
 
-                'Total Score' =>
-                    number_format(
-                        $totalScore,
-                        2
-                    ),
+                'Manager Score' => number_format($weightedManagerScore, 2),
 
-                'HR Score' =>
-                    number_format(
-                        $hrScore100,
-                        2
-                    ),
+                'Manager Feedback' => number_format($weightedFeedbackScore, 2),
 
-                'Final Score' =>
-                    number_format(
-                        $finalScore,
-                        2
-                    ),
+                'Manager Final Score' => number_format($totalScore, 2),
 
-                'Rating' =>
-                    $finalRating,
+                'HR Score' => number_format($hrScore100, 2),
+
+                'Final Score' => number_format($finalScore, 2),
+
+                'Rating' => $finalRating,
+
+                'HR Remarks' => $hrOverallComments,
             ];
         });
     }
@@ -389,6 +363,7 @@ class GoalHrOverallPerformanceExport implements
             'HR Score',
             'Final Score',
             'Rating',
+            'HR Remarks',
         ];
     }
 
@@ -432,6 +407,8 @@ class GoalHrOverallPerformanceExport implements
         | Formula text is smaller for better presentation.
         */
         $richText = new RichText();
+        $managerScoreText = new RichText();
+        $managerFeedbackText = new RichText();
 
         $mainText = $richText->createTextRun('Total Score');
         $mainText->getFont()->setBold(true);
@@ -442,7 +419,7 @@ class GoalHrOverallPerformanceExport implements
             ->setARGB('FFFFFF');
 
         $subText = $richText->createTextRun(
-            "\n70% Goal + 30% Feedback"
+            "\n Manager Score + Manager Feedback"
         );
         $subText->getFont()->setBold(false);
         $subText->getFont()->setSize(8);
@@ -452,26 +429,68 @@ class GoalHrOverallPerformanceExport implements
             ->setARGB('FFFFFF');
 
         $sheet
-            ->getCell('H1')
+            ->getCell('J1')
             ->setValue($richText);
 
         $sheet
-            ->getStyle('H1')
+            ->getStyle('J1')
             ->getAlignment()
             ->setWrapText(true);
 
         $sheet
-            ->getStyle('H1')
+            ->getStyle('J1')
             ->getAlignment()
             ->setHorizontal(
                 Alignment::HORIZONTAL_CENTER
             );
 
         $sheet
-            ->getStyle('H1')
+            ->getStyle('J1')
             ->getAlignment()
             ->setVertical(
                 Alignment::VERTICAL_CENTER
+            );
+
+            $managerScoreMain = $managerScoreText->createTextRun('Manager Score');
+            $managerScoreMain->getFont()->setBold(true);
+            $managerScoreMain->getFont()->setSize(12);
+            $managerScoreMain->getFont()->getColor()->setARGB('FFFFFF');
+
+            $managerScoreSub = $managerScoreText->createTextRun(
+            "\n70% Weighted Score"
+            );
+            $managerScoreSub->getFont()->setBold(false);
+            $managerScoreSub->getFont()->setSize(8);
+            $managerScoreSub->getFont()->getColor()->setARGB('FFFFFF');
+
+            $sheet->getCell('H1')->setValue($managerScoreText);
+            $sheet->getStyle('H1')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('H1')->getAlignment()->setHorizontal(
+            Alignment::HORIZONTAL_CENTER
+            );
+            $sheet->getStyle('H1')->getAlignment()->setVertical(
+            Alignment::VERTICAL_CENTER
+            );
+
+            $managerFeedbackMain = $managerFeedbackText->createTextRun('Manager Feedback');
+            $managerFeedbackMain->getFont()->setBold(true);
+            $managerFeedbackMain->getFont()->setSize(12);
+            $managerFeedbackMain->getFont()->getColor()->setARGB('FFFFFF');
+
+            $managerFeedbackSub = $managerFeedbackText->createTextRun(
+            "\n30% Weighted Score"
+            );
+            $managerFeedbackSub->getFont()->setBold(false);
+            $managerFeedbackSub->getFont()->setSize(8);
+            $managerFeedbackSub->getFont()->getColor()->setARGB('FFFFFF');
+
+            $sheet->getCell('I1')->setValue($managerFeedbackText);
+            $sheet->getStyle('I1')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('I1')->getAlignment()->setHorizontal(
+            Alignment::HORIZONTAL_CENTER
+            );
+            $sheet->getStyle('I1')->getAlignment()->setVertical(
+            Alignment::VERTICAL_CENTER
             );
 
         if ($highestRow > 1) {
@@ -486,7 +505,7 @@ class GoalHrOverallPerformanceExport implements
 
             $sheet
                 ->getStyle(
-                    "E2:K{$highestRow}"
+                    "E2:L{$highestRow}"
                 )
                 ->getAlignment()
                 ->setHorizontal(
@@ -498,10 +517,7 @@ class GoalHrOverallPerformanceExport implements
                 $row <= $highestRow;
                 $row++
             ) {
-                $rating =
-                    $sheet
-                        ->getCell("K{$row}")
-                        ->getValue();
+                $rating = $sheet->getCell("M{$row}")->getValue();
 
                 $color = match ($rating) {
                     'OS' => '6EA8FE',
@@ -513,7 +529,7 @@ class GoalHrOverallPerformanceExport implements
                 };
 
                 $sheet
-                    ->getStyle("K{$row}")
+                    ->getStyle("M{$row}")
                     ->applyFromArray([
                         'font' => [
                             'bold' => true,
