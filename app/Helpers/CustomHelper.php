@@ -8523,7 +8523,7 @@ if (!function_exists('admissionTargetDepartmentAverage')) {
         $departmentId = auth()->user()->department_id;
 
         // Get ONLY active terms
-        $activeTerms = Term::where('status', '1')
+        $activeTerms = Term::where('other_status', '1')
             ->get();
 
         $activeTermIds = $activeTerms->pluck('id');

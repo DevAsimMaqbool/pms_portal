@@ -108,7 +108,7 @@
                                                 <label for="batch" class="form-label">Semester / Campaign /Term</label>
                                                 <select name="admission[0][term_id]" class="form-select term_id" id="term_id" required>
                                                     <option value="">-- Select Term --</option>
-                                                    @foreach(SelectCurrentTerm() as $term)
+                                                    @foreach(SelectAllTerm() as $term)
                                                         <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
                                                     </option> @endforeach
                                                 </select>
@@ -252,7 +252,7 @@
                                                                                                             <label for="batch" class="form-label">Semester / Campaign /Term</label>
                                                                                                             <select name="admission[${pastIndex}][term_id]" class="form-select term_id" id="term_id" required>
                                                                                                                 <option value="">-- Select Term --</option>
-                                                                                                                @foreach(SelectCurrentTerm() as $term)
+                                                                                                                @foreach(SelectAllTerm() as $term)
                                                                                                                     <option value="{{ $term->id }}"> {{ $term->term }} {{ $term->start_year }}
                                                                                                                 </option> @endforeach
                                                                                                             </select>

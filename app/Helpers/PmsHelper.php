@@ -93,7 +93,7 @@ if (!function_exists('hodHotIndicators')) {
             ->orderBy('id')
             ->first();
 
-        $avg = $record ? round($record->score, 1) : 0.00;
+        $avg = $record ? round($record->with_out_weight_score, 1) : 0.00;
 
         if ($avg >= 90) {
             $color = 'primary';
