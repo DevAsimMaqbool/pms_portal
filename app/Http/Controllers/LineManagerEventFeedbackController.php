@@ -197,6 +197,8 @@ class LineManagerEventFeedbackController extends Controller
      */
     public function destroy(LineManagerEventFeedback $lineManagerEventFeedback)
     {
-        //
+          $lineManagerEventFeedback->delete();
+
+          return redirect()->back()->with('success', 'Feedback deleted successfully.');
     }
 }

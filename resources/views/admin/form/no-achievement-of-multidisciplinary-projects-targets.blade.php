@@ -793,7 +793,7 @@
                                 form.creator ? form.creator.name : 'N/A',
                                 form.project_name || 'N/A',
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${formData}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
@@ -979,7 +979,7 @@
                                 form.project_name || 'N/A',
                                 statusText,
                                 createdAt,
-                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form='${formData}'><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
+                                `<button class="btn rounded-pill btn-outline-primary waves-effect view-form-btn" data-form="${formData}"><span class="icon-xs icon-base ti tabler-eye me-2"></span>View</button>`
                             ];
                         });
 
