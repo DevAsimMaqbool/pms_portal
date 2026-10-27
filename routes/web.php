@@ -487,7 +487,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/employee-feedback/update/{id}', [LineManagerEventFeedbackController::class, 'update'])->name('employee.feedback.update');
         Route::get('/employee-feedback/create', [LineManagerEventFeedbackController::class, 'create'])->name('employee.feedback.create');
         Route::post('/employee-feedback/store', [LineManagerEventFeedbackController::class, 'store'])->name('employee.feedback.store');
-        Route::post('/employee-feedback/destroy', [LineManagerEventFeedbackController::class, 'destroy'])->name('employee.feedback.destroy');
+        Route::delete('/employee-feedback/destroy', [LineManagerEventFeedbackController::class, 'destroy'])->name('employee.feedback.destroy');
         Route::get('professional-membership-target', [ProfessionalMembershipController::class, 'target'])->name('professional-membership-target.get');
         Route::get('/professional-membership-users', [ProfessionalMembershipController::class, 'ProfessionalMembershipUsers']);
     });
