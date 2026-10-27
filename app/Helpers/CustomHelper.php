@@ -10149,7 +10149,7 @@ if (!function_exists('ActiveInternationalResearchPartnerOfHOD')) {
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
 
         // 6️⃣ Weighted Score
-        $weightedScore = ($departmentAvg * $weight) / 100;
+        $weightedScore = min(($departmentAvg * $weight) / 100, 100);
 
         // 7️⃣ Save overall only
         saveIndicatorPercentage90Plus(
