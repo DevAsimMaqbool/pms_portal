@@ -4,12 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Services\PmsIndicatorCalculationService;
+use App\Models\User;
 use Throwable;
 
 class CalculatePmsIndicators extends Command
 {
     protected $signature = 'pms:calculate-indicators
                             {--employee= : Calculate only one employee_id}
+                            {--faculty= : Calculate users against faculty column}
                             {--dry-run : Calculate but do not save}';
 
     protected $description =
@@ -26,6 +28,7 @@ class CalculatePmsIndicators extends Command
         $this->newLine();
 
         $employeeId = $this->option('employee');
+        $facultyId = $this->option('faculty');
 
         try {
 
@@ -49,95 +52,176 @@ class CalculatePmsIndicators extends Command
 
             /*
              * -----------------------------------------------------
+             * FACULTY USERS
+             * -----------------------------------------------------
+             */
+            if ($facultyId !== null) {
+
+                $employees = User::where(
+                    'faculty',
+                    $facultyId
+                )->get();
+
+                if ($employees->isEmpty()) {
+                    $this->error(
+                        "No users found for faculty: {$facultyId}"
+                    );
+
+                    return self::FAILURE;
+                }
+
+                $this->info(
+                    "Processing faculty: {$facultyId}"
+                );
+
+                $this->info(
+                    "Users found: {$employees->count()}"
+                );
+
+                $total = [
+                    'employees' => 0,
+                    'processed' => 0,
+                    'saved' => 0,
+                    'skipped' => 0,
+                    'failed' => 0,
+                ];
+
+                foreach ($employees as $employee) {
+
+                    $this->newLine();
+
+                    $this->info(
+                        "Processing employee ID: {$employee->employee_id}"
+                    );
+
+                    $result = $service->calculateAll(
+                        (int) $employee->employee_id
+                    );
+
+                    foreach ($total as $key => $value) {
+                        $total[$key] += $result[$key] ?? 0;
+                    }
+                }
+
+                $this->newLine();
+
+                $this->info(
+                    'Faculty indicator calculation completed.'
+                );
+
+                $this->table(
+                    [
+                        'Employees',
+                        'Processed',
+                        'Saved',
+                        'Skipped',
+                        'Failed',
+                    ],
+                    [[
+                        $total['employees'],
+                        $total['processed'],
+                        $total['saved'],
+                        $total['skipped'],
+                        $total['failed'],
+                    ]]
+                );
+
+                return $total['failed'] > 0
+                    ? self::FAILURE
+                    : self::SUCCESS;
+            }
+
+            /*
+             * -----------------------------------------------------
              * SINGLE EMPLOYEE
              * -----------------------------------------------------
              */
             if ($employeeId) {
 
-    $this->info(
-        "Processing employee: {$employeeId}"
-    );
+                $this->info(
+                    "Processing employee: {$employeeId}"
+                );
 
-    $result = $service->calculateAll(
-        (int) $employeeId
-    );
+                $result = $service->calculateAll(
+                    (int) $employeeId
+                );
 
-    $this->newLine();
+                $this->newLine();
 
-    $this->table(
-        [
-            'Employees',
-            'Processed',
-            'Saved',
-            'Skipped',
-            'Failed',
-        ],
-        [[
-            $result['employees'],
-            $result['processed'],
-            $result['saved'],
-            $result['skipped'],
-            $result['failed'],
-        ]]
-    );
+                $this->table(
+                    [
+                        'Employees',
+                        'Processed',
+                        'Saved',
+                        'Skipped',
+                        'Failed',
+                    ],
+                    [[
+                        $result['employees'],
+                        $result['processed'],
+                        $result['saved'],
+                        $result['skipped'],
+                        $result['failed'],
+                    ]]
+                );
 
-    /*
-     * Show indicator-level details
-     */
-    $this->newLine();
+                /*
+                 * Show indicator-level details
+                 */
+                $this->newLine();
 
-    $employee = \App\Models\User::where(
-        'employee_id',
-        $employeeId
-    )->first();
+                $employee = User::where(
+                    'employee_id',
+                    $employeeId
+                )->first();
 
-    if ($employee) {
+                if ($employee) {
 
-        /*
-         * Run separately so we can see
-         * exact indicator results.
-         */
-        $detailService = app(
-            \App\Services\PmsIndicatorCalculationService::class
-        );
+                    /*
+                     * Run separately so we can see
+                     * exact indicator results.
+                     */
+                    $detailService = app(
+                        PmsIndicatorCalculationService::class
+                    );
 
-        $detail = $detailService
-            ->calculateForEmployee($employee);
+                    $detail = $detailService
+                        ->calculateForEmployee($employee);
 
-        $this->newLine();
+                    $this->newLine();
 
-        $this->table(
-            [
-                'Role',
-                'Indicator',
-                'Status',
-                'Raw Score',
-                'Weight',
-                'Weighted',
-                'Message',
-            ],
-            collect($detail['indicators'])
-                ->map(function ($item) {
+                    $this->table(
+                        [
+                            'Role',
+                            'Indicator',
+                            'Status',
+                            'Raw Score',
+                            'Weight',
+                            'Weighted',
+                            'Message',
+                        ],
+                        collect($detail['indicators'])
+                            ->map(function ($item) {
 
-                    return [
-                        $item['role_id'] ?? '',
-                        $item['indicator_id'] ?? '',
-                        $item['status'] ?? '',
-                        $item['raw_score'] ?? '',
-                        $item['weightage'] ?? '',
-                        $item['weighted_score'] ?? '',
-                        $item['message'] ?? '',
-                    ];
+                                return [
+                                    $item['role_id'] ?? '',
+                                    $item['indicator_id'] ?? '',
+                                    $item['status'] ?? '',
+                                    $item['raw_score'] ?? '',
+                                    $item['weightage'] ?? '',
+                                    $item['weighted_score'] ?? '',
+                                    $item['message'] ?? '',
+                                ];
 
-                })
-                ->toArray()
-        );
-    }
+                            })
+                            ->toArray()
+                    );
+                }
 
-    return $result['failed'] > 0
-        ? self::FAILURE
-        : self::SUCCESS;
-}
+                return $result['failed'] > 0
+                    ? self::FAILURE
+                    : self::SUCCESS;
+            }
 
             /*
              * -----------------------------------------------------
