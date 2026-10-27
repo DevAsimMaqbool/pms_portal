@@ -1809,136 +1809,130 @@ protected function calculate128(
      * -------------------------------------------------------------
      */
     protected function calculate188(
-        User $employee,
-        int $roleId,
-        int $indicatorId
-    ): ?array {
+    User $employee,
+    int $roleId,
+    int $indicatorId
+): ?array {
 
-        $employeeId =
-            $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-        if (!$employeeId) {
-            return $this->noData(
-                'employee_id is missing'
-            );
-        }
-
-        $records =
-            LineManagerFeedback::query()
-                ->where(
-                    'employee_id',
-                    $employeeId
-                )
-                ->where(
-                    'year_id',
-                    $this->yearId
-                )
-                ->get();
-
-        if ($records->isEmpty()) {
-            return $this->noData(
-                'No line manager task feedback records found'
-            );
-        }
-
-        $recordScores = [];
-
-        foreach ($records as $record) {
-
-            $responsibility =
-                (
-                    (float)
-                    $record->responsibility_accountability_1
-                    +
-                    (float)
-                    $record->responsibility_accountability_2
-                ) / 2;
-
-            $empathy =
-                (
-                    (float)
-                    $record->empathy_compassion_1
-                    +
-                    (float)
-                    $record->empathy_compassion_2
-                ) / 2;
-
-            $humility =
-                (
-                    (float)
-                    $record->humility_service_1
-                    +
-                    (float)
-                    $record->humility_service_2
-                ) / 2;
-
-            $honesty =
-                (
-                    (float)
-                    $record->honesty_integrity_1
-                    +
-                    (float)
-                    $record->honesty_integrity_2
-                ) / 2;
-
-            $inspirational =
-                (
-                    (float)
-                    $record->inspirational_leadership_1
-                    +
-                    (float)
-                    $record->inspirational_leadership_2
-                ) / 2;
-
-            $overall =
-                (
-                    $responsibility +
-                    $empathy +
-                    $humility +
-                    $honesty +
-                    $inspirational
-                ) / 5;
-
-            $recordScores[] =
-                $overall;
-        }
-
-        if (!$recordScores) {
-            return $this->noData(
-                'No valid line manager ratings found'
-            );
-        }
-
-        $rawScore =
-            round(
-                array_sum($recordScores) /
-                count($recordScores),
-                2
-            );
-
-        $rawScore =
-            min(
-                100,
-                $rawScore
-            );
-
-        $weight =
-            $this->getWeight(
-                $roleId,
-                $indicatorId
-            );
-
-        return [
-            'raw_score' =>
-                $rawScore,
-
-            'weighted_score' =>
-                $this->weighted(
-                    $rawScore,
-                    $weight
-                ),
-        ];
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get Line Manager Task Feedback
+    |--------------------------------------------------------------------------
+    */
+    $records = LineManagerFeedback::query()
+        ->where('employee_id', $employeeId)
+        ->where('assessment_type', 'manager')
+        ->where('year_id', $this->yearId)
+        ->get();
+
+    if ($records->isEmpty()) {
+        return $this->noData(
+            'No line manager task feedback records found'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate Average Of Five Virtues For Each Record
+    |--------------------------------------------------------------------------
+    */
+    $recordScores = [];
+
+    foreach ($records as $record) {
+
+        $responsibility = (
+            (float) $record->responsibility_accountability_1 +
+            (float) $record->responsibility_accountability_2
+        ) / 2;
+
+        $empathy = (
+            (float) $record->empathy_compassion_1 +
+            (float) $record->empathy_compassion_2
+        ) / 2;
+
+        $humility = (
+            (float) $record->humility_service_1 +
+            (float) $record->humility_service_2
+        ) / 2;
+
+        $honesty = (
+            (float) $record->honesty_integrity_1 +
+            (float) $record->honesty_integrity_2
+        ) / 2;
+
+        $inspirational = (
+            (float) $record->inspirational_leadership_1 +
+            (float) $record->inspirational_leadership_2
+        ) / 2;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Overall Average Of Five Virtues
+        |--------------------------------------------------------------------------
+        */
+        $overall = (
+            $responsibility +
+            $empathy +
+            $humility +
+            $honesty +
+            $inspirational
+        ) / 5;
+
+        $recordScores[] = $overall;
+    }
+
+    if (empty($recordScores)) {
+        return $this->noData(
+            'No valid line manager ratings found'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overall Average Rating
+    |--------------------------------------------------------------------------
+    */
+    $rawScore = array_sum($recordScores)
+        / count($recordScores);
+
+    $rawScore = min(
+        $rawScore,
+        100
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Role-Specific Indicator Weightage
+    |--------------------------------------------------------------------------
+    */
+    $weight = $this->getWeight(
+        $roleId,
+        $indicatorId
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Final Weighted Score
+    |--------------------------------------------------------------------------
+    */
+    $weightedScore = $this->weighted(
+        $rawScore,
+        $weight
+    );
+
+    return [
+        'raw_score' => $rawScore,
+        'weighted_score' => $weightedScore,
+    ];
+}
 
     /**
  * -------------------------------------------------------------
@@ -1962,7 +1956,7 @@ protected function calculate128(
     User $employee,
     int $roleId,
     int $indicatorId
-    ): ?array {
+): ?array {
 
     $employeeId = $employee->employee_id;
 
@@ -1973,10 +1967,10 @@ protected function calculate128(
     }
 
     /*
-        * ---------------------------------------------------------
-        * Get employee department
-        * ---------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Get Employee Department
+    |--------------------------------------------------------------------------
+    */
     $departmentId = $employee->department_id;
 
     if (!$departmentId) {
@@ -1986,19 +1980,13 @@ protected function calculate128(
     }
 
     /*
-        * ---------------------------------------------------------
-        * Employee event feedback
-        * ---------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Employee Event Feedback
+    |--------------------------------------------------------------------------
+    */
     $feedbacks = LineManagerEventFeedback::query()
-        ->where(
-            'employee_id',
-            $employeeId
-        )
-        ->where(
-            'year_id',
-            $this->yearId
-        )
+        ->where('employee_id', $employeeId)
+        ->where('year_id', $this->yearId)
         ->get();
 
     if ($feedbacks->isEmpty()) {
@@ -2008,30 +1996,18 @@ protected function calculate128(
     }
 
     /*
-        * ---------------------------------------------------------
-        * 1. Average Feedback Rating
-        * ---------------------------------------------------------
-        */
-    $ratings = $feedbacks
-        ->pluck('rating')
-        ->filter(function ($rating) {
-            return $rating !== null
-                && is_numeric($rating);
-        })
-        ->map(function ($rating) {
-            return (float) $rating;
-        });
+    |--------------------------------------------------------------------------
+    | 1. Average Feedback Rating
+    |--------------------------------------------------------------------------
+    */
+    $total = 0;
+    $count = $feedbacks->count();
 
-    if ($ratings->isEmpty()) {
-        return $this->noData(
-            'No valid line manager event feedback ratings found'
-        );
+    foreach ($feedbacks as $item) {
+        $total += (float) $item->rating;
     }
 
-    $averageRating = round(
-        $ratings->avg(),
-        2
-    );
+    $averageRating = $total / $count;
 
     $averageRating = min(
         $averageRating,
@@ -2039,32 +2015,23 @@ protected function calculate128(
     );
 
     /*
-        * ---------------------------------------------------------
-        * 2. Employee Event Participation Count
-        * ---------------------------------------------------------
-        */
-    $employeeEventCount = $feedbacks->count();
+    |--------------------------------------------------------------------------
+    | 2. Employee Event Participation Count
+    |--------------------------------------------------------------------------
+    */
+    $employeeEventCount = $count;
 
     /*
-        * ---------------------------------------------------------
-        * 3. Highest Event Count in Same Department
-        * ---------------------------------------------------------
-        *
-        * Get all users from same department.
-        */
+    |--------------------------------------------------------------------------
+    | 3. Highest Department Event Count
+    |--------------------------------------------------------------------------
+    */
     $departmentEmployeeIds = User::query()
-        ->where(
-            'department_id',
-            $departmentId
-        )
+        ->where('department_id', $departmentId)
         ->pluck('employee_id')
         ->filter()
         ->values();
 
-    /*
-        * Find highest number of events participated by
-        * any employee in the same department for this year.
-        */
     $highestDepartmentCount = 1;
 
     if ($departmentEmployeeIds->isNotEmpty()) {
@@ -2075,22 +2042,13 @@ protected function calculate128(
                     'employee_id',
                     $departmentEmployeeIds
                 )
-                ->where(
-                    'year_id',
-                    $this->yearId
-                )
+                ->where('year_id', $this->yearId)
                 ->selectRaw(
                     'employee_id, COUNT(*) as total'
                 )
-                ->groupBy(
-                    'employee_id'
-                )
-                ->orderByDesc(
-                    'total'
-                )
-                ->value(
-                    'total'
-                ) ?? 1;
+                ->groupBy('employee_id')
+                ->orderByDesc('total')
+                ->value('total') ?? 1;
     }
 
     $highestDepartmentCount = max(
@@ -2099,38 +2057,25 @@ protected function calculate128(
     );
 
     /*
-        * ---------------------------------------------------------
-        * 4. Participation Score
-        * ---------------------------------------------------------
-        *
-        * Example:
-        *
-        * Employee events = 4
-        * Department highest = 5
-        *
-        * 4 / 5 * 100 = 80
-        */
+    |--------------------------------------------------------------------------
+    | 4. Participation Score - 30%
+    |--------------------------------------------------------------------------
+    */
     $participationScore = (
         $employeeEventCount /
         $highestDepartmentCount
     ) * 100;
 
     $participationScore = min(
-        100,
-        round(
-            $participationScore,
-            2
-        )
+        $participationScore,
+        100
     );
 
     /*
-        * ---------------------------------------------------------
-        * 5. Final 189 Raw Score
-        * ---------------------------------------------------------
-        *
-        * 70% Average Rating
-        * 30% Participation Score
-        */
+    |--------------------------------------------------------------------------
+    | 5. Final Score: Rating 70% + Participation 30%
+    |--------------------------------------------------------------------------
+    */
     $weightedRating = (
         $averageRating * 70
     ) / 100;
@@ -2139,34 +2084,28 @@ protected function calculate128(
         $participationScore * 30
     ) / 100;
 
-    $rawScore = (
-        $weightedRating +
-        $weightedParticipation
-    );
+    $rawScore = $weightedRating + $weightedParticipation;
 
     $rawScore = min(
-        100,
-        round(
-            $rawScore,
-            2
-        )
+        $rawScore,
+        100
     );
 
     /*
-        * ---------------------------------------------------------
-        * 6. Role-specific Indicator Weightage
-        * ---------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | 6. Role-specific Indicator Weightage
+    |--------------------------------------------------------------------------
+    */
     $weight = $this->getWeight(
         $roleId,
         $indicatorId
     );
 
     /*
-        * ---------------------------------------------------------
-        * 7. Final Weighted Score
-        * ---------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | 7. Final Weighted Score
+    |--------------------------------------------------------------------------
+    */
     $weightedScore = $this->weighted(
         $rawScore,
         $weight
@@ -2174,10 +2113,9 @@ protected function calculate128(
 
     return [
         'raw_score' => $rawScore,
-
         'weighted_score' => $weightedScore,
     ];
-    }
+}
     
     /**
      * -------------------------------------------------------------
