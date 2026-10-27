@@ -12,6 +12,7 @@ class CalculatePmsIndicators extends Command
     protected $signature = 'pms:calculate-indicators
                             {--employee= : Calculate only one employee_id}
                             {--faculty= : Calculate users against faculty column}
+                            {--department= : Calculate users against department_id}
                             {--dry-run : Calculate but do not save}';
 
     protected $description =
@@ -29,6 +30,7 @@ class CalculatePmsIndicators extends Command
 
         $employeeId = $this->option('employee');
         $facultyId = $this->option('faculty');
+        $departmentId = $this->option('department');
 
         try {
 
@@ -107,6 +109,87 @@ class CalculatePmsIndicators extends Command
 
                 $this->info(
                     'Faculty indicator calculation completed.'
+                );
+
+                $this->table(
+                    [
+                        'Employees',
+                        'Processed',
+                        'Saved',
+                        'Skipped',
+                        'Failed',
+                    ],
+                    [[
+                        $total['employees'],
+                        $total['processed'],
+                        $total['saved'],
+                        $total['skipped'],
+                        $total['failed'],
+                    ]]
+                );
+
+                return $total['failed'] > 0
+                    ? self::FAILURE
+                    : self::SUCCESS;
+            }
+
+            /*
+             * -----------------------------------------------------
+             * DEPARTMENT USERS
+             * -----------------------------------------------------
+             */
+            if ($departmentId !== null) {
+
+                $employees = User::where(
+                    'department_id',
+                    $departmentId
+                )->get();
+
+                if ($employees->isEmpty()) {
+                    $this->error(
+                        "No users found for department: {$departmentId}"
+                    );
+
+                    return self::FAILURE;
+                }
+
+                $this->info(
+                    "Processing department: {$departmentId}"
+                );
+
+                $this->info(
+                    "Users found: {$employees->count()}"
+                );
+
+                $total = [
+                    'employees' => 0,
+                    'processed' => 0,
+                    'saved' => 0,
+                    'skipped' => 0,
+                    'failed' => 0,
+                ];
+
+                foreach ($employees as $employee) {
+
+                    $this->newLine();
+
+                    $this->info(
+                        "Processing employee ID: {$employee->employee_id}"
+                    );
+
+                    $result = $service->calculateAll(
+                        (int) $employee->employee_id
+                    );
+
+                    foreach ($total as $key => $value) {
+                        $total[$key] += $result[$key] ?? 0;
+                    }
+                }
+
+                $this->newLine();
+
+                $this->info(
+                    'Department indicator calculation completed.'
                 );
 
                 $this->table(
