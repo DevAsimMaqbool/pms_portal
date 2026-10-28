@@ -1378,75 +1378,88 @@ protected function calculate186(
 * ---
 
 */
+
 protected function calculate127(
-User $employee,
-int $roleId,
-int $indicatorId
+    User $employee,
+    int $roleId,
+    int $indicatorId
 ): ?array {
 
-$employeeId = $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-if (!$employeeId) {
-    return $this->noData(
-        'employee_id is missing'
-    );
-}
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
+    }
 
-// Indicator 127 derives its publication data from indicator 128.
-$sourceIndicatorId = 128;
+    // Indicator 127 derives its publication data from indicator 128.
+    $sourceIndicatorId = 128;
 
-$facultyTargets = FacultyTarget::query()
-    ->where('user_id', $employeeId)
-    ->where('form_status', 'HOD')
-    ->where('year_id', $this->yearId)
-    ->where('indicator_id', $sourceIndicatorId)
-    ->with([
-        'researchPublicationTargets' => function ($query) use (
-            $sourceIndicatorId
-        ) {
-            $query
-                ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
-                ->where('indicator_id', $sourceIndicatorId)
-                ->where('year_id', $this->yearId)
-                ->where('status', 3)
-                ->whereNotNull('journal_clasification');
-        },
-    ])
-    ->get();
+    $facultyTargets = FacultyTarget::query()
+        ->where('user_id', $employeeId)
+        ->where('form_status', 'HOD')
+        ->where('year_id', $this->yearId)
+        ->where('indicator_id', $sourceIndicatorId)
+        ->with([
+            'researchPublicationTargets' => function ($query) use (
+                $sourceIndicatorId
+            ) {
+                $query
+                    ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
+                    ->where('indicator_id', $sourceIndicatorId)
+                    ->where('year_id', $this->yearId)
+                    ->where('status', 3)
+                    ->whereNotNull('journal_clasification');
+            },
+        ])
+        ->get();
 
-$totalTarget = (float) $facultyTargets->sum(
-    fn ($target) => (float) ($target->target ?? 0)
-);
+    $totalTarget = 0;
+    $totalSubmitted = 0;
+    $internationalPapers = 0;
 
-$totalSubmitted = 0;
-$internationalPapers = 0;
+    foreach ($facultyTargets as $facultyTarget) {
+        $targetCount = (float) ($facultyTarget->target ?? 0);
 
-foreach ($facultyTargets as $facultyTarget) {
-    $publications = $facultyTarget->researchPublicationTargets;
+        $publications = $facultyTarget->researchPublicationTargets;
 
-    $totalSubmitted += $publications->count();
+        $submissionCount = $publications->count();
 
-    $internationalPapers += $publications
-        ->filter(function ($publication) {
-            return strtolower(
-                trim((string) ($publication->nationality ?? ''))
-            ) === 'international';
-        })
-        ->count();
-}
+        $internationalCount = $publications
+            ->filter(function ($publication) {
+                return strtolower(
+                    trim((string) ($publication->nationality ?? ''))
+                ) === 'international';
+            })
+            ->count();
 
-$rawScore = $totalTarget > 0
-    ? round(($internationalPapers / $totalTarget) * 100, 2)
-    : 0.0;
+        $totalTarget += $targetCount;
+        $totalSubmitted += $submissionCount;
+        $internationalPapers += $internationalCount;
+    }
 
-$rawScore = min(100, $rawScore);
+    // International co-author target is 50% of total publication target
+    $internationalTarget = $totalTarget * 0.5;
 
-$weight = $this->getWeight($roleId, $indicatorId);
+    // Calculate score against international target
+    $rawScore = $internationalTarget > 0
+        ? round(
+            ($internationalPapers / $internationalTarget) * 100,
+            2
+        )
+        : 0.0;
 
-return [
-    'raw_score' => $rawScore,
-    'weighted_score' => $this->weighted($rawScore, $weight),
-];
+    // Maximum score is 100
+    $rawScore = min($rawScore, 100);
+
+    // Apply indicator weightage
+    $weight = $this->getWeight($roleId, $indicatorId);
+
+    return [
+        'raw_score' => $rawScore,
+        'weighted_score' => $this->weighted($rawScore, $weight),
+    ];
 }
 
     /**
@@ -2242,72 +2255,92 @@ protected function calculate128(
 * ---
 
 */
+
 protected function calculate203(
-User $employee,
-int $roleId,
-int $indicatorId
+    User $employee,
+    int $roleId,
+    int $indicatorId
 ): ?array {
 
-$employeeId = $employee->employee_id;
+    $employeeId = $employee->employee_id;
 
-if (!$employeeId) {
-    return $this->noData(
-        'employee_id is missing'
-    );
-}
-
-// Indicator 203 derives its publication data from indicator 128.
-$sourceIndicatorId = 128;
-
-$quartilePoints = [
-    'Q1' => 20,
-    'Q2' => 15,
-    'Q3' => 10,
-    'Q4' => 5,
-];
-
-$records = AchievementOfResearchPublicationsTarget::query()
-    ->where('indicator_id', $sourceIndicatorId)
-    ->where('created_by', $employeeId)
-    ->where('target_category', 'Scopus-Indexed')
-    ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
-    ->where('year_id', $this->yearId)
-    ->where('status', 3)
-    ->whereNotNull('journal_clasification')
-    ->get([
-        'journal_clasification',
-    ]);
-
-$obtainedScore = 0;
-$quartileCounts = [
-    'Q1' => 0,
-    'Q2' => 0,
-    'Q3' => 0,
-    'Q4' => 0,
-];
-
-foreach ($records as $record) {
-    $quartile = strtoupper(
-        trim((string) $record->journal_clasification)
-    );
-
-    if (!isset($quartilePoints[$quartile])) {
-        continue;
+    if (!$employeeId) {
+        return $this->noData(
+            'employee_id is missing'
+        );
     }
 
-    $obtainedScore += $quartilePoints[$quartile];
-    $quartileCounts[$quartile]++;
-}
+    // Indicator 203 derives its publication data from indicator 128.
+    $sourceIndicatorId = 128;
 
-$rawScore = min(100, $obtainedScore);
+    $quartilePoints = [
+        'Q1' => 20,
+        'Q2' => 15,
+        'Q3' => 10,
+        'Q4' => 5,
+    ];
 
-$weight = $this->getWeight($roleId, $indicatorId);
+    // Step 1: Get assigned target from faculty_targets
+    $target = DB::table('faculty_targets')
+        ->where('employee_id', $employeeId)
+        ->where('indicator_id', $sourceIndicatorId)
+        ->where('year_id', $this->yearId)
+        ->sum('target');
 
-return [
-    'raw_score' => $rawScore,
-    'weighted_score' => $this->weighted($rawScore, $weight),
-];
+    // Maximum possible points based on assigned target
+    $maxPossibleScore = $target * 20;
 
+    // Step 2: Get approved Scopus publications
+    $records = AchievementOfResearchPublicationsTarget::query()
+        ->where('indicator_id', $sourceIndicatorId)
+        ->where('created_by', $employeeId)
+        ->where('target_category', 'Scopus-Indexed')
+        ->whereIn('form_status', ['RESEARCHER', 'DEAN'])
+        ->where('year_id', $this->yearId)
+        ->where('status', 3)
+        ->whereNotNull('journal_clasification')
+        ->get([
+            'journal_clasification',
+        ]);
+
+    $obtainedPoints = 0;
+
+    $quartileCounts = [
+        'Q1' => 0,
+        'Q2' => 0,
+        'Q3' => 0,
+        'Q4' => 0,
+    ];
+
+    // Step 3: Calculate quartile points and counts
+    foreach ($records as $record) {
+        $quartile = strtoupper(
+            trim((string) $record->journal_clasification)
+        );
+
+        if (!isset($quartilePoints[$quartile])) {
+            continue;
+        }
+
+        $obtainedPoints += $quartilePoints[$quartile];
+        $quartileCounts[$quartile]++;
+    }
+
+    // Step 4: Calculate percentage against assigned target
+    $rawScore = $maxPossibleScore > 0
+        ? min(
+            ($obtainedPoints / $maxPossibleScore) * 100,
+            100
+        )
+        : 0;
+
+    // Step 5: Apply existing indicator weightage
+    $weight = $this->getWeight($roleId, $indicatorId);
+
+    return [
+        'raw_score' => $rawScore,
+        'weighted_score' => $this->weighted($rawScore, $weight),
+    ];
 }
 
     /**
