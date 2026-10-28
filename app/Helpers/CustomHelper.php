@@ -1223,10 +1223,9 @@ if (!function_exists('calculateInternationalScore')) {
 
         foreach ($facultyTargets as $facultyTarget) {
             $targetCount = (float) ($facultyTarget->target ?? 0);
-
             $submissionCount = $facultyTarget->researchPublicationTargets->count();
 
-            $internationalCount = $facultyTarget->researchPublicationTargets
+            $internationalcount = $facultyTarget->researchPublicationTargets
                 ->filter(function ($publication) {
                     return strtolower(trim($publication->nationality ?? '')) === 'international';
                 })
@@ -1234,24 +1233,16 @@ if (!function_exists('calculateInternationalScore')) {
 
             $totalTarget += $targetCount;
             $totalSubmitted += $submissionCount;
-            $internationalPapers += $internationalCount;
+            $internationalPapers += $internationalcount;
+
         }
-
-        // International co-author target is 50% of total publication target
-        $internationalTarget = $totalTarget * 0.5;
-
-        // Calculate score against the international target
-        $fraction = $internationalTarget > 0
-            ? round(($internationalPapers / $internationalTarget) * 100, 2)
-            : 0;
-
-        // Maximum score is 100
+        $fraction = $totalTarget > 0
+            ? round(($internationalPapers / $totalTarget) * 100, 2) : 0;
         $fraction = min($fraction, 100);
 
         // Calculate obtained score using indicator weight
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 127);
         $weight = $indicatorWeight['weightage'] ?? 0;
-
         $obtainedScore = ($fraction * $weight) / 100;
 
         // Save obtained score
@@ -1266,18 +1257,22 @@ if (!function_exists('calculateInternationalScore')) {
             $currentYear
         );
 
+        //return round($obtainedScore, 2); // e.g., 5.00
         return [
             'total_score' => $fraction,
             'total_target' => $totalTarget,
             'total_acheived' => $totalSubmitted,
             'total_international' => $internationalPapers,
+
         ];
     }
 }
 
 if (!function_exists('calculateJournalQuartile')) {
+
     function calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId, $currentYear = null)
     {
+
         // Quartile Points
         $quartilePoints = [
             'Q1' => 20,
@@ -1285,28 +1280,16 @@ if (!function_exists('calculateJournalQuartile')) {
             'Q3' => 10,
             'Q4' => 5,
         ];
-
         $q1Count = 0;
         $q2Count = 0;
         $q3Count = 0;
         $q4Count = 0;
-
         $q1_count1 = 0;
         $q2_count1 = 0;
         $q3_count1 = 0;
         $q4_count1 = 0;
 
-        // Step 1: Check assigned target from faculty_targets
-        $target = DB::table('faculty_targets')
-            ->where('user_id', $facultyId)
-            ->where('indicator_id', $indicatorId)
-            ->where('year_id', $currentYear)
-            ->sum('target');
-
-        // Maximum possible points based on assigned target
-        $maxPossibleScore = $target * 20;
-
-        // Step 2: Get approved Scopus publications
+        // Get Approved Scopus Publications
         $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
             ->where('created_by', $facultyId)
             ->where('target_category', 'Scopus-Indexed')
@@ -1315,47 +1298,35 @@ if (!function_exists('calculateJournalQuartile')) {
             ->where('status', 3) // Fully approved
             ->get();
 
-        $obtainedPoints = 0;
+        $obtainedScore = 0;
 
-        // Step 3: Calculate quartile points and counts
         foreach ($records as $record) {
-            $quartile = strtoupper(trim($record->journal_clasification ?? ''));
-
+            $quartile = strtoupper(trim($record->journal_clasification));
             if (isset($quartilePoints[$quartile])) {
-                $obtainedPoints += $quartilePoints[$quartile];
+                $obtainedScore += $quartilePoints[$record->journal_clasification];
             }
-
-            if ($quartile === 'Q1') {
+            if ($quartile === 'Q1')
                 $q1Count++;
-            } elseif ($quartile === 'Q2') {
+            elseif ($quartile === 'Q2')
                 $q2Count++;
-            } elseif ($quartile === 'Q3') {
+            elseif ($quartile === 'Q3')
                 $q3Count++;
-            } elseif ($quartile === 'Q4') {
+            elseif ($quartile === 'Q4')
                 $q4Count++;
-            }
         }
-
         $q1_count1 += $q1Count;
         $q2_count1 += $q2Count;
         $q3_count1 += $q3Count;
         $q4_count1 += $q4Count;
+        $obtainedScore = min($obtainedScore, 100);
 
-        // Step 4: Calculate percentage against assigned target
-        $obtainedScore = $maxPossibleScore > 0
-            ? min(($obtainedPoints / $maxPossibleScore) * 100, 100)
-            : 0;
-
-        // Step 5: Apply indicator weightage
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
         $weight = $indicatorWeight['weightage'] ?? 0;
-
         $weightedScore = ($obtainedScore * $weight) / 100;
 
-        // Step 6: Save indicator percentage
         saveIndicatorPercentage(
             $facultyId,
-            $activeRoleId,
+            $role_id = $activeRoleId,
             2,
             5,
             203,
@@ -1363,7 +1334,7 @@ if (!function_exists('calculateJournalQuartile')) {
             $obtainedScore,
             $currentYear
         );
-
+        //return $obtainedScore;
         return [
             'total_score' => $obtainedScore,
             'q1_count' => $q1_count1,
@@ -6934,20 +6905,15 @@ if (!function_exists('departmentScopusPublicationsOfHOD')) {
 }
 
 if (!function_exists('departmentScopusAnalysisOfHOD')) {
-    function departmentScopusAnalysisOfHOD(
-        $activeRoleId,
-        $indicatorId,
-        $keyPerformanceAreaId = 2,
-        $indicatorCategoryId = 5,
-        $currentYear = null
-    ) {
+    function departmentScopusAnalysisOfHOD($activeRoleId, $indicatorId, $keyPerformanceAreaId = 2, $indicatorCategoryId = 5,$currentYear=null)
+    {
         $departmentId = auth()->user()->department_id;
-        $employee_id = auth()->user()->employee_id;
+         $employee_id = auth()->user()->employee_id;
 
         // Get all faculty IDs in the department
         $facultyIds = User::where('department_id', $departmentId)
             ->whereNotNull('faculty_id')
-            ->pluck('id');
+            ->pluck('id');  
 
         if ($facultyIds->isEmpty()) {
             return [
@@ -6970,92 +6936,70 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
         $totalSubmitted = 0;
         $totalInternational = 0;
         $totalQuartileScore = 0;
-        $totalResearchSubmitted = 0;
-        $totalResearchTarget = 0;
+        $totalResearchSubmitted = 0; // For overall research publications
+        $totalResearchTarget = 0; // For overall research publications
         $oversubmissionCount = 0;
-
         $q1_count1 = 0;
         $q2_count1 = 0;
         $q3_count1 = 0;
         $q4_count1 = 0;
-
-        // Get HOD target
-        $facultyTargets = FacultyTargetsDean::where('user_id', $employee_id)
-            ->where('form_status', 'HOD')
-            ->where('year_id', $currentYear)
-            ->where('indicator_id', $indicatorId)
-            ->first();
-
-        $totalTarget = $facultyTargets->target ?? 0;
-        $totalResearchTarget = $totalTarget;
+        // Get HOD targets for this faculty
+            $facultyTargets = FacultyTargetsDean::where('user_id', $employee_id)
+                ->where('form_status', 'HOD')
+                ->where('year_id', $currentYear)
+                ->where('indicator_id', $indicatorId)
+                ->first();
+            $totalTarget = $facultyTargets->target ?? 0;    
+            $totalResearchTarget = $totalTarget;
 
         foreach ($facultyIds as $facultyId) {
+
             $facultySubmittedTotal = 0;
             $facultyInternationalCount = 0;
             $facultyQuartileScore = 0;
             $facultyResearchSubmitted = 0;
             $totalsubmissionCount = 0;
-
+            // Quartile counts
             $q1Count = 0;
             $q2Count = 0;
             $q3Count = 0;
             $q4Count = 0;
 
-            // Publications submitted by faculty
-            $facultyRecords = AchievementOfResearchPublicationsTarget::where(
-                'created_by',
-                $facultyId
-            )
-                ->where('indicator_id', $indicatorId)
-                ->where('form_status', 'RESEARCHER')
-                ->where('year_id', $currentYear)
-                ->where('status', 3)
-                ->get();
+                // Publications submitted by faculty (main)
+                $facultyRecords = AchievementOfResearchPublicationsTarget::where('created_by', $facultyId)
+                    ->where('indicator_id', $indicatorId)
+                    ->where('form_status', 'RESEARCHER')
+                    ->where('year_id', $currentYear)
+                    ->where('status', 3)
+                    ->get();
 
-            // Count co-author publications
-            $coAuthorCount = AchievementOfResearchPublicationTargetCoAuthor::whereIn(
-                'target_id',
-                $facultyRecords->pluck('id')
-            )->count();
+                // Count co-author publications
+                $coAuthorCount = AchievementOfResearchPublicationTargetCoAuthor::whereIn('target_id', $facultyRecords->pluck('id'))->count();
 
-            $submissionCount = $facultyRecords->count() + $coAuthorCount;
+                $submissionCount = $facultyRecords->count() + $coAuthorCount;
+                $totalsubmissionCount += $facultyRecords->count();
+                $facultySubmittedTotal += $submissionCount;
+                $facultyResearchSubmitted += $submissionCount; // also for overall research
 
-            $totalsubmissionCount += $facultyRecords->count();
-            $facultySubmittedTotal += $submissionCount;
-            $facultyResearchSubmitted += $submissionCount;
+                // International papers
+                $facultyInternationalCount += $facultyRecords->filter(fn($r) => strtolower(trim($r->nationality)) === 'international')->count();
 
-            // International co-authored publications
-            $facultyInternationalCount += $facultyRecords
-                ->filter(function ($record) {
-                    return strtolower(trim($record->nationality ?? '')) === 'international';
-                })
-                ->count();
-
-            // Journal Quartile scoring
-            $quartilePoints = [
-                'Q1' => 20,
-                'Q2' => 15,
-                'Q3' => 10,
-                'Q4' => 5,
-            ];
-
-            foreach ($facultyRecords as $record) {
-                $quartile = strtoupper(trim($record->journal_clasification ?? ''));
-
-                if (isset($quartilePoints[$quartile])) {
-                    $facultyQuartileScore += $quartilePoints[$quartile];
+                // Journal Quartile scoring
+                $quartilePoints = ['Q1' => 20, 'Q2' => 15, 'Q3' => 10, 'Q4' => 5];
+                foreach ($facultyRecords as $record) {
+                    $quartile = strtoupper(trim($record->journal_clasification));
+                    if (isset($quartilePoints[$quartile])) {
+                        $facultyQuartileScore += $quartilePoints[$quartile];
+                    }
+                    if ($quartile === 'Q1')
+                        $q1Count++;
+                    elseif ($quartile === 'Q2')
+                        $q2Count++;
+                    elseif ($quartile === 'Q3')
+                        $q3Count++;
+                    elseif ($quartile === 'Q4')
+                        $q4Count++;
                 }
-
-                if ($quartile === 'Q1') {
-                    $q1Count++;
-                } elseif ($quartile === 'Q2') {
-                    $q2Count++;
-                } elseif ($quartile === 'Q3') {
-                    $q3Count++;
-                } elseif ($quartile === 'Q4') {
-                    $q4Count++;
-                }
-            }
 
             $totalSubmitted += $facultySubmittedTotal;
             $totalInternational += $facultyInternationalCount;
@@ -7063,7 +7007,7 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
 
             $totalResearchSubmitted += $facultyResearchSubmitted;
             $oversubmissionCount += $totalsubmissionCount;
-
+            // ✅ Quartile counts
             $q1_count1 += $q1Count;
             $q2_count1 += $q2Count;
             $q3_count1 += $q3Count;
@@ -7075,40 +7019,27 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
             ? round(($totalSubmitted / $totalTarget) * 100, 2)
             : 0;
 
-        // International co-author target = 50% of total target
-        $internationalTarget = $totalResearchTarget * 0.5;
-
-        // International co-authored publication score
-        $departmentInternationalFraction = $internationalTarget > 0
-            ? round(($totalInternational / $internationalTarget) * 100, 2)
+        // Department international fraction
+        $departmentInternationalFraction = $totalResearchTarget > 0
+            ? round(($totalInternational / $totalResearchTarget) * 100, 2)
             : 0;
-
-        // Maximum international score = 100
-        $departmentInternationalFraction = min(
-            $departmentInternationalFraction,
-            100
-        );
 
         // Department overall research publications percentage
         $departmentResearchPercentage = $totalResearchTarget > 0
             ? round(($totalResearchSubmitted / $totalResearchTarget) * 100, 2)
             : 0;
-
+        // Department overall research publications percentage
         $overdepartmentResearchPercentage = $totalResearchTarget > 0
             ? round(($oversubmissionCount / $totalResearchTarget) * 100, 2)
             : 0;
-
-        $overdepartmentResearchPercentage = min(
-            $overdepartmentResearchPercentage,
-            100
-        );
-
+        $overdepartmentResearchPercentage = min($overdepartmentResearchPercentage, 100);
+        //dd($totalsubmissionCount);
         $hodEmployeeId = auth()->user()->employee_id;
-
-        // Quartile score cap
-        if ($totalTarget > 0) {
-            $totalQuartileScore = min($totalQuartileScore, 100);
-        } else {
+        $departmentInternationalFraction = min($departmentInternationalFraction, 100);
+        
+        if($totalTarget > 0){
+             $totalQuartileScore = min($totalQuartileScore, 100);
+        }else{
             $totalQuartileScore = 0;
         }
 
@@ -7117,52 +7048,13 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
             'weight128' => getRoleWeightage($activeRoleId, 'indicator', 128)['weightage'],
             'weight203' => getRoleWeightage($activeRoleId, 'indicator', 203)['weightage'],
         ];
+        $weightedScore127 = ($departmentInternationalFraction * $weights['weight127']) / 100;
+        $weightedScore128 = ($overdepartmentResearchPercentage * $weights['weight128']) / 100;
+        $weightedScore203 = ($totalQuartileScore * $weights['weight203']) / 100;
 
-        $weightedScore127 = (
-            $departmentInternationalFraction * $weights['weight127']
-        ) / 100;
-
-        $weightedScore128 = (
-            $overdepartmentResearchPercentage * $weights['weight128']
-        ) / 100;
-
-        $weightedScore203 = (
-            $totalQuartileScore * $weights['weight203']
-        ) / 100;
-
-        saveIndicatorPercentage(
-            $hodEmployeeId,
-            $activeRoleId,
-            $keyPerformanceAreaId,
-            $indicatorCategoryId,
-            127,
-            $weightedScore127,
-            $departmentInternationalFraction,
-            $currentYear
-        );
-
-        saveIndicatorPercentage(
-            $hodEmployeeId,
-            $activeRoleId,
-            $keyPerformanceAreaId,
-            $indicatorCategoryId,
-            203,
-            $weightedScore203,
-            $totalQuartileScore,
-            $currentYear
-        );
-
-        saveIndicatorPercentage(
-            $hodEmployeeId,
-            $activeRoleId,
-            $keyPerformanceAreaId,
-            $indicatorCategoryId,
-            128,
-            $weightedScore128,
-            $overdepartmentResearchPercentage,
-            $currentYear
-        );
-
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 127, $weightedScore127, $departmentInternationalFraction, $currentYear); // International
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 203, $weightedScore203, $totalQuartileScore, $currentYear); // Quartile
+        saveIndicatorPercentage($hodEmployeeId, $activeRoleId, $keyPerformanceAreaId, $indicatorCategoryId, 128, $weightedScore128, $overdepartmentResearchPercentage, $currentYear); // Overall Research % (dummy indicator_id 999, change as needed)
         saveUserTargetAchieved(
             $hodEmployeeId,
             $activeRoleId,
@@ -7171,7 +7063,6 @@ if (!function_exists('departmentScopusAnalysisOfHOD')) {
             $totalTarget,
             $oversubmissionCount
         );
-
         return [
             'total_target' => $totalTarget,
             'total_submit' => $oversubmissionCount,
@@ -7670,6 +7561,7 @@ if (!function_exists('ProgramAccreditationOfHODPLDean')) {
             ->first();
         $totalTarget = $totalTargetDean->target ?? 0;    
         
+
         // 4️⃣ ACHIEVED
         $totalAchieved = $records->count();
 
@@ -7737,6 +7629,7 @@ if (!function_exists('ProgramAccreditationOfHODPLDean')) {
             $totalAchieved
         );
         
+
         // 8️⃣ RETURN
         return (object) [
             'rows' => $rows,
@@ -7911,6 +7804,7 @@ if (!function_exists('noOfProfessionalMembershipsOfHODPLDean')) {
             ->first();
 
         $totalTarget = $totalTargetdean->target ?? 0;  
+
 
         // 4️⃣ ACHIEVED
         $totalAchieved = $records->count();
@@ -10178,7 +10072,7 @@ if (!function_exists('ActiveInternationalResearchPartnerOfHOD')) {
         $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
 
         // 6️⃣ Weighted Score
-        $weightedScore = min(($departmentAvg * $weight) / 100, 100);
+        $weightedScore = ($departmentAvg * $weight) / 100;
 
         // 7️⃣ Save overall only
         saveIndicatorPercentage90Plus(
