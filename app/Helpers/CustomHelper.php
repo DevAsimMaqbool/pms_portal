@@ -1276,10 +1276,8 @@ if (!function_exists('calculateInternationalScore')) {
 }
 
 if (!function_exists('calculateJournalQuartile')) {
-
     function calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId, $currentYear = null)
     {
-
         // Quartile Points
         $quartilePoints = [
             'Q1' => 20,
@@ -1287,10 +1285,12 @@ if (!function_exists('calculateJournalQuartile')) {
             'Q3' => 10,
             'Q4' => 5,
         ];
+
         $q1Count = 0;
         $q2Count = 0;
         $q3Count = 0;
         $q4Count = 0;
+
         $q1_count1 = 0;
         $q2_count1 = 0;
         $q3_count1 = 0;
@@ -1307,28 +1307,43 @@ if (!function_exists('calculateJournalQuartile')) {
 
         $obtainedScore = 0;
 
+        // Maximum possible points: 20 per published paper
+        $totalPapers = $records->count();
+        $maxPossibleScore = $totalPapers * 20;
+
         foreach ($records as $record) {
             $quartile = strtoupper(trim($record->journal_clasification));
+
             if (isset($quartilePoints[$quartile])) {
-                $obtainedScore += $quartilePoints[$record->journal_clasification];
+                $obtainedScore += $quartilePoints[$quartile];
             }
-            if ($quartile === 'Q1')
+
+            if ($quartile === 'Q1') {
                 $q1Count++;
-            elseif ($quartile === 'Q2')
+            } elseif ($quartile === 'Q2') {
                 $q2Count++;
-            elseif ($quartile === 'Q3')
+            } elseif ($quartile === 'Q3') {
                 $q3Count++;
-            elseif ($quartile === 'Q4')
+            } elseif ($quartile === 'Q4') {
                 $q4Count++;
+            }
         }
+
         $q1_count1 += $q1Count;
         $q2_count1 += $q2Count;
         $q3_count1 += $q3Count;
         $q4_count1 += $q4Count;
-        $obtainedScore = min($obtainedScore, 100);
 
+        // Calculate obtained percentage against maximum possible points
+        $obtainedScore = $maxPossibleScore > 0
+            ? min(($obtainedScore / $maxPossibleScore) * 100, 100)
+            : 0;
+
+        // Get Indicator Weightage
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
         $weight = $indicatorWeight['weightage'] ?? 0;
+
+        // Apply indicator weightage
         $weightedScore = ($obtainedScore * $weight) / 100;
 
         saveIndicatorPercentage(
@@ -1341,7 +1356,7 @@ if (!function_exists('calculateJournalQuartile')) {
             $obtainedScore,
             $currentYear
         );
-        //return $obtainedScore;
+
         return [
             'total_score' => $obtainedScore,
             'q1_count' => $q1_count1,
