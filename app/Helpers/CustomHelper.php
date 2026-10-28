@@ -6710,9 +6710,15 @@ if (!function_exists('getDepartmentFacultyFeedbackForHOD')) {
 if (!function_exists('getDepartmentFacultyFeedbackForPL')) {
     function getDepartmentFacultyFeedbackForPL($activeRoleId)
     {
+        $programNames = [];
         $departmentId = auth()->user()->department_id;
         $employee_id = auth()->user()->employee_id;
-        $programIds = Program::where('leader_id', $employee_id)->pluck('id');
+
+        $programNames = \App\Models\Program::query()
+                ->where('leader_id', $employee_id)
+                ->distinct()
+                ->pluck('program_name')
+                ->all();
 
         // Get active Spring and Fall terms
         $activeTerms = \App\Models\Term::where('status', '1')
@@ -6742,6 +6748,7 @@ if (!function_exists('getDepartmentFacultyFeedbackForPL')) {
             )
             ->where('users.department_id', $departmentId)
             ->whereIn('student_feedback_class_wises.term_id', $termIds)
+            ->whereIn('student_feedback_class_wises.program', $programNames)
             ->select(
                 'student_feedback_class_wises.term_id',
                 'student_feedback_class_wises.program',

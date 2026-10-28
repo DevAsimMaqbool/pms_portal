@@ -918,3 +918,165 @@ if (!function_exists('getManagerRole')) {
     }
 }
 
+if (!function_exists('myClassesUG')) {
+    function myClassesUG($activeRoleId, $term = null, $user = null)
+    {
+        $user = $user ?? auth()->user();
+
+        if (!$user) {
+            return [
+                'classes' => collect(),
+                'validClasses' => collect(),
+                'totalCourses' => 0,
+                'courseLoadScore' => 60,
+                'totalPassPercentage' => 0,
+                'totalAverageMarks' => 0,
+                'averagePassPercentage' => 0,
+                'averageStudentScore' => 0,
+                'weightedCourseLoad' => 0,
+                'weightedPassScore' => 0,
+                'weightedMarksScore' => 0,
+            ];
+        }
+        
+        $roleName = activeRole();
+
+        $isProgramLeader = in_array($roleName, [
+            'program leader ug',
+            'program leader pg',
+        ], true);
+
+        $programNames = [];
+        $facultyIds = [];
+
+        if ($isProgramLeader) {
+            $programNames = \App\Models\Program::query()
+                ->where('leader_id', $user->employee_id)
+                ->distinct()
+                ->pluck('program_name')
+                ->all();
+
+            $facultyIds = \App\Models\User::query()
+                ->where('department_id', $user->department_id)
+                ->whereNotNull('faculty_id')
+                ->distinct()
+                ->pluck('faculty_id')
+                ->all();
+        }
+
+        $classes = \App\Models\FacultyMemberClass::query()
+            ->where('career_code', 'UG')
+            ->when($term !== null, function ($query) use ($term) {
+                $query->where('term_id', $term);
+            })
+            ->when($isProgramLeader, function ($query) use (
+                $programNames,
+                $facultyIds
+            ) {
+                // No matching program/faculty means no results.
+                $query->whereIn('faculty_id', $facultyIds)
+                    ->whereHas('attendances', function ($attendanceQuery) use (
+                        $programNames
+                    ) {
+                        $attendanceQuery->whereIn(
+                            'program_name',
+                            $programNames
+                        );
+                    });
+            })
+            ->with([
+                'attendances' => function ($query) use (
+                    $isProgramLeader,
+                    $programNames
+                ) {
+                    $query->when($isProgramLeader, function ($attendanceQuery) use (
+                        $programNames
+                    ) {
+                        $attendanceQuery->whereIn(
+                            'program_name',
+                            $programNames
+                        );
+                    })
+                    ->orderByDesc('class_date');
+                }
+            ])
+            ->get();  
+
+        // Exclude classes without students from score calculations.
+        $validClasses = $classes
+            ->filter(function ($class) {
+                return $class->attendances->sum('total_students') > 0;
+            })
+            ->values();
+
+        $totalCourses = $validClasses->count();
+
+        $totalPassPercentage = $validClasses->sum(
+            fn ($class) => (float) ($class->passing_percentage ?? 0)
+        );
+
+        $totalAverageMarks = $validClasses->sum(
+            fn ($class) => (float) ($class->average_marks ?? 0)
+        );
+
+        $averagePassPercentage = $validClasses->isNotEmpty()
+            ? $validClasses->avg(
+                fn ($class) => (float) ($class->passing_percentage ?? 0)
+            )
+            : 0;
+
+        $averageStudentScore = $validClasses->isNotEmpty()
+            ? $validClasses->avg(
+                fn ($class) => (float) ($class->average_marks ?? 0)
+            )
+            : 0;
+
+        $courseLoadScore = $totalCourses > 3
+            ? 100
+            : ($totalCourses === 3 ? 80 : 60);
+
+        $weights = [
+            'course_load' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                122
+            )['weightage'] ?? 0,
+
+            'pass' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                185
+            )['weightage'] ?? 0,
+
+            'marks' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                186
+            )['weightage'] ?? 0,
+        ];
+
+        return [
+            'classes' => $classes,
+            'validClasses' => $validClasses,
+            'totalCourses' => $totalCourses,
+            'courseLoadScore' => $courseLoadScore,
+            'totalPassPercentage' => $totalPassPercentage,
+            'totalAverageMarks' => $totalAverageMarks,
+            'averagePassPercentage' => $averagePassPercentage,
+            'averageStudentScore' => $averageStudentScore,
+
+            'weightedCourseLoad' => (
+                $courseLoadScore * $weights['course_load']
+            ) / 100,
+
+            'weightedPassScore' => (
+                $averagePassPercentage * $weights['pass']
+            ) / 100,
+
+            'weightedMarksScore' => (
+                $averageStudentScore * $weights['marks']
+            ) / 100,
+        ];
+    }
+}
+

@@ -328,6 +328,7 @@ class EmployeeKpaReportExport implements
                 DB::raw('COUNT(*) as total')
             )
             ->where('year_id', $this->yearId)
+            ->where('status', '3')
             ->groupBy(
                 'created_by',
                 'indicator_id'
@@ -357,6 +358,7 @@ class EmployeeKpaReportExport implements
                 DB::raw('COUNT(*) as total')
             )
             ->where('year_id', $this->yearId)
+            ->where('status', '2')
             ->groupBy(
                 'created_by',
                 'indicator_id'
@@ -386,6 +388,7 @@ class EmployeeKpaReportExport implements
                 DB::raw('COUNT(*) as total')
             )
             ->where('year_id', $this->yearId)
+            ->where('status', '3')
             ->groupBy(
                 'created_by',
                 'indicator_id'
@@ -415,6 +418,7 @@ class EmployeeKpaReportExport implements
                 DB::raw('COUNT(*) as total')
             )
             ->where('year_id', $this->yearId)
+            ->where('status', '3')
             ->groupBy(
                 'created_by',
                 'indicator_id'
