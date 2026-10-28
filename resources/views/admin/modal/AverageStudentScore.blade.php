@@ -343,3 +343,233 @@
 
     <!-- / Payment Methods modal -->
 @endif
+
+@if(in_array(getRoleName(activeRole()), [
+    'Program Leader UG',
+    'Program Leader PG',
+]))
+
+@php
+    $activeRoleId = getRoleIdByName(activeRole());
+    $user = auth()->user();
+
+    $activeTerms = \App\Models\Term::query()
+        ->where('status', '1')
+        ->whereIn('term', ['Spring', 'Fall'])
+        ->get()
+        ->keyBy('term');
+
+    $springTerm = $activeTerms->get('Spring');
+    $fallTerm = $activeTerms->get('Fall');
+
+    $springData = $springTerm
+        ? myClassesUG($activeRoleId, $springTerm->id, $user)
+        : null;
+
+    $fallData = $fallTerm
+        ? myClassesUG($activeRoleId, $fallTerm->id, $user)
+        : null;
+
+    $springAvg = $springData['averageStudentScore'] ?? 0;
+    $fallAvg = $fallData['averageStudentScore'] ?? 0;
+
+    $springValid = $springData['validClasses'] ?? collect();
+    $fallValid = $fallData['validClasses'] ?? collect();
+
+    // Preserve the existing Spring/Fall average calculation.
+    if ($springValid->isNotEmpty() && $fallValid->isNotEmpty()) {
+        $avgScore = ($springAvg + $fallAvg) / 2;
+    } elseif ($springValid->isNotEmpty()) {
+        $avgScore = $springAvg;
+    } elseif ($fallValid->isNotEmpty()) {
+        $avgScore = $fallAvg;
+    } else {
+        $avgScore = 0;
+    }
+
+    $avgScore = round($avgScore, 2);
+
+    // Save the combined score once.
+    $marksWeight = getRoleWeightage(
+        $activeRoleId,
+        'indicator',
+        186
+    )['weightage'] ?? 0;
+
+   
+
+    $semesterTabs = [
+        'spring' => [
+            'label' => '🌸 Spring ' . now()->year,
+            'data' => $springData,
+            'average' => $springAvg,
+            'empty' => 'No Spring records found.',
+        ],
+        'fall' => [
+            'label' => '🍂 Fall ' . (now()->year - 1),
+            'data' => $fallData,
+            'average' => $fallAvg,
+            'empty' => 'No Fall records found.',
+        ],
+    ];
+@endphp
+
+<div class="modal fade"
+    id="AverageStudentScore"
+    tabindex="-1"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+
+            <div class="modal-header">
+                <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body p-4">
+
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    <span class="badge bg-label-primary rounded p-2">
+                        <i class="icon-base ti tabler-chart-histogram icon-md"></i>
+                    </span>
+                    Average Student Score (UG)
+                </h3>
+
+                <div class="nav-align-top nav-tabs-shadow">
+
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        <ul class="nav custom-tabs" role="tablist">
+
+                            @foreach($semesterTabs as $key => $semester)
+                                <li class="nav-item">
+                                    <button type="button"
+                                        class="nav-link {{ $loop->first ? 'active' : '' }}"
+                                        role="tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#AverageStudentScore-{{ $key }}"
+                                        aria-controls="AverageStudentScore-{{ $key }}"
+                                        aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                        {{ $semester['label'] }}
+                                    </button>
+                                </li>
+                            @endforeach
+
+                        </ul>
+                    </div>
+
+                    <div class="tab-content">
+
+                        @foreach($semesterTabs as $key => $semester)
+
+                            @php
+                                $classes = $semester['data']['classes'] ?? collect();
+                                $average = $semester['average'];
+                                $averageRating = getRatingMeta($average);
+                            @endphp
+
+                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                                id="AverageStudentScore-{{ $key }}"
+                                role="tabpanel">
+
+                                <div class="table-responsive">
+
+                                    <table class="table table-hover align-middle custom-table">
+
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Sr#</th>
+                                                <th>Class</th>
+                                                <th>Program</th>
+                                                <th>Career (UG)</th>
+                                                <th>Average Student Score</th>
+                                                <th>Score</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            @forelse($classes as $class)
+
+                                                @php
+                                                    $latestAttendance = $class->attendances->first();
+                                                    $avg = (float) ($class->average_marks ?? 0);
+                                                    $ratingMeta = getRatingMeta($avg);
+                                                @endphp
+
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $class->class_name }}</td>
+                                                    <td>{{ $latestAttendance->program_name ?? 'N/A' }}</td>
+                                                    <td>{{ $class->career_code }}</td>
+                                                    <td>{{ number_format($avg, 1) }}</td>
+
+                                                    <td>
+                                                        <span class="badge"
+                                                            style="background-color: {{ $ratingMeta->color }}">
+                                                            {{ number_format($avg, 1) }}%
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge"
+                                                            style="background-color: {{ $ratingMeta->color }}">
+                                                            {{ $ratingMeta->rating }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                            @empty
+
+                                                <tr>
+                                                    <td colspan="7" class="text-center">
+                                                        {{ $semester['empty'] }}
+                                                    </td>
+                                                </tr>
+
+                                            @endforelse
+
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr class="table-primary">
+                                                <th colspan="5" class="text-end">
+                                                    Average Student Score
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                        style="background-color: {{ $averageRating->color }}">
+                                                        {{ number_format($average, 1) }}%
+                                                    </span>
+                                                </th>
+
+                                                <th>
+                                                    <span class="badge"
+                                                        style="background-color: {{ $averageRating->color }}">
+                                                        {{ $averageRating->rating }}
+                                                    </span>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@endif
