@@ -437,7 +437,7 @@
                     <h6 class="mb-0">Performance Score</h6>
                   </div>
                   <div class="user-progress d-flex align-items-center gap-1">
-                    <h6 class="mb-0 text-success">{{ number_format($overallscore, 1) }}%</h6>
+                    <h6 class="mb-0 text-success">{{ number_format($overallpercentage, 1) }}%</h6>
                   </div>
                 </div>
               </li>
@@ -610,7 +610,7 @@
       @endforeach
 
       // Combined score chart
-      renderChart("#combinedScoreChart", {{ number_format($overallscore, 1) }}, "Score");
+      renderChart("#combinedScoreChart", {{ number_format($overallpercentage, 1) }}, "Score");
 
     });
   </script>
