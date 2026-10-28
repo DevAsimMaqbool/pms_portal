@@ -1296,7 +1296,17 @@ if (!function_exists('calculateJournalQuartile')) {
         $q3_count1 = 0;
         $q4_count1 = 0;
 
-        // Get Approved Scopus Publications
+        // Step 1: Check assigned target from faculty_targets
+        $target = DB::table('faculty_targets')
+            ->where('user_id', $facultyId)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
+            ->sum('target');
+
+        // Maximum possible points based on assigned target
+        $maxPossibleScore = $target * 20;
+
+        // Step 2: Get approved Scopus publications
         $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
             ->where('created_by', $facultyId)
             ->where('target_category', 'Scopus-Indexed')
@@ -1305,17 +1315,14 @@ if (!function_exists('calculateJournalQuartile')) {
             ->where('status', 3) // Fully approved
             ->get();
 
-        $obtainedScore = 0;
+        $obtainedPoints = 0;
 
-        // Maximum possible points: 20 per published paper
-        $totalPapers = $records->count();
-        $maxPossibleScore = $totalPapers * 20;
-
+        // Step 3: Calculate quartile points and counts
         foreach ($records as $record) {
-            $quartile = strtoupper(trim($record->journal_clasification));
+            $quartile = strtoupper(trim($record->journal_clasification ?? ''));
 
             if (isset($quartilePoints[$quartile])) {
-                $obtainedScore += $quartilePoints[$quartile];
+                $obtainedPoints += $quartilePoints[$quartile];
             }
 
             if ($quartile === 'Q1') {
@@ -1334,21 +1341,21 @@ if (!function_exists('calculateJournalQuartile')) {
         $q3_count1 += $q3Count;
         $q4_count1 += $q4Count;
 
-        // Calculate obtained percentage against maximum possible points
+        // Step 4: Calculate percentage against assigned target
         $obtainedScore = $maxPossibleScore > 0
-            ? min(($obtainedScore / $maxPossibleScore) * 100, 100)
+            ? min(($obtainedPoints / $maxPossibleScore) * 100, 100)
             : 0;
 
-        // Get Indicator Weightage
+        // Step 5: Apply indicator weightage
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
         $weight = $indicatorWeight['weightage'] ?? 0;
 
-        // Apply indicator weightage
         $weightedScore = ($obtainedScore * $weight) / 100;
 
+        // Step 6: Save indicator percentage
         saveIndicatorPercentage(
             $facultyId,
-            $role_id = $activeRoleId,
+            $activeRoleId,
             2,
             5,
             203,
