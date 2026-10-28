@@ -195,10 +195,13 @@ class LineManagerEventFeedbackController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LineManagerEventFeedback $lineManagerEventFeedback)
+    public function destroy($id)
     {
-          $lineManagerEventFeedback->delete();
+        $feedback = LineManagerEventFeedback::findOrFail($id);
 
-          return redirect()->back()->with('success', 'Feedback deleted successfully.');
+        $feedback->delete();
+
+        return redirect()->route('employee.feedback.index')
+            ->with('success', 'Feedback deleted successfully.');
     }
 }
