@@ -5997,15 +5997,20 @@ function CompletionOfCourseFolderForPL($activeRoleId, $indicator_id)
 
     $departmentId = auth()->user()->department_id;
     $employee_id = auth()->user()->employee_id;
+    $roleName = strtolower(activeRole());
 
+    $isProgramLeader = [
+        'program leader ug' => 'UG',
+        'program leader pg' => 'PG',
+    ][$roleName] ?? null;
     /*
     |--------------------------------------------------------------------------
     | Faculty Members Of Department
     |--------------------------------------------------------------------------
     */
 
-    $facultyMembers = User::where('manager_id', $employee_id)
-                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');           
+    $facultyMembers = User::where('department_id', $departmentId)->whereNotNull('employee_id')
+                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');                             
                  
     /*
     |--------------------------------------------------------------------------
@@ -6026,6 +6031,11 @@ function CompletionOfCourseFolderForPL($activeRoleId, $indicator_id)
             'completion_of_Course_folder_indicator_id',
             $indicator_id
         )
+        ->when($isProgramLeader, function ($query) use ($isProgramLeader) {
+            $query->whereHas('facultyClass', function ($classQuery) use ($isProgramLeader) {
+                $classQuery->where('career_code', $isProgramLeader);
+            });
+        })
         ->latest()
         ->get();
 
@@ -10817,8 +10827,9 @@ if (!function_exists('admissionTargetAverageForPL')) {
         
         $programIds = Program::where('leader_id', $employeeId)->pluck('id');
         // Get ONLY active terms
-        $activeTerms = Term::where('status', '1')
+        $activeTerms = Term::where('other_status', '1')
             ->get();
+            
 
         $activeTermIds = $activeTerms->pluck('id');
 
@@ -10842,7 +10853,7 @@ if (!function_exists('admissionTargetAverageForPL')) {
                 'percentage' => 0,
             ],
             'Fall' => [
-                'year' => 2025,
+                'year' => NULL,
                 'total_target' => 0,
                 'total_achieved' => 0,
                 'percentage' => 0,
