@@ -395,6 +395,16 @@
         'indicator',
         186
     )['weightage'] ?? 0;
+    $weightedPassScore = ($avgScore * $marksWeight) / 100;
+    saveIndicatorPercentage(
+        auth()->id(),
+        $activeRoleId,
+        1,
+        25,
+        186,
+        $weightedPassScore,
+        $avgScore
+    );
 
    
 
