@@ -689,6 +689,15 @@ public function collection()
 
             /*
             |--------------------------------------------------------------------------
+            | Teacher: Exclude KPA ID 2
+            |--------------------------------------------------------------------------
+            */
+            if ($role->name === 'Teacher') {
+                unset($kpaGroups[2]);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
             | KPA Totals
             |--------------------------------------------------------------------------
             */
@@ -721,6 +730,23 @@ public function collection()
 
                 $weightedKpaScore =
                     $rawKpaScore * ($kpaWeight / 100);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Teacher KPA Score Adjustment
+                |--------------------------------------------------------------------------
+                */
+                if ($role->name === 'Teacher') {
+                    if ((int) $kpaId === 1) {
+                        $weightedKpaScore =
+                            ($weightedKpaScore * 60) / 50;
+                    }
+
+                    if ((int) $kpaId === 13) {
+                        $weightedKpaScore =
+                            ($weightedKpaScore * 40) / 30;
+                    }
+                }
 
                 $kpaTotals[$kpaId] = [
                     'raw' =>
