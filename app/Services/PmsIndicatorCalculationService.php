@@ -2282,7 +2282,7 @@ protected function calculate203(
 
     // Step 1: Get assigned target from faculty_targets
     $target = DB::table('faculty_targets')
-        ->where('employee_id', $employeeId)
+        ->where('user_id', $employeeId)
         ->where('indicator_id', $sourceIndicatorId)
         ->where('year_id', $this->yearId)
         ->sum('target');
