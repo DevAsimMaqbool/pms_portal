@@ -4,6 +4,8 @@ use App\Models\ActiveRecord;
 use App\Models\User;
 use App\Models\IndicatorsPercentage;
 use App\Models\Department;
+use App\Models\FacultyClassAttendance;
+use App\Models\FacultyMemberClass;
 use App\Models\FacultyTarget;
 use App\Models\Role;
 use App\Models\Term;
@@ -1080,3 +1082,175 @@ if (!function_exists('myClassesUG')) {
     }
 }
 
+function myDepartmentClassesAttendanceRecordPGUG(
+    $employeeId,
+    $activeRoleId,
+    $activeTermId
+) {
+    $user = $user ?? auth()->user();
+    $departmentId = auth()->user()->department_id;
+    $roleName = activeRole();
+    $isProgramLeader = [
+        'program leader ug' => 'UG',
+        'program leader pg' => 'PG',
+    ][$roleName] ?? null;
+    $programNames = [];    
+    if ($isProgramLeader) {
+            $programNames = \App\Models\Program::query()
+                ->where('leader_id', $user->employee_id)
+                ->distinct()
+                ->pluck('program_name')
+                ->all();
+
+        }    
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get all faculty members of HOD's department
+    |--------------------------------------------------------------------------
+    */
+    $facultyUsers = User::where('department_id', $departmentId)
+        ->whereNotNull('faculty_id')
+        ->get([
+            'faculty_id',
+            'name'
+        ]);
+
+    if ($facultyUsers->isEmpty()) {
+        return collect();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty IDs
+    |--------------------------------------------------------------------------
+    */
+    $facultyIds = $facultyUsers
+        ->pluck('faculty_id')
+        ->unique()
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Faculty names indexed by faculty_id
+    |--------------------------------------------------------------------------
+    */
+    $facultyNames = $facultyUsers
+        ->unique('faculty_id')
+        ->keyBy('faculty_id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get all classes + attendance counts in ONE query
+    |--------------------------------------------------------------------------
+    */
+    $classes = FacultyMemberClass::query()
+        ->when(
+            $isProgramLeader,
+            function ($query) use ($isProgramLeader) {
+                $query->where('career_code', $isProgramLeader);
+            },
+            function ($query) {
+                $query->where('career_code', 'UG');
+            }
+        )
+        ->whereIn(
+            'faculty_member_classes.faculty_id',
+            $facultyIds
+        )
+        ->where(
+            'faculty_member_classes.term_id',
+            $activeTermId
+        )
+
+        ->leftJoinSub(
+            FacultyClassAttendance::query()
+                ->select(
+                    'class_id',
+                    DB::raw('COUNT(*) as total_rows'),
+                    DB::raw(
+                        'SUM(CASE WHEN att_marked = 1 THEN 1 ELSE 0 END) as class_held_count'
+                    ),
+                    DB::raw(
+                        'SUM(CASE WHEN att_marked = 0 THEN 1 ELSE 0 END) as class_not_held_count'
+                    )
+                )->when($isProgramLeader, function ($query) use ($programNames) {
+                        $query->whereIn('program_name', $programNames);
+                    })
+                ->groupBy('class_id'),
+
+            'attendance_counts',
+
+            'attendance_counts.class_id',
+            '=',
+            'faculty_member_classes.c_class_id'
+        )
+
+        ->select([
+            'faculty_member_classes.*',
+
+            DB::raw(
+                'COALESCE(attendance_counts.total_rows, 0) as total_rows'
+            ),
+
+            DB::raw(
+                'COALESCE(attendance_counts.class_held_count, 0) as class_held_count'
+            ),
+
+            DB::raw(
+                'COALESCE(attendance_counts.class_not_held_count, 0) as class_not_held_count'
+            ),
+        ])
+
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Format result
+    |--------------------------------------------------------------------------
+    */
+    return $classes->map(function ($class) use ($facultyNames) {
+
+        $totalRows = (int) $class->total_rows;
+        $heldCount = (int) $class->class_held_count;
+        $notHeldCount = (int) $class->class_not_held_count;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Held percentage
+        |--------------------------------------------------------------------------
+        */
+        $class->held_percentage = $class->class_held_count >= 16 ? 100 : ($class->total_rows ? round(($class->class_held_count / $class->total_rows) * 100, 2) : 0);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Not held percentage
+        |--------------------------------------------------------------------------
+        */
+        $class->not_held_percentage = $totalRows > 0
+            ? round(($notHeldCount / $totalRows) * 100, 2)
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty name
+        |--------------------------------------------------------------------------
+        */
+        $faculty = $facultyNames->get($class->faculty_id);
+
+        $class->faculty_name = $faculty?->name ?? 'N/A';
+
+        /*
+        |--------------------------------------------------------------------------
+        | Program
+        |--------------------------------------------------------------------------
+        |
+        | Keep null if program is not available from
+        | faculty_member_classes.
+        |
+        */
+        $class->program = null;
+
+        return $class;
+    });
+}
