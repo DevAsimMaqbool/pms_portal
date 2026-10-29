@@ -1223,9 +1223,10 @@ if (!function_exists('calculateInternationalScore')) {
 
         foreach ($facultyTargets as $facultyTarget) {
             $targetCount = (float) ($facultyTarget->target ?? 0);
+
             $submissionCount = $facultyTarget->researchPublicationTargets->count();
 
-            $internationalcount = $facultyTarget->researchPublicationTargets
+            $internationalCount = $facultyTarget->researchPublicationTargets
                 ->filter(function ($publication) {
                     return strtolower(trim($publication->nationality ?? '')) === 'international';
                 })
@@ -1233,16 +1234,24 @@ if (!function_exists('calculateInternationalScore')) {
 
             $totalTarget += $targetCount;
             $totalSubmitted += $submissionCount;
-            $internationalPapers += $internationalcount;
-
+            $internationalPapers += $internationalCount;
         }
-        $fraction = $totalTarget > 0
-            ? round(($internationalPapers / $totalTarget) * 100, 2) : 0;
+
+        // International co-author target is 50% of total publication target
+        $internationalTarget = $totalTarget * 0.5;
+
+        // Calculate score against the international target
+        $fraction = $internationalTarget > 0
+            ? round(($internationalPapers / $internationalTarget) * 100, 2)
+            : 0;
+
+        // Maximum score is 100
         $fraction = min($fraction, 100);
 
         // Calculate obtained score using indicator weight
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 127);
         $weight = $indicatorWeight['weightage'] ?? 0;
+
         $obtainedScore = ($fraction * $weight) / 100;
 
         // Save obtained score
@@ -1257,22 +1266,18 @@ if (!function_exists('calculateInternationalScore')) {
             $currentYear
         );
 
-        //return round($obtainedScore, 2); // e.g., 5.00
         return [
             'total_score' => $fraction,
             'total_target' => $totalTarget,
             'total_acheived' => $totalSubmitted,
             'total_international' => $internationalPapers,
-
         ];
     }
 }
 
 if (!function_exists('calculateJournalQuartile')) {
-
     function calculateJournalQuartile($facultyId, $activeRoleId, $indicatorId, $currentYear = null)
     {
-
         // Quartile Points
         $quartilePoints = [
             'Q1' => 20,
@@ -1280,16 +1285,28 @@ if (!function_exists('calculateJournalQuartile')) {
             'Q3' => 10,
             'Q4' => 5,
         ];
+
         $q1Count = 0;
         $q2Count = 0;
         $q3Count = 0;
         $q4Count = 0;
+
         $q1_count1 = 0;
         $q2_count1 = 0;
         $q3_count1 = 0;
         $q4_count1 = 0;
 
-        // Get Approved Scopus Publications
+        // Step 1: Check assigned target from faculty_targets
+        $target = DB::table('faculty_targets')
+            ->where('user_id', $facultyId)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
+            ->sum('target');
+
+        // Maximum possible points based on assigned target
+        $maxPossibleScore = $target * 20;
+
+        // Step 2: Get approved Scopus publications
         $records = AchievementOfResearchPublicationsTarget::where('indicator_id', $indicatorId)
             ->where('created_by', $facultyId)
             ->where('target_category', 'Scopus-Indexed')
@@ -1298,35 +1315,47 @@ if (!function_exists('calculateJournalQuartile')) {
             ->where('status', 3) // Fully approved
             ->get();
 
-        $obtainedScore = 0;
+        $obtainedPoints = 0;
 
+        // Step 3: Calculate quartile points and counts
         foreach ($records as $record) {
-            $quartile = strtoupper(trim($record->journal_clasification));
+            $quartile = strtoupper(trim($record->journal_clasification ?? ''));
+
             if (isset($quartilePoints[$quartile])) {
-                $obtainedScore += $quartilePoints[$record->journal_clasification];
+                $obtainedPoints += $quartilePoints[$quartile];
             }
-            if ($quartile === 'Q1')
+
+            if ($quartile === 'Q1') {
                 $q1Count++;
-            elseif ($quartile === 'Q2')
+            } elseif ($quartile === 'Q2') {
                 $q2Count++;
-            elseif ($quartile === 'Q3')
+            } elseif ($quartile === 'Q3') {
                 $q3Count++;
-            elseif ($quartile === 'Q4')
+            } elseif ($quartile === 'Q4') {
                 $q4Count++;
+            }
         }
+
         $q1_count1 += $q1Count;
         $q2_count1 += $q2Count;
         $q3_count1 += $q3Count;
         $q4_count1 += $q4Count;
-        $obtainedScore = min($obtainedScore, 100);
 
+        // Step 4: Calculate percentage against assigned target
+        $obtainedScore = $maxPossibleScore > 0
+            ? min(($obtainedPoints / $maxPossibleScore) * 100, 100)
+            : 0;
+
+        // Step 5: Apply indicator weightage
         $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', 203);
         $weight = $indicatorWeight['weightage'] ?? 0;
+
         $weightedScore = ($obtainedScore * $weight) / 100;
 
+        // Step 6: Save indicator percentage
         saveIndicatorPercentage(
             $facultyId,
-            $role_id = $activeRoleId,
+            $activeRoleId,
             2,
             5,
             203,
@@ -1334,7 +1363,7 @@ if (!function_exists('calculateJournalQuartile')) {
             $obtainedScore,
             $currentYear
         );
-        //return $obtainedScore;
+
         return [
             'total_score' => $obtainedScore,
             'q1_count' => $q1_count1,
@@ -7561,7 +7590,6 @@ if (!function_exists('ProgramAccreditationOfHODPLDean')) {
             ->first();
         $totalTarget = $totalTargetDean->target ?? 0;    
         
-
         // 4️⃣ ACHIEVED
         $totalAchieved = $records->count();
 
@@ -7629,7 +7657,6 @@ if (!function_exists('ProgramAccreditationOfHODPLDean')) {
             $totalAchieved
         );
         
-
         // 8️⃣ RETURN
         return (object) [
             'rows' => $rows,
@@ -7804,7 +7831,6 @@ if (!function_exists('noOfProfessionalMembershipsOfHODPLDean')) {
             ->first();
 
         $totalTarget = $totalTargetdean->target ?? 0;  
-
 
         // 4️⃣ ACHIEVED
         $totalAchieved = $records->count();
