@@ -711,6 +711,7 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
     {
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $faculty = auth()->user()->faculty;
+        $faculty_employee_id = auth()->user()->employee_id;
        // $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
 
         $hod_ids = User::where('faculty', $faculty)
@@ -719,6 +720,7 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
                 $query->where('id', '!=', 609);
             })
             ->pluck('employee_id');
+        $hod_ids = $hod_ids->diff([$faculty_employee_id])->values();    
         $count_hod_ids = $hod_ids->count();
         $record = IndicatorsPercentage::with([
             'user:id,employee_id,department_id,name',
