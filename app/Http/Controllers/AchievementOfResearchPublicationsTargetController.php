@@ -49,7 +49,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
                 if ($status == "RESEARCHER") {
                     $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor'])->pluck('employee_id');
+                        ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor'])->pluck('employee_id');
                     $all_ids = $teacher_id->merge($hod_ids);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
@@ -64,7 +64,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
             }
-            if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor'])) {
+            if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor'])) {
 
                 $status = $request->input('status');
                 if ($status == "Teacher") {
@@ -81,7 +81,7 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
                 if ($status == "HOD") {
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor'])->pluck('employee_id');
+                        ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employee_id);
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
@@ -345,7 +345,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 return response()->json(['status' => 'error', 'errors' => $validator->errors()], 422);
             }
 
-
             $employeeId = Auth::user()->employee_id;
             $exists = AchievementOfResearchPublicationsTarget::where('created_by', $employeeId)
                 ->where('link_of_publications', $request->link_of_publications)
@@ -427,7 +426,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -456,7 +454,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
 
             $target = AchievementOfResearchPublicationsTarget::findOrFail($id);
 
-
             // Get current update history
             $history = $target->update_history ? json_decode($target->update_history, true) : [];
 
@@ -477,8 +474,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     'updated_at' => now()->toDateTimeString(),
                 ];
             }
-
-
 
             $target->status = $request->status;
             $target->reject_status = '0';
@@ -517,10 +512,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 ];
             }
 
-
-
-
-
             $target->status = 1;
             $target->reject_status = $request->status;
             $target->reject_status_remarks = $request->reject_status_remarks;
@@ -557,9 +548,6 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                     'updated_at' => now()->toDateTimeString(),
                 ];
             }
-
-
-
 
             $target->status = 2;
             $target->reject_status = $request->status;
@@ -745,8 +733,5 @@ class AchievementOfResearchPublicationsTargetController extends Controller
             'message' => 'Field updated successfully.',
         ]);
     }
-
-
-
 
 }

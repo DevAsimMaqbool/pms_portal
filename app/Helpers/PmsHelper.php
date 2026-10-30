@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\DB;
 if (!function_exists('hodTopPerformers')) {
     function hodTopPerformers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Non Phd AP','Demonstrator'])->pluck('id')->toArray();
         $departmentId = auth()->user()->department_id;
         $department = Department::find($departmentId);
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Non Phd AP','Demonstrator'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -291,10 +291,10 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])->pluck('id')->toArray();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -312,7 +312,7 @@ function MultidisciplinaryProjectsHODDean($employeeIds, $activeRoleId, $indicato
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
@@ -363,10 +363,10 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])->pluck('id')->toArray();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -384,7 +384,7 @@ function CommercialGainsCounsultancyResearchIncomeHODDean($employeeIds, $activeR
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
@@ -440,10 +440,10 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])->pluck('id')->toArray();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -461,7 +461,7 @@ function PatentsIntellectualPropertyHODDean($employeeIds, $activeRoleId, $indica
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
@@ -517,10 +517,10 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId,$c
 {
     $departmentId = auth()->user()->department_id;
     if (in_array(getRoleName(activeRole()), ['HOD'])) {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])->pluck('id')->toArray();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();
@@ -538,7 +538,7 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId,$c
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $employeeIds = User::where('faculty', $faculty)
-            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor'])
+            ->role(['HOD', 'Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP'])
             ->pluck('employee_id')
             ->filter()
             ->toArray();
@@ -593,12 +593,12 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId,$c
 if (!function_exists('FacultyLevelToppers')) {
     function FacultyLevelToppers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP', 'Demonstrator'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('faculty', $faculty)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP', 'Demonstrator'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();

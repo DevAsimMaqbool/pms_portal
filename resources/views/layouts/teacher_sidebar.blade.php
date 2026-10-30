@@ -102,7 +102,7 @@
 </a>
 </li> -->
 
-    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Program Leader UG', 'Program Leader PG', 'Demonstrator']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Non Phd AP','Professor', 'Associate Professor', 'Program Leader UG', 'Program Leader PG', 'Demonstrator']))
 
         <!-- <li class="menu-item" {{ request()->routeIs('pip.index') ? 'active' : '' }}>
                                                                                                                                                                                                                                       <a href="{{ route('pip.index') }}" class="menu-link">

@@ -27,7 +27,7 @@ class CompletionOfCourseFolderController extends Controller
             ->get(); // make sure you call get() here, not just a query builder
         // dd($data);
 
-        if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])) {
+        if (in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor', 'Demonstrator'])) {
             $status = $request->input('status');
             if ($status == "Teacher") {
                 $forms = CompletionOfCourseFolder::with([
@@ -44,7 +44,7 @@ class CompletionOfCourseFolderController extends Controller
             }
             if ($status == "HOD") {
                 $employeeIds = User::where('manager_id', $employeeId)
-                    ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
+                    ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employeeId);
                 $forms = CompletionOfCourseFolder::with([
                     'creator' => function ($q) {

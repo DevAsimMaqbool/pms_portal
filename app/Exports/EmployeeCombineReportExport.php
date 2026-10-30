@@ -52,6 +52,7 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
         $teachingRoleNames = [
             'Teacher',
             'Assistant Professor',
+            'Non Phd AP',
             'Associate Professor',
             'Professor',
             'Demonstrator',
@@ -126,8 +127,6 @@ class EmployeeCombineReportExport implements FromCollection, WithHeadings, WithM
                    $totalWeightedScore += $scores * $weight / 100;
                 }
 
-
-                
                 //$totalWeight += $weight;
                 if (!$adminWeightAdded) {
                     $totalWeight += $weight;
