@@ -15,14 +15,14 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator']))
+        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator','Non Phd AP']))
             <!-- Multi Column with Form Separator -->
             <div class="card">
                 <div class="card-datatable table-responsive card-body">
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator']))
+                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor', 'Demonstrator','Non Phd AP']))
                             <div class="tab-pane fade show active" id="form1" role="tabpanel">
                                 <div class="d-flex justify-content-between">
                                     <div>

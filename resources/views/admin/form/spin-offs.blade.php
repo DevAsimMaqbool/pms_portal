@@ -26,7 +26,7 @@
                     <!-- <a href="{{ route('indicators_crud.index', ['slug' => 'spin-offs', 'id' => $indicatorId]) }}"
                             class="btn rounded-pill btn-outline-primary waves-effect"> View</a> -->
                 </div>
-                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
+                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor','Non Phd AP']))
                     <form id="researchForm1" enctype="multipart/form-data" class="row">
                         @csrf
                         <input type="hidden" id="kpa_id" name="kpa_id" value="{{ $areaId }}">
@@ -143,7 +143,7 @@
     <script src="{{ asset('admin/assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('admin/assets/js/forms-selects.js') }}"></script>
     <script src="{{ asset('admin/assets/vendor/libs/tagify/tagify.js') }}"></script>
-    @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor']))
+    @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor','Non Phd AP']))
         <script>
             $(document).ready(function () {
 

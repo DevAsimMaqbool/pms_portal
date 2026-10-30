@@ -46,7 +46,7 @@
     $springTerm = $activeTerms->get('Spring');
     $fallTerm = $activeTerms->get('Fall');
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator','Non Phd AP']))
 @php
 
     // Spring

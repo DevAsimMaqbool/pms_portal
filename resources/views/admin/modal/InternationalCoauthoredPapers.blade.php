@@ -42,7 +42,7 @@
     $totalFeedback = 0;     
     $currentYear = SelectCurrentYear(1)->first();                               
  @endphp
- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+ @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
 <!--  Payment Methods modal -->
 
     <div class="modal fade" id="InternationalCoauthoredPapers" tabindex="-1" aria-hidden="true">

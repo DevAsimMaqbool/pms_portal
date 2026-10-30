@@ -42,7 +42,7 @@
     $totalFeedback = 0;  
     $currentYear = SelectCurrentYear(1)->first();                                  
  @endphp
- @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+ @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="ofGrantProposalsSubmitted" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -70,7 +70,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
                                             @php
                                                 $noofGrantsWon = noofGrantsWon(Auth::user()->employee_id, $activeRoleId, 'Submitted', 135,$currentYear->id);
                                             @endphp

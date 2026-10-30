@@ -15,7 +15,7 @@
 @section('content')
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Teacher','Professor','Assistant Professor','Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['Dean','HOD','ORIC','Teacher','Professor','Assistant Professor','Associate Professor','Non Phd AP']))
         <!-- Multi Column with Form Separator -->
         <div class="card">
             <div class="card-datatable table-responsive card-body">
@@ -45,7 +45,7 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     {{-- ================= FORM 1 ================= --}}
-                    @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Associate Professor','Assistant Professor','Professor']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Associate Professor','Assistant Professor','Professor','Non Phd AP']))
                     
                     <div class="tab-pane fade show active" id="form1" role="tabpanel">
                     <div class="d-flex justify-content-between">

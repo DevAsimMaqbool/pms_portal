@@ -300,7 +300,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/hod-departments-overview', [PermissionController::class, 'hodDepartmentsOverview']);
     Route::get('/multi-role-performance', [PermissionController::class, 'MultiRolePerformance'])->name('multi-role-performance');
 
-    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC|Finance|OEC|Employability Center|Program Leader UG|Program Leader PG|DOPS|Alumni Office|Associate Professor|QCH|Demonstrator')->group(function () {
+    Route::middleware('role:Teacher|HOD|ORIC|Dean|Human Resources|Assistant Professor|Professor|International Office|QEC|Finance|OEC|Employability Center|Program Leader UG|Program Leader PG|DOPS|Alumni Office|Associate Professor|QCH|Demonstrator|Non Phd AP')->group(function () {
         Route::get('/view-forms', [IndicatorController::class, 'indicator_form_show'])->name('indicatorForm.show');
         Route::post('/achievement-of-research-publications-target/{id}/update-status', [IndicatorController::class, 'updateStatus']);
         Route::post('/achievement-of-research-publications-target/bulk-update-status', [IndicatorController::class, 'bulkUpdateStatus'])->name('indicatorForm.bulkUpdateStatus');

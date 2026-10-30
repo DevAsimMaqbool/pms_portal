@@ -19,7 +19,7 @@
         <div class="card">
              <h5 class="card-header">Products Delivered to Industry</h5>
             <div class="card-datatable table-responsive card-body">
-                     @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
+                     @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor','Non Phd AP']))
                         <div class="tab-pane fade show" id="form2" role="tabpanel">
                            <div class="table-responsive text-nowrap">
                              <table id="intellectualTable" class="table table-bordered">
@@ -219,7 +219,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor','Non Phd AP']))
         <script>
             function fetchCommercialForms() {
                 $.ajax({

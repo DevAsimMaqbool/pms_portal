@@ -42,7 +42,7 @@
     $totalFeedback = 0;                                    
     $currentYear = SelectCurrentYear(1)->first();
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
 
     <!--  Payment Methods modal -->
 
@@ -74,7 +74,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
                                             @php
                                                 $data = NumberOfKnowledgeProduct(Auth::id(), $activeRoleId,$currentYear->id);
                                             @endphp
@@ -101,7 +101,7 @@
                                             @endif
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="">Total</th>
