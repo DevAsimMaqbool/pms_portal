@@ -296,6 +296,13 @@
 
         </li>
 
+         <li class="menu-item {{ request()->routeIs('goal-initiatives.index') ? 'active' : '' }}">
+            <a href="{{ route('goal-initiatives.index') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-bulb"></i>
+                <div data-i18n="Initiative / Extra Role">Initiative / Extra Role</div>
+            </a>
+        </li>
+
         <!-- <li class="menu-item">
                                   <a href="#" class="menu-link">
                                     <i class="menu-icon icon-base ti tabler-bell"></i>
