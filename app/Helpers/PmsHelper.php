@@ -722,7 +722,6 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
             ->pluck('employee_id');
         $hod_ids = $hod_ids->diff([$faculty_employee_id])->values();    
         $count_hod_ids = $hod_ids->count();
-        dd($count_hod_ids);
         $record = IndicatorsPercentage::with([
             'user:id,employee_id,department_id,name',
             'user.department:id,name'
