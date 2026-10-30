@@ -86,7 +86,8 @@
                                                     'Associate Professor',
                                                     'Professor',
                                                     'Program Leader UG',
-                                                    'Program Leader PG'
+                                                    'Program Leader PG',
+                                                    'Non Phd AP'
                                                 ])
                                             )
 
