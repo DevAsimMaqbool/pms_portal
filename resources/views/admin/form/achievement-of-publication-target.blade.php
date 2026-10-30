@@ -59,7 +59,7 @@
             <div class="tab-content">
 
                 {{-- ================= FORM 1 ================= --}}
-                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor', 'Professor', 'Associate Professor']))
+                @if(in_array(getRoleName(activeRole()), ['Teacher', 'HOD', 'Assistant Professor', 'Professor', 'Associate Professor','Non Phd AP']))
                 @php
                     $formStatus = in_array('Dean', auth()->user()->roles->pluck('name')->toArray())
                         ? 'DEAN'
@@ -939,7 +939,7 @@
         }
     </script>
 
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Non Phd AP']))
         <script>
             $(document).ready(function () {
                

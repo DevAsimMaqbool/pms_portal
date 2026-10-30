@@ -41,7 +41,7 @@
     // Initialize totalFeedback to 0 in case nothing is set later
     $totalFeedback = 0;                                    
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Associate Professor', 'Associate Professor', 'Professor','Non Phd AP']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="ResearchProductivityofPGStudentsMSMPhilPhD" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">

@@ -42,7 +42,7 @@
     $totalFeedback = 0;  
     $currentYear = SelectCurrentYear(1)->first();                                  
  @endphp
- @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor']))
+ @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
     <!--  Payment Methods modal -->
 
     <div class="modal fade" id="RatingonImpactofResearchConferencesOrganized" tabindex="-1" aria-hidden="true">
@@ -73,7 +73,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor']))
+                                        @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
                                             @php
                                                 $data = RatingonImpact(Auth::id(), $activeRoleId,$currentYear->id);
                                             @endphp
@@ -100,7 +100,7 @@
                                             @endif
                                         @endif
                                     </tbody>
-                                    @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor']))
+                                    @if(in_array(getRoleName(activeRole()), ['Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
                                         <tfoot>
                                             <tr class="table-primary">
                                                 <th class="">Total</th>

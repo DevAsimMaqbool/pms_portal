@@ -41,7 +41,7 @@
     $totalFeedback = 0; 
      $currentYear = SelectCurrentYear(1)->first();                                   
  @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Non Phd AP', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="ResearchPublications" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -78,7 +78,7 @@
                                         </thead>
                                        
                                         <tbody>
-                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor','Non Phd AP']))
                                                 @php
                                                     $scopusData = ScopusPublicationsNew(Auth::user()->employee_id, $activeRoleId, 128,2,5,$currentYear->id);
                                                     if (!function_exists('ratingFunction')) {

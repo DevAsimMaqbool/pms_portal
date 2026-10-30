@@ -39,7 +39,7 @@
             </div>
             
             <div class="card-datatable table-responsive card-body">
-                @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor']))
+                @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor','Non Phd AP']))
                     <div class="tab-pane fade show" id="form2" role="tabpanel">
                         <div class="table-responsive text-nowrap">
                             <table id="achievementTable" class="table table-bordered">
@@ -318,7 +318,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor','Non Phd AP']))
         <script>
             function fetchAchievementForms() {
                 $.ajax({

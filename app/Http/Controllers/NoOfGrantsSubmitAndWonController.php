@@ -28,7 +28,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                    ->role('HOD')->pluck('employee_id');
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Professor','Assistant Professor','Associate Professor','Non Phd AP'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                           $forms = NoOfGrantsSubmitAndWon::with([
                                 'creator' => function ($q) {
@@ -48,7 +48,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                     }
 
             }
-            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor'])) {
+            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor','Non Phd AP'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = NoOfGrantsSubmitAndWon::with([
@@ -70,7 +70,7 @@ class NoOfGrantsSubmitAndWonController extends Controller
                 }
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor','Non Phd AP'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employee_id);
                     $forms = NoOfGrantsSubmitAndWon::with([
                             'creator' => function ($q) {

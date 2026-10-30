@@ -35,7 +35,7 @@
         vertical-align: middle;
     }
 </style>
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator','Non Phd AP']))
     <!--  Payment Methods modal -->
     @php
     $activeRoleId = getRoleIdByName(activeRole());
@@ -171,7 +171,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator','Non Phd AP']))
 
                                                 @forelse($spring as $class)
                                                     @php
@@ -223,7 +223,7 @@
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator','Non Phd AP']))
                                             <tfoot>
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>
@@ -261,7 +261,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+                                            @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator','Non Phd AP']))
 
                                                 @forelse($fall as $class)
                                                     @php
@@ -313,7 +313,7 @@
                                                 @endforelse
                                             @endif
                                         </tbody>
-                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator']))
+                                        @if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Demonstrator','Non Phd AP']))
                                             <tfoot>
                                                 <tr class="table-primary">
                                                     <th class="text-end">Total</th>

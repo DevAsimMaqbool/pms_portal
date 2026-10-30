@@ -41,7 +41,7 @@ class ProductsDeliveredToIndustryController extends Controller
                     }
 
             }
-            if(in_array(getRoleName(activeRole()), ['Teacher','HOD','Assistant Professor','Associate Professor','Professor'])) {    
+            if(in_array(getRoleName(activeRole()), ['Teacher','HOD','Assistant Professor','Associate Professor','Professor','Non Phd AP'])) {    
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = ProductsDeliveredToIndustry::with([
@@ -55,7 +55,7 @@ class ProductsDeliveredToIndustryController extends Controller
                 }
                 if($status=="HOD"){
                      $employeeIds = User::where('manager_id', $employee_id)
-                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor','Non Phd AP'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employee_id);
                     $forms = ProductsDeliveredToIndustry::with([
                             'creator' => function ($q) {

@@ -57,7 +57,7 @@
     $employeeEventCount = $feedbacks->employee_event_count ?? 0;
     $maxDepartmentCount = $feedbacks->max_department_count ?? 0;                             
 @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader PG', 'Program Leader UG', 'Demonstrator']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor', 'Program Leader PG', 'Program Leader UG', 'Demonstrator','Non Phd AP']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="EventPerformanceFeedback" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">

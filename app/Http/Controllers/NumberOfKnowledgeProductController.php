@@ -35,7 +35,7 @@ class NumberOfKnowledgeProductController extends Controller
 
             }
 
-             if(in_array(getRoleName(activeRole()), ['Teacher','Professor','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG'])) {
+             if(in_array(getRoleName(activeRole()), ['Teacher','Professor','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Non Phd AP'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = NumberOfKnowledgeProduct::with([
@@ -58,7 +58,7 @@ class NumberOfKnowledgeProductController extends Controller
                 $status = $request->input('status');
                 if($status=="HOD"){
                      $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor','Non Phd AP'])->pluck('employee_id');
                         $all_ids = $employeeIds->merge($employee_id);    
                         $forms = NumberOfKnowledgeProduct::with([
                                 'creator' => function ($q) {
@@ -84,7 +84,7 @@ class NumberOfKnowledgeProductController extends Controller
                     ->role('HOD')->pluck('employee_id');
                 if ($status == "HOD") {
                     $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor','Non Phd AP'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                     $forms = NumberOfKnowledgeProduct::with([
                         'creator' => function ($q) {

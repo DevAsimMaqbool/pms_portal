@@ -43,7 +43,7 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Associate Professor','Professor']))
+                    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher', 'Assistant Professor','Associate Professor','Professor','Non Phd AP']))
                         <div class="tab-pane fade show active" id="form1" role="tabpanel">
                         <div class="d-flex justify-content-between">
                                <div>
@@ -286,7 +286,7 @@
     </script>
 @endpush
 @push('script')
-    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor']))
+    @if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Associate Professor','Professor','Non Phd AP']))
         <script>
             $(document).ready(function () {
                   function fetchTarget(indicatorId) {
