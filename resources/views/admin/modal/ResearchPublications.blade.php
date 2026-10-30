@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -59,10 +58,8 @@
                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="nav-align-top nav-tabs-shadow">
 
-
                         <!-- Tab Content -->
                         <div class="tab-content">
-
 
                             <!-- Fall -->
                             <div class="tab-pane fade show active"
