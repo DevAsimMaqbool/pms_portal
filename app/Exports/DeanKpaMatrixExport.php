@@ -480,9 +480,9 @@ class DeanKpaMatrixExport implements
                             );
 
                             $row[] = $scoreRecord
-                                && $scoreRecord->with_out_weight_score !== null
-                                && $scoreRecord->with_out_weight_score !== ''
-                                    ? (float) $scoreRecord->with_out_weight_score
+                                && $scoreRecord->score !== null
+                                && $scoreRecord->score !== ''
+                                    ? (float) $scoreRecord->score
                                     : '';
                         } else {
                             $row[] = '';
