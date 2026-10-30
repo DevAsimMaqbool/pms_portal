@@ -11,7 +11,6 @@
         box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.2);
     }
 
-
     .custom-tabs .nav-link {
         border-radius: 25px;
         margin: 0 5px;
@@ -42,7 +41,7 @@
     $totalFeedback = 0; 
      $currentYear = SelectCurrentYear(1)->first();                                   
  @endphp
-@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Professor']))
+@if(in_array(getRoleName(activeRole()), ['Teacher', 'Assistant Professor', 'Associate Professor', 'Non Phd AP', 'Professor']))
     <!-- / Payment Methods modal -->
     <div class="modal fade" id="ResearchPublications" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -59,10 +58,8 @@
                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="nav-align-top nav-tabs-shadow">
 
-
                         <!-- Tab Content -->
                         <div class="tab-content">
-
 
                             <!-- Fall -->
                             <div class="tab-pane fade show active"

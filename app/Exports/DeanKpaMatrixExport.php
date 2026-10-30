@@ -38,6 +38,7 @@ class DeanKpaMatrixExport implements
 
     protected $mergeRanges = [];
     protected $currentExcelRow = 2;
+    protected $summaryRows = [];
 
     public function __construct($yearId = 1)
     {
@@ -301,8 +302,6 @@ class DeanKpaMatrixExport implements
                     + (float) $achievement->total_acheived;
             }
         }
-
-       
     }
 
     /*
@@ -412,11 +411,25 @@ class DeanKpaMatrixExport implements
         |--------------------------------------------------------------------------
         */
 
+        // Keep a running overall total for each Dean.
+        $overallTotals = [];
+
+        foreach ($this->deans as $dean) {
+            $overallTotals[$dean->id] = 0;
+        }
+
         foreach ($matrix as $kpaId => $categories) {
             $kpaName = $this->kpaList[$kpaId] ?? 'N/A';
 
             $kpaStartRow = $this->currentExcelRow;
             $kpaFirstRow = true;
+            $kpaTotals = [];
+            $kpaWeightages = [];
+
+            foreach ($this->deans as $dean) {
+                $kpaTotals[$dean->id] = 0;
+                $kpaWeightages[$dean->id] = 0;
+            }
 
             foreach ($categories as $categoryId => $indicators) {
                 $categoryName =
@@ -469,6 +482,13 @@ class DeanKpaMatrixExport implements
                                 $deanData['assignments'][$assignmentKey]
                             )
                         ) {
+                            $assignment = $deanData['assignments'][$assignmentKey];
+
+                            // Use the effective assignment's KPA weightage for this Dean.
+                            // User-specific assignments already override role-level assignments.
+                            $kpaWeightages[$dean->id] =
+                                (float) ($assignment->kpa_weightage ?? 0);
+
                             $roleId = $deanData['role_id'];
 
                             $scoreRecord = $this->getScoreRecord(
@@ -484,6 +504,17 @@ class DeanKpaMatrixExport implements
                                 && $scoreRecord->score !== ''
                                     ? (float) $scoreRecord->score
                                     : '';
+
+                            // IndicatorsPercentage.score is already indicator-weighted.
+                            // Sum it first, then apply KPA weightage once below.
+                            if (
+                                $scoreRecord &&
+                                $scoreRecord->score !== null &&
+                                $scoreRecord->score !== ''
+                            ) {
+                                $weightedScore = (float) $scoreRecord->score;
+                                $kpaTotals[$dean->id] += $weightedScore;
+                            }
                         } else {
                             $row[] = '';
                         }
@@ -495,15 +526,15 @@ class DeanKpaMatrixExport implements
                         | Target is retrieved independently of the score.
                         | It is matched by Dean user ID and indicator ID.
                         */
-                         $targetKey = $dean->id . '_' . $indicatorId;
 
-                         $target = $this->indicatorTargets[$targetKey] ?? null;
-                         $achieved = $this->indicatorAchievements[$targetKey] ?? 0;
-                         $row[] = $target !== null
+                        $targetKey = $dean->id . '_' . $indicatorId;
+
+                        $target = $this->indicatorTargets[$targetKey] ?? null;
+                        $achieved = $this->indicatorAchievements[$targetKey] ?? 0;
+
+                        $row[] = $target !== null
                             ? (float) $target . ' / ' . (float) $achieved
                             : '';
-
-                       
                     }
 
                     $rows[] = $row;
@@ -542,6 +573,39 @@ class DeanKpaMatrixExport implements
                     'A' . $kpaStartRow
                     . ':A' . $kpaEndRow;
             }
+
+            // Apply this Dean's effective KPA weightage to the sum of indicator scores.
+            // IndicatorsPercentage.score is already indicator-weighted.
+            // Therefore, indicator weightage is not applied again.
+            $kpaTotalRow = ["KPA Total - " . $kpaName, '', ''];
+
+            foreach ($this->deans as $dean) {
+                $weightedKpaTotal =
+                    ($kpaTotals[$dean->id] * $kpaWeightages[$dean->id]) / 100;
+
+                $overallTotals[$dean->id] += $weightedKpaTotal;
+
+                $kpaTotalRow[] = (float) $weightedKpaTotal;
+                $kpaTotalRow[] = '';
+            }
+
+            $rows[] = $kpaTotalRow;
+            $this->summaryRows[] = $this->currentExcelRow;
+            $this->currentExcelRow++;
+        }
+
+        // Add the grand total of all KPA weighted scores at the end.
+        if (!empty($matrix)) {
+            $overallTotalRow = ['OVERALL TOTAL SCORE', '', ''];
+
+            foreach ($this->deans as $dean) {
+                $overallTotalRow[] = (float) $overallTotals[$dean->id];
+                $overallTotalRow[] = '';
+            }
+
+            $rows[] = $overallTotalRow;
+            $this->summaryRows[] = $this->currentExcelRow;
+            $this->currentExcelRow++;
         }
 
         return collect($rows);
@@ -716,6 +780,14 @@ class DeanKpaMatrixExport implements
                         ->setVertical(Alignment::VERTICAL_CENTER)
                         ->setHorizontal(Alignment::HORIZONTAL_LEFT)
                         ->setWrapText(true);
+                }
+
+                // Highlight KPA subtotals and the overall total row.
+                foreach ($this->summaryRows as $summaryRow) {
+                    $sheet
+                        ->getStyle('A' . $summaryRow . ':' . $lastColumn . $summaryRow)
+                        ->getFont()
+                        ->setBold(true);
                 }
 
                 /*
