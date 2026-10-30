@@ -225,13 +225,13 @@ class ComparitiveAnalysisController extends Controller
         $user = Auth::user();
         $highlightName = $user->name;
 
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])->pluck('id')->toArray();
+        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP', 'Demonstrator'])->pluck('id')->toArray();
         $departmentId = auth()->user()->department_id;
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $department = Department::find($departmentId);
         // 1️⃣ Get all employee_ids in the department
         $employeeIds = User::where('department_id', $departmentId)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor', 'Demonstrator'])
+            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP', 'Demonstrator'])
             ->pluck('employee_id')
             ->filter() // remove nulls
             ->toArray();

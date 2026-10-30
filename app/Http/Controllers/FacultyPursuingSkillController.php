@@ -25,7 +25,7 @@ class FacultyPursuingSkillController extends Controller
                    ->role('HOD')->pluck('employee_id');
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Non Phd AP','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                           $forms = FacultyPursuingSkill::with([
                                 'creator' => function ($q) {
@@ -45,7 +45,7 @@ class FacultyPursuingSkillController extends Controller
 
                 }
         
-            if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])) {
+            if(in_array(getRoleName(activeRole()), ['Teacher','Associate Professor','Assistant Professor','Non Phd AP','Program Leader UG','Program Leader PG','Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = FacultyPursuingSkill::with([
@@ -69,7 +69,7 @@ class FacultyPursuingSkillController extends Controller
                 $status = $request->input('status');
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Associate Professor','Assistant Professor','Non Phd AP','Program Leader UG','Program Leader PG','Professor'])->pluck('employee_id');
                         $all_ids = $employeeIds->merge($employee_id);
                         $forms = FacultyPursuingSkill::with([
                                 'creator' => function ($q) {
@@ -170,7 +170,6 @@ class FacultyPursuingSkillController extends Controller
                        
             }
            
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -249,10 +248,6 @@ class FacultyPursuingSkillController extends Controller
                     ];
                 }
 
-
-
-
-
                 $target->status = $request->status;
                 $target->reject_status = '0';
                 $target->reject_status_remarks = null;
@@ -289,10 +284,6 @@ class FacultyPursuingSkillController extends Controller
                         'updated_at' => now()->toDateTimeString(),
                     ];
                 }
-
-
-
-
 
                 $target->status = 1;
                 $target->reject_status = $request->status;

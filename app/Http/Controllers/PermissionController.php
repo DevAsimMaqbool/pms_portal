@@ -83,7 +83,7 @@ class PermissionController extends Controller
         if ($role->name == 'Rector') {
             return redirect()->route('rector-dashboard.index');
         }
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC' || $role->name == 'Demonstrator') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Non Phd AP' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC' || $role->name == 'Demonstrator') {
             return view('admin.teacher_dashbord', compact('employee', 'showPasswordPopup'));
         } elseif ($role->name == 'Survey') {
             return view('admin.survey_dashbord', compact('employee', 'showPasswordPopup'));
@@ -159,7 +159,7 @@ class PermissionController extends Controller
         $categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
         $data = [100, 40, 50, 60, 70, 80, 90, 85];
 
-        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC' || $role->name == 'Demonstrator') {
+        if ($role->name == 'Teacher' || $role->name == 'Assistant Professor' || $role->name == 'Non Phd AP' || $role->name == 'Professor' || $role->name == 'Associate Professor' || $role->name == 'Program Leader UG' || $role->name == 'Program Leader PG' || $role->name == 'Finance' || $role->name == 'International Office' || $role->name == 'Human Resources' || $role->name == 'QCE' || $role->name == 'OEC' || $role->name == 'DOPS' || $role->name == 'Alumni Office' || $role->name == 'Employability Center' || $role->name == 'Rector' || $role->name == 'QCH' || $role->name == 'ORIC' || $role->name == 'Demonstrator') {
             return view('admin.teacher_dashbord_bk', compact('employee'));
         } else {
             return view('admin.teacher_dashbord', compact('employee'));
@@ -182,6 +182,7 @@ class PermissionController extends Controller
         $role = match ($activeRole) {
             'teacher' => $user->roles->firstWhere('name', 'Teacher')
             ?? $user->roles->firstWhere('name', 'Assistant Professor')
+            ?? $user->roles->firstWhere('name', 'Non Phd AP')
             ?? $user->roles->firstWhere('name', 'Associate Professor')
             ?? $user->roles->firstWhere('name', 'Program Leader UG')
             ?? $user->roles->firstWhere('name', 'Program Leader PG')
@@ -259,6 +260,7 @@ class PermissionController extends Controller
             case 'teacher':
             case 'professor':
             case 'assistant professor':
+            case 'non phd ap':
             case 'associate professor':
             case 'program leader ug':
             case 'program leader pg':
@@ -384,6 +386,7 @@ class PermissionController extends Controller
         $roleMap = [
             'Teacher' => 'teacher',
             'Assistant Professor' => 'assistant professor',
+            'Non Phd AP' => 'non phd ap',
             'Associate Professor' => 'associate professor',
             'Professor' => 'professor',
             'Program Leader UG' => 'program leader ug',
@@ -410,6 +413,7 @@ class PermissionController extends Controller
         return match (activeRole()) {
             'teacher' => redirect()->route('teacher_dashboard'),
             'assistant professor' => redirect()->route('teacher_dashboard'),
+            'non phd ap' => redirect()->route('teacher_dashboard'),
             'associate professor' => redirect()->route('teacher_dashboard'),
             'professor' => redirect()->route('teacher_dashboard'),
             'program leader ug' => redirect()->route('teacher_dashboard'),
@@ -530,7 +534,6 @@ class PermissionController extends Controller
                 }
             }
 
-            
         }
 
         // Calculate combined weighted score (avoid division by zero)

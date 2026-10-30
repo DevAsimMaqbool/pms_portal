@@ -24,8 +24,7 @@ class ComplianceAndUsageOfLMSController extends Controller
             ->get(); // make sure you call get() here, not just a query builder
         // dd($data);
 
-
-        if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Professor','Associate Professor'])) {
+        if(in_array(getRoleName(activeRole()), ['HOD', 'Teacher','Assistant Professor','Non Phd AP','Professor','Associate Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = CompletionOfCourseFolder::with([
@@ -39,7 +38,7 @@ class ComplianceAndUsageOfLMSController extends Controller
                 }
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employeeId)
-                        ->role(['Teacher','Assistant Professor','Professor','Associate Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Assistant Professor','Non Phd AP','Professor','Associate Professor'])->pluck('employee_id');
                         $forms = CompletionOfCourseFolder::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');
@@ -139,7 +138,6 @@ class ComplianceAndUsageOfLMSController extends Controller
                 DB::beginTransaction();
                 foreach ($request->class_name as $classCode) {
                     
-
                     $exists = CompletionOfCourseFolder::where('faculty_member_id', $request->faculty_member_id)
                         ->where('class_cod', $classCode)
                         ->when($request->has('completion_of_Course_folder'), function ($query) use ($request) {
@@ -165,7 +163,6 @@ class ComplianceAndUsageOfLMSController extends Controller
                         ], 409);
                     }
                     
-
                     // Base data (always inserted)
                     $data = [
                         'faculty_member_id' => $request->faculty_member_id,
@@ -193,7 +190,6 @@ class ComplianceAndUsageOfLMSController extends Controller
                     CompletionOfCourseFolder::create($data);
                 }
 
-
                 DB::commit();
 
                 return response()->json([
@@ -216,7 +212,6 @@ class ComplianceAndUsageOfLMSController extends Controller
             ], 500);
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -320,7 +315,6 @@ class ComplianceAndUsageOfLMSController extends Controller
                 ], 409);
             }
             
-
             // Base update data
             $updateData = [
                 'class_cod' => $classCode,
@@ -409,10 +403,6 @@ class ComplianceAndUsageOfLMSController extends Controller
                     ];
                 }
 
-
-
-
-
                 $target->status = $request->status;
                 $target->reject_status = '0';
                 $target->reject_status_remarks = null;
@@ -449,10 +439,6 @@ class ComplianceAndUsageOfLMSController extends Controller
                         'updated_at' => now()->toDateTimeString(),
                     ];
                 }
-
-
-
-
 
                 $target->status = 1;
                 $target->reject_status = $request->status;

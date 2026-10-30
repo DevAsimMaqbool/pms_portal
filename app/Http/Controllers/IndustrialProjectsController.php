@@ -31,7 +31,7 @@ class IndustrialProjectsController extends Controller
                    ->role('HOD')->pluck('employee_id');
                     if($status=="RESEARCHER"){
                         $teacher_id = User::whereIn('manager_id', $hod_ids)
-                        ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                        ->role(['Teacher','Professor','Assistant Professor','Non Phd AP','Associate Professor'])->pluck('employee_id');
                           $all_ids = $teacher_id->merge($hod_ids);
                           $forms = IndustrialProjects::with([
                                 'creator' => function ($q) {
@@ -51,7 +51,7 @@ class IndustrialProjectsController extends Controller
                     }
 
             }
-            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Associate Professor'])) {
+            if(in_array(getRoleName(activeRole()), ['HOD','Teacher','Professor','Assistant Professor','Non Phd AP','Associate Professor'])) {
                 $status = $request->input('status');
                 if($status=="Teacher"){
                     $forms = IndustrialProjects::with([
@@ -71,7 +71,7 @@ class IndustrialProjectsController extends Controller
                 }
                 if($status=="HOD"){
                     $employeeIds = User::where('manager_id', $employee_id)
-                    ->role(['Teacher','Professor','Assistant Professor','Associate Professor'])->pluck('employee_id');
+                    ->role(['Teacher','Professor','Assistant Professor','Non Phd AP','Associate Professor'])->pluck('employee_id');
                     $all_ids = $employeeIds->merge($employee_id);
                     $forms = IndustrialProjects::with([
                             'creator' => function ($q) {
@@ -215,7 +215,6 @@ class IndustrialProjectsController extends Controller
                        
             }
            
-
         } catch (\Exception $e) {
             DB::rollBack();
             // return response()->json([
@@ -258,7 +257,6 @@ class IndustrialProjectsController extends Controller
             // Get current update history
             $history = $target->update_history ? json_decode($target->update_history, true) : [];
 
-
             // Get current user info
             $currentUserId = Auth::id();
             $currentUserName = Auth::user()->name;
@@ -275,7 +273,6 @@ class IndustrialProjectsController extends Controller
                     'updated_at' => now()->toDateTimeString(),
                 ];
             }
-
 
             $target->status = $request->status;
             $target->reject_status = '0';
@@ -313,10 +310,6 @@ class IndustrialProjectsController extends Controller
                         'updated_at' => now()->toDateTimeString(),
                     ];
                 }
-
-
-
-
 
                 $target->status = 1;
                 $target->reject_status = $request->status;

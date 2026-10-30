@@ -162,6 +162,12 @@
                   </li>
                 </ul>
             </li>
+            <li class="menu-item {{ request()->routeIs('goal-initiatives.manager.index') ? 'active' : '' }}">
+            <a href="{{ route('goal-initiatives.manager.index') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-bulb"></i>
+                <div data-i18n="Initiative Validation">Initiative Validation</div>
+            </a>
+        </li>
             <li class="menu-item">
                 <a href="#" class="menu-link">
                     <i class="menu-icon icon-base ti tabler-users"></i>

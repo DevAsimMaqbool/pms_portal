@@ -3903,6 +3903,7 @@ if (!function_exists('activeRole')) {
         $teacherRoles = [
             'Teacher',
             'Assistant Professor',
+            'Non Phd AP',
             'Associate Professor',
             'Professor',
             'Program Leader UG',
@@ -5749,7 +5750,7 @@ function CompletionOfCourseFolderForHOD($activeRoleId, $indicator_id)
     */
 
     $facultyMembers = User::where('department_id', $departmentId)
-    ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');
+    ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');
 
     /*
     |--------------------------------------------------------------------------
@@ -6010,7 +6011,7 @@ function CompletionOfCourseFolderForPL($activeRoleId, $indicator_id)
     */
 
     $facultyMembers = User::where('department_id', $departmentId)->whereNotNull('employee_id')
-                        ->role(['Teacher', 'Assistant Professor', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');                             
+                        ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor','Demonstrator'])->pluck('employee_id');                             
                  
     /*
     |--------------------------------------------------------------------------

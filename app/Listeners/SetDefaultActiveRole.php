@@ -25,6 +25,7 @@ class SetDefaultActiveRole
         $teacherRoles = [
             'Teacher',
             'Assistant Professor',
+            'Non Phd AP',
             'Associate Professor',
             'Professor',
             'Program Leader UG',
