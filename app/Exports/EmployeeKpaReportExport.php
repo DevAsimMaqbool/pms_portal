@@ -456,6 +456,7 @@ public function collection()
         28,
         29,
         33,
+        34,
     ];
 
     $usersQuery = User::with([
@@ -484,6 +485,7 @@ public function collection()
             27,
             28,
             33,
+            34,
         ];
 
         $usersQuery->whereHas('roles', function ($query) use ($facultyRoleIds) {

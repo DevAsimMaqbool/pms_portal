@@ -13,6 +13,9 @@ use App\Models\UserTargetAchieved;
 use App\Models\Years;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\FacultyTargetsDean;
+use App\Models\AchievementOfResearchPublicationsTarget;
+use App\Models\AchievementOfResearchPublicationTargetCoAuthor;
 
 if (!function_exists('hodTopPerformers')) {
     function hodTopPerformers()
@@ -1255,4 +1258,506 @@ function myDepartmentClassesAttendanceRecordPGUG(
 
         return $class;
     });
+}
+
+
+
+if (!function_exists('facultyScopusAnalysisOfDean')) {
+
+    function facultyScopusAnalysisOfDean(
+        $activeRoleId,
+        $indicatorId,
+        $keyPerformanceAreaId = 2,
+        $indicatorCategoryId = 5,
+        $currentYear = null
+    ) {
+
+        $user = auth()->user();
+
+        $faculty = $user->faculty;
+        $facultyEmployeeId = $user->employee_id;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get HODs of Current Faculty
+        |--------------------------------------------------------------------------
+        */
+
+        $hods = User::with('department')
+            ->where('faculty', $faculty)
+            ->role('HOD')
+            ->whereHas('department', function ($query) {
+                $query->where('id', '!=', 609);
+            })
+            ->get(['id', 'name', 'employee_id', 'department_id']);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get Only HODs Who Have Assigned Targets
+        |--------------------------------------------------------------------------
+        */
+
+        $hodTargets = FacultyTargetsDean::whereIn(
+                'user_id',
+                $hods->pluck('employee_id')
+            )
+            ->where('form_status', 'HOD')
+            ->where('year_id', $currentYear)
+            ->where('indicator_id', $indicatorId)
+            ->get()
+            ->groupBy('user_id');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Initialize Faculty Totals
+        |--------------------------------------------------------------------------
+        */
+
+        $totalTarget = 0;
+        $totalSubmitted = 0;
+        $totalInternational = 0;
+        $totalQuartileScore = 0;
+
+        $q1_count = 0;
+        $q2_count = 0;
+        $q3_count = 0;
+        $q4_count = 0;
+
+      
+        $international_count = 0;
+        $quartials_count = 0;
+
+        $hodDetails = [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Empty Result
+        |--------------------------------------------------------------------------
+        */
+
+        $emptyResult = [
+            'total_target' => 0,
+            'total_submit' => 0,
+            'total_international' => 0,
+            'faculty_submitted_total' => 0,
+            'department_avg_percentage' => 0,
+            'department_international_fraction' => 0,
+            'department_quartile_score' => 0,
+            'department_research_percentage' => 0,
+            'q1_count' => 0,
+            'q2_count' => 0,
+            'q3_count' => 0,
+            'q4_count' => 0,
+            'hod_details' => [],
+        ];
+
+        if ($hodTargets->isEmpty()) {
+            return $emptyResult;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Quartile Points
+        |--------------------------------------------------------------------------
+        */
+
+        $quartilePoints = [
+            'Q1' => 20,
+            'Q2' => 15,
+            'Q3' => 10,
+            'Q4' => 5,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Individual HOD Calculation
+        |--------------------------------------------------------------------------
+        */
+        $hod_count = $hodTargets->count();
+
+        foreach ($hodTargets as $hodEmployeeId => $targetRecords) {
+
+            $hod = $hods->firstWhere('employee_id', $hodEmployeeId);
+
+            if (!$hod) {
+                continue;
+            }
+
+            $departmentId = $hod->department_id;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Individual HOD Target
+            |--------------------------------------------------------------------------
+            */
+
+            $hodTarget = $targetRecords->sum('target');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Get All Users of HOD Department
+            |--------------------------------------------------------------------------
+            */
+
+            $departmentUserIds = User::where(
+                'department_id',
+                $departmentId
+            )->whereNotNull('faculty_id')->pluck('id');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Get Research Publications of Department Users
+            |--------------------------------------------------------------------------
+            */
+
+            $facultyRecords = AchievementOfResearchPublicationsTarget::whereIn(
+                    'created_by',
+                    $departmentUserIds
+                )
+                ->where('indicator_id', $indicatorId)
+                ->where('form_status', 'RESEARCHER')
+                ->where('year_id', $currentYear)
+                ->where('status', 3)
+                ->get();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Co-Author Publications
+            |--------------------------------------------------------------------------
+            */
+
+            $coAuthorCount = AchievementOfResearchPublicationTargetCoAuthor::whereIn(
+                'target_id',
+                $facultyRecords->pluck('id')
+            )->count();
+            $hodSubmitted = $facultyRecords->count();
+            //$hodSubmitted = $facultyRecords->count() + $coAuthorCount;
+
+            /*
+            |--------------------------------------------------------------------------
+            | International Publications
+            |--------------------------------------------------------------------------
+            */
+
+            $hodInternational = $facultyRecords
+                ->filter(function ($record) {
+                    return strtolower(trim($record->nationality ?? ''))
+                        === 'international';
+                })
+                ->count();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Individual Quartile Calculation
+            |--------------------------------------------------------------------------
+            */
+
+            $hodQuartileScore = 0;
+
+            $hodQ1 = 0;
+            $hodQ2 = 0;
+            $hodQ3 = 0;
+            $hodQ4 = 0;
+
+            foreach ($facultyRecords as $record) {
+
+                $quartile = strtoupper(
+                    trim($record->journal_clasification ?? '')
+                );
+
+                $hodQuartileScore += $quartilePoints[$quartile] ?? 0;
+
+                if ($quartile === 'Q1') {
+                    $hodQ1++;
+                } elseif ($quartile === 'Q2') {
+                    $hodQ2++;
+                } elseif ($quartile === 'Q3') {
+                    $hodQ3++;
+                } elseif ($quartile === 'Q4') {
+                    $hodQ4++;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Individual HOD Percentages
+            |--------------------------------------------------------------------------
+            */
+
+            $hodPercentage = $hodTarget > 0
+                ? round(($hodSubmitted / $hodTarget) * 100, 2)
+                : 0;
+
+            $hodInternationalTarget = $hodTarget * 0.5;
+
+            $hodInternationalPercentage = $hodInternationalTarget > 0
+                ? round(
+                    ($hodInternational / $hodInternationalTarget) * 100,
+                    2
+                )
+                : 0;
+
+            $hodInternationalPercentage = min(
+                $hodInternationalPercentage,
+                100
+            );
+
+            $hodQuartileScore = $hodTarget > 0
+                ? min($hodQuartileScore, 100)
+                : 0;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Store Individual HOD Details
+            |--------------------------------------------------------------------------
+            */
+
+            $hodDetails[] = [
+                'hod_id' => $hod->employee_id,
+                'hod_name' => $hod->name,
+                'department_id' => $departmentId,
+                'department_name' => $hod->department->name ?? 'N/A',
+
+                'total_target' => $hodTarget,
+                'total_submit' => $hodSubmitted,
+
+                'total_international' => $hodInternational,
+
+                'department_avg_percentage' => min($hodPercentage, 100),
+
+                'department_international_fraction' => $hodInternationalPercentage,
+
+                'department_quartile_score' => $hodQuartileScore,
+
+                'department_research_percentage' => $hodPercentage,
+
+                'q1_count' => $hodQ1,
+                'q2_count' => $hodQ2,
+                'q3_count' => $hodQ3,
+                'q4_count' => $hodQ4,
+            ];
+
+            /*
+            |--------------------------------------------------------------------------
+            | Add Individual HOD Values to Faculty Totals
+            |--------------------------------------------------------------------------
+            */
+
+            $totalTarget += $hodTarget;
+
+            $totalSubmitted += $hodSubmitted;
+
+            $totalInternational += $hodInternational;
+
+            $totalQuartileScore += array_sum([
+                $hodQ1 * 20,
+                $hodQ2 * 15,
+                $hodQ3 * 10,
+                $hodQ4 * 5,
+            ]);
+
+            $q1_count += $hodQ1;
+            $q2_count += $hodQ2;
+            $q3_count += $hodQ3;
+            $q4_count += $hodQ4;
+
+            $international_count += $hodInternationalPercentage;
+            $quartials_count += $hodQuartileScore;
+        }
+        
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Overall Percentage
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentAvgPercentage = $totalTarget > 0
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty International Percentage
+        |--------------------------------------------------------------------------
+        */
+
+        $internationalTarget = $totalTarget * 0.5;
+
+        $departmentInternationalFraction = $internationalTarget > 0
+            ? round(
+                ($totalInternational / $internationalTarget) * 100,
+                2
+            )
+            : 0;
+
+        $international_count = $hod_count > 0
+        ? $international_count / $hod_count
+        : 0; 
+
+        $international_count = min(
+            $international_count,
+            100
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Research Percentage
+        |--------------------------------------------------------------------------
+        */
+
+        $departmentResearchPercentage = $departmentAvgPercentage;
+
+        $overdepartmentResearchPercentage = min(
+            $departmentResearchPercentage,
+            100
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Faculty Quartile Score
+        |--------------------------------------------------------------------------
+        */
+
+        // $totalQuartileScore = $totalTarget > 0
+        //     ? min($totalQuartileScore, 100)
+        //     : 0;
+
+            $quartials_count = $hod_count > 0
+            ? $quartials_count / $hod_count
+            : 0;
+            $quartials_count = min(
+                $quartials_count,
+                100
+            );    
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get Indicator Weights
+        |--------------------------------------------------------------------------
+        */
+
+        $weights = [
+            'weight127' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                127
+            )['weightage'],
+
+            'weight128' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                128
+            )['weightage'],
+
+            'weight203' => getRoleWeightage(
+                $activeRoleId,
+                'indicator',
+                203
+            )['weightage'],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Calculate Weighted Scores
+        |--------------------------------------------------------------------------
+        */
+
+        $weightedScore127 = (
+            $international_count * $weights['weight127']
+        ) / 100;
+
+        $weightedScore128 = (
+            $overdepartmentResearchPercentage * $weights['weight128']
+        ) / 100;
+
+        $weightedScore203 = (
+            $quartials_count * $weights['weight203']
+        ) / 100;
+
+          /*
+        |--------------------------------------------------------------------------
+        | Save International Publications
+        |--------------------------------------------------------------------------
+        */
+
+        saveIndicatorPercentage(
+            $facultyEmployeeId,
+            $activeRoleId,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            127,
+            $weightedScore127,
+            $departmentInternationalFraction,
+            $currentYear
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save Overall Research Publications
+        |--------------------------------------------------------------------------
+        */
+
+        saveIndicatorPercentage(
+            $facultyEmployeeId,
+            $activeRoleId,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            128,
+            $weightedScore128,
+            $overdepartmentResearchPercentage,
+            $currentYear
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save Quartile
+        |--------------------------------------------------------------------------
+        */
+
+        saveIndicatorPercentage(
+            $facultyEmployeeId,
+            $activeRoleId,
+            $keyPerformanceAreaId,
+            $indicatorCategoryId,
+            203,
+            $weightedScore203,
+            $totalQuartileScore,
+            $currentYear
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save Faculty Target and Achieved
+        |--------------------------------------------------------------------------
+        */
+
+        saveUserTargetAchieved(
+            $facultyEmployeeId,
+            $activeRoleId,
+            128,
+            $currentYear,
+            $totalTarget,
+            $totalSubmitted
+        );
+        
+        return [
+            'total_target' => $totalTarget,
+            'total_submit' => $totalSubmitted,
+            'total_international' => $totalInternational,
+            'faculty_submitted_total' => $totalSubmitted,
+
+            'department_avg_percentage' => $overdepartmentResearchPercentage,
+            'department_international_fraction' => $international_count,
+            'department_quartile_score' => $quartials_count,
+            'department_research_percentage' => $departmentResearchPercentage,
+
+            'q1_count' => $q1_count,
+            'q2_count' => $q2_count,
+            'q3_count' => $q3_count,
+            'q4_count' => $q4_count,
+
+            'hod_details' => $hodDetails,
+        ];
+    }
 }
