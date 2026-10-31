@@ -220,79 +220,386 @@
     </div>
     <!-- / Payment Methods modal -->
 @endif
+
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
+
+    @php
+
+        $data = facultyScopusAnalysisOfDean(
+            $activeRoleId,
+            128,
+            2,
+            5,
+            $currentYear->id
+        );
+
+        $avg = $data['department_quartile_score'] ?? 0;
+
+        $meta = getRatingMeta($avg);
+
+    @endphp
+
+    <!-- Research Publications Modal -->
 
     <div class="modal fade" id="JournalQuartile" tabindex="-1" aria-hidden="true">
+
         <div class="modal-dialog modal-xl modal-dialog-centered">
+
             <div class="modal-content custom-modal">
+
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
                 </div>
-                <div class="modal-body text-center text-center p-4">
-                    <!-- Title -->
+
+                <div class="modal-body text-center p-4">
+
                     <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Journal Quartile
+
+                        <div class="badge bg-label-primary rounded p-2">
+
+                            <i class="icon-base ti tabler-clock-hour-2 icon-md"></i>
+
+                        </div>
+
+                        Journal Quartile
+
                     </h3>
-                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
+
+                    <button type="button"
+                            class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">
+
+                        {{ $currentYear->year }}
+
+                    </button>
+
                     <div class="card">
 
                         <div class="card-body">
-                            <div class="table-responsive text-nowrap">
+
+                            <!-- Faculty Summary -->
+
+                            <h5 class="text-primary fw-bold mb-3">
+                                Faculty Overall Journal Quartile
+                            </h5>
+
+                            <div class="table-responsive">
+
                                 <table class="table table-striped align-middle custom-table">
+
                                     <thead class="table-primary">
+
                                         <tr>
                                             <th>Sr#</th>
-                                            <th>Department</th>
+                                            <th>Q1</th>
+                                            <th>Q2</th>
+                                            <th>Q3</th>
+                                            <th>Q4</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 2, 5, 203,$currentYear->id);
-                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
-                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                @php
-                                                $meta_avg_single = getRatingMeta($record->with_out_weight_score);
-                                                $sumScore = min($record->with_out_weight_score, 100);
-                                                @endphp
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge" style="background-color: {{ $meta_avg_single->color }}">
-                                                        {{ $sumScore}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
 
-                                                                {{ $meta_avg_single->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                    </thead>
+
+                                    <tbody>
+
+                                        @if($data['total_target'] > 0)
+
+                                            <tr>
+
+                                                <td>1</td>
+
+                                                <td>
+                                                    {{ number_format($data['q1_count']) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($data['q2_count']) }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($data['q3_count']) }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($data['q4_count']) }}
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta->color }}">
+
+                                                        {{ number_format($avg, 2) }}%
+
+                                                    </span>
+
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="badge"
+                                                          style="background-color: {{ $meta->color }}">
+
+                                                        {{ $meta->rating }}
+
+                                                    </span>
+
+                                                </td>
+
+                                            </tr>
+
+                                        @else
+
+                                            <tr>
+
+                                                <td colspan="5" class="text-center">
+                                                    No record found
+                                                </td>
+
+                                            </tr>
+
+                                        @endif
+
                                     </tbody>
+
                                     <tfoot>
+
                                         <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                            <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                            <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
-                                       
+
+                                            <th>Total</th>
+
+                                            <th>
+                                                {{ number_format($data['q1_count']) }}
+                                            </th>
+
+                                            <th>
+                                                {{ number_format($data['q2_count']) }}
+                                            </th>
+                                              <th>
+                                                {{ number_format($data['q3_count']) }}
+                                            </th>
+                                              <th>
+                                                {{ number_format($data['q4_count']) }}
+                                            </th>
+
+                                            <th>
+
+                                                <span class="badge"
+                                                      style="background-color: {{ $meta->color }}">
+
+                                                    {{ number_format($avg, 2) }}%
+
+                                                </span>
+
+                                            </th>
+
+                                            <th>
+
+                                                <span class="badge"
+                                                      style="background-color: {{ $meta->color }}">
+
+                                                    {{ $meta->rating }}
+
+                                                </span>
+
+                                            </th>
+
                                         </tr>
-                                    </tfoot> 
+
+                                    </tfoot>
+
                                 </table>
+
                             </div>
+
+                            <hr class="my-4">
+
+                            <!-- Individual HOD Details -->
+
+                            <h5 class="text-primary fw-bold mb-3">
+                                HOD Wise Journal Quartile
+                            </h5>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-striped table-bordered align-middle">
+
+                                    <thead class="table-primary">
+
+                                        <tr>
+
+                                            <th>Sr#</th>
+                                            <th>HOD Name</th>
+                                            <th>Department</th>
+                                            <th>Quartile Score</th>
+                                            <th>Q1</th>
+                                            <th>Q2</th>
+                                            <th>Q3</th>
+                                            <th>Q4</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        @forelse($data['hod_details'] as $hodIndex => $hod)
+
+                                            @php
+
+                                                $hodMeta = getRatingMeta(
+                                                    $hod['department_quartile_score']
+                                                );
+
+                                            @endphp
+
+                                            <tr>
+
+                                                <td>
+                                                    {{ $hodIndex + 1 }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $hod['hod_name'] }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $hod['department_name'] }}
+                                                </td>
+
+                                                <td>
+                                                    {{ number_format($hod['department_quartile_score'], 2) }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $hod['q1_count'] }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $hod['q2_count'] }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $hod['q3_count'] }}
+                                                </td>
+
+                                                <td>
+                                                    {{ $hod['q4_count'] }}
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="badge"
+                                                          style="background-color: {{ $hodMeta->color }}">
+
+                                                        {{ number_format($hod['department_quartile_score'], 2) }}%
+
+                                                    </span>
+
+                                                </td>
+
+                                                <td>
+
+                                                    <span class="badge"
+                                                          style="background-color: {{ $hodMeta->color }}">
+
+                                                        {{ $hodMeta->rating }}
+
+                                                    </span>
+
+                                                </td>
+
+                                            </tr>
+
+                                        @empty
+
+                                            <tr>
+
+                                                <td colspan="13" class="text-center">
+                                                    No HOD target records found.
+                                                </td>
+
+                                            </tr>
+
+                                        @endforelse
+
+                                    </tbody>
+
+                                    <tfoot>
+
+                                        <tr class="table-primary fw-bold">
+
+                                            <th colspan="3">
+                                                Faculty Total
+                                            </th>
+
+
+                                            <th>
+                                                {{ number_format($data['department_quartile_score'], 2) }}
+                                            </th>
+
+                                            <th>
+                                                {{ $data['q1_count'] }}
+                                            </th>
+
+                                            <th>
+                                                {{ $data['q2_count'] }}
+                                            </th>
+
+                                            <th>
+                                                {{ $data['q3_count'] }}
+                                            </th>
+
+                                            <th>
+                                                {{ $data['q4_count'] }}
+                                            </th>
+
+                                            <th>
+
+                                                <span class="badge"
+                                                      style="background-color: {{ $meta->color }}">
+
+                                                    {{ number_format($avg, 2) }}%
+
+                                                </span>
+
+                                            </th>
+
+                                            <th>
+
+                                                <span class="badge"
+                                                      style="background-color: {{ $meta->color }}">
+
+                                                    {{ $meta->rating }}
+
+                                                </span>
+
+                                            </th>
+
+                                        </tr>
+
+                                    </tfoot>
+
+                                </table>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
-    <!-- / Payment Methods modal -->
+
 @endif

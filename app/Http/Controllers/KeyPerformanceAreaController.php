@@ -371,7 +371,7 @@ class KeyPerformanceAreaController extends Controller
         |
         */
 
-        $facultyRoles = [21, 26, 27, 28, 33];
+        $facultyRoles = [21, 26, 27, 28, 33,34];
 
         /*
         |--------------------------------------------------------------------------
