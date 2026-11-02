@@ -214,7 +214,7 @@ if (!function_exists('deanHotIndicators')) {
             ->where('indicator_id', $indicator_id)
             ->whereIn('role_id', $roleIds)
             ->where('year_id', $ActiveRecord->id)
-            ->avg('score');
+            ->avg('with_out_weight_score');
 
         $avg = $avg ? round($avg, 1) : 0.00;
 
@@ -721,6 +721,62 @@ if (!function_exists('ResearchInnovationAndCommercializationYear')) {
             ->role('HOD')
             ->whereHas('department', function ($query) {
                 $query->where('id', '!=', 609);
+            })
+            ->pluck('employee_id');
+        if ($hod_ids->count() > 2) {
+            $hod_ids = $hod_ids->diff([$faculty_employee_id])->values();  
+        }    
+          
+        $count_hod_ids = $hod_ids->count();
+        $record = IndicatorsPercentage::with([
+            'user:id,employee_id,department_id,name',
+            'user.department:id,name'
+        ])
+            ->whereIn('employee_id', $hod_ids)
+            ->where('year_id', $ActiveRecord->id)
+            ->where('role_id', 22)->where('key_performance_area_id', $KpaId)
+            ->where('indicator_category_id', $categoryId)->where('indicator_id', $indicatorId)
+            ->orderBy('id')
+            ->get();    
+        $sumScore = $record->sum('with_out_weight_score');
+        $avgScore = ($count_hod_ids > 0) ? round(($sumScore / $count_hod_ids), 2) : 0;
+        $avgScore = min($avgScore, 100);
+
+        $indicatorWeight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId);
+        $weight = $indicatorWeight['weightage'] ?? 0;
+        $weightedScore = ($avgScore * $weight) / 100;
+
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $avgScore,
+            $currentYear
+        );
+
+        return [
+            'records' => $record,
+            'faculty_avg_percentage' => $avgScore,
+            'weighted_score' => $weightedScore,
+        ];
+    }
+}
+if (!function_exists('ResearchInnovationAndCommercializationYearEmp')) {
+    function ResearchInnovationAndCommercializationYearEmp($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear=null)
+    {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
+        $faculty = auth()->user()->faculty;
+        $faculty_employee_id = auth()->user()->employee_id;
+       // $hod_ids = User::where('faculty', $faculty)->role('HOD')->pluck('employee_id');
+
+        $hod_ids = User::where('faculty', $faculty)
+            ->role('HOD')
+            ->whereHas('department', function ($query) {
+                $query->whereNotIn('id', [609, 705]);
+
             })
             ->pluck('employee_id');
         if ($hod_ids->count() > 2) {
