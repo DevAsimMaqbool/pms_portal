@@ -23,7 +23,7 @@ class GoalHrReviewController extends Controller
     |--------------------------------------------------------------------------
     */
 
-   public function index(Request $request)
+public function index(Request $request)
 {
     // Get available departments
     $departments = User::whereNotNull('hr_department_name')
@@ -43,38 +43,42 @@ class GoalHrReviewController extends Controller
         array_filter($selectedDepartments)
     );
 
-    $employees = User::whereHas('goalSelfReports', function ($query) {
-            $query->where('status', 'manager_approved');
-        })
+    $employees = User::whereHas('goalSelfReports')
         ->when(!empty($selectedDepartments), function ($query) use ($selectedDepartments) {
-
             $query->whereIn(
                 'hr_department_name',
                 $selectedDepartments
             );
-
         })
+
         // Independent Manager Name Search
-         ->when($request->filled('manager'), function ($query) use ($request) { $query->where( 'manager_name', 'like', '%' . trim($request->input('manager')) . '%' ); })
+        ->when($request->filled('manager'), function ($query) use ($request) {
+            $query->where(
+                'manager_name',
+                'like',
+                '%' . trim($request->input('manager')) . '%'
+            );
+        })
+
         ->with([
             'goalSelfReports' => function ($query) {
-                $query->where('status', 'manager_approved')
-                    ->with([
-                        'goal.s2rDriver',
-                        'reviews' => function ($query) {
-                            $query->where(
-                                'reviewer_type',
-                                'manager'
-                            )->latest('id');
-                        },
-                        'reviews.reviewer',
-                    ]);
+                $query->with([
+                    'goal.s2rDriver',
+                    'reviews' => function ($query) {
+                        $query->where(
+                            'reviewer_type',
+                            'manager'
+                        )->latest('id');
+                    },
+                    'reviews.reviewer',
+                ]);
             },
 
             'goalOverallReviews' => function ($query) {
                 $query->latest('id');
             },
         ])
+
         ->paginate(15)
         ->withQueryString();
 
