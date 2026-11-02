@@ -168,7 +168,7 @@ $totalFeedback = 0;
                                     <tbody>
                                         @php
     //$data = ResearchInnovationAndCommercialization(Auth::user()->employee_id, $activeRoleId, 1, 1, 104);
-    $data = ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 1, 1, 104);
+    $data = ResearchInnovationAndCommercializationYearEmp(Auth::user()->employee_id, $activeRoleId, 1, 1, 104);
     
     $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
     $meta_avg = getRatingMeta($faculty_avg_percentage);

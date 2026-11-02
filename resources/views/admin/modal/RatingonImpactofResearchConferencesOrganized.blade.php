@@ -225,7 +225,7 @@
                     <!-- Title -->
                     <h3 class="text-center mb-4 fw-bold text-primary">
                         <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div># of Grant Proposals Submitted
+                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>Rating on Impact of Research Conferences Organized
                     </h3>
                     <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
                     <div class="card">

@@ -154,7 +154,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $data = ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 6, 14, 157);
+                                            $data = ResearchInnovationAndCommercializationYearEmp(Auth::user()->employee_id, $activeRoleId, 6, 14, 157);
                                             $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
                                             $meta_avg = getRatingMeta($faculty_avg_percentage);
                                         @endphp
