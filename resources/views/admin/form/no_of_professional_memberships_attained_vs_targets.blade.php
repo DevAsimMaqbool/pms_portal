@@ -941,7 +941,7 @@ class="country-dropdown select2 form-select" required>
             });
         </script>
     @endif
-     @if(auth()->user()->hasRole(['Dean']))
+      @if(in_array(getRoleName(activeRole()), ['Dean']))
         <script>
             function fetchTarget() {
                 $.ajax({

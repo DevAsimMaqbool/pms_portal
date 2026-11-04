@@ -1929,3 +1929,226 @@ if (!function_exists('facultyScopusAnalysisOfDean')) {
         ];
     }
 }
+if (!function_exists('departmentTargetIndicatorsAnalysisOfHODDeans')) {
+
+    function departmentTargetIndicatorsAnalysisOfHODDeans($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId, $currentYear = null)
+    {
+        $facultyid = auth()->user()->faculty_id;
+            $faculty = User::where('faculty_id', $facultyid)
+                ->whereNotNull('faculty_id')
+                ->role(['HOD', 'Program Leader UG', 'Program Leader PG'])
+                ->get(['id', 'employee_id']);
+            $employeeIds = $faculty->pluck('employee_id');
+
+        // Indicator configuration
+        $indicators = [
+
+            135 => [
+                'model' => \App\Models\NoOfGrantsSubmitAndWon::class,
+                'filter' => ['grant_status' => 'Submitted'],
+                'status' => 3
+            ],
+
+            202 => [
+                'model' => \App\Models\NoOfGrantsSubmitAndWon::class,
+                'filter' => ['grant_status' => 'Won'],
+                'status' => 3
+            ],
+
+            154 => [
+                'model' => \App\Models\ProgramAccreditation::class,
+                'faculty_id'=>$facultyid,
+                'status' => 2
+            ],
+
+            155 => [
+                'model' => \App\Models\ProfessionalMembership::class,
+                'status' => 2
+            ],
+            
+            140 => [
+                'model' => \App\Models\ResearchConferenceImpact::class,
+                'status' => 3
+            ],
+
+        ];
+
+        if (!isset($indicators[$indicatorId])) {
+            return null;
+        }
+
+        $modelClass = $indicators[$indicatorId]['model'];
+        $filter = $indicators[$indicatorId]['filter'] ?? [];
+        $modelstatus = $indicators[$indicatorId]['status'] ?? null;
+
+        // Faculty targets
+        // $totalTarget = FacultyTarget::whereIn('user_id', $userIds)
+        //     ->where('indicator_id', $indicatorId)
+        //     ->where('year_id', $currentYear)
+        //     ->sum('target');
+        $totalTargetdean = FacultyTargetsDean::where('user_id', $employeeId)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
+            ->first();
+
+        $totalTarget = $totalTargetdean->target ?? 0;    
+
+        // Submissions
+        $totalSubmitted = $modelClass::whereIn('created_by', $employeeIds)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $currentYear)
+            ->when(!empty($filter), function ($q) use ($filter) {
+                foreach ($filter as $key => $value) {
+                    $q->where($key, $value);
+                }
+            })
+            ->when(!is_null($modelstatus), function ($q) use ($modelstatus) {
+                $q->where('status', $modelstatus);
+            })
+            ->count();
+
+        $departmentAvgPercentage = $totalTarget > 0
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+        $departmentAvgPercentage = min($departmentAvgPercentage, 100);
+        $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+        $weightedScore = ($departmentAvgPercentage * $weight) / 100;
+
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $departmentAvgPercentage,
+            $currentYear
+        );
+        saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $currentYear,
+            $totalTarget,
+            $totalSubmitted
+        );
+
+        return [
+            'department_avg_percentage' => $departmentAvgPercentage,
+            'weighted_score' => $weightedScore,
+            'total_target' => $totalTarget,
+            'total_submitted' => $totalSubmitted
+        ];
+    }
+}
+if (!function_exists('faculitytTargetIndicatorsAnalysisOfHODDeans')) {
+
+    function faculitytTargetIndicatorsAnalysisOfHODDeans(
+        $employeeId,
+        $activeRoleId,
+        $KpaId,
+        $categoryId,
+        $indicatorId,
+        $currentYear = null
+    ) {
+        $user = auth()->user();
+        $faculty = $user->faculty;
+
+        // Active Year
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
+        $yearId = $currentYear ?? $ActiveRecord?->id;
+
+        // Get HODs of logged-in user's faculty
+        $hods = User::where('faculty', $faculty)
+            ->role(['HOD'])
+            ->get(['employee_id', 'name', 'department']);
+
+        $employeeIds = $hods->pluck('employee_id')->filter();
+
+        // Get individual HOD targets and achievements
+        $hodTargets = UserTargetAchieved::whereIn('employ_id', $employeeIds)
+            ->where('indicator_id', $indicatorId)
+            ->where('year_id', $yearId)
+            ->where('role_id', 22)
+            ->selectRaw('
+                employ_id,
+                SUM(target) as total_target,
+                SUM(acheived) as total_acheived
+            ')
+            ->groupBy('employ_id')
+            ->get()
+            ->keyBy('employ_id');
+
+        // Individual HOD details
+        $hodDetails = $hods->map(function ($hod) use ($hodTargets) {
+
+            $record = $hodTargets->get($hod->employee_id);
+
+            $target = $record->total_target ?? 0;
+            $achieved = $record->total_acheived ?? 0;
+
+            $percentage = $target > 0
+                ? round(($achieved / $target) * 100, 2)
+                : 0;
+
+            return [
+                'employee_id' => $hod->employee_id,
+                'name' => $hod->name,
+                'department' => $hod->department,
+                'target' => $target,
+                'achieved' => $achieved,
+                'percentage' => min($percentage, 100),
+            ];
+        });
+
+        // Overall totals
+        $totalTarget = $hodDetails->sum('target');
+        $totalSubmitted = $hodDetails->sum('achieved');
+
+        // Overall percentage
+        $departmentAvgPercentage = $totalTarget > 0
+            ? round(($totalSubmitted / $totalTarget) * 100, 2)
+            : 0;
+
+        $departmentAvgPercentage = min($departmentAvgPercentage, 100);
+
+        // Weighted score
+        $weight = getRoleWeightage(
+            $activeRoleId,
+            'indicator',
+            $indicatorId
+        )['weightage'] ?? 0;
+
+        $weightedScore = ($departmentAvgPercentage * $weight) / 100;
+
+        // Save indicator percentage
+        saveIndicatorPercentage(
+            $employeeId,
+            $activeRoleId,
+            $KpaId,
+            $categoryId,
+            $indicatorId,
+            $weightedScore,
+            $departmentAvgPercentage,
+            $yearId
+        );
+
+        // Save overall target and achieved
+        saveUserTargetAchieved(
+            $employeeId,
+            $activeRoleId,
+            $indicatorId,
+            $yearId,
+            $totalTarget,
+            $totalSubmitted
+        );
+
+        return [
+            'hod_details' => $hodDetails,
+            'department_avg_percentage' => $departmentAvgPercentage,
+            'weighted_score' => $weightedScore,
+            'total_target' => $totalTarget,
+            'total_submitted' => $totalSubmitted,
+        ];
+    }
+}
