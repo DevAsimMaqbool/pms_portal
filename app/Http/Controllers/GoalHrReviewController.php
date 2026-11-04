@@ -43,7 +43,7 @@ public function index(Request $request)
         array_filter($selectedDepartments)
     );
 
-    $employees = User::whereHas('goalSelfReports')
+    $employees = User::role('Survey')->whereHas('goalSelfReports')
         ->when(!empty($selectedDepartments), function ($query) use ($selectedDepartments) {
             $query->whereIn(
                 'hr_department_name',
