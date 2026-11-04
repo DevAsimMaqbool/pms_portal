@@ -125,7 +125,13 @@ class FormBuilderController extends Controller
     {
         $user = Auth::user();
         $employee_id = $user->employee_id;
-        $facultyMembers = User::with('roles')->where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        //$facultyMembers = User::with('roles')->where('manager_id', $employee_id)->get(['id', 'name', 'department', 'job_title']);
+        $facultyMembers = User::with('roles')
+            ->where(function ($query) use ($employee_id, $user) {
+                $query->where('manager_id', $employee_id)
+                    ->orWhere('id', $user->id);
+            })
+    ->get(['id', 'employee_id', 'name', 'department', 'job_title']);
         return view('admin.form.dean_user_targets', compact('facultyMembers'));
     }
      public function AdminTargetForms()

@@ -190,78 +190,187 @@
     <!-- / Payment Methods modal -->
 @endif
 @if(in_array(getRoleName(activeRole()), ['Dean']))
-<!--  Payment Methods modal -->
 
     <div class="modal fade" id="ofGrantProposalsSubmitted" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content custom-modal">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center p-4">
-                    <!-- Title -->
-                    <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div># of Grant Proposals Submitted
-                    </h3>
-                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
-                    <div class="card">
 
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <div class="modal-content custom-modal">
+
+                <div class="modal-header">
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body text-center p-4">
+
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        <div class="badge bg-label-primary rounded p-2">
+                            <i class="icon-base ti tabler-clock-hour-2 icon-md"></i>
+                        </div>
+                        # of Grant Proposals Submitted
+                    </h3>
+
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary">
+                        {{ $currentYear->year }}
+                    </button>
+
+                    @php
+                        $data = faculitytTargetIndicatorsAnalysisOfHODDeans(
+                            Auth::user()->employee_id,
+                            $activeRoleId,
+                            2,
+                            8,
+                            135,
+                            $currentYear->id
+                        );
+
+                        $avg = $data['department_avg_percentage'];
+
+                        if ($avg >= 90) {
+                            $color = 'primary';
+                            $rating = 'OS';
+                        } elseif ($avg >= 80) {
+                            $color = 'success';
+                            $rating = 'EE';
+                        } elseif ($avg >= 70) {
+                            $color = 'warning';
+                            $rating = 'ME';
+                        } elseif ($avg >= 60) {
+                            $color = 'orange';
+                            $rating = 'NI';
+                        } else {
+                            $color = 'danger';
+                            $rating = 'BE';
+                        }
+                    @endphp
+
+                    <div class="card">
                         <div class="card-body">
-                            <div class="table-responsive text-nowrap">
+
+                            <div class="table-responsive">
+
                                 <table class="table table-striped align-middle custom-table">
+
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Sr#</th>
+                                            <th>HOD Name</th>
                                             <th>Department</th>
+                                            <th>Target</th>
+                                            <th>Achieved</th>
                                             <th>Score</th>
                                             <th>Rating</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                            @php
-                                                $data=ResearchInnovationAndCommercializationYear(Auth::user()->employee_id, $activeRoleId, 2, 8, 135,$currentYear->id);
-                                                $faculty_avg_percentage = $data['faculty_avg_percentage'] ?? 0;
-                                                $meta_avg = getRatingMeta($faculty_avg_percentage);
-                                            @endphp
-                                                @foreach($data['records'] as $record)
-                                                @php
-                                                $meta_avg_single = getRatingMeta($record->with_out_weight_score);
-                                                $sumScore = min($record->with_out_weight_score, 100);
-                                                @endphp
-                                                <tr>
-                                                   <td>{{ $loop->iteration }}</td>
-                                                   <td> {{ $record->user?->department?->name ?? '' }}</td>
-                                                    <td><div class="badge" style="background-color: {{ $meta_avg_single->color }}">
-                                                        {{ $sumScore}}%
-                                                        </div></td>
-                                                    <td>
-                                                            <div class="badge" style="background-color: {{ $meta_avg_single->color }}">
 
-                                                                {{ $meta_avg_single->rating }}
-                                                            </div>
-                                                    </td>    
-                                                </tr>
-                                            @endforeach
+                                    <tbody>
+
+                                        @forelse($data['hod_details'] as $index => $hod)
+
+                                            @php
+                                                $hodAvg = $hod['percentage'];
+
+                                                if ($hodAvg >= 90) {
+                                                    $hodColor = 'primary';
+                                                    $hodRating = 'OS';
+                                                } elseif ($hodAvg >= 80) {
+                                                    $hodColor = 'success';
+                                                    $hodRating = 'EE';
+                                                } elseif ($hodAvg >= 70) {
+                                                    $hodColor = 'warning';
+                                                    $hodRating = 'ME';
+                                                } elseif ($hodAvg >= 60) {
+                                                    $hodColor = 'orange';
+                                                    $hodRating = 'NI';
+                                                } else {
+                                                    $hodColor = 'danger';
+                                                    $hodRating = 'BE';
+                                                }
+                                            @endphp
+
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+
+                                                <td>{{ $hod['name'] }}</td>
+
+                                                <td>{{ $hod['department'] }}</td>
+
+                                                <td>{{ $hod['target'] }}</td>
+
+                                                <td>{{ $hod['achieved'] }}</td>
+
+                                                <td>
+                                                    <span class="badge bg-{{ $hodColor }}">
+                                                        {{ number_format($hodAvg, 2) }}%
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge bg-{{ $hodColor }}">
+                                                        {{ $hodRating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+
+                                        @empty
+
+                                            <tr>
+                                                <td colspan="7" class="text-center">
+                                                    No record found
+                                                </td>
+                                            </tr>
+
+                                        @endforelse
+
                                     </tbody>
+
+                                    {{-- Overall Footer --}}
                                     <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th class=""></th>
-                                            {{-- <th class="">{{number_format($data['faculty_avg_percentage'], 2) }}</th>
-                                           <th class="">W: {{number_format($data['weighted_score'], 1) }}</th> --}}
-                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">{{number_format($faculty_avg_percentage, 2) }}</span></th>
-                                           <th class="fs-6"><span class="badge" style="background-color: {{ $meta_avg->color }}">  {{ $meta_avg->rating }} </span></th>
-                                       
+
+                                        <tr class="table-primary fw-bold">
+
+                                            <th colspan="3" class="text-start">
+                                                Total
+                                            </th>
+
+                                            <th>
+                                                {{ $data['total_target'] }}
+                                            </th>
+
+                                            <th>
+                                                {{ $data['total_submitted'] }}
+                                            </th>
+
+                                            <th>
+                                                <span class="badge bg-{{ $color }}">
+                                                    {{ number_format($avg, 2) }}%
+                                                </span>
+                                            </th>
+
+                                            <th>
+                                                <span class="badge bg-{{ $color }}">
+                                                    {{ $rating }}
+                                                </span>
+                                            </th>
+
                                         </tr>
-                                    </tfoot> 
+
+                                    </tfoot>
+
                                 </table>
+
                             </div>
+
                         </div>
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
-    <!-- / Payment Methods modal -->
+
 @endif
