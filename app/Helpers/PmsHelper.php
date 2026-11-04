@@ -34,7 +34,7 @@ if (!function_exists('hodTopPerformers')) {
             return []; // return empty array if no employees
         }
         // 2️⃣ Get top 5 employees with avg score + eager load user
-        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('AVG(score) as avg_score'))
+        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('AVG(with_out_weight_score) as avg_score'))
             ->with([
                 'user:employee_id,name,email,job_title,work_location'
             ])
@@ -42,7 +42,7 @@ if (!function_exists('hodTopPerformers')) {
             ->whereIn('role_id', $roleIds)
             ->where('year_id', $ActiveRecord->id)
             ->groupBy('employee_id', 'role_id')
-            ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
+            ->havingRaw('AVG(with_out_weight_score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')   // Sort by avg_score descending
             ->limit(5)                   // Take top 5
             ->get();
@@ -132,17 +132,22 @@ if (!function_exists('deanTopPerformers')) {
     function deanTopPerformers()
     {
         $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
+        $faculty_employee_id = auth()->user()->employee_id;
         $faculty = auth()->user()->faculty;
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $employeeIds = User::where('faculty', $faculty)
             ->role(['HOD'])
             ->pluck('employee_id')
-            ->filter()
-            ->toArray();
-        if (empty($employeeIds)) {
+            ->filter();
+        if ($employeeIds->isEmpty()) {
             return [];
         }
-        $topEmployees = IndicatorsPercentage::select('employee_id', DB::raw('AVG(score) as avg_score'))
+        if ($employeeIds->count() > 2) {
+            $employeeIds = $employeeIds->diff([$faculty_employee_id])->values();
+        }
+
+        $employeeIds = $employeeIds->toArray();
+        $topEmployees = IndicatorsPercentage::select('employee_id', DB::raw('AVG(with_out_weight_score) as avg_score'))
             ->with([
                 'user:employee_id,name,email,job_title,work_location,department_id',
                 'user.department:id,name'
@@ -151,7 +156,7 @@ if (!function_exists('deanTopPerformers')) {
             ->where('role_id', $roleIds)
             ->where('year_id', $ActiveRecord->id)
             ->groupBy('employee_id')
-            ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
+            ->havingRaw('AVG(with_out_weight_score) > ?', [60]) // Only average score greater than 60
             ->orderByDesc('avg_score')
             ->limit(5)
             ->get();
@@ -203,6 +208,9 @@ if (!function_exists('deanHotIndicators')) {
         $ActiveRecord = ActiveRecord::where('status', 1)->first();
         $employeeIds = User::where('faculty', $faculty)
             ->role(['HOD'])
+            ->whereHas('department', function ($query) {
+                $query->whereNotIn('id', [609]);
+            })
             ->pluck('employee_id')
             ->filter()
             ->toArray();
@@ -217,6 +225,107 @@ if (!function_exists('deanHotIndicators')) {
             ->avg('with_out_weight_score');
 
         $avg = $avg ? round($avg, 1) : 0.00;
+
+        if ($avg >= 90) {
+            $color = 'primary';
+            $rating = 'OS';
+        } elseif ($avg >= 80) {
+            $color = 'success';
+            $rating = 'EE';
+        } elseif ($avg >= 70) {
+            $color = 'warning';
+            $rating = 'ME';
+        } elseif ($avg >= 60) {
+            $color = 'orange';
+            $rating = 'NI';
+        } elseif ($avg >= 0) {
+            $color = 'danger';
+            $rating = 'BE';
+        } else {
+            $color = 'secondary';
+            $rating = 'N/A';
+        }
+
+        return [
+            'avg' => $avg,
+            'rating' => $rating,
+            'color' => $color,
+        ];
+    }
+
+}
+if (!function_exists('deanHotIndicatorsEmp')) {
+    function deanHotIndicatorsEmp($indicator_id, $role_id)
+    {
+        $roleIds = Role::whereIn('name', ['HOD'])->pluck('id')->toArray();
+        $faculty = auth()->user()->faculty;
+        $faculty_employee_id = auth()->user()->employee_id;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
+        $employeeIds = User::where('faculty', $faculty)
+            ->role(['HOD'])
+            ->whereHas('department', function ($query) {
+                $query->whereNotIn('id', [609, 705]);
+            })
+            ->pluck('employee_id')
+            ->filter();
+        if ($employeeIds->isEmpty()) {
+            return [];
+        }
+
+        if ($employeeIds->count() > 2) {
+            $employeeIds = $employeeIds->diff([$faculty_employee_id])->values();
+        }
+
+        $employeeIds = $employeeIds->toArray();   
+
+        $avg = IndicatorsPercentage::whereIn('employee_id', $employeeIds)
+            ->where('indicator_id', $indicator_id)
+            ->whereIn('role_id', $roleIds)
+            ->where('year_id', $ActiveRecord->id)
+            ->avg('with_out_weight_score');
+
+        $avg = $avg ? round($avg, 1) : 0.00;
+
+        if ($avg >= 90) {
+            $color = 'primary';
+            $rating = 'OS';
+        } elseif ($avg >= 80) {
+            $color = 'success';
+            $rating = 'EE';
+        } elseif ($avg >= 70) {
+            $color = 'warning';
+            $rating = 'ME';
+        } elseif ($avg >= 60) {
+            $color = 'orange';
+            $rating = 'NI';
+        } elseif ($avg >= 0) {
+            $color = 'danger';
+            $rating = 'BE';
+        } else {
+            $color = 'secondary';
+            $rating = 'N/A';
+        }
+
+        return [
+            'avg' => $avg,
+            'rating' => $rating,
+            'color' => $color,
+        ];
+    }
+
+}
+if (!function_exists('DeansingleHotIndicators')) {
+    function DeansingleHotIndicators($indicator_id, $role_id)
+    {
+        $employee_id = auth()->user()->employee_id;
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
+        $record = IndicatorsPercentage::where('employee_id', $employee_id)
+            ->where('role_id', $role_id)->where('indicator_id', $indicator_id)
+            ->where('year_id', $ActiveRecord->id)
+            ->orderBy('id')
+            ->first();
+
+        $avg = $record ? round($record->with_out_weight_score, 1) : 0.00;
 
         if ($avg >= 90) {
             $color = 'primary';

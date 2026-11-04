@@ -3691,6 +3691,7 @@ function Research_Innovation_Commercialization($facultyId, $activeRoleId, $indic
 if (!function_exists('getIndicatorsByScore')) {
     function getIndicatorsByScore($scoreCompare, $scoreValue, $employeeId = null, $kpaId = null, $isBadge = null, $member = null)
     {
+        $ActiveRecord = ActiveRecord::where('status', 1)->first();
         if ($member) {
             $user = User::find($employeeId);
             $roleId = $user->roles->first()?->id;
@@ -3721,6 +3722,7 @@ if (!function_exists('getIndicatorsByScore')) {
 
         return $query
             ->where('score', $scoreCompare, $scoreValue)
+            ->where('year_id', $ActiveRecord->id)
             ->where('role_id', $roleId)
             ->get([
                 'id',

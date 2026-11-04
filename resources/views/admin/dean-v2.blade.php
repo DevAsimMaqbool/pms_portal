@@ -546,7 +546,7 @@
 
           @php
 
-            $EmployabilitydeanHotIndicators = deanHotIndicators(103, $activeRoleId);
+            $EmployabilitydeanHotIndicators = deanHotIndicatorsEmp(103, $activeRoleId);
             $EmployabilityPercentage = getRatingByPercentage($EmployabilitydeanHotIndicators['avg'] ?? 0);
            @endphp
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -576,7 +576,7 @@
 
           @php
 
-            $ResearchPublicationssdeanHotIndicators = deanHotIndicators(128, $activeRoleId);
+            $ResearchPublicationssdeanHotIndicators = DeansingleHotIndicators(128, $activeRoleId);
             $ResearchPublicationsPercentage = getRatingByPercentage($ResearchPublicationssdeanHotIndicators['avg'] ?? 0);
            @endphp
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -637,7 +637,7 @@
 
           @php
 
-            $AdmissionTargetsdeanHotIndicators = deanHotIndicators(146, $activeRoleId);
+            $AdmissionTargetsdeanHotIndicators = deanHotIndicatorsEmp(157, $activeRoleId);
             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg'] ?? 0);
            @endphp
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -649,7 +649,38 @@
                     class="icon-base ti tabler-book-2 icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark text-cut-hot">% of Recovery</small>
+                  <small class="text-dark text-cut-hot">Employer Satisfaction Score</small>
+                </div>
+              </div>
+              <div class="d-flex flex-grow-1 align-items-center">
+                <div class="progress w-100 me-4" style="height:8px;">
+                  <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }}" role="progressbar"
+                    style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%" aria-valuenow="65"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%</span>
+                <span
+                  class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] ?? 0}}</span>
+              </div>
+            </div>
+          </div>
+
+
+          @php
+
+            $AdmissionTargetsdeanHotIndicators = deanHotIndicators(161, $activeRoleId);
+            $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg'] ?? 0);
+           @endphp
+          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0}}"
+            data-bs-original-title="{{ $AdmissionTargetPercentage['description'] ?? 0}}">
+            <div class="card-body d-flex">
+              <div class="d-flex w-50 align-items-center me-4">
+                <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }} rounded p-1_5 me-4"><i
+                    class="icon-base ti tabler-stars icon-md"></i>
+                </div>
+                <div>
+                  <small class="text-dark text-cut-hot">Net Promoter Score of Faculty</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
@@ -667,97 +698,7 @@
 
           @php
 
-            $AdmissionTargetsdeanHotIndicators = deanHotIndicators(147, $activeRoleId);
-            $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg'] ?? 0);
-           @endphp
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }}"
-            data-bs-original-title="{{ $AdmissionTargetPercentage['description'] ?? 0 }}">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }} rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-stars icon-md"></i>
-                </div>
-                <div>
-                  <small class="text-dark text-cut-hot">Profitability of the Programs</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0}}" role="progressbar"
-                    style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%</span>
-                <span
-                  class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0}} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] ?? 0}}</span>
-              </div>
-            </div>
-          </div>
-
-          @php
-
-            $AdmissionTargetsdeanHotIndicators = deanHotIndicators(166, $activeRoleId);
-            $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg'] ?? 0);
-           @endphp
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0}}"
-            data-bs-original-title="{{ $AdmissionTargetPercentage['description'] ?? 0}}">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }} rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-stars icon-md"></i>
-                </div>
-                <div>
-                  <small class="text-dark text-cut-hot">Faculty Satisfaction Score</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }}" role="progressbar"
-                    style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%</span>
-                <span
-                  class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] ?? 0}}</span>
-              </div>
-            </div>
-          </div>
-
-          @php
-
-            $AdmissionTargetsdeanHotIndicators = deanHotIndicators(179, $activeRoleId);
-            $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg'] ?? 0);
-           @endphp
-          <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
-            data-bs-custom-class="tooltip-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0}}"
-            data-bs-original-title="{{ $AdmissionTargetPercentage['description'] ?? 0 }}">
-            <div class="card-body d-flex">
-              <div class="d-flex w-50 align-items-center me-4">
-                <div class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0}} rounded p-1_5 me-4"><i
-                    class="icon-base ti tabler-stars icon-md"></i>
-                </div>
-                <div>
-                  <small class="text-dark text-cut-hot">Student Feedback Score</small>
-                </div>
-              </div>
-              <div class="d-flex flex-grow-1 align-items-center">
-                <div class="progress w-100 me-4" style="height:8px;">
-                  <div class="progress-bar bg-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }}" role="progressbar"
-                    style="width:{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0}}%" aria-valuenow="65"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="text-body-secondary">{{ $AdmissionTargetsdeanHotIndicators['avg'] ?? 0 }}%</span>
-                <span
-                  class="badge bg-label-{{ $AdmissionTargetsdeanHotIndicators['color'] ?? 0 }} ms-1">{{ $AdmissionTargetsdeanHotIndicators['rating'] ?? 0 }}</span>
-              </div>
-            </div>
-          </div>
-
-          @php
-
-            $AdmissionTargetsdeanHotIndicators = deanHotIndicators(181, $activeRoleId);
+            $AdmissionTargetsdeanHotIndicators = deanHotIndicatorsEmp(163, $activeRoleId);
             $AdmissionTargetPercentage = getRatingByPercentage($AdmissionTargetsdeanHotIndicators['avg'] ?? 0);
            @endphp
           <div class="card mb-6 scgrool-card-h hover-card" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -769,7 +710,7 @@
                     class="icon-base ti tabler-stars icon-md"></i>
                 </div>
                 <div>
-                  <small class="text-dark text-cut-hot">Faculty Discipline / Punctuality</small>
+                  <small class="text-dark text-cut-hot">Alumni Satisfaction Rate</small>
                 </div>
               </div>
               <div class="d-flex flex-grow-1 align-items-center">
