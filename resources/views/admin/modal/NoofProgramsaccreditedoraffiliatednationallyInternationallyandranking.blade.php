@@ -260,7 +260,7 @@
 
 <!-- / Payment Methods modal -->
 @endif
-@if(in_array(getRoleName(activeRole()), ['Dean_test']))
+@if(in_array(getRoleName(activeRole()), ['Dean']))
 <!--  Payment Methods modal -->
 
     <div class="modal fade" id="NoofProgramsaccreditedoraffiliatednationallyInternationallyandranking" tabindex="-1" aria-hidden="true">
@@ -337,104 +337,3 @@
     </div>
     <!-- / Payment Methods modal -->
 @endif
-@if(in_array(getRoleName(activeRole()), ['Dean']))
-    <!--  Payment Methods modal -->
-
-    <div class="modal fade" id="NoofProgramsaccreditedoraffiliatednationallyInternationallyandranking" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content custom-modal">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center p-4">
-                    <!-- Title -->
-                    <h3 class="text-center mb-4 fw-bold text-primary">
-                        <div class="badge bg-label-primary rounded p-2"><i
-                                class="icon-base ti tabler-clock-hour-2 icon-md"></i></div>No of Programs accredited or
-                    affiliated nationally / Internationally and ranking
-                    </h3>
-                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
-                    <div class="card">
-
-                        <div class="card-body">
-                            <div class="table-responsive text-nowrap">
-                                <table class="table table-striped align-middle custom-table">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Sr#</th>
-                                            <th>Target</th>
-                                            <th>Achieved</th>
-                                            <th>Score</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $data = departmentTargetIndicatorsAnalysisOfHODDeans(Auth::user()->employee_id, $activeRoleId, 6, 14, 154,$currentYear->id);
-                                            $avg = $data['department_avg_percentage'];
-                                            if ($avg >= 90) {
-                                                $color = 'primary';
-                                                $rating = 'OS';
-                                            } elseif ($avg >= 80) {
-                                                $color = 'success';
-                                                $rating = 'EE';
-                                            } elseif ($avg >= 70) {
-                                                $color = 'warning';
-                                                $rating = 'ME';
-                                            } elseif ($avg >= 60) {
-                                                $color = 'orange';
-                                                $rating = 'NI';
-                                            } else {
-                                                $color = 'danger';
-                                                $rating = 'BE';
-                                            }
-                                        @endphp
-                                        @if($data['total_target'] > 0)
-                                            <tr>
-                                                <td>1</td>
-                                                <td>{{ $data['total_target'] }}</td>
-                                                <td>{{ $data['total_submitted'] }}</td>
-                                                <td>
-                                                    <div class="badge bg-{{ $color }}">
-                                                        {{number_format($data['department_avg_percentage']) }}%
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="badge bg-{{ $color }}">
-                                                        {{ $rating }}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @else
-                                            <tr>
-                                                <td colspan="5" class="text-center">No record found</td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="table-primary">
-                                            <th class="">Total</th>
-                                            <th colspan="2" class="text-end"></th>
-                                            <th class="fs-6">
-                                                <div class="badge bg-{{ $color }}">
-                                                    {{number_format($data['department_avg_percentage']) }}%
-                                                </div>
-                                            </th>
-                                            <th class="text-white fs-6">
-                                                <div class="badge bg-{{ $color }}">
-                                                    {{ $rating }}
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- / Payment Methods modal -->
-@endif
-
