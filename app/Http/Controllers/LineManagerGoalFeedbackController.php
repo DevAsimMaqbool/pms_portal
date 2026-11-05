@@ -80,6 +80,7 @@ class LineManagerGoalFeedbackController extends Controller
             'honesty_integrity_3' => 'nullable|integer',
             'empathy_compassion_1' => 'nullable|integer',
             'empathy_compassion_2' => 'nullable|integer',
+            'empathy_compassion_3' => 'nullable|integer',
             'humility_service_1' => 'nullable|integer',
             'humility_service_2' => 'nullable|integer',
             'humility_service_3' => 'nullable|integer',
@@ -138,6 +139,12 @@ class LineManagerGoalFeedbackController extends Controller
 
         $facultyMembers = $manager->merge($subordinates);
 
+        if ($authUser->barcode==40171){
+        return view(
+                'admin.form.goal_feedback.rector_manager_satisfaction_feedback_edit',
+                compact('feedback','facultyMembers')
+            );
+        }
         return view(
             'admin.form.goal_feedback.line_manager_satisfaction_feedback_edit',
             compact('feedback', 'facultyMembers')
@@ -163,6 +170,7 @@ class LineManagerGoalFeedbackController extends Controller
             'responsibility_accountability_3' => 'nullable|integer',
             'empathy_compassion_1' => 'nullable|integer',
             'empathy_compassion_2' => 'nullable|integer',
+            'empathy_compassion_3' => 'nullable|integer',
             'humility_service_1' => 'nullable|integer',
             'humility_service_2' => 'nullable|integer',
             'humility_service_3' => 'nullable|integer',

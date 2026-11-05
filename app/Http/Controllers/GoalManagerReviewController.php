@@ -551,7 +551,12 @@ public function lineManagerForm()
 
     // Only subordinates
     $facultyMembers = $authUser->subordinates ?? collect();
-
+if ($authUser->barcode==40171){
+return view(
+        'admin.form.goal_feedback.rector_manager_feedback_in_goal',
+        compact('facultyMembers')
+    );
+}
     return view(
         'admin.form.goal_feedback.line_manager_feedback_in_goal',
         compact('facultyMembers')

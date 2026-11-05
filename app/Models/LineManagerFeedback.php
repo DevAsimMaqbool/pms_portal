@@ -16,6 +16,7 @@ class LineManagerFeedback extends Model
         'responsibility_accountability_3',
         'empathy_compassion_1',
         'empathy_compassion_2',
+        'empathy_compassion_3',
         'humility_service_1',
         'humility_service_2',
         'humility_service_3',
