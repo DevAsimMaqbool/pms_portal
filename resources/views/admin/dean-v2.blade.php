@@ -738,7 +738,7 @@
         <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
 
           @php
-            $deanTopPerformers = deanTopPerformers();
+            $deanTopPerformers = deanTopPerformersNew();
           @endphp
           @if(!empty($deanTopPerformers))
             @foreach($deanTopPerformers as $deanTopPerformer)

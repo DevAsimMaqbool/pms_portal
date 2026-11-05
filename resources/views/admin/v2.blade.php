@@ -884,7 +884,7 @@
         <div class="scrollableCol" style="height:409px; overflow:auto; scrollbar-width: none;">
 
           @php
-            $hodTopPerformers = hodTopPerformers();
+            $hodTopPerformers = hodTopPerformersTeacher();
           @endphp
           @if(!empty($hodTopPerformers))
             @foreach($hodTopPerformers as $hodTopPerformer)

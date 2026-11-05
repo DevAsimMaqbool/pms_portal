@@ -87,6 +87,75 @@ if (!function_exists('hodTopPerformers')) {
     }
 
 }
+if (!function_exists('hodTopPerformersTeacher')) {
+    function hodTopPerformersTeacher()
+    {
+
+        $departmentId = auth()->user()->department_id;
+        $department = Department::find($departmentId);
+        $activeRoleName = getRoleName(activeRole());
+
+        // Get top 5 employees directly from users table
+        $topEmployees = User::where('department_id', $departmentId)
+            ->role([
+                'Teacher',
+                'Professor',
+                'Associate Professor',
+                'Assistant Professor',
+                'Non Phd AP',
+                'Demonstrator'
+            ])
+            ->whereNotNull('as_teacher_score')
+            ->where('as_teacher_score', '>', 60)
+            ->orderByDesc('as_teacher_score')
+            ->limit(5)
+            ->get([
+                'employee_id',
+                'name',
+                'email',
+                'job_title',
+                'work_location',
+                'as_teacher_score'
+            ]);
+
+        // Transform data
+        $result = $topEmployees->map(function ($item) use ($department) {
+
+            $avg_score = round((float) $item->as_teacher_score, 1);
+
+            if ($avg_score >= 90) {
+                $color = 'primary';
+                $label = 'OS';
+            } elseif ($avg_score >= 80) {
+                $color = 'success';
+                $label = 'EE';
+            } elseif ($avg_score >= 70) {
+                $color = 'warning';
+                $label = 'ME';
+            } elseif ($avg_score >= 60) {
+                $color = 'orange';
+                $label = 'NI';
+            } else {
+                $color = 'danger';
+                $label = 'BE';
+            }
+
+            return [
+                'employee_id' => $item->employee_id,
+                'name' => $item->name,
+                'email' => $item->email,
+                'job_title' => $item->job_title,
+                'department' => $department->name ?? null,
+                'location' => $item->work_location,
+                'avg_score' => $avg_score,
+                'label' => $label,
+                'color' => $color,
+            ];
+        })->toArray();
+
+        return $result;
+    }
+}
 if (!function_exists('hodHotIndicators')) {
     function hodHotIndicators($indicator_id, $role_id)
     {
@@ -199,6 +268,78 @@ if (!function_exists('deanTopPerformers')) {
 
     }
 
+}
+if (!function_exists('deanTopPerformersNew')) {
+    function deanTopPerformersNew()
+    {
+        $faculty_employee_id = auth()->user()->employee_id;
+        $faculty = auth()->user()->faculty;
+
+        $employeeIds = User::where('faculty', $faculty)
+            ->role(['HOD'])
+            ->pluck('employee_id')
+            ->filter();
+
+        if ($employeeIds->isEmpty()) {
+            return [];
+        }
+
+        if ($employeeIds->count() > 2) {
+            $employeeIds = $employeeIds->diff([$faculty_employee_id])->values();
+        }
+
+        $topEmployees = User::where('faculty', $faculty)
+            ->whereIn('employee_id', $employeeIds)
+            ->role(['HOD'])
+            ->whereNotNull('as_hod_score')
+            ->where('as_hod_score', '>', 60)
+            ->orderByDesc('as_hod_score')
+            ->limit(5)
+            ->with('department:id,name')
+            ->get([
+                'employee_id',
+                'name',
+                'email',
+                'job_title',
+                'work_location',
+                'department_id',
+                'as_hod_score'
+            ]);
+
+        $result = $topEmployees->map(function ($item) {
+
+            $avg_score = round((float) $item->as_hod_score, 1);
+
+            if ($avg_score >= 90) {
+                $color = 'primary';
+                $label = 'OS';
+            } elseif ($avg_score >= 80) {
+                $color = 'success';
+                $label = 'EE';
+            } elseif ($avg_score >= 70) {
+                $color = 'warning';
+                $label = 'ME';
+            } elseif ($avg_score >= 60) {
+                $color = 'orange';
+                $label = 'NI';
+            } else {
+                $color = 'danger';
+                $label = 'BE';
+            }
+
+            return [
+                'employee_id' => $item->employee_id,
+                'name' => $item->name,
+                'department' => $item->department->name ?? null,
+                'location' => $item->work_location,
+                'avg_score' => $avg_score,
+                'label' => $label,
+                'color' => $color,
+            ];
+        })->toArray();
+
+        return $result;
+    }
 }
 if (!function_exists('deanHotIndicators')) {
     function deanHotIndicators($indicator_id, $role_id)
