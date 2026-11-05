@@ -134,7 +134,7 @@
 @endif
 
 <!-- / Payment Methods modal -->
-@if(in_array(getRoleName(activeRole()), ['Dean']))
+@if(in_array(getRoleName(activeRole()), ['Dean_test']))
     <!--  Payment Methods modal -->
 
     <div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
@@ -241,6 +241,94 @@
                                                 ? array_sum($data['categories']) / count($data['categories'])
                                                 : 0;
 
+                                        @endphp
+
+                                        @foreach($data['categories'] as $label => $avg)
+
+                                            @php
+                                                $meta = getRatingMeta($avg);
+                                            @endphp
+
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $label }}</td>
+
+                                                <td>
+                                                    <div class="badge" style="background-color: {{ $meta->color }}">
+                                                        {{ number_format($avg, 1) }}%
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge" style="background-color: {{ $meta->color }}">
+                                                        {{ $meta->rating }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+
+                                        @endforeach
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="table-primary">
+                                            <th>Overall</th>
+                                            <th colspan="1" class="text-end"></th>
+                                            <th style="font-size: 0.960rem;">
+                                                <b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ number_format($overallAvg, 1) }}%
+                                                </b>
+                                            </th>
+                                            <th style="font-size: 0.960rem;"><b class="badge"
+                                                    style="background-color: {{ getRatingMeta($overallAvg)->color }}">
+                                                    {{ getRatingMeta($overallAvg)->rating }}
+                                                </b></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+@if(in_array(getRoleName(activeRole()), ['Dean']))
+    <div class="modal fade" id="RectorsFeedbackScore" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content custom-modal">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <!-- Title -->
+                    <h3 class="text-center mb-4 fw-bold text-primary">
+                        Rector’s Feedback Score
+                    </h3>
+                    <button type="button" class="mb-3 btn rounded-pill btn-primary waves-effect waves-light">{{ $currentYear->year }}</button>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title mb-0 fw-bold text-primary"></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped align-middle custom-table">
+                                    <thead class=" table-primary">
+                                        <tr>
+                                            <th>Sr#</th>
+                                            <th>Category</th>
+                                            <th>Score</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-border-bottom-0">
+                                        @php
+                                            $data = calculateRectorFeedbackAverage(Auth::user(), $activeRoleId, 165,$currentYear->id);
+                                            // Use RAW values (NO rounding here)
+                                            $categories = collect($data['categories']);
+                                            // SINGLE SOURCE → SAME RESULT ALWAYS
+                                            $overallAvg = round($categories->avg(), 1);
                                         @endphp
 
                                         @foreach($data['categories'] as $label => $avg)

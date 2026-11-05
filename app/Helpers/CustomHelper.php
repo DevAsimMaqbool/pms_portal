@@ -10082,6 +10082,162 @@ if (!function_exists('lineManagerReviewRatingOnTasks169')) {
         return ['average_score' => $averageScore, 'total_score' => $totalScore, 'ratings' => $managerRatings];
     }
 }
+if (!function_exists('calculateRectorFeedbackAverage')) {
+    /**
+     * Calculate department-level feedback average for Line Manager Feedback
+     *
+     * @param \App\Models\User $authUser
+     * @param int $indicatorId
+     * @return array
+     */
+    function calculateRectorFeedbackAverage($authUser, $activeRoleId, $indicatorId,$currentYear = null)
+    {
+        $employeeIdManager = [];
+        // Determine which employees to include
+        if ($indicatorId == 165) {
+
+            // Dean's Feedback Score: upward (manager)
+            $employeeIdManager = $authUser->manager ? [$authUser->manager->employee_id] : [];
+            $employeeIds = [$authUser->employee_id];
+
+        } else {
+            // Default: include user himself/herself
+            $employeeIds = [$authUser->employee_id];
+        }
+
+        if (empty($employeeIds)) {
+            return [
+                'department_average' => 0,
+                'weighted_score' => 0,
+                'categories' => []
+            ];
+        }
+
+        // Fetch all relevant feedback records
+        $feedbacks = LineManagerFeedback::whereIn('employee_id', $employeeIds)
+                ->when($indicatorId == 165, function ($query) use ($employeeIdManager) {
+                $query->whereIn('created_by', $employeeIdManager);
+            })
+        ->where('year_id', $currentYear)
+            ->get([
+                'responsibility_accountability_1',
+                'responsibility_accountability_2',
+                'empathy_compassion_1',
+                'empathy_compassion_2',
+                'humility_service_1',
+                'humility_service_2',
+                'honesty_integrity_1',
+                'honesty_integrity_2',
+                'inspirational_leadership_1',
+                'inspirational_leadership_2'
+            ]);
+        if ($feedbacks->isEmpty()) {
+            return [
+                'department_average' => 0,
+                'weighted_score' => 0,
+                'categories' => []
+            ];
+        }
+
+        // Calculate average for each record
+        $allAverages = $feedbacks->map(function ($record) {
+            $scores = [
+                $record->responsibility_accountability_1,
+                $record->responsibility_accountability_2,
+                $record->empathy_compassion_1,
+                $record->empathy_compassion_2,
+                $record->humility_service_1,
+                $record->humility_service_2,
+                $record->honesty_integrity_1,
+                $record->honesty_integrity_2,
+                $record->inspirational_leadership_1,
+                $record->inspirational_leadership_2,
+            ];
+
+            // Remove nulls
+            $scores = array_filter($scores, fn($val) => !is_null($val));
+
+            return $scores ? array_sum($scores) / count($scores) : 0;
+        });
+
+        // Department-level average
+        $categoryAverages = collect($feedbacks)->map(function ($r) {
+
+            return collect([
+                collect([$r->responsibility_accountability_1, $r->responsibility_accountability_2])->filter()->avg(),
+                collect([$r->empathy_compassion_1, $r->empathy_compassion_2])->filter()->avg(),
+                collect([$r->humility_service_1, $r->humility_service_2])->filter()->avg(),
+                collect([$r->honesty_integrity_1, $r->honesty_integrity_2])->filter()->avg(),
+                collect([$r->inspirational_leadership_1, $r->inspirational_leadership_2])->filter()->avg(),
+            ])->filter()->avg();
+
+        });
+
+        // FINAL MASTER AVERAGE (SAME FOR BOTH)
+        $departmentAvg = round($categoryAverages->avg(), 1);
+        $weight165 = getRoleWeightage($activeRoleId, 'indicator', 165)['weightage'] ?? 0;
+        $weightedScore165 = round(($departmentAvg * $weight165) / 100, 2);
+
+        // Weighted score example (20% weight)
+        if ($indicatorId == 165) {
+            $weight = getRoleWeightage($activeRoleId, 'indicator', $indicatorId)['weightage'] ?? 0;
+            $weightedScore = round(($departmentAvg * $weight) / 100, 2);
+
+            saveIndicatorPercentage(
+                $authUser->employee_id,
+                $activeRoleId,
+                7,
+                16,
+                $indicatorId,
+                $weightedScore,
+                $departmentAvg
+            );
+        }
+
+        return [
+            // 'department_average' => $departmentAvg,
+            // 'weighted_score' => $weightedScore,
+
+            // 🔥 NEW: Modal-ready breakdown
+            'categories' => [
+                'Responsibility & Accountability' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->responsibility_accountability_1,
+                        $r->responsibility_accountability_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Empathy & Compassion' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->empathy_compassion_1,
+                        $r->empathy_compassion_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Humility & Service' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->humility_service_1,
+                        $r->humility_service_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Honesty & Integrity' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->honesty_integrity_1,
+                        $r->honesty_integrity_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+
+                'Inspirational Leadership' => round($feedbacks->map(function ($r) {
+                    return collect([
+                        $r->inspirational_leadership_1,
+                        $r->inspirational_leadership_2
+                    ])->filter()->avg();
+                })->filter()->avg(), 2),
+            ]
+        ];
+    }
+}
 if (!function_exists('facultyPursuingSkills')) {
     function facultyPursuingSkills($employeeId, $activeRoleId)
     {
