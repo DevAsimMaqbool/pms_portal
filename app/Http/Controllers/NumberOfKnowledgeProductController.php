@@ -57,9 +57,24 @@ class NumberOfKnowledgeProductController extends Controller
             if(in_array(getRoleName(activeRole()), ['HOD'])) {
                 $status = $request->input('status');
                 if($status=="HOD"){
-                     $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor','Non Phd AP'])->pluck('employee_id');
-                        $all_ids = $employeeIds->merge($employee_id);    
+                    //  $employeeIds = User::where('manager_id', $employee_id)
+                    //     ->role(['Teacher','Associate Professor','Assistant Professor','Program Leader UG','Program Leader PG','Professor','Non Phd AP'])->pluck('employee_id');
+                    //     $all_ids = $employeeIds->merge($employee_id);   
+                    $employeeIds = User::where(function ($query) use ($user, $employee_id) {
+                    $query->where('department_id', $user->department_id)
+                        ->orWhere('manager_id', $employee_id);
+                            })
+                            ->role([
+                                'Teacher',
+                                'Associate Professor',
+                                'Assistant Professor',
+                                'Program Leader UG',
+                                'Program Leader PG',
+                                'Professor',
+                                'Non Phd AP'
+                            ])->pluck('employee_id');
+
+                        $all_ids = $employeeIds->merge([$employee_id])->unique()->values(); 
                         $forms = NumberOfKnowledgeProduct::with([
                                 'creator' => function ($q) {
                                     $q->select('employee_id', 'name');

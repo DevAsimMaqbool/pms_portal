@@ -115,10 +115,19 @@ class FormBuilderController extends Controller
     public function HodTargetForms()
     {
         $user = Auth::user();
-        $departmentId = $user->department_id;
-        $employee_id = $user->employee_id;
-        $facultyMembers = User::with('roles')->where('department_id', $departmentId)
-     ->get(['id', 'name', 'department', 'job_title']);
+        //     $departmentId = $user->department_id;
+        //     $employee_id = $user->employee_id;
+        //     $facultyMembers = User::with('roles')->where('department_id', $departmentId)
+        //  ->get(['id', 'name', 'department', 'job_title']);
+
+         $facultyMembers = User::with('roles')
+            ->where(function ($query) use ($user) {
+                $query->where('department_id', $user->department_id)
+                    ->orWhere('manager_id', $user->employee_id);
+            })
+            ->select('id', 'name', 'department', 'job_title')
+            ->distinct()
+            ->get();
         return view('admin.form.hod_targets', compact('facultyMembers'));
     }
     public function DeanTargetForms()
