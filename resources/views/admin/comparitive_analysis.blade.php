@@ -169,7 +169,7 @@
             <div class="card-body top-department-list">
               <ul class="p-0 m-0">
                 @php
-                    $hodTopPerformers = hodTopPerformers();
+                    $hodTopPerformers = hodTopPerformersTeacher();
                 @endphp
                 @if(!empty($hodTopPerformers))
                   @foreach($hodTopPerformers as $hodTopPerformer)

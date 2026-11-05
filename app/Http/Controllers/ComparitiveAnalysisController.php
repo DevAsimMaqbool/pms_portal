@@ -243,7 +243,7 @@ class ComparitiveAnalysisController extends Controller
             ]);
         }
         // 2️⃣ Get top 5 employees with avg score + eager load user
-        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('AVG(score) as avg_score'))
+        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('SUM(score) as avg_score'))
             ->with([
                 'user:employee_id,name,email,job_title,work_location'
             ])
@@ -260,7 +260,7 @@ class ComparitiveAnalysisController extends Controller
         $values = [];
         foreach ($topEmployees as $employee) {
             $categories[] = $employee->user->name ?? 'N/A';
-            $values[] = round($employee->avg_score, 2);
+            $values[] = round($employee->avg_score, 1);
         }
 
         return response()->json([

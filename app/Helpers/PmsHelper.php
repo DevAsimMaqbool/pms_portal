@@ -846,37 +846,35 @@ function ResearchPublicationHODDean($employeeIds, $activeRoleId, $indicatorId,$c
 if (!function_exists('FacultyLevelToppers')) {
     function FacultyLevelToppers()
     {
-        $roleIds = Role::whereIn('name', ['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP', 'Demonstrator'])->pluck('id')->toArray();
         $faculty = auth()->user()->faculty;
-        $ActiveRecord = ActiveRecord::where('status', 1)->first();
-        // 1️⃣ Get all employee_ids in the department
-        $employeeIds = User::where('faculty', $faculty)
-            ->role(['Teacher', 'Professor', 'Associate Professor', 'Assistant Professor','Non Phd AP', 'Demonstrator'])
-            ->pluck('employee_id')
-            ->filter() // remove nulls
-            ->toArray();
-        if (empty($employeeIds)) {
-            return []; // return empty array if no employees
-        }
 
-        // 2️⃣ Get top 5 employees with avg score + eager load user
-        $topEmployees = IndicatorsPercentage::select('employee_id', 'role_id', DB::raw('AVG(score) as avg_score'))
-            ->with([
-                'user:employee_id,name,email,job_title,work_location,department_id',
-                'user.department:id,name'
+        $topEmployees = User::where('faculty', $faculty)
+            ->role([
+                'Teacher',
+                'Professor',
+                'Associate Professor',
+                'Assistant Professor',
+                'Non Phd AP',
+                'Demonstrator'
             ])
-            ->whereIn('employee_id', $employeeIds)
-            ->whereIn('role_id', $roleIds)
-            ->where('year_id', $ActiveRecord->id)
-            ->groupBy('employee_id', 'role_id')
-            ->havingRaw('AVG(score) > ?', [60]) // Only average score greater than 60
-            ->orderByDesc('avg_score')   // Sort by avg_score descending
-            ->limit(5)                   // Take top 5
-            ->get();
+            ->whereNotNull('as_teacher_score')
+            ->where('as_teacher_score', '>', 60)
+            ->orderByDesc('as_teacher_score')
+            ->limit(5)
+            ->with('department:id,name')
+            ->get([
+                'employee_id',
+                'name',
+                'email',
+                'job_title',
+                'work_location',
+                'department_id',
+                'as_teacher_score'
+            ]);
 
-        // 3️⃣ Transform data into array with label and color
         $result = $topEmployees->map(function ($item) {
-            $avg_score = $item ? round($item->avg_score, 1) : 0.0;
+
+            $avg_score = round((float) $item->as_teacher_score, 1);
 
             if ($avg_score >= 90) {
                 $color = 'primary';
@@ -890,30 +888,25 @@ if (!function_exists('FacultyLevelToppers')) {
             } elseif ($avg_score >= 60) {
                 $color = 'orange';
                 $label = 'NI';
-            } elseif ($avg_score >= 0) {
+            } else {
                 $color = 'danger';
                 $label = 'BE';
-            } else {
-                $color = 'secondary';
-                $label = 'N/A';
             }
 
             return [
                 'employee_id' => $item->employee_id,
-                'role_id' => $item->role_id,
-                'name' => $item->user->name ?? null,
-                'department' => $item->user->department->name ?? null,
-                'location' => $item->user->work_location ?? null,
+                'name' => $item->name,
+                'department' => $item->department->name ?? null,
+                'location' => $item->work_location,
                 'avg_score' => $avg_score,
                 'label' => $label,
                 'color' => $color,
             ];
+
         })->toArray();
 
         return $result;
-
     }
-
 }
 if (!function_exists('ResearchInnovationAndCommercialization')) {
     function ResearchInnovationAndCommercialization($employeeId, $activeRoleId, $KpaId, $categoryId, $indicatorId)
