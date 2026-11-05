@@ -19,6 +19,7 @@ class CompletionOfCourseFolderController extends Controller
     public function index(Request $request)
     {
         $employeeId = Auth::id();
+        $user = Auth::user();
         $activeTermIds = Term::where('status', '1')->pluck('id');
         $data = CompletionOfCourseFolder::with('facultyClass') // eager load classes
             ->where('faculty_member_id', $employeeId)
@@ -43,9 +44,25 @@ class CompletionOfCourseFolderController extends Controller
                     ->get();
             }
             if ($status == "HOD") {
-                $employeeIds = User::where('manager_id', $employeeId)
-                    ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
-                    $all_ids = $employeeIds->merge($employeeId);
+                // $employeeIds = User::where('manager_id', $employeeId)
+                //     ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor', 'Demonstrator'])->pluck('employee_id');
+                //     $all_ids = $employeeIds->merge($employeeId);
+                $employeeIds = User::where(function ($query) use ($user, $employeeId) {
+                    $query->where('department_id', $user->department_id)
+                        ->orWhere('manager_id', $employeeId);
+                            })
+                            ->role([
+                                'Teacher',
+                                'Associate Professor',
+                                'Assistant Professor',
+                                'Program Leader UG',
+                                'Program Leader PG',
+                                'Professor',
+                                'Non Phd AP',
+                                'Demonstrator'
+                            ])->pluck('employee_id');
+
+                        $all_ids = $employeeIds->merge([$employeeId])->unique()->values();
                 $forms = CompletionOfCourseFolder::with([
                     'creator' => function ($q) {
                         $q->select('employee_id', 'name');
