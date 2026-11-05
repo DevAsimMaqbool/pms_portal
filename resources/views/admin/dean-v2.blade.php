@@ -1243,11 +1243,14 @@
         "Leadership and Governance",
       ];
 
-      var shortLabels = ["T&L", "RIC", "FS", "INT", "BI", "L&G"];
+     // var shortLabels = ["T&L", "RIC", "FS", "INT", "BI", "L&G"];
 
       // ✅ Example dataset (7 values)
       //var dataset1 = [90, 85, 80, 70, 75, 65, 70];
-      var dataset1 = @json($dataset1) || [];
+      //var dataset1 = @json($dataset1) || [];
+      var datasetset = @json($dataset1) || []; // dataset from backend
+      var shortLabels = datasetset.map(item => item.kpa_name);
+      var dataset1 = datasetset.map(item => item.avg);
       var labelColors = [
         "#e74c3c",
         "#3498db",
@@ -1414,11 +1417,14 @@
       ];
 
       // ✅ Matching short labels (7 total)
-      var shortLabels = ["T&L", "RIC", "FS","Intl","BI","L&G"];
+     // var shortLabels = ["T&L", "RIC", "FS","Intl","BI","L&G"];
 
       // ✅ Sample dataset
       //var dataset1 = [90, 85, 80, 70, 75, 65, 70];
-      var dataset1 = @json($dataset1) || [];
+      //var dataset1 = @json($dataset1) || [];
+      var datasetset = @json($dataset1) || []; // dataset from backend
+      var shortLabels = datasetset.map(item => item.kpa_name);
+      var dataset1 = datasetset.map(item => item.avg);
       var labelColors = ["#e74c3c", "#3498db", "#27ae60", "#f39c12", "#9b59b6", "#1abc9c", "#2c3e50"];
 
       var ctx = document.getElementById("radarChart1").getContext("2d");

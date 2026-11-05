@@ -208,9 +208,10 @@ class PermissionController extends Controller
         if (!$role) {
             abort(403, 'No valid role found for this user.');
         }
+        //dd($role->id);
         // Fetch assignments
         $assignments = RoleKpaAssignment::with(['kpa', 'category', 'indicator'])
-            ->where('role_id', $role->id)
+            ->where('role_id', $activeRoleId)
             ->get();
         $grouped = $assignments->filter(fn($a) => $a->kpa && $a->category && $a->indicator)
             ->groupBy(fn($a) => $a->kpa->id)
@@ -252,8 +253,13 @@ class PermissionController extends Controller
 
         foreach ($assignments->groupBy('kpa.id') as $kpaId => $group) {
             $result = kpaAvgScore($kpaId, $employee->id);
-            $dataset1[] = $result['avg'];   // only avg
+            //$dataset1[] = $result['avg'];   // only avg
+            $dataset1[] = [
+                'kpa_name' => $group->first()->kpa->short_code ?? '',
+                'avg' => $result['avg'],
+            ];
         }
+        //dd($dataset1);
 
         // Return views based on active role context
         switch ($activeRole) {
@@ -269,7 +275,7 @@ class PermissionController extends Controller
                 return view('admin.v2', compact('employee', 'dataset1', 'researchData', 'showPasswordPopup'));
             case 'hod':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
-                return view('admin.hod-v2', compact('employee', 'researchData', 'showPasswordPopup'));
+                return view('admin.hod-v2', compact('employee', 'researchData','dataset1', 'showPasswordPopup'));
             case 'dean':
                 $researchData = Research_Innovation_Commercialization_HOD_Dean($employee->employee_id, $activeRoleId, 0);
                 return view('admin.dean-v2', compact('employee','dataset1', 'researchData', 'showPasswordPopup'));

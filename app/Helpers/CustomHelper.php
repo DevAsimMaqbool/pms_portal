@@ -3721,7 +3721,7 @@ if (!function_exists('getIndicatorsByScore')) {
         }
 
         return $query
-            ->where('score', $scoreCompare, $scoreValue)
+            ->where('with_out_weight_score', $scoreCompare, $scoreValue)
             ->where('year_id', $ActiveRecord->id)
             ->where('role_id', $roleId)
             ->get([
@@ -3731,6 +3731,7 @@ if (!function_exists('getIndicatorsByScore')) {
                 'indicator_category_id',
                 'indicator_id',
                 'score',
+                'with_out_weight_score',
                 'rating',
                 'color',
                 'badge_name'
