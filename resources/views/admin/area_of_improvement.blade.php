@@ -57,7 +57,7 @@
                         <td class="dt-type-numeric">
                           <div class="d-flex align-items-center">
                             <div class="progress w-100 me-3" style="height: 6px;">
-                              <div class="progress-bar bg-{{ $areaOfImprovements->color }}" role="progressbar" style="width: {{ $areaOfImprovements->score }}%" aria-valuenow="{{ $areaOfImprovements->score }}"
+                              <div class="progress-bar bg-{{ $areaOfImprovements->color }}" role="progressbar" style="width: {{ $areaOfImprovements->with_out_weight_score }}%" aria-valuenow="{{ $areaOfImprovements->score }}"
                                 aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
@@ -66,7 +66,7 @@
                         <td><span class="badge bg-label-{{ $areaOfImprovements->color }}"> {{ $areaOfImprovements->rating }}</span></td>
                         <td>
                           <p class="text-danger fw-medium mb-0 d-flex align-items-center gap-1">
-                            {{ $areaOfImprovements->score }}%
+                            {{ $areaOfImprovements->with_out_weight_score }}%
                           </p>
                         </td>
                       </tr>

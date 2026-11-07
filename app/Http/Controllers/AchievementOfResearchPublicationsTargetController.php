@@ -80,9 +80,22 @@ class AchievementOfResearchPublicationsTargetController extends Controller
                 }
 
                 if ($status == "HOD") {
-                    $employeeIds = User::where('manager_id', $employee_id)
-                        ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor'])->pluck('employee_id');
-                    $all_ids = $employeeIds->merge($employee_id);
+                    // $employeeIds = User::where('manager_id', $employee_id)
+                    //     ->role(['Teacher', 'Assistant Professor','Non Phd AP', 'Professor', 'Associate Professor'])->pluck('employee_id');
+                    // $all_ids = $employeeIds->merge($employee_id);
+                    $employeeIds = User::where(function ($query) use ($user, $employee_id) {
+                    $query->where('department_id', $user->department_id)
+                        ->orWhere('manager_id', $employee_id);
+                            })
+                            ->role([
+                                'Teacher',
+                                'Associate Professor',
+                                'Assistant Professor',
+                                'Professor',
+                                'Non Phd AP'
+                            ])->pluck('employee_id');
+
+                        $all_ids = $employeeIds->merge([$employee_id])->unique()->values(); 
                     $forms = AchievementOfResearchPublicationsTarget::with([
                         'creator' => function ($q) {
                             $q->select('employee_id', 'name');

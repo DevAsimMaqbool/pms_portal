@@ -38,7 +38,7 @@ class OricApiController extends Controller
         */
 
         $query = DB::table('achievement_of_research_publications_target as rpt')
-            ->whereIn('rpt.status', ['1', '2', '3']);
+            ->whereIn('rpt.status', ['3']);
 
         /*
         |--------------------------------------------------------------------------

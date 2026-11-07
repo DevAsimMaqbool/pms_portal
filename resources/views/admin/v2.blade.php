@@ -1439,26 +1439,15 @@
         "Research, Innovation and Commercialisation",
         "Institutional Engagement"
       ];
-      var shortLabels = ["T&L", "RIC", "IE"];
-      var dataset1 = @json($dataset1) || []; // dataset from backend
+      //var shortLabels = ["T&L", "RIC", "IE"];
+      //var dataset1 = @json($dataset1) || []; // dataset from backend
       var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
 
-      // Combine all arrays into one array of objects to maintain relationships
-      var radarData = dataset1.map((score, index) => ({
-        score: score,
-        label: chartLabels[index],
-        shortLabel: shortLabels[index],
-        color: labelColors[index]
-      }));
+      var datasetset = @json($dataset1) || []; // dataset from backend
+      var shortLabels = datasetset.map(item => item.kpa_name);
+      var dataset1 = datasetset.map(item => item.avg);
 
-      // Sort by score descending (highest to lowest)
-      radarData.sort((a, b) => b.score - a.score);
-
-      // Separate back into individual arrays
-      chartLabels = radarData.map(item => item.label);
-      shortLabels = radarData.map(item => item.shortLabel);
-      dataset1 = radarData.map(item => item.score);
-      labelColors = radarData.map(item => item.color);
+     
 
       // Create chart
       var ctx = document.getElementById("radarChart").getContext("2d");
@@ -1529,26 +1518,14 @@
         "Research, Innovation and Commercialisation",
         "Institutional Engagement"
       ];
-      var shortLabels = ["T&L", "RIC", "IE"];
-      var dataset1 = @json($dataset1) || []; // dataset from backend
+      //var shortLabels = ["T&L", "RIC", "IE"];
+      //var dataset1 = @json($dataset1) || []; // dataset from backend
       var labelColors = ["#e74c3c", "#3498db", "#27ae60"];
 
       // Combine all arrays to maintain the relationships
-      var radarData = dataset1.map((score, index) => ({
-        score: score,
-        label: chartLabels[index],
-        shortLabel: shortLabels[index],
-        color: labelColors[index]
-      }));
-
-      // Sort by score descending (highest to lowest)
-      radarData.sort((a, b) => b.score - a.score);
-
-      // Separate back into individual arrays
-      chartLabels = radarData.map(item => item.label);
-      shortLabels = radarData.map(item => item.shortLabel);
-      dataset1 = radarData.map(item => item.score);
-      labelColors = radarData.map(item => item.color);
+      var datasetset = @json($dataset1) || []; // dataset from backend
+      var shortLabels = datasetset.map(item => item.kpa_name);
+      var dataset1 = datasetset.map(item => item.avg);
 
       // Chart setup
       var ctx = document.getElementById("radarChart1").getContext("2d");
