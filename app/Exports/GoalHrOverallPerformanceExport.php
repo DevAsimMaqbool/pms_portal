@@ -75,9 +75,7 @@ class GoalHrOverallPerformanceExport implements
 
         // Existing manager filter
         ->when($this->manager !== '', function ($query) {
-
-        $query->where('manager_id',$this->manager);
-
+            $query->where('manager_name', 'LIKE', '%' . $this->manager . '%');
         })
 
         ->orderBy('name');
